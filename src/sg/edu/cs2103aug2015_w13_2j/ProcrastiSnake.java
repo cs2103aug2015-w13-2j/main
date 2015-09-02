@@ -15,7 +15,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
-public class Todo extends JFrame implements KeyListener {
+public class ProcrastiSnake extends JFrame implements KeyListener {
     // Recommended for serializable classes
     private static final long serialVersionUID = 7758912303888211773L;
 
@@ -32,7 +32,7 @@ public class Todo extends JFrame implements KeyListener {
     /**
      * Creates the GUI window and adds all the GUI components on initialization
      */
-    public Todo() {
+    public ProcrastiSnake() {
         // Create and set up window
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -79,7 +79,7 @@ public class Todo extends JFrame implements KeyListener {
     }
     
     public static void main(String[] args) {
-        Todo todo = new Todo();
+        ProcrastiSnake procrastiSnake = new ProcrastiSnake();
     }
 
     @Override
