@@ -2,6 +2,7 @@ package sg.edu.cs2103aug2015_w13_2j;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
@@ -47,6 +48,7 @@ public class ProcrastiSnake extends JFrame implements KeyListener {
         mTextPane = new JTextPane();
         mTextPane.setEditable(false);
         mTextPane.getCaret().setVisible(true);
+        mTextPane.setFont(new Font("monospaced", Font.PLAIN, 12));
         JScrollPane scrollPane = new JScrollPane(mTextPane);
         constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
@@ -79,7 +81,49 @@ public class ProcrastiSnake extends JFrame implements KeyListener {
     }
     
     public static void main(String[] args) {
-        ProcrastiSnake procrastiSnake = new ProcrastiSnake();
+        new ProcrastiSnake();
+    }
+    
+    /**
+     * Executes the commands entered by the user
+     * @param command
+     *      The command that the user keys into the text field
+     */
+    private void executeCommand(String command) {
+        switch(command) {
+          case "snake" :
+              new SnakeTXT(mTextPane, mTextField);
+              break;
+          case "exit" :
+              System.exit(0);
+              break;
+          default :
+              println(command);
+              break;
+        }
+    }
+    
+    /**
+     * Prints the string to the text pane
+     * @param s
+     *      The string to be printed
+     */
+    private void print(String s) {
+        StyledDocument document = mTextPane.getStyledDocument();
+        try {
+            document.insertString(document.getLength(), s, null);
+        } catch (BadLocationException ble) {
+            ble.printStackTrace();
+            System.exit(1);
+        }
+    }
+    
+    /**
+     * Prints the string to the text pane and goes to the next line
+     * @param s
+     */
+    private void println(String s) {
+        print(s + NEWLINE);
     }
 
     @Override
@@ -91,15 +135,11 @@ public class ProcrastiSnake extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()) {
           case KeyEvent.VK_ENTER :
-            StyledDocument document = mTextPane.getStyledDocument();
-            String input = mTextField.getText() + NEWLINE;
+            executeCommand(mTextField.getText());
             mTextField.setText(null);
-            try {
-                document.insertString(document.getLength(), input, null);
-                mTextPane.setCaretPosition(document.getLength());
-            } catch (BadLocationException ble) {
-                System.exit(1);
-            }
+            break;
+          case KeyEvent.VK_ESCAPE :
+            System.exit(0);
             break;
           default :
             break;
