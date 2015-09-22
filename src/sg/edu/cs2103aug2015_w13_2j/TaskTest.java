@@ -19,6 +19,7 @@ public class TaskTest {
     
     @Test
     public void userDefinedLabelsTest() {
+        task = new Task();
         String[] labels = {"Module", "Priority", "Non-existant"};
         String[] values = {"CS2103", "High"};
         
@@ -36,10 +37,11 @@ public class TaskTest {
 
     @Test
     public void dateRelatedTests() {
+        task = new Task();
         Date now = new Date();
         
         // Date & Time created
-        assertTrue(now.compareTo(task.getCreated()) > 0);
+        assertTrue(now.compareTo(task.getCreated()) >= 0);
         
         // Setting and retrieving deadlines
         assertTrue(task.getDeadline() == null);
