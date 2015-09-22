@@ -16,7 +16,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
-public class ProcrastiSnake extends JFrame implements KeyListener {
+public class FunDUE extends JFrame implements KeyListener {
     // Recommended for serializable classes
     private static final long serialVersionUID = 7758912303888211773L;
 
@@ -33,7 +33,7 @@ public class ProcrastiSnake extends JFrame implements KeyListener {
     /**
      * Creates the GUI window and adds all the GUI components on initialization
      */
-    public ProcrastiSnake() {
+    public FunDUE() {
         // Create and set up window
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -81,7 +81,7 @@ public class ProcrastiSnake extends JFrame implements KeyListener {
     }
     
     public static void main(String[] args) {
-        new ProcrastiSnake();
+        new FunDUE();
     }
     
     /**
