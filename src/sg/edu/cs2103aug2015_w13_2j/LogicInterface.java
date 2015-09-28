@@ -13,4 +13,7 @@ public interface LogicInterface {
     public void archiveTask(Task task);
     public void sort();
     public ArrayList<Task> getAllTask();
+    
+    /*should display be in Logic ?*/
+    public void display();
 }
