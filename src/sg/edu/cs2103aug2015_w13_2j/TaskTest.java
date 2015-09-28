@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.junit.Test;
 
+import sg.edu.cs2103aug2015_w13_2j.TaskInterface.Label;
+
 public class TaskTest {
     // Use the same task object across the tests
     private Task task;
@@ -20,10 +22,10 @@ public class TaskTest {
     @Test
     public void userDefinedLabelsTest() {
         task = new Task();
-        String[] labels = {"Module", "Priority", "Non-existant"};
-        String[] values = {"CS2103", "High"};
+        Label[] labels = {Label.NAME, Label.CREATED, Label.DEADLINE};
+        String[] values = {"CS2103", "12345678"};
         
-        // Set the user defined labels
+        // Set the labels
         task.setLabel(labels[0], values[0]);
         task.setLabel(labels[1], values[1]);
         
