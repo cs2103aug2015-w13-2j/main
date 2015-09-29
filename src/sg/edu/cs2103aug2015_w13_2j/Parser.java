@@ -11,52 +11,7 @@ import java.util.StringTokenizer;
  * add -s <date/time> -e <date/time> -r <frequency/> -d <date/time> "Task name"
  */
 public class Parser implements ParserInterface {
-	
-	public enum ParserState {
-		PARSE_COMMAND_STATE {
-			public ParserState nextState(String commandLine) {
-				return PARSE_TASK_NAME_STATE;
-			}
-			// Pass commandLine without command token (first token) to next state
-		}, 
-		
-		PARSE_TASK_NAME_STATE {
-			public ParserState nextState(String commandLine) {
-				return PARSE_OPTIONS_STATE;
-			}
-			// Pass commandLine without task name token (last token) to next state
-		}, 
-		
-		PARSE_OPTIONS_STATE {
-			public ParserState nextState(String commandLine) {
-				return PARSE_END;
-			}
-			// Pass something to ending state, doesn't really matter what
-		},
-		
-		PARSE_END {
-			public ParserState nextState(String commandLine) {
-				return null;
-			}
-		};
-		
-		public abstract ParserState nextState(String commandLine);
-		
-	}
-	
-	/**
-	 * Enum class representing all available commands supported
-	 * 
-	 * @author Natasha Koh Sze Sze
-	 *
-	 */
-	public enum Commands {
-		add, delete, edit, mark, archive, retrieve, filter, summarise, 
-		export, help, exit
-	}
-
-	private static final Commands[] 
-			listOfAcceptedCommands = Commands.values();
+	private static ParserStateHandler.Commands[] listOfAcceptedCommands;
 	
 	private static final List<String> startTimeOption = 
 		    Arrays.asList("-s", "starting", "start", "starts");
@@ -86,6 +41,7 @@ public class Parser implements ParserInterface {
 	public Parser(String commandLine) {
 		this.commandLine = commandLine;
 		listOfValidOptions = new ArrayList<String>();
+		listOfAcceptedCommands = ParserStateHandler.getCommands();
 		
 		// Groups all the valid options in a single list for ease
 		// of keeping track of valid options
@@ -134,7 +90,7 @@ public class Parser implements ParserInterface {
 	public boolean isAcceptedCommand(String token) {
 		boolean isAnAcceptedCommand = false;
 		
-		for (Commands cmd: listOfAcceptedCommands) {
+		for (ParserStateHandler.Commands cmd: listOfAcceptedCommands) {
 			if (cmd.toString().equals(token)) {
 				isAnAcceptedCommand = true;
 				break;

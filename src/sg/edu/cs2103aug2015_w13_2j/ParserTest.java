@@ -3,6 +3,9 @@ package sg.edu.cs2103aug2015_w13_2j;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import sg.edu.cs2103aug2015_w13_2j.ParserStateHandler.ParserState;
+
 import org.junit.Before;
 import org.junit.After;
 
@@ -34,21 +37,23 @@ public class ParserTest {
 	 *****************************************************************/
 	@Test
 	public void parserStateTest() {
+		ParserStateHandler.ParserState state;
+		
 		// Start from the PARSE_COMMAND_STATE
-		Parser.ParserState state = Parser.ParserState.PARSE_COMMAND_STATE;
+		state = ParserStateHandler.ParserState.PARSE_COMMAND_STATE;
 		String commandLine = parser.getCommandLine();
 		
 		// From PARSE_COMMAND_STATE to PARSE_TASK_NAME_STATE
 		state = state.nextState(commandLine);
-		assertEquals(Parser.ParserState.PARSE_TASK_NAME_STATE, state);
+		assertEquals(ParserStateHandler.ParserState.PARSE_TASK_NAME_STATE, state);
 		
 		// From PARSE_TASK_NAME_STATE to PARSE_OPTIONS_STATE
 		state = state.nextState(commandLine);
-		assertEquals(Parser.ParserState.PARSE_OPTIONS_STATE, state);
+		assertEquals(ParserStateHandler.ParserState.PARSE_OPTIONS_STATE, state);
 		
 		// From PARSE_OPTIONS_STATE to PARSE_END
 		state = state.nextState(commandLine);
-		assertEquals(Parser.ParserState.PARSE_END, state);
+		assertEquals(ParserStateHandler.ParserState.PARSE_END, state);
 		
 		// Ended state traversal
 		state = state.nextState(commandLine);
