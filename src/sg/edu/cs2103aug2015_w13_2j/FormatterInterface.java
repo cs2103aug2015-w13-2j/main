@@ -1,5 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.util.List;
+
 //@@author A0121410H
 public interface FormatterInterface {
     // Enumeration of the various formats for displaying
@@ -25,5 +27,13 @@ public interface FormatterInterface {
      * @param f
      *            The enumerated format option to display the Task objects
      */
-    public void format(Task[] tasks, Format f);
+    public void format(List<Task> tasks, Format f);
+
+    /**
+     * Pass through directly to TextUI without formatting
+     * 
+     * @param s
+     *            The string to be displayed in TextUI
+     */
+    public void passThrough(String s);
 }

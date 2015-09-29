@@ -15,6 +15,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
+//@@author A0121410H
 public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     // For portability across Unix and Windows systems
     public static final String NEWLINE = System.getProperty("line.separator");
