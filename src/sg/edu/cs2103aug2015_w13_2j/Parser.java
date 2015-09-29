@@ -179,10 +179,29 @@ public class Parser implements ParserInterface {
 	 * 
 	 * @return   empty string if successfully parsed the options field 
 	 * 			 in the commandLine. Returns null if the format of 
-	 * 			 one of the options entered is incorrect.
+	 * 			 one of the <option, option field> pairs entered is incorrect.
 	 */
 	public String parseAllOptions(String optionsCommandLine) {
-		return null;
+		try {
+			while (isStillParsingOptions(optionsCommandLine)) {
+				optionsCommandLine = parseOption(optionsCommandLine);
+	
+				boolean optionFieldIsInvalid = optionsCommandLine == null;
+	
+				if (optionFieldIsInvalid) {
+					break;
+				}
+			}
+
+			return optionsCommandLine;
+			
+		} catch (NullPointerException error) {
+			return null;
+		}
+	}
+
+	private boolean isStillParsingOptions(String optionsCommandLine) {
+		return !optionsCommandLine.equals("");
 	}
 	
 	/**
@@ -251,7 +270,7 @@ public class Parser implements ParserInterface {
 	 * 				    commandLine with only options and their option fields
 	 * 
 	 * @return   String of the remaining options tokens without the first
-	 * 			 2 valid options tokens
+	 * 			 2 valid options tokens.
 	 */
 	public String getOptionsRemaining(String optionsCommandLine) {
 		String[] optionsSplitArray = optionsCommandLine.split(" ", 3);

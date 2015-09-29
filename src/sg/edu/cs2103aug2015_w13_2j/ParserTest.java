@@ -67,21 +67,38 @@ public class ParserTest {
 		assertEquals(null, parser.parseCommand(emptyCommandLine));
 	}
 	
-	/**
-	 * Parses an option-optionField pair from the options field in commandLine.
-	 * Checks if the first token is a valid option and that there is an 
-	 * optionField for that option, if it does not, this method returns null.
-	 * 
-	 * Pre-condition: Check is only viable for the commands that offer this 
-	 * 				  format, e.g. 'add' or 'edit'. 
-	 * 
-	 * @param    optionsCommandLine   
-	 * 					command line entered by the user in the text UI
-	 * 
-	 * @return	 String of remaining options left to parse. If the option is not
-	 * 			 valid, or the option is valid but does not have an option 
-	 * 			 field, this method returns null
-	 */
+	@Test
+	public void parseAllOptionsTest() {
+		// Test cases for valid options
+		String validOptions = "starting 23/09 end 24/09 -r 1week";
+		String singleValidOption = "starting 23/09";
+		String emptyToken = "";
+		
+		assertEquals("", parser.parseAllOptions(validOptions));
+		assertEquals("", parser.parseAllOptions(singleValidOption));
+		assertEquals("", parser.parseAllOptions(emptyToken));
+		
+		// Test cases for invalid number of options
+		String singleToken = "starting";
+		String invalidSecondOption = "starting 23/09 24/09 -r 1week";
+		String invalidSecondOptionField = "starting 23/09 end -r 1week";
+		
+		assertEquals(null, parser.parseAllOptions(singleToken));
+		assertEquals(null, parser.parseAllOptions(invalidSecondOption));
+		assertEquals(null, parser.parseAllOptions(invalidSecondOptionField));
+		
+		// Test cases for having an invalid option
+		String singleInvalidToken = "startzzgzz";
+		String invalidOptionWithField = "startzxczxc 23/09";
+		
+		assertEquals(null, parser.parseAllOptions(singleInvalidToken));
+		assertEquals(null, parser.parseAllOptions(invalidOptionWithField));
+
+		// Testing for null pointer
+		assertEquals(null, parser.parseAllOptions(null));
+		
+	}
+	
 	@Test
 	public void parseOptionTest() {
 		String validOptionPair = "-s 23/09";
