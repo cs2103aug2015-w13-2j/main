@@ -68,6 +68,17 @@ public class ParserTest {
 	}
 	
 	@Test
+	public void getOptionsRemainingTest() {
+		String optionsCommandLine = "starting 23/09 end 24/09 -r 1week";
+		String optionsCommandLineOnePair = "starting 23/09";
+		String emptyOptions = "";
+		
+		assertEquals("end 24/09 -r 1week", parser.getOptionsRemaining(optionsCommandLine));
+		assertEquals("", parser.getOptionsRemaining(optionsCommandLineOnePair));
+		assertEquals("", parser.getOptionsRemaining(emptyOptions));
+	}
+	
+	@Test
 	public void isValidOptionTest() {
 		String correctOption = "-s";
 		String correctOptionAlternative = "start";
@@ -84,5 +95,5 @@ public class ParserTest {
 		assertFalse(parser.isAcceptedOption(invalidOption));
 		assertFalse(parser.isAcceptedOption(emptyToken));
 	}
-
+	
 }

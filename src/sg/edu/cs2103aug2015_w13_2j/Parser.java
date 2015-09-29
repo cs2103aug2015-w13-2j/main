@@ -3,6 +3,8 @@ package sg.edu.cs2103aug2015_w13_2j;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
  * Sample Add command format
@@ -208,6 +210,35 @@ public class Parser implements ParserInterface {
 	 */
 	public boolean isAcceptedOption(String token) {
 		return listOfValidOptions.contains(token);
+	}
+	
+	/**
+	 * Returns a String of the remaining options tokens after
+	 * parsing the first 2 valid option tokens.
+	 * 
+	 * Pre-condition: The first 2 tokens of optionsCommandLine are valid 
+	 * 				  options if the number of tokens > 2.
+	 * 				  optionsCommandLine must not be null.
+	 * 
+	 * @param    optionsCommandLine
+	 * 				    commandLine with only options and their option fields
+	 * 
+	 * @return   String of the remaining options tokens without the first
+	 * 			 2 valid options tokens
+	 */
+	public String getOptionsRemaining(String optionsCommandLine) {
+		String[] optionsSplitArray = optionsCommandLine.split(" ", 3);
+
+		/* After splitting the optionsCommandLine into 3 parts, we know that
+		 * the remaining String of options will always be the last element of 
+		 * the array since the first 2 elements are the option and option 
+		 * field respectively 
+		 */
+		if (optionsSplitArray.length <= 2) {
+			return "";
+		} else {
+			return optionsSplitArray[2];
+		}
 	}
 	
 }
