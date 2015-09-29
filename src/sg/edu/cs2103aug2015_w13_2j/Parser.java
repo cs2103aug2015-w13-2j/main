@@ -12,7 +12,6 @@ public class Parser implements ParserInterface {
 	public enum ParserState {
 		PARSE_COMMAND_STATE {
 			public ParserState nextState(String commandLine) {
-				System.out.println("In PARSE_COMMAND_STATE");
 				return PARSE_TASK_NAME_STATE;
 			}
 			// Pass commandLine without command token (first token) to next state
@@ -20,7 +19,6 @@ public class Parser implements ParserInterface {
 		
 		PARSE_TASK_NAME_STATE {
 			public ParserState nextState(String commandLine) {
-				System.out.println("In PARSE_TASK_NAME_STATE");
 				return PARSE_OPTIONS_STATE;
 			}
 			// Pass commandLine without task name token (last token) to next state
@@ -28,7 +26,6 @@ public class Parser implements ParserInterface {
 		
 		PARSE_OPTIONS_STATE {
 			public ParserState nextState(String commandLine) {
-				System.out.println("In PARSE_OPTIONS_STATE");
 				return PARSE_END;
 			}
 			// Pass something to ending state, doesn't really matter what
@@ -36,7 +33,6 @@ public class Parser implements ParserInterface {
 		
 		PARSE_END {
 			public ParserState nextState(String commandLine) {
-				System.out.println("In PARSE_END");
 				return null;
 			}
 		};
@@ -99,6 +95,7 @@ public class Parser implements ParserInterface {
 	 * 
 	 * @param commandLine   command line entered by the user in the
 	 * 						text UI
+	 * 
 	 * @return 	 the first token if it is an accepted command
 	 */
 	public String parseCommand(String commandLine) {
@@ -116,7 +113,8 @@ public class Parser implements ParserInterface {
 	 * Returns true if a token is an accepted user 
 	 * command
 	 * 
-	 * @param token   a token from the command line  
+	 * @param token   a token from the command line 
+	 * 
 	 * @return	 true if is accepted command, false otherwise.
 	 */
 	public boolean isAcceptedCommand(String token) {
@@ -135,10 +133,59 @@ public class Parser implements ParserInterface {
 	/*****************************************************************
 	 * PARSING TASK NAME METHODS
 	 *****************************************************************/
+	/**
+	 * Parses the last token of the commandLine which is expected to be
+	 * some task name specified by the user surrounded by a pair of wrappers.
+	 * E.g. 'Do homework' or "Do homework", etc. Checks if that last token has
+	 * a valid wrapper surrounding it. If it does, then the String in between those
+	 * wrappers will be the task name.
+	 * 
+	 * @param commandLine   command line entered by the user in the
+	 * 						text UI
+	 * 
+	 * @return   valid task name or null if the task name is not surrounded by 
+	 * 			 appropriate wrappers.
+	 */
+	public String parseTaskName(String commandLine) {
+		return null;
+	}
+	
+	
 	
 	/*****************************************************************
 	 * PARSING OPTIONS FIELD IN COMMAND LINE METHODS
 	 *****************************************************************/
-
+	/**
+	 * Parses all options in the commandLine. Checks if the options or 
+	 * option fields are valid or if they are in a valid 
+	 * <option, option field> pair.
+	 * 
+	 * @param    optionsCommandLine
+	 * 				 	command line entered by the user in the text UI
+	 * 
+	 * @return   empty string if successfully parsed the options field 
+	 * 			 in the commandLine. Returns null if the format of 
+	 * 			 one of the options entered is incorrect.
+	 */
+	public String parseAllOptions(String optionsCommandLine) {
+		return null;
+	}
+	
+	/**
+	 * Parses an option from the commandLine, only for the commands
+	 * that offer this format, e.g. 'add' or 'edit'. Checks is the first
+	 * token is a valid option and that there is a optionField for that
+	 * option, if it does not, this method returns null.
+	 * 
+	 * @param    optionsCommandLine   
+	 * 					command line entered by the user in the text UI
+	 * 
+	 * @return	 remaining options left to parse. If the option is not
+	 * 			 valid, or the option is valid but does not have an option 
+	 * 			 field, this method returns null
+	 */
+	public String parseOption(String optionsCommandLine) {
+		return null;
+	}
 	
 }
