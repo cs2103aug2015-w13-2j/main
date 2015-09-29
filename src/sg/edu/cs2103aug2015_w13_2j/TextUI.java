@@ -112,6 +112,14 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
             e.printStackTrace();
         }
     }
+    
+    public void addTextFieldKeyListener(KeyListener listener) {
+        mTextField.addKeyListener(listener);
+    }
+    
+    public void removeTextFieldKeyListener(KeyListener listener) {
+        mTextField.removeKeyListener(listener);
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -122,7 +130,12 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
         case KeyEvent.VK_ENTER:
-            FunDUE.sParser.parseCommand(mTextField.getText() + NEWLINE);
+            // Hijack the snake command
+            if(mTextField.getText().equalsIgnoreCase("snake")) {
+                new SnakeTXT();
+            } else {
+                FunDUE.sParser.parseCommand(mTextField.getText() + NEWLINE);
+            }
             mTextField.setText(null);
             break;
         case KeyEvent.VK_UP:
