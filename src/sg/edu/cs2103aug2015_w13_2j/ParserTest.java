@@ -66,5 +66,18 @@ public class ParserTest {
 		assertEquals(null, parser.parseCommand(singleTokenIncorrectCommand));
 		assertEquals(null, parser.parseCommand(emptyCommandLine));
 	}
+	
+	@Test
+	public void isValidOptionTest() {
+		String correctOption = "-s";
+		String correctOptionAlternative = "start";
+		String incorrectOptionExtraFlag = "--s";
+		String incorrectOptionSpelling = "stzzart";
+		
+		assertTrue(parser.isAcceptedOption(correctOption));
+		assertTrue(parser.isAcceptedOption(correctOptionAlternative));
+		assertFalse(parser.isAcceptedOption(incorrectOptionExtraFlag));
+		assertFalse(parser.isAcceptedOption(incorrectOptionSpelling));
+	}
 
 }

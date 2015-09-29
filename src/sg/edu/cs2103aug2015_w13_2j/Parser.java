@@ -1,5 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -70,6 +71,9 @@ public class Parser implements ParserInterface {
 	private static final List<String> listOfAcceptedTaskNameWrappers = 
 			Arrays.asList("'", "\"", "-");
 	
+	// Keeps track of valid options
+	private static List<String> listOfValidOptions;
+	
 	private String commandLine;
 	
 	/**
@@ -79,6 +83,14 @@ public class Parser implements ParserInterface {
 	 */
 	public Parser(String commandLine) {
 		this.commandLine = commandLine;
+		listOfValidOptions = new ArrayList<String>();
+		
+		// Groups all the valid options in a single list for ease
+		// of keeping track of valid options
+		listOfValidOptions.addAll(startTimeOption);
+		listOfValidOptions.addAll(endTimeOption);
+		listOfValidOptions.addAll(recurTaskOption);
+		listOfValidOptions.addAll(deadlineOption);
 	}
 	
 	public String getCommandLine() {
@@ -186,6 +198,16 @@ public class Parser implements ParserInterface {
 	 */
 	public String parseOption(String optionsCommandLine) {
 		return null;
+	}
+	
+	/**
+	 * Checks if a token is a valid option.
+	 * 
+	 * @param token   token from the commandLine
+	 * @return   true if token is a valid option, false otherwise.
+	 */
+	public boolean isAcceptedOption(String token) {
+		return listOfValidOptions.contains(token);
 	}
 	
 }
