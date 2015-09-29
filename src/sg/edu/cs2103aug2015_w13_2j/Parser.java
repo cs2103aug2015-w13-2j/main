@@ -38,8 +38,7 @@ public class Parser implements ParserInterface {
 	 * 
 	 * @param commandLine
 	 */
-	public Parser(String commandLine) {
-		this.commandLine = commandLine;
+	public Parser() {
 		listOfValidOptions = new ArrayList<String>();
 		listOfAcceptedCommands = ParserStateHandler.getCommands();
 		
@@ -69,6 +68,7 @@ public class Parser implements ParserInterface {
 	 * @return 	 the first token if it is an accepted command
 	 */
 	public String parseCommand(String commandLine) {
+	    this.commandLine = commandLine;
 		String[] commandLineTokens = commandLine.split(" ", 2);
 		String firstToken = commandLineTokens[0];
 		

@@ -16,7 +16,8 @@ public class ParserTest {
 	@Before
 	public void setUp() {
 		String defaultCommandLine = "add -s 23/09 -r 1week 'Task name'";
-		parser = new Parser(defaultCommandLine);
+		parser = new Parser();
+		parser.parseCommand(defaultCommandLine);
 	}
 	
 	@After
@@ -27,7 +28,8 @@ public class ParserTest {
 	@Test
 	public void createParserTest() {
 		String sampleCommandLine = "add -s 23/09 -e 4pm *@(*#(!&@! 'Task name'";
-		parser = new Parser(sampleCommandLine);
+		parser = new Parser();
+		parser.parseCommand(sampleCommandLine);
 		
 		assertEquals(sampleCommandLine, parser.getCommandLine());
 	}

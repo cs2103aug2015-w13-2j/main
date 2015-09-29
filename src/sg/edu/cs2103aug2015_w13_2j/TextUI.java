@@ -16,14 +16,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
 public class TextUI extends JFrame implements TextUIInterface, KeyListener {
-    // Component dependencies
-    private Parser mParser;
-
-    // Recommended for serializable classes
-    private static final long serialVersionUID = 7758912303888211773L;
-
     // For portability across Unix and Windows systems
     public static final String NEWLINE = System.getProperty("line.separator");
+    
+    // Serialization ID
+    private static final long serialVersionUID = 7758912303888211773L;
 
     // The (fixed) size of the window
     private static final Dimension PREFERRED_SIZE = new Dimension(800, 600);
@@ -34,10 +31,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 
     private int mPrevPos = 0;
 
-    public TextUI(Parser parser) {
-        // Store reference to dependency
-        mParser = parser;
-
+    public TextUI() {
         // Create and set up window
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -127,7 +121,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
         case KeyEvent.VK_ENTER:
-            // TODO: Pass the command to parser component
+            FunDUE.sParser.parseCommand(mTextField.getText());
             mTextField.setText(null);
             break;
         case KeyEvent.VK_UP:
