@@ -92,7 +92,19 @@ public class ParserTest {
 	
 	@Test
 	public void hasValidTaskNameWrappers() {
-	
+		String validWrappers = "'Do assignment'";
+		String validSingleWrapper = "'Do Assignment";
+		String validMiddleWrapper = "Do A'ssi'gnm'ent";
+		
+		assertTrue(parser.hasValidTaskNameWrappers(validWrappers));
+		assertTrue(parser.hasValidTaskNameWrappers(validSingleWrapper));
+		assertTrue(parser.hasValidTaskNameWrappers(validMiddleWrapper));
+		
+		String noWrappersFound = "Do assignment";
+		String emptyTaskName = "";
+		
+		assertFalse(parser.hasValidTaskNameWrappers(noWrappersFound));
+		assertFalse(parser.hasValidTaskNameWrappers(emptyTaskName));
 	}
 	
 	/*****************************************************************

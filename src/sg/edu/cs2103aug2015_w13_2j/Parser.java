@@ -156,6 +156,7 @@ public class Parser implements ParserInterface {
 	 * 
 	 * @param commandLine   command line entered by the user in the
 	 * 						text UI
+	 * 
 	 * @return   valid task name or null if the task name is not surrounded by 
 	 * 			 appropriate wrappers.
 	 */
@@ -169,14 +170,15 @@ public class Parser implements ParserInterface {
 	 * "opening", this method removes the first wrapper, else if openingOrClosing
 	 * is "closing", this method removes the last wrapper.
 	 *  
-	 * @param taskNameToken   command line entered by the user in the
-	 * 						  text UI
+	 * @param taskNameToken      command line entered by the user in the
+	 * 						     text UI
 	 * @param openingOrClosing   flag that determines if removing the opening
 	 * 							 or closing wrapper on a task name
+	 * 
 	 * @return   Task name without one of its opening or closing wrappers
 	 * 			 or null if there are no more wrappers in this Task name
 	 */
-	private String getRemainingTaskName(String taskNameToken, String openingOrClosing) {
+	public String getRemainingTaskName(String taskNameToken, String openingOrClosing) {
 		return null;
 	}
 
@@ -187,9 +189,21 @@ public class Parser implements ParserInterface {
 	 * 
 	 * @param commandLine   command line entered by the user in the
 	 * 						text UI
-	 * @return   true if the commandLine contains ' or ", false otherwise.
+	 * 
+	 * @return   true if the commandLine contains any one of the valid
+	 * 			 task name wrappers, false otherwise.
 	 */
-	private boolean hasValidTaskNameWrappers(String commandLine) {
+	public boolean hasValidTaskNameWrappers(String commandLine) {
+		boolean containsValidWrapper = false;
+		
+		for (String wrapper: listOfAcceptedTaskNameWrappers) {
+			containsValidWrapper = commandLine.indexOf(wrapper) != -1;
+			
+			if (containsValidWrapper) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
