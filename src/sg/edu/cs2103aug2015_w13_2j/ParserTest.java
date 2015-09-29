@@ -51,5 +51,20 @@ public class ParserTest {
 		state = state.nextState(commandLine);
 		assertEquals(null, state);
 	}
+	
+	@Test
+	public void parseCommandTest() {
+		String correctCommand = "add **(#!(*@&#!(@&";
+		String incorrectCommandIdentifier = "addd *(&(!*&@*!*(@&(";
+		String singleTokenCommandLine = "add";
+		String singleTokenIncorrectCommand = "adzzd";
+		String emptyCommandLine = "";
+		
+		assertEquals("add", parser.parseCommand(correctCommand));
+		assertEquals(null, parser.parseCommand(incorrectCommandIdentifier));
+		assertEquals("add", parser.parseCommand(singleTokenCommandLine));
+		assertEquals(null, parser.parseCommand(singleTokenIncorrectCommand));
+		assertEquals(null, parser.parseCommand(emptyCommandLine));
+	}
 
 }
