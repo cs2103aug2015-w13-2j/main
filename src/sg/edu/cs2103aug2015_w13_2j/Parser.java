@@ -72,6 +72,8 @@ public class Parser implements ParserInterface {
 		String[] commandLineTokens = commandLine.split(" ", 2);
 		String firstToken = commandLineTokens[0];
 		
+		FunDUE.sLogic.echo(commandLine);
+		
 		if (isAcceptedCommand(firstToken)) {
 			return firstToken;
 		} else {

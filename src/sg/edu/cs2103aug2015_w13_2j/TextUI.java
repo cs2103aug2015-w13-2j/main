@@ -30,7 +30,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private static JTextField mTextField;
     private static JTextPane mTextPane;
 
-    private int mPrevPos = 0;
+    private int mPrevLen = 0;
 
     public TextUI() {
         // Create and set up window
@@ -77,7 +77,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     }
 
     public void printr(String s) {
-        print(s, mPrevPos);
+        print(s, mPrevLen);
     }
 
     public void println(String s) {
@@ -90,22 +90,22 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 
     /**
      * Internally used method to print the string to the text pane at the
-     * specified position from the start of the document. If provided position
-     * is not at the end of the document, the method will first remove string
-     * from position to end of document and then prints the provided string
+     * specified position from the end of the document. If provided offset
+     * is not 0, the method will first remove string of length offset from
+     * the end of document and then prints the provided string
      * 
      * @param s
      *            The string to be printed
-     * @param pos
-     *            Positive integer representing position in document to print
+     * @param offset
+     *            Positive integer representing offset from end of document
      */
-    private void print(String s, int pos) {
+    private void print(String s, int offset) {
         StyledDocument document = mTextPane.getStyledDocument();
         try {
-            mPrevPos = document.getLength();
-            // Remove string in between position and end of document
-            if (pos < document.getLength()) {
-                document.remove(pos, document.getLength() - pos);
+            mPrevLen = s.length();
+            // Remove string of length offset from end of document
+            if (offset > 0) {
+                document.remove(document.getLength() - offset, offset);
             }
             document.insertString(document.getLength(), s, null);
         } catch (BadLocationException e) {
@@ -122,7 +122,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
         case KeyEvent.VK_ENTER:
-            FunDUE.sParser.parseCommand(mTextField.getText());
+            FunDUE.sParser.parseCommand(mTextField.getText() + NEWLINE);
             mTextField.setText(null);
             break;
         case KeyEvent.VK_UP:

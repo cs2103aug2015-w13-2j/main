@@ -38,8 +38,7 @@ public class Logic implements LogicInterface{
     	return tasks;
     }
     
-    /*should display be in Logic ?*/
-    public void display(){
-    	
+    public void echo(String s){
+    	FunDUE.sFormatter.passThrough(s);
     }
 }
