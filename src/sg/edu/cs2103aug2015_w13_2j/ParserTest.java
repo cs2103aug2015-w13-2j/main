@@ -87,7 +87,27 @@ public class ParserTest {
 	
 	@Test
 	public void getRemainingTaskNameTest() {
+		String doubleWrappers = "'Eat Lunch'";
+		String singleWrapperAtStart = "'Eat Lunch";
+		String singleWrapperAtEnd = "Eat Lunch'";
+		String emptyTaskName = "";
+		String nullTaskName = null;
 		
+		// Test case when getting remaining task name without the opening wrapper
+		assertEquals("Eat Lunch'", parser.getRemainingTaskName(doubleWrappers, "opening"));
+		assertEquals("Eat Lunch", parser.getRemainingTaskName(singleWrapperAtStart, "opening"));
+		assertEquals("", parser.getRemainingTaskName(singleWrapperAtEnd, "opening"));
+		
+		// Test case when getting remaining task name without the closing wrapper
+		assertEquals("", parser.getRemainingTaskName(doubleWrappers, "closing"));
+		assertEquals("", parser.getRemainingTaskName(singleWrapperAtStart, "closing"));
+		assertEquals("Eat Lunch", parser.getRemainingTaskName(singleWrapperAtEnd, "closing"));
+
+		// Test case for empty or null task names
+		assertNull(parser.getRemainingTaskName(emptyTaskName, "opening"));
+		assertNull(parser.getRemainingTaskName(emptyTaskName, "closing"));
+		assertNull(parser.getRemainingTaskName(nullTaskName, "opening"));
+		assertNull(parser.getRemainingTaskName(nullTaskName, "closing"));
 	}
 	
 	@Test

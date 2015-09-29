@@ -165,21 +165,75 @@ public class Parser implements ParserInterface {
 	}
 
 	/**
-	 * Obtains the task name without one of its opening or closing 
-	 * wrappers depending on the flag openingOrClosing. If openingOrClosing is 
-	 * "opening", this method removes the first wrapper, else if openingOrClosing
-	 * is "closing", this method removes the last wrapper.
+	 * Obtains the task name after a specified opening or closing wrapper. 
+	 * If openingOrClosing is "opening", this method removes the first wrapper, 
+	 * and returns the task name after that first wrapper.
+	 * 
+	 * If openingOrClosing is "closing", this method removes the last wrapper,
+	 * and returns the task name after that last wrapper.
 	 *  
 	 * @param taskNameToken      command line entered by the user in the
 	 * 						     text UI
 	 * @param openingOrClosing   flag that determines if removing the opening
 	 * 							 or closing wrapper on a task name
 	 * 
-	 * @return   Task name without one of its opening or closing wrappers
-	 * 			 or null if there are no more wrappers in this Task name
+	 * @return   Task name remaining after one of its opening or closing wrappers.
+	 * 			 Returns null if there are no more wrappers in this Task name or 
+	 * 			 task name happens to be null
 	 */
-	public String getRemainingTaskName(String taskNameToken, String openingOrClosing) {
-		return null;
+	public String getRemainingTaskName(String taskName, String openingOrClosing) {
+		String remainingTaskName = null;
+		int indexOfWrapper;
+		boolean containsThisWrapper = false;
+		
+		try {
+			for (String wrapper: listOfAcceptedTaskNameWrappers) {
+				indexOfWrapper = taskName.indexOf(wrapper);
+				containsThisWrapper = indexOfWrapper != -1;
+				
+				if (containsThisWrapper) {
+					remainingTaskName = 
+							getTextAfterWrapper(taskName, openingOrClosing, 
+									remainingTaskName, indexOfWrapper);
+					
+					break;
+				}
+			}
+		} catch (NullPointerException error) {
+			// In the case where taskName is null
+			return null;
+		}
+		
+		return remainingTaskName;
+	}
+
+	private String getTextAfterWrapper(String taskName, String openingOrClosing, 
+									   String remainingTaskName, int indexOfWrapper) {
+		switch(openingOrClosing) {
+			case "opening" :
+				remainingTaskName = 
+					getTextAfterOpeningWrapper(taskName, indexOfWrapper);
+				
+				return remainingTaskName;
+				
+			case "closing" :
+				remainingTaskName = 
+					getTextAfterClosingWrapper(taskName, indexOfWrapper);
+				
+				return remainingTaskName;
+		}
+
+		return remainingTaskName;
+	}
+
+	private String getTextAfterOpeningWrapper(String taskName, int indexOfWrapper) {
+		// Will not include the opening wrapper itself
+		return taskName.substring(indexOfWrapper + 1);
+	}
+	
+	private String getTextAfterClosingWrapper(String taskName, int indexOfWrapper) {
+		// Will not include the closing wrapper itself
+		return taskName.substring(0, indexOfWrapper);
 	}
 
 
