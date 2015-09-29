@@ -49,22 +49,26 @@ public class ParserTest {
 		
 		// Ended state traversal
 		state = state.nextState(commandLine);
-		assertEquals(null, state);
+		assertNull(state);
 	}
 	
 	@Test
 	public void parseCommandTest() {
+		// Test cases for valid command formats
 		String correctCommand = "add **(#!(*@&#!(@&";
-		String incorrectCommandIdentifier = "addd *(&(!*&@*!*(@&(";
 		String singleTokenCommandLine = "add";
+		
+		assertEquals("add", parser.parseCommand(correctCommand));
+		assertEquals("add", parser.parseCommand(singleTokenCommandLine));
+		
+		// Test cases for invalid command formats or incorrect number of tokens
+		String incorrectCommandIdentifier = "addd *(&(!*&@*!*(@&(";
 		String singleTokenIncorrectCommand = "adzzd";
 		String emptyCommandLine = "";
 		
-		assertEquals("add", parser.parseCommand(correctCommand));
-		assertEquals(null, parser.parseCommand(incorrectCommandIdentifier));
-		assertEquals("add", parser.parseCommand(singleTokenCommandLine));
-		assertEquals(null, parser.parseCommand(singleTokenIncorrectCommand));
-		assertEquals(null, parser.parseCommand(emptyCommandLine));
+		assertNull(parser.parseCommand(incorrectCommandIdentifier));
+		assertNull(parser.parseCommand(singleTokenIncorrectCommand));
+		assertNull(parser.parseCommand(emptyCommandLine));
 	}
 	
 	@Test
@@ -83,63 +87,68 @@ public class ParserTest {
 		String invalidSecondOption = "starting 23/09 24/09 -r 1week";
 		String invalidSecondOptionField = "starting 23/09 end -r 1week";
 		
-		assertEquals(null, parser.parseAllOptions(singleToken));
-		assertEquals(null, parser.parseAllOptions(invalidSecondOption));
-		assertEquals(null, parser.parseAllOptions(invalidSecondOptionField));
+		assertNull(parser.parseAllOptions(singleToken));
+		assertNull(parser.parseAllOptions(invalidSecondOption));
+		assertNull(parser.parseAllOptions(invalidSecondOptionField));
 		
 		// Test cases for having an invalid option
 		String singleInvalidToken = "startzzgzz";
 		String invalidOptionWithField = "startzxczxc 23/09";
 		
-		assertEquals(null, parser.parseAllOptions(singleInvalidToken));
-		assertEquals(null, parser.parseAllOptions(invalidOptionWithField));
+		assertNull(parser.parseAllOptions(singleInvalidToken));
+		assertNull(parser.parseAllOptions(invalidOptionWithField));
 
 		// Testing for null pointer
-		assertEquals(null, parser.parseAllOptions(null));
+		assertNull(parser.parseAllOptions(null));
 		
 	}
 	
 	@Test
 	public void parseOptionTest() {
+		// Test cases for valid options
 		String validOptionPair = "-s 23/09";
 		String multipleValidOptions = "-s 23/09 -e 29/09 -d 4pm";
 
+		assertEquals("", parser.parseOption(validOptionPair));
+		assertEquals("-e 29/09 -d 4pm", parser.parseOption(multipleValidOptions));
+		
+		// Test cases for invalid options or invalid number of option tokens
 		String invalidOption = "startzxczxc";
 		String invalidOptionWithField = "startzxczxc 23/09";
 		String haveOptionNoField = "-s";
 		String emptyOptions = "";
 		
-		assertEquals("", parser.parseOption(validOptionPair));
-		assertEquals("-e 29/09 -d 4pm", parser.parseOption(multipleValidOptions));
-		
-		assertEquals(null, parser.parseOption(invalidOption));
-		assertEquals(null, parser.parseOption(invalidOptionWithField));
-		assertEquals(null, parser.parseOption(haveOptionNoField));
-		assertEquals(null, parser.parseOption(emptyOptions));
+		assertNull(parser.parseOption(invalidOption));
+		assertNull(parser.parseOption(invalidOptionWithField));
+		assertNull(parser.parseOption(haveOptionNoField));
+		assertNull(parser.parseOption(emptyOptions));
 	}
 	
 	@Test
 	public void getOptionsRemainingTest() {
-		String optionsCommandLine = "starting 23/09 end 24/09 -r 1week";
-		String optionsCommandLineOnePair = "starting 23/09";
+		String validOptionsCommandLine = "starting 23/09 end 24/09 -r 1week";
+		String validPairOptions = "starting 23/09";
 		String emptyOptions = "";
 		
-		assertEquals("end 24/09 -r 1week", parser.getOptionsRemaining(optionsCommandLine));
-		assertEquals("", parser.getOptionsRemaining(optionsCommandLineOnePair));
+		assertEquals("end 24/09 -r 1week", parser.getOptionsRemaining(validOptionsCommandLine));
+		assertEquals("", parser.getOptionsRemaining(validPairOptions));
 		assertEquals("", parser.getOptionsRemaining(emptyOptions));
 	}
 	
 	@Test
 	public void isValidOptionTest() {
+		// Test cases for valid options
 		String correctOption = "-s";
 		String correctOptionAlternative = "start";
+		
+		assertTrue(parser.isAcceptedOption(correctOption));
+		assertTrue(parser.isAcceptedOption(correctOptionAlternative));
+		
+		// Test cases for options with incorrect names or more than 1 option token
 		String incorrectOptionExtraFlag = "--s";
 		String incorrectOptionSpelling = "stzzart";
 		String invalidOption = "start today and tonight";
 		String emptyToken = "";
-		
-		assertTrue(parser.isAcceptedOption(correctOption));
-		assertTrue(parser.isAcceptedOption(correctOptionAlternative));
 		
 		assertFalse(parser.isAcceptedOption(incorrectOptionExtraFlag));
 		assertFalse(parser.isAcceptedOption(incorrectOptionSpelling));
