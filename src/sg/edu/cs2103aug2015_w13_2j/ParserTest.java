@@ -73,11 +73,16 @@ public class ParserTest {
 		String correctOptionAlternative = "start";
 		String incorrectOptionExtraFlag = "--s";
 		String incorrectOptionSpelling = "stzzart";
+		String invalidOption = "start today and tonight";
+		String emptyToken = "";
 		
 		assertTrue(parser.isAcceptedOption(correctOption));
 		assertTrue(parser.isAcceptedOption(correctOptionAlternative));
+		
 		assertFalse(parser.isAcceptedOption(incorrectOptionExtraFlag));
 		assertFalse(parser.isAcceptedOption(incorrectOptionSpelling));
+		assertFalse(parser.isAcceptedOption(invalidOption));
+		assertFalse(parser.isAcceptedOption(emptyToken));
 	}
 
 }
