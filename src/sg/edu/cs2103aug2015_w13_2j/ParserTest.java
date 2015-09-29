@@ -82,7 +82,21 @@ public class ParserTest {
 	 *****************************************************************/
 	@Test
 	public void parseTaskNameTest() {
+		// Test cases for a task name with enclosing wrappers
+		String validTaskName = "'Eat Lunch'";
+		String validTaskNameAlternative = "\"Eat Lunch\"";
 		
+		assertEquals("Eat Lunch", parser.parseTaskName(validTaskName));
+		assertEquals("Eat Lunch", parser.parseTaskName(validTaskNameAlternative));
+		
+		// Test cases for a task name with incomplete wrappers
+		String invalidNoWrappers = "Eat Lunch";
+		String invalidNoOpeningWrapper = "Eat Lunch'";
+		String invalidNoClosingWrapper = "'Eat Lunch";
+		
+		assertNull(parser.parseTaskName(invalidNoWrappers));
+		assertNull(parser.parseTaskName(invalidNoOpeningWrapper));
+		assertNull(parser.parseTaskName(invalidNoClosingWrapper));
 	}
 	
 	@Test

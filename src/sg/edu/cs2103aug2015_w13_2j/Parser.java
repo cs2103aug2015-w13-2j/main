@@ -161,7 +161,49 @@ public class Parser implements ParserInterface {
 	 * 			 appropriate wrappers.
 	 */
 	public String parseTaskName(String commandLine) {
-		return null;
+		String taskName = null;
+		
+		if (hasValidTaskNameWrappers(commandLine)) {
+			taskName = getRemainingTaskName(commandLine, "opening");
+			
+			if (hasValidTaskNameWrappers(taskName)) {
+				taskName = getRemainingTaskName(taskName, "closing");
+				
+			} else {
+				// No closing wrapper found
+				return null;
+			}
+			
+		} else {
+			// No opening wrapper found
+			return null;
+		}
+		
+		return taskName;
+	}
+	
+	/**
+	 * Checks if a commandLine contains any one of the list of accepted
+	 * task name wrappers.
+	 * 
+	 * @param commandLine   command line entered by the user in the
+	 * 						text UI
+	 * 
+	 * @return   true if the commandLine contains any one of the valid
+	 * 			 task name wrappers, false otherwise.
+	 */
+	public boolean hasValidTaskNameWrappers(String commandLine) {
+		boolean containsValidWrapper = false;
+		
+		for (String wrapper: listOfAcceptedTaskNameWrappers) {
+			containsValidWrapper = commandLine.indexOf(wrapper) != -1;
+			
+			if (containsValidWrapper) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	/**
@@ -237,32 +279,6 @@ public class Parser implements ParserInterface {
 	}
 
 
-	/**
-	 * Checks if a commandLine contains any one of the list of accepted
-	 * task name wrappers.
-	 * 
-	 * @param commandLine   command line entered by the user in the
-	 * 						text UI
-	 * 
-	 * @return   true if the commandLine contains any one of the valid
-	 * 			 task name wrappers, false otherwise.
-	 */
-	public boolean hasValidTaskNameWrappers(String commandLine) {
-		boolean containsValidWrapper = false;
-		
-		for (String wrapper: listOfAcceptedTaskNameWrappers) {
-			containsValidWrapper = commandLine.indexOf(wrapper) != -1;
-			
-			if (containsValidWrapper) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	
-	
 	/*****************************************************************
 	 * PARSING OPTIONS FIELD IN COMMAND LINE METHODS
 	 *****************************************************************/
