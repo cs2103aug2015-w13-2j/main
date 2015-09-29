@@ -23,7 +23,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private static final long serialVersionUID = 7758912303888211773L;
 
     // For portability across Unix and Windows systems
-    private static final String NEWLINE = System.getProperty("line.separator");
+    public static final String NEWLINE = System.getProperty("line.separator");
 
     // The (fixed) size of the window
     private static final Dimension PREFERRED_SIZE = new Dimension(800, 600);
