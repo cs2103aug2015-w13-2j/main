@@ -29,6 +29,9 @@ public class ParserTest {
 		assertEquals(sampleCommandLine, parser.getCommandLine());
 	}
 	
+	/*****************************************************************
+	 * TESTING PARSE STATE TRAVERSAL
+	 *****************************************************************/
 	@Test
 	public void parserStateTest() {
 		// Start from the PARSE_COMMAND_STATE
@@ -52,6 +55,9 @@ public class ParserTest {
 		assertNull(state);
 	}
 	
+	/*****************************************************************
+	 * TESTING PARSE COMMAND METHODS
+	 *****************************************************************/
 	@Test
 	public void parseCommandTest() {
 		// Test cases for valid command formats
@@ -71,6 +77,27 @@ public class ParserTest {
 		assertNull(parser.parseCommand(emptyCommandLine));
 	}
 	
+	/*****************************************************************
+	 * TESTING PARSE TASK NAME METHODS
+	 *****************************************************************/
+	@Test
+	public void parseTaskNameTest() {
+		
+	}
+	
+	@Test
+	public void getRemainingTaskNameTest() {
+		
+	}
+	
+	@Test
+	public void hasValidTaskNameWrappers() {
+	
+	}
+	
+	/*****************************************************************
+	 * TESTING PARSE OPTIONS IN COMMANDLINE METHODS
+	 *****************************************************************/
 	@Test
 	public void parseAllOptionsTest() {
 		// Test cases for valid options
