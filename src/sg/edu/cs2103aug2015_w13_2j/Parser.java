@@ -186,20 +186,47 @@ public class Parser implements ParserInterface {
 	}
 	
 	/**
-	 * Parses an option from the commandLine, only for the commands
-	 * that offer this format, e.g. 'add' or 'edit'. Checks is the first
-	 * token is a valid option and that there is a optionField for that
-	 * option, if it does not, this method returns null.
+	 * Parses an option-optionField pair from the options field in commandLine.
+	 * Checks if the first token is a valid option and that there is an 
+	 * optionField for that option, if it does not, this method returns null.
+	 * 
+	 * Pre-condition: Check is only viable for the commands that offer this 
+	 * 				  format, e.g. 'add' or 'edit'. 
 	 * 
 	 * @param    optionsCommandLine   
 	 * 					command line entered by the user in the text UI
 	 * 
-	 * @return	 remaining options left to parse. If the option is not
+	 * @return	 String of remaining options left to parse. If the option is not
 	 * 			 valid, or the option is valid but does not have an option 
 	 * 			 field, this method returns null
 	 */
 	public String parseOption(String optionsCommandLine) {
-		return null;
+		StringTokenizer tokenizer = new StringTokenizer(optionsCommandLine);
+		String option;
+		String optionField;
+		
+		try {
+			option = tokenizer.nextToken();
+			
+			if (isAcceptedOption(option)) {
+				optionField = tokenizer.nextToken();
+				
+				// Check if optionField is valid here 
+				// Need to check if is correct date/time format...etc.
+				// Add this option to the Task's attributes...etc.
+				// -- Work in Progress --
+				
+				return getOptionsRemaining(optionsCommandLine);
+				
+			} else {
+				return null;
+			}
+			
+		} catch (NoSuchElementException error) {
+			// If the optionsCommandLine is the empty String "", or 
+			// there is an option but no option field for that option
+			return null;
+		}
 	}
 	
 	/**

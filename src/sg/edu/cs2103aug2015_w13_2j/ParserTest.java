@@ -67,6 +67,40 @@ public class ParserTest {
 		assertEquals(null, parser.parseCommand(emptyCommandLine));
 	}
 	
+	/**
+	 * Parses an option-optionField pair from the options field in commandLine.
+	 * Checks if the first token is a valid option and that there is an 
+	 * optionField for that option, if it does not, this method returns null.
+	 * 
+	 * Pre-condition: Check is only viable for the commands that offer this 
+	 * 				  format, e.g. 'add' or 'edit'. 
+	 * 
+	 * @param    optionsCommandLine   
+	 * 					command line entered by the user in the text UI
+	 * 
+	 * @return	 String of remaining options left to parse. If the option is not
+	 * 			 valid, or the option is valid but does not have an option 
+	 * 			 field, this method returns null
+	 */
+	@Test
+	public void parseOptionTest() {
+		String validOptionPair = "-s 23/09";
+		String multipleValidOptions = "-s 23/09 -e 29/09 -d 4pm";
+
+		String invalidOption = "startzxczxc";
+		String invalidOptionWithField = "startzxczxc 23/09";
+		String haveOptionNoField = "-s";
+		String emptyOptions = "";
+		
+		assertEquals("", parser.parseOption(validOptionPair));
+		assertEquals("-e 29/09 -d 4pm", parser.parseOption(multipleValidOptions));
+		
+		assertEquals(null, parser.parseOption(invalidOption));
+		assertEquals(null, parser.parseOption(invalidOptionWithField));
+		assertEquals(null, parser.parseOption(haveOptionNoField));
+		assertEquals(null, parser.parseOption(emptyOptions));
+	}
+	
 	@Test
 	public void getOptionsRemainingTest() {
 		String optionsCommandLine = "starting 23/09 end 24/09 -r 1week";
