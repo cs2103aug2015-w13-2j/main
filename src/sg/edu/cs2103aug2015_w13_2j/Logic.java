@@ -39,6 +39,7 @@ public class Logic implements LogicInterface{
     	
     }
     
+    
     public void sort(){
     	
     }
