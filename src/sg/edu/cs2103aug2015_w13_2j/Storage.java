@@ -29,12 +29,8 @@ public class Storage implements StorageInterface {
          * 1. Get string content of file
          * 2. Split string by \n
          * 3. Save to List
-        */ 
+        */
         
         return tasks;
-    }
-    
-    public void exportFile(String path) throws IOException {
-    	// TODO 
     }
 }

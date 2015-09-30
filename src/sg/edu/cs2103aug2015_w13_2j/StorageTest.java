@@ -27,13 +27,8 @@ public class StorageTest {
     	
     	storage.writeFile(toWrite, "StorageTestTXT.txt");
     	
-    	List<Task> toRead = storage.readFile(StorageTestTXT.txt);
+    	List<Task> toRead = storage.readFile("StorageTestTXT.txt");
     	
     	assertTrue(toWrite.equals(toRead));
-    }
-    
-    @Test
-    public void exportTest() {
-    	// TODO: is this even feasible to test?
     }
 }
