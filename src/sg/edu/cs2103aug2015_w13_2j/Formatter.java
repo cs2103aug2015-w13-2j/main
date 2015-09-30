@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
 * Formatter class that processes output and messages before printing
-* to the TextUI for the user's viewing pleasure
+* to the TextUI to provide feedback for the user
 * 
 * @author Lu Yang Kenneth
 */
