@@ -1,5 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -11,13 +12,14 @@ import javafx.util.Pair;
  */
 public class Parser implements ParserInterface {
     private enum State {
-        GENERAL, ALPHA_NUM, NAME, DATE, FLAG
+        GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
     }
 
     private enum Token {
         RESERVED("RESERVED"), DATE("DATE"), DATE_INVALID("DATE_INVALID"), FLAG(
-                "FLAG"), FLAG_INVALID("FLAG_INVALID"), ID("ID"), NAME("NAME"), WHITESPACE(
-                "WHITESPACE"), ALPHA_NUM("ALPHA_NUM");
+                "FLAG"), FLAG_INVALID("FLAG_INVALID"), ID("ID"), ID_INVALID(
+                "ID_INVALID"), NAME("NAME"), WHITESPACE("WHITESPACE"),
+                ALPHA_NUM("ALPHA_NUM");
 
         private String mValue;
 
@@ -76,7 +78,7 @@ public class Parser implements ParserInterface {
             trim();
 
             switch (mState) {
-            
+
             case ALPHA_NUM:
                 s = nextDelimiter(' ');
                 if (isReserved(s)) {
@@ -99,7 +101,7 @@ public class Parser implements ParserInterface {
                 String flag = String.valueOf(next());
                 if (isValidFlag(flag)) {
                     addToken(Token.FLAG, String.valueOf(flag));
-                    //TODO: May not always transition to date state
+                    // TODO: May not always transition to date state
                     mState = State.DATE;
                 } else {
                     addToken(Token.FLAG_INVALID, String.valueOf(flag));
@@ -112,9 +114,22 @@ public class Parser implements ParserInterface {
                     mState = State.NAME;
                 } else if (peek() == '-') {
                     mState = State.FLAG;
+                } else if (peek() >= '0' && peek() <= '9') {
+                    mState = State.ID;
                 } else {
                     mState = State.ALPHA_NUM;
                 }
+                break;
+            case ID:
+                s = nextDelimiter(' ');
+                try {
+                    Integer.parseInt(s);
+                    addToken(Token.ID, s);
+                } catch (NumberFormatException e) {
+                    //e.printStackTrace();
+                    addToken(Token.ID_INVALID, s);
+                }
+                mState = State.GENERAL;
                 break;
             case NAME:
                 s = nextDelimiter(openingQuote);
