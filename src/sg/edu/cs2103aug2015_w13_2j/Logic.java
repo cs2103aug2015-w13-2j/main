@@ -15,6 +15,7 @@ public class Logic implements LogicInterface{
     private ArrayList<Task> events;
     private ArrayList<Task> deadLines;
     private ArrayList<Task> floatingTasks;
+    
  //   private HashMap<String, Task> names;
     
     public Logic(){
