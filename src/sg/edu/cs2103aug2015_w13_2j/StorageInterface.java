@@ -11,13 +11,13 @@ public interface StorageInterface {
      * @param tasks
      *            The list of tasks to be written to disk
      * @param filename
-     *            The filename to write to
+     *            The file to write to
      * @throws IOException
      */
     public void writeFile(List<Task> tasks, String filename) throws IOException;
 
     /**
-     * Reads from the specified file the list of tasks stored within
+     * Reads the list of tasks from the specified text file
      * 
      * @param filename
      *            The file to be read from

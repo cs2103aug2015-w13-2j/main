@@ -12,13 +12,24 @@ import java.util.List;
 * @author Lu Yang Kenneth
 */
 public class Storage implements StorageInterface {
+	public Storage() {
+        // Empty constructor
+    }
+	
     public void writeFile(List<Task> tasks, String filename) throws IOException {
-    	// TODO
+    	/* TODO:
+    	 * 1. Convert List to string
+    	 * 2. Save string to file
+    	 */
     }
 
     public List<Task> readFile(String filename) throws IOException {
         List<Task> tasks = new ArrayList<Task>();
-        // TODO
+        /* TODO:
+         * 1. Get string content of file
+         * 2. Split string by \n
+         * 3. Save to List
+        */ 
         
         return tasks;
     }
