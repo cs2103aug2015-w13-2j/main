@@ -25,14 +25,4 @@ public interface StorageInterface {
      * @throws IOException
      */
     public List<Task> readFile(String filename) throws IOException;
-    
-    //@@author Kenneth
-    /**
-     * Exports a backup of the data file to a user-defined location
-     * 
-     * @param path
-     *            The directory to export the file to
-     * @throws IOException
-     */
-    public void exportFile(String path) throws IOException;
 }
