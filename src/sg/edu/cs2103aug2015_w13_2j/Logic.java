@@ -12,16 +12,12 @@ import java.util.*;
 
 public class Logic implements LogicInterface{
     private ArrayList<Task> tasks;
-    private ArrayList<Task> events;
-    private ArrayList<Task> deadLines;
-    private ArrayList<Task> floatingTasks;
+    private HashMap<String, ArrayList<Task>> types;
 
     
     public Logic(){
         tasks = new ArrayList<Task>();	
-        events = new ArrayList<Task>();
-        deadLines = new ArrayList<Task>();
-        floatingTasks = new ArrayList<Task>();
+        types = new HashMap<String, ArrayList<Task>>();
     }
     
     public void addTask(Task task){
@@ -33,7 +29,7 @@ public class Logic implements LogicInterface{
     }
     
     public void deleteTask(Task task){
-    	
+    	tasks.remove(task);
     }
     
     public void archiveTask(Task task){
@@ -50,5 +46,11 @@ public class Logic implements LogicInterface{
     
     public void echo(String s){
     	FunDUE.sFormatter.passThrough(s);
+    }
+    
+    //WIP
+    public Task findTaskByName(String name){
+    	//for(int index = 0; index<)
+    	return null;
     }
 }
