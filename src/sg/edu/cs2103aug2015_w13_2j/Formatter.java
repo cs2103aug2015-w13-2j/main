@@ -2,7 +2,14 @@ package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.List;
 
-//@@author A0121410H
+//@@author Kenneth
+
+/**
+* Formatter class that processes output and messages before printing
+* to the TextUI for the user's viewing pleasure
+* 
+* @author Lu Yang Kenneth
+*/
 public class Formatter implements FormatterInterface {
     public Formatter() {
         // Empty constructor
