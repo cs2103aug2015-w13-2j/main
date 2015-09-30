@@ -12,6 +12,10 @@ import java.util.*;
 
 public class Logic implements LogicInterface{
     private ArrayList<Task> tasks;
+    private ArrayList<Task> events;
+    private ArrayList<Task> deadLines;
+    private ArrayList<Task> floatingTasks;
+    
     
     public Logic(){
         tasks = new ArrayList<Task>();	
