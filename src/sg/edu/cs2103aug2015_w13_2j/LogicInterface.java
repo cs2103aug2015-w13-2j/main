@@ -4,7 +4,6 @@ import java.util.*;
 
 /**
  * This class contains methods for classes implementing the abstract class
- * LogicInterface Haven't put in edit due to uncertainty of format
  * 
  * @author Nguyen Tuong Van
  */

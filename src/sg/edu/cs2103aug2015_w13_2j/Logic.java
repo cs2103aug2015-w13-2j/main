@@ -15,11 +15,13 @@ public class Logic implements LogicInterface{
     private ArrayList<Task> events;
     private ArrayList<Task> deadLines;
     private ArrayList<Task> floatingTasks;
-    
- //   private HashMap<String, Task> names;
+
     
     public Logic(){
         tasks = new ArrayList<Task>();	
+        events = new ArrayList<Task>();
+        deadLines = new ArrayList<Task>();
+        floatingTasks = new ArrayList<Task>();
     }
     
     public void addTask(Task task){
@@ -33,12 +35,15 @@ public class Logic implements LogicInterface{
     public void deleteTask(Task task){
     	
     }
+    
     public void archiveTask(Task task){
     	
     }
+    
     public void sort(){
     	
     }
+    
     public ArrayList<Task> getAllTask(){
     	return tasks;
     }
