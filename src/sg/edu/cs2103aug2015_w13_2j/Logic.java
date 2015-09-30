@@ -18,6 +18,9 @@ public class Logic implements LogicInterface{
     public Logic(){
         tasks = new ArrayList<Task>();	
         types = new HashMap<String, ArrayList<Task>>();
+        types.put("EVENT", null);
+        types.put("DEADLINE", null);
+        types.put("FLOAT", null);
     }
     
     public void addTask(Task task){
