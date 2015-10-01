@@ -12,15 +12,15 @@ import java.util.*;
 
 public class Logic implements LogicInterface{
     private ArrayList<Task> tasks;
-    private HashMap<String, ArrayList<Task>> types;
-
+    private ArrayList<Task> events;
+    private ArrayList<Task> deadlines;
+    private ArrayList<Task> floating;
     
     public Logic(){
         tasks = new ArrayList<Task>();	
-        types = new HashMap<String, ArrayList<Task>>();
-        types.put("EVENT", null);
-        types.put("DEADLINE", null);
-        types.put("FLOAT", null);
+        events = new ArrayList<Task>();	
+        deadlines = new ArrayList<Task>();	
+        floating = new ArrayList<Task>();	
     }
     
     public void addTask(Task task){
