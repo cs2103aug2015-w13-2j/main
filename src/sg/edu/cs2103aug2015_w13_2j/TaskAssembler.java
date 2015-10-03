@@ -74,7 +74,23 @@ public class TaskAssembler {
 	 * 			Error when an invalid flag or token is found
 	 */
 	private void setTaskFlags() throws Error {
+		Pair<Parser.Token, String> tokenPair = null;
+		Parser.Token tokenType;
+		String tokenValue;
 		
+		for (int i = 0; i < listOfTokens.size(); i++) {
+			tokenPair = listOfTokens.get(i);
+			tokenType = tokenPair.getKey();
+			tokenValue = tokenPair.getValue();
+			
+			if (tokenType.equals(Parser.Token.FLAG)) {
+				setFlagValue(tokenValue, i);
+			} else if (tokenType.equals(Parser.Token.FLAG_INVALID)) {
+				throw new Error("Invalid flag entered.");
+			} else if (tokenType.equals(Parser.Token.ID_INVALID)) {
+				throw new Error("Invalid token entered.");
+			} 
+		}
 	}
 	
 	/**
@@ -98,7 +114,32 @@ public class TaskAssembler {
 	 * 			error acts as an extra safety precaution)
 	 */
 	private void setFlagValue(String flagType, int indexOfFlag) throws Error {
+		int indexOfNextToken = indexOfFlag + 1;
 		
+		// String representation of first occurrence of date token after this flag
+		// TODO: Check for DATE_INVALID tokens and throw appropriate error message 
+		String date = findValueOfToken(Parser.Token.DATE, indexOfNextToken);
+		
+		if (date == null) {
+			throw new Error("No date specified for a particular flag. "
+							+ "Please input a date right after you have "
+							+ "specified a flag.");
+		}
+		
+		switch (flagType) {
+			case "s" :
+				//TODO: Call task interface method Set start time of task when avail
+				break;
+			case "e" :
+				//TODO: Call task interface method and Set end time of task when avail
+				break;
+			case "d" :
+				//TODO: Call task interface Set deadline time of task when avail
+				break;
+			default :
+				// As an extra safety precaution
+				throw new Error("Invalid flag entered.");
+		}
 	}
 	
 	
