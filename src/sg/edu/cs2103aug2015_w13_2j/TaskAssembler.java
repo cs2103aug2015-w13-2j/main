@@ -117,9 +117,11 @@ public class TaskAssembler {
 		int indexOfNextToken = indexOfFlag + 1;
 		
 		// String representation of first occurrence of date token after this flag
-		// TODO: Check for DATE_INVALID tokens and throw appropriate error message 
+		// TODO: Check for DATE_INVALID tokens and throw appropriate error message
 		String date = findValueOfToken(Parser.Token.DATE, indexOfNextToken);
 		
+		// TODO: For now, this error will not never thrown as invalid task
+		// 		 name errors will be thrown first due to Parser bug - not done yet.
 		if (date == null) {
 			throw new Error("No date specified for a particular flag. "
 							+ "Please input a date right after you have "

@@ -4,6 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * TaskAssembler Test class. 
+ * Verifies the workability of TaskAssembler methods.
+ * 
+ * @author A0130894B
+ *
+ */
 public class TaskAssemblerTest {
 
 	private TaskAssembler taskAssembler;
@@ -61,6 +68,7 @@ public class TaskAssemblerTest {
 			assertEquals(expectedErrorInvalidToken, error.getMessage());
 		}
 		
+		// Invalid tokens found, throw Error
 		String invalidMultipleTokensCommandLine = "add 23/09 24/09 'Do Homework'";
 		String expectedErrorInvalidMultipleTokens = "Invalid token entered.";
 		
