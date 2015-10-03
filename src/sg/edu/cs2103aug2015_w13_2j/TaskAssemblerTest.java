@@ -16,6 +16,7 @@ public class TaskAssemblerTest {
 	
 	@Test
 	public void setTaskNameTest() {
+		// Valid Task Name added to Task object
 		String validCommandLine = "add -s 23/09 -e 24/09 'Do Homework'";
 		setUpTestTaskAssembler(validCommandLine);
 		
@@ -24,6 +25,32 @@ public class TaskAssemblerTest {
 		
 		String expectedTaskName = "Do Homework";
 		assertEquals(expectedTaskName, taskAssembler.getAssembledTask().getName());
+		
+		// Valid Task Name added to Task object even without last inverted comma
+		validCommandLine = "add -s 23/09 -e 24/09 'Do Homework";
+		setUpTestTaskAssembler(validCommandLine);
+		
+		validTask = new Task();
+		validTask.setName("Do Homework");
+		
+		assertEquals(expectedTaskName, taskAssembler.getAssembledTask().getName());
+		
+		// Invalid task name found, throw Error
+		String invalidTaskNameCommandLine = "add -s 23/09 -e 24/09 Do Homework'";
+		String expectedErrorInvalidTaskName = "Invalid task name entered";
+		
+		try {
+			setUpTestTaskAssembler(invalidTaskNameCommandLine);
+			fail("setTaskNameTest - invalidTaskNameEntered exception not thrown");
+		} catch (Error error) {
+			assertEquals(expectedErrorInvalidTaskName, error.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void setTaskFlags() {
+		
 	}
 
 }
