@@ -58,8 +58,43 @@ public class Controller {
 	 * 				Error when command is not of any accepted type
 	 * 
 	 */
-	private void startCommandExecution() {
+	public void startCommandExecution() {
+		Commands command = getCommand();
 		
+		switch (command) {
+			case ADD:
+				log.log(Level.INFO, "Switched to 'add' command");
+				//TODO: Call LOGIC INTERFACE method
+				break;
+			case DELETE:
+				log.log(Level.INFO, "Switched to 'delete' command");
+				//TODO: Call LOGIC INTERFACE method
+				break;
+			case EDIT:
+				log.log(Level.INFO, "Switched to 'edit' command");
+				//TODO: Call LOGIC INTERFACE method
+				break;
+			case MARK:
+				log.log(Level.INFO, "Switched to 'mark' command");
+				break;
+			case ARCHIVE:
+			
+			case RETRIEVE:
+				
+			case FILTER:
+				
+			case SUMMARISE:
+				
+			case EXPORT:
+				
+			case HELP:
+				
+			case EXIT:
+				
+			default:
+				throw new Error("Unrecognised command entered");
+				
+		}
 	} 
 	
 	/**
