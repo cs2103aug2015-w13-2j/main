@@ -2,8 +2,10 @@ package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.Iterator;
 
-//@@author A0121410
+//@@author A0121410H
 
 /**
  * Task class that encapsulates all the data that represents a task for e.g. the
@@ -101,7 +103,19 @@ public class Task implements TaskInterface {
         }
     }
     
+    //@@author Kenneth
     public String toString() {
-    	// TODO
+    	String output = "";
+    	
+        Set<Label> labelSet = mLabels.keySet();
+        Iterator<Label> labelIter = labelSet.iterator();
+        
+        while(labelIter.hasNext()){
+            Label label = labelIter.next();
+            String value = mLabels.get(label);
+            output += label.toString() + ":" + value + "|";
+        }
+        
+        return output;
     }
 }

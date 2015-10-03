@@ -57,6 +57,6 @@ public class TaskTest {
     	task = Task.parseTask(taskString);
     	String compareString = task.toString();
     	
-    	assertEquals(taskString.equals(compareString));
+    	assertTrue(taskString.equals(compareString));
     }
 }

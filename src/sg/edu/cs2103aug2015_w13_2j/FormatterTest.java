@@ -13,5 +13,6 @@ public class FormatterTest {
     @Test
     public void somethingTest() {
         // TODO
+    	fail("Not yet implemented");
     }
 }

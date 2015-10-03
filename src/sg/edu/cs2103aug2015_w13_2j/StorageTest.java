@@ -24,7 +24,6 @@ public class StorageTest {
     	toWrite.add(new Task("Task one"));
     	toWrite.add(new Task("Task two"));
     	toWrite.add(new Task("Task three"));
-    	
     	storage.writeFile(toWrite, "StorageTestTXT.txt");
     	
     	List<Task> toRead = storage.readFile("StorageTestTXT.txt");
