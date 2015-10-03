@@ -33,7 +33,7 @@ public class TaskTest {
         assertEquals(values[0], task.getLabel(labels[0]));
         assertEquals(values[1], task.getLabel(labels[1]));
         
-        // Try to retrieve non-existant label
+        // Try to retrieve non-existent label
         assertTrue(task.getLabel(labels[2]) == null);
     }
 
@@ -51,4 +51,12 @@ public class TaskTest {
         assertTrue(now.compareTo(task.getDeadline()) == 0);
     }
     
+    @Test
+    public void conversionTest() {
+    	String taskString = "NAME:test task name|DEADLINE:1443886630410|CREATED:1443886630393|";
+    	task = Task.parseTask(taskString);
+    	String compareString = task.toString();
+    	
+    	assertEquals(taskString.equals(compareString));
+    }
 }

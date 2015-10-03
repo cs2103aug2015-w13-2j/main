@@ -84,5 +84,7 @@ public interface TaskInterface {
      *            A Task in its string format
      * @return The corresponding Task object after conversion
      */
-    public static Task parseTask(String taskString);
+    public static Task parseTask(String taskString) {
+    	// TODO
+    }
 }

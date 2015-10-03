@@ -104,8 +104,4 @@ public class Task implements TaskInterface {
     public String toString() {
     	// TODO
     }
-    
-    public static Task parseTask(String taskString) {
-    	// TODO
-    }
 }
