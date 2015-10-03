@@ -100,4 +100,12 @@ public class Task implements TaskInterface {
             return String.valueOf(date.getTime());
         }
     }
+    
+    public String toString() {
+    	// TODO
+    }
+    
+    public static Task parseTask(String taskString) {
+    	// TODO
+    }
 }

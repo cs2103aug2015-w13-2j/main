@@ -69,4 +69,20 @@ public interface TaskInterface {
      * @return Date object representing the deadline or null if not set
      */
     public Date getDeadline();
+    
+    /**
+     * Converts Task object into string format for storage in the data file
+     * 
+     * @return String representing the Task and its attributes
+     */
+    public String toString();
+    
+    /**
+     * Converts a string into its corresponding Task object
+     * 
+     * @param taskString
+     *            A Task in its string format
+     * @return The corresponding Task object after conversion
+     */
+    public static Task parseTask(String taskString);
 }
