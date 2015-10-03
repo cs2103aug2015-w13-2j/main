@@ -74,8 +74,25 @@ public class Controller {
 	 * 			Error when a token not of the RESERVED Token type is found 
 	 * 			to represent the command of the user's input
 	 */
-	private Commands getCommand() throws Error {
-		return null;
+	public Commands getCommand() throws Error {
+		Pair<Parser.Token, String> commandTokenPair;
+		
+		try {
+			commandTokenPair = listOfTokens.get(0);
+			Parser.Token commandType = commandTokenPair.getKey();
+			String commandName = commandTokenPair.getValue();
+			
+			if (commandType.equals(Parser.Token.RESERVED)) {
+				Commands recognisedCommand = 
+						Commands.valueOf(commandName.toUpperCase());
+				
+				return recognisedCommand;
+			} else {
+				throw new Error("Invalid command entered");
+			}
+		} catch (ArrayIndexOutOfBoundsException error) {
+			throw new Error("Invalid command entered. No user input detected.");
+		}
 	}
 	
 }
