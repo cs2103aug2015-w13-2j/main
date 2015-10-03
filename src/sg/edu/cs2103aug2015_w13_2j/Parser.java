@@ -14,7 +14,7 @@ public class Parser implements ParserInterface {
         GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
     }
 
-    private enum Token {
+    public enum Token {
         RESERVED("RESERVED"), DATE("DATE"), DATE_INVALID("DATE_INVALID"), FLAG(
                 "FLAG"), FLAG_INVALID("FLAG_INVALID"), ID("ID"), ID_INVALID(
                 "ID_INVALID"), NAME("NAME"), WHITESPACE("WHITESPACE"),
@@ -50,7 +50,11 @@ public class Parser implements ParserInterface {
         mTokens.clear();
         startParserLoop();
     }
-
+    
+    public Vector<Pair<Token, String>> getListOfTokens() {
+		return mTokens;
+    }
+    
     public String getParsedTokens() {
         StringBuilder sb = new StringBuilder();
 

@@ -1,5 +1,9 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.util.Vector;
+
+import javafx.util.Pair;
+
 //@@author A0121410H
 public interface ParserInterface {
     /**
@@ -20,4 +24,12 @@ public interface ParserInterface {
      * @return The string of tokens parsed
      */
     public String getParsedTokens();
+    
+    /**
+     * Retrieves the list of tokens parsed and their values.
+     * 
+     * @return A Vector of <Token-Token name> pairs
+     */
+    public Vector<Pair<Parser.Token, String>> getListOfTokens();
+    
 }
