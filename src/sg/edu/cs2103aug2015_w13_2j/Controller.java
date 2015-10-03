@@ -7,9 +7,15 @@ import java.util.logging.Logger;
 import javafx.util.Pair;
 
 /**
- * Class that determines 
+ * Class that determines the appropriate method of execution from
+ * the Logic Interface. It scans for the first token of the user 
+ * input parsed by the Parser class and verifies it. The appropriate 
+ * method for that command is then executed.
  * 
- * @@author A0130894B
+ * The Task object passed to the Logic Interface methods is handled
+ * by the TaskAssembler class and not this class.
+ * 
+ * @author A0130894B
  *
  */
 public class Controller {
@@ -28,7 +34,9 @@ public class Controller {
 	
 	/**
 	 * Constructor for CustomController class. 
-	 * Takes in a Parser object and initializes a listOfTokens.
+	 * Takes in a Parser object and initializes a listOfTokens parsed 
+	 * by the Parser. The task object is handled upon construction 
+	 * by the TaskAssembler.
 	 */
 	public Controller(Parser parser) {
 		this.listOfTokens = parser.getListOfTokens();
@@ -39,14 +47,19 @@ public class Controller {
 	}
 	
 	/**
-	 * Retrieves and returns a list of available enum type commands 
+	 * Retrieves a list of available enum type commands 
 	 * 
 	 * @return	 list of available commands
 	 */
-	public static Commands[] getCommands() {
+	public static Commands[] getCommandsEnum() {
 		return Commands.values();
 	}
 	
+	/**
+	 * Retrieves the task object of this class
+	 * 
+	 * @return   Task object assembled
+	 */
 	public Task getControllerTask() {
 		return this.task;
 	}
@@ -56,7 +69,6 @@ public class Controller {
 	 * 
 	 * @throws   Error
 	 * 				Error when command is not of any accepted type
-	 * 
 	 */
 	public void startCommandExecution() {
 		Commands command = getCommand();
@@ -105,9 +117,9 @@ public class Controller {
 	 * 
 	 * @return   A valid command of user input command line
 	 * 
-	 * @throws Error
-	 * 			Error when a token not of the RESERVED Token type is found 
-	 * 			to represent the command of the user's input
+	 * @throws   Error
+	 * 			   Error when a token not of the RESERVED Token type is found 
+	 * 			   to represent the command of the user's input
 	 */
 	public Commands getCommand() throws Error {
 		Pair<Parser.Token, String> commandTokenPair;

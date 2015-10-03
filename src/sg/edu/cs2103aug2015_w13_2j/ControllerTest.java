@@ -4,6 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Controller Test class. 
+ * Verifies the workability of all Controller methods.
+ * 
+ * @author A0130894B
+ */
 public class ControllerTest {
 
 	private Controller controller;
