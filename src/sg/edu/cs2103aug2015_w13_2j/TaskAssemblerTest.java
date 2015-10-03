@@ -50,7 +50,42 @@ public class TaskAssemblerTest {
 	
 	@Test
 	public void setTaskFlags() {
+		// Invalid token found, throw Error
+		String invalidTokenCommandLine = "add -s 23/09 24/09 'Do Homework'";
+		String expectedErrorInvalidToken = "Invalid token entered.";
 		
+		try {
+			setUpTestTaskAssembler(invalidTokenCommandLine);
+			fail("setTaskFlags - invalidToken exception not thrown");
+		} catch (Error error) {
+			assertEquals(expectedErrorInvalidToken, error.getMessage());
+		}
+		
+		String invalidMultipleTokensCommandLine = "add 23/09 24/09 'Do Homework'";
+		String expectedErrorInvalidMultipleTokens = "Invalid token entered.";
+		
+		try {
+			setUpTestTaskAssembler(invalidMultipleTokensCommandLine);
+			fail("setTaskFlags - invalidMultipleToken exception not thrown");
+		} catch (Error error) {
+			assertEquals(expectedErrorInvalidMultipleTokens, error.getMessage());
+		}
+		
+		/* TODO: To be edited and tested again
+		// Invalid date found, throw Error
+		String dateNotFoundCommandLine = "add -s 'Do Homework'";
+		String expectedErrordateNotFound = 
+				"No date specified for a particular flag. "
+				+ "Please input a date right after you have "
+				+ "specified a flag.";
+		
+		try {
+			setUpTestTaskAssembler(dateNotFoundCommandLine);
+			fail("setTaskFlags - dateNotFound exception not thrown");
+		} catch (Error error) {
+			assertEquals(expectedErrordateNotFound, error.getMessage());
+		}
+		*/
 	}
 
 }
