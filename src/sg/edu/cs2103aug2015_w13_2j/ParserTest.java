@@ -131,5 +131,13 @@ public class ParserTest {
 
         testParser(singleInvalidToken, singleInvalidTokenExpected);
         testParser(invalidOptionWithField, invalidOptionWithFieldExpected);
+    
+        // Test cases for having an invalid flag followed by task name
+        String invalidFlagThenTaskName = "add -s 'Do Homework'";
+        String invalidFlagThenTaskNameExpected = "[RESERVED=add][WHITESPACE]"
+        		+ "[FLAG=s][NAME=Do Homework]";
+        testParser(invalidFlagThenTaskName, invalidFlagThenTaskNameExpected);
     }
+    
+   
 }
