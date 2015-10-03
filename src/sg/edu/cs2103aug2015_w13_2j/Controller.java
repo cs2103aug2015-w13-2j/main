@@ -1,14 +1,12 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 /**
- * Class that handles the process of parsing the commandLine. 
- * The traversal of states depends on the command specified in the 
- * commandLine. 
+ * Class that determines 
  * 
- * @author Natasha Koh Sze Sze
+ * @@author A0130894B
  *
  */
-public class ParserStateHandler {
+public class Controller {
 	/**
 	 * Enum class representing all available commands supported
 	 */
@@ -18,41 +16,39 @@ public class ParserStateHandler {
 	}
 	
 	/**
-	 * Enum class representing all states of parsing a commandLine
+	 * 
 	 */
-	public enum ParserState {
+	public enum ControllerState {
 		PARSE_COMMAND_STATE {
-			public ParserState nextState(String commandLine) {
+			public ControllerState nextState(String commandLine) {
 				return PARSE_TASK_NAME_STATE;
 			}
 			// Pass commandLine without command token (first token) to next state
 		}, 
 		
 		PARSE_TASK_NAME_STATE {
-			public ParserState nextState(String commandLine) {
+			public ControllerState nextState(String commandLine) {
 				return PARSE_OPTIONS_STATE;
 			}
 			// Pass commandLine without task name token (last token) to next state
 		}, 
 		
 		PARSE_OPTIONS_STATE {
-			public ParserState nextState(String commandLine) {
+			public ControllerState nextState(String commandLine) {
 				return PARSE_END;
 			}
 			// Pass something to ending state, doesn't really matter what
 		},
 		
 		PARSE_END {
-			public ParserState nextState(String commandLine) {
+			public ControllerState nextState(String commandLine) {
 				return null;
 			}
 		};
 		
-		public abstract ParserState nextState(String commandLine);
+		public abstract ControllerState nextState(String commandLine);
 		
 	}
-	
-	// Methods...
 	
 	/**
 	 * Retrieves and returns a list of available enum type commands 

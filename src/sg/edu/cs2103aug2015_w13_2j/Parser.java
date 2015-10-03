@@ -7,8 +7,7 @@ import java.util.Vector;
 import javafx.util.Pair;
 
 /**
- * Sample Add command format add -s <date/time> -e <date/time> -r <frequency/>
- * -d <date/time> "Task name"
+ * 
  */
 public class Parser implements ParserInterface {
     private enum State {
