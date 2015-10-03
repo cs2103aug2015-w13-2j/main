@@ -7,10 +7,12 @@ import java.util.logging.Logger;
 import javafx.util.Pair;
 
 /**
- * Class that determines the appropriate method of execution from
- * the Logic Interface. It scans for the first token of the user 
- * input parsed by the Parser class and verifies it. The appropriate 
- * method for that command is then executed.
+ * This class determines the appropriate method of execution from
+ * the Logic Interface. 
+ * 
+ * It scans for the first token of the user input parsed by the 
+ * Parser class and verifies it. The appropriate method for that 
+ * command is then executed.
  * 
  * The Task object passed to the Logic Interface methods is handled
  * by the TaskAssembler class and not this class.

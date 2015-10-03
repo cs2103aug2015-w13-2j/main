@@ -4,6 +4,16 @@ import java.util.Vector;
 
 import javafx.util.Pair;
 
+/**
+ * This class assigns the appropriate attributes of a Task 
+ * corresponding to the flags in the user's input.
+ * 
+ * More specifically, the task name and flags/flag-values stated 
+ * in the user's input will be detected and assigned to the 
+ * correct attributes of the Task object.
+ * 
+ * @author A0130894B
+ */
 public class TaskAssembler {
 	private Task task;
 	private Vector<Pair<Parser.Token, String>> listOfTokens;
@@ -11,10 +21,10 @@ public class TaskAssembler {
 	/**
 	 * Constructor that initializes the listOfTokens to process a 
 	 * task
-	 * @param listOfTokens
+	 * 
+	 * @param listOfTokens   List of tokens from user input
 	 */
-	public TaskAssembler(
-			Vector<Pair<Parser.Token, String>> listOfTokens) {
+	public TaskAssembler(Vector<Pair<Parser.Token, String>> listOfTokens) {
 		this.listOfTokens = listOfTokens;
 		task = new Task();
 		
@@ -46,7 +56,13 @@ public class TaskAssembler {
 	 * 			Error when no valid task name is specified in user's input
 	 */
 	private void setTaskName() throws Error {
-
+		String taskName = findValueOfToken(Parser.Token.NAME, 0);
+		
+		if (taskName == null) {
+			throw new Error("Invalid task name entered");
+		} else {
+			task.setName(taskName);
+		}
 	}
 	
 	/**
@@ -104,7 +120,21 @@ public class TaskAssembler {
 	 * 		   be found
 	 */
 	private String findValueOfToken(Parser.Token tokenTypeToFind, int start) throws Error {
-		return null;
+		Pair<Parser.Token, String> tokenPair = null;
+		Parser.Token tokenType = null;
+		String tokenValue = null;
+		
+		for (int i = start; i < listOfTokens.size(); i++) {
+			tokenPair = listOfTokens.get(i);
+			tokenType = tokenPair.getKey();
+			
+			if (tokenType.equals(tokenTypeToFind)) {
+				tokenValue = tokenPair.getValue();
+				break;
+			}
+		}
+		
+		return tokenValue;
 	}
 	
 }
