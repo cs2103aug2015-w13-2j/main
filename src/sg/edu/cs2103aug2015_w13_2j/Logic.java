@@ -73,14 +73,20 @@ public class Logic implements LogicInterface{
     	FunDUE.sFormatter.passThrough(s);
     }
     
-   
+    /**
+     * Find a task based on name
+     * @param name
+     *            the name being searched for 
+     * @return 
+     *        the Task with the name requested
+     */
     public Task findTaskByName(String name){
     	//for the case of only one task with the name first
     	Task result = new Task();
     	for(int i = 0; i < tasks.size(); i++){
     		if(tasks.get(i).getName().equals(name)){
     			result = tasks.get(i);
-    			break; //for now, only output the first occurence
+    			break; //for now, only output the first occurrence
     		}
     	}
     	
