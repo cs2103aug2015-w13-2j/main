@@ -29,6 +29,14 @@ public class StorageTest {
          * but this is to test if Java's interaction
          * with file directories work as intended.
          */
-    	fail("Not yet implemented");
+    	
+    	// current execution directory
+    	String dir = System.getProperty("user.dir");
+    	System.out.println(dir);
+    	
+    	// create (empty) data file
+    	String dataFilePath = storage.readRawFile("DATA_FILE_PATH");
+    	System.out.println(dataFilePath);
+    	storage.writeRawFile("", dataFilePath);
     }
 }
