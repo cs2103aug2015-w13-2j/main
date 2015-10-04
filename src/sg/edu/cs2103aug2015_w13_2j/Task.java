@@ -103,11 +103,19 @@ public class Task implements TaskInterface {
     }
     
     public void markDeleted() {
-        mLabels.put(Label.STATUS, Status.DELETED.toString());
+    	this.setStatus(Status.DELETED);
     }
 
     public void markCompleted() {
         this.setStatus(Status.COMPLETED);
+    }
+    
+    public void markArchived() {
+        this.setStatus(Status.ARCHIVED);
+    }
+    
+    public void markOverdue() {
+        this.setStatus(Status.OVERDUE);
     }
     
     public String getStatus() {

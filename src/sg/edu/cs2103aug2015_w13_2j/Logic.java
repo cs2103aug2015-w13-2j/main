@@ -52,6 +52,12 @@ public class Logic implements LogicInterface{
     	return tasks.get(index);
     }
     
+    /**
+     * Delete a task
+     * @param task
+     *            the new task to be deleted
+     * 
+     */
     public void deleteTask(Task task){
     	task.markDeleted();
     	tasks.remove(task);
@@ -61,7 +67,7 @@ public class Logic implements LogicInterface{
     }
     
     public void archiveTask(Task task){
-    	
+    	task.markArchived();
     }
     
     
