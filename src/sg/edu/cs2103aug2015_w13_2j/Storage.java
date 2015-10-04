@@ -1,6 +1,9 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,21 +19,32 @@ public class Storage implements StorageInterface {
         // Empty constructor
     }
 	
-    public void writeFile(List<Task> tasks, String filename) throws IOException {
-    	/* TODO:
-    	 * 1. Convert List to string
-    	 * 2. Save string to file
-    	 */
-    }
+	public String readRawFile(String filename) throws Exception {
+		String content = new String(Files.readAllBytes(Paths.get(filename)));
+		return content;
+	}
 
-    public List<Task> readFile(String filename) throws IOException {
-        List<Task> tasks = new ArrayList<Task>();
-        /* TODO:
-         * 1. Get string content of file
-         * 2. Split string by \n
-         * 3. Save to List
-        */
-        
+    public List<Task> readFile(String filename) throws Exception {
+    	// Files.readAllLines() uses UTF-8 character encoding
+    	// and ensures that the file is closed after all bytes are read
+    	List<String> lines = Files.readAllLines(Paths.get(filename));
+    	
+    	List<Task> tasks = new ArrayList<Task>();
+    	for(String taskString : lines) {
+    		tasks.add(Task.parseTask(taskString));
+    	}
         return tasks;
+    }
+	
+    public void writeRawFile(String content, String filename) throws IOException {
+    	Files.write(Paths.get(filename), content.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+    }
+    
+    public void writeFile(List<Task> tasks, String filename) throws IOException {
+    	String content = "";
+    	for(Task task : tasks) {
+    		content += task.toString() + "\n";
+    	}
+    	writeRawFile(content, filename);
     }
 }
