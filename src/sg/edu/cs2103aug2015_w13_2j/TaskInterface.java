@@ -12,8 +12,19 @@ import java.util.Date;
 public interface TaskInterface {
     // Enumerated labels
     public enum Label {
-        CREATED, DEADLINE, NAME
+        CREATED, DEADLINE, NAME, TYPE, STATUS
     }
+    
+    //@author Nguyen Tuong Van
+  
+    public enum Type {
+        EVENT, DUE, FLOAT
+    }
+    
+    public enum Status {
+        ONGOING, COMPLETED, OVERDUE, ARCHIVED, DELETED
+    }
+    
     
     /**
      * Sets a label-value pair of the Task object

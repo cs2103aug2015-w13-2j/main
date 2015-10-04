@@ -12,15 +12,19 @@ import java.util.*;
 
 public class Logic implements LogicInterface{
     private ArrayList<Task> tasks;
-    private ArrayList<Task> events;
-    private ArrayList<Task> deadlines;
-    private ArrayList<Task> floating;
+    private ArrayList<Task> events;//TBC if needed
+    private ArrayList<Task> deadlines;//TBC if needed
+    private ArrayList<Task> floating;//TBC if needed
+    private ArrayList<Task> userView;//to store the user's latest requested list if any
+                                     //eg. user filter(completed) all completed tasks will be store
+                                     //here in case user wants to perform further request 
     
     public Logic(){
         tasks = new ArrayList<Task>();	
         events = new ArrayList<Task>();	
         deadlines = new ArrayList<Task>();	
         floating = new ArrayList<Task>();	
+        userView = new ArrayList<Task>();
     }
     
     public void addTask(Task task){
@@ -52,9 +56,17 @@ public class Logic implements LogicInterface{
     	FunDUE.sFormatter.passThrough(s);
     }
     
-    //WIP
+   
     public Task findTaskByName(String name){
-    	//for(int index = 0; index<)
-    	return null;
+    	//for the case of only one task with the name first
+    	Task result = new Task();
+    	for(int i = 0; i < tasks.size(); i++){
+    		if(tasks.get(i).getName().equals(name)){
+    			result = tasks.get(i);
+    			break; //for now, only output the first occurence
+    		}
+    	}
+    	
+       return result;
     }
 }
