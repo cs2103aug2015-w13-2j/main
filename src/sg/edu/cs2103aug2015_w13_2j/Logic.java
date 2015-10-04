@@ -70,6 +70,48 @@ public class Logic implements LogicInterface{
     	task.markArchived();
     }
     
+    /**
+     * This method lets user see all tasks they have previously marked as completed
+     * It traverses the tasks list to take out all completed task, put them into the
+     * userView list and prints out the tasks
+     *  
+     * @return
+     *            the list of completed tasks
+     * 
+     */
+    
+    public ArrayList<Task> viewCompleted(){
+    	userView = new ArrayList<Task>();
+    	for(int i = 0; i < tasks.size(); i++){
+    		if(tasks.get(i).getStatus().equals("COMPLETED")){
+    			userView.add(tasks.get(i));
+    		}
+    	}
+    	
+    	return userView;
+    }
+    
+    public ArrayList<Task> viewArchived(){
+    	userView = new ArrayList<Task>();
+    	for(int i = 0; i < tasks.size(); i++){
+    		if(tasks.get(i).getStatus().equals("ARCHIVED")){
+    			userView.add(tasks.get(i));
+    		}
+    	}
+    	
+    	return userView;
+    }
+    
+    public ArrayList<Task> viewOverdue(){
+    	userView = new ArrayList<Task>();
+    	for(int i = 0; i < tasks.size(); i++){
+    		if(tasks.get(i).getStatus().equals("OVERDUE")){
+    			userView.add(tasks.get(i));
+    		}
+    	}
+    	
+    	return userView;
+    }
     
     public void sortByDeadLine(){
     	
