@@ -37,6 +37,8 @@ public class Task implements TaskInterface {
     public Task(String name) {
         this();
         setName(name);
+        //@author Nguyen Tuong Van
+        setStatus(Status.ONGOING);
     }
     
     public void setLabel(Label label, String value) {
@@ -99,7 +101,15 @@ public class Task implements TaskInterface {
     public void setStatus(Status status) {
         mLabels.put(Label.STATUS, status.toString());
     }
+    
+    public void markDeleted() {
+        mLabels.put(Label.STATUS, Status.DELETED.toString());
+    }
 
+    public void markCompleted() {
+        this.setStatus(Status.COMPLETED);
+    }
+    
     public String getStatus() {
         return getLabel(Label.STATUS);
     }

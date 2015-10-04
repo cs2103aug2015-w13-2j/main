@@ -53,7 +53,11 @@ public class Logic implements LogicInterface{
     }
     
     public void deleteTask(Task task){
+    	task.markDeleted();
     	tasks.remove(task);
+    	events.remove(task);
+    	deadlines.remove(task);
+    	floats.remove(task);
     }
     
     public void archiveTask(Task task){
