@@ -91,6 +91,14 @@ public class Logic implements LogicInterface{
     	return userView;
     }
     
+    /**
+     * This method lets user see all tasks they have previously marked as completed
+     * It works the same way as viewCompleted does
+     *  
+     * @return
+     *            the list of archived tasks
+     * 
+     */
     public ArrayList<Task> viewArchived(){
     	userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
