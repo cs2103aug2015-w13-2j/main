@@ -133,6 +133,24 @@ public class Logic implements LogicInterface{
     	return userView;
     }
     
+    /**
+     * This method lets user see all tasks are still active
+     * It works the same way as viewCompleted does
+     * @return
+     *            the list of active tasks
+     * 
+     */
+    public ArrayList<Task> viewOngoing(){
+    	userView = new ArrayList<Task>();
+    	for(int i = 0; i < tasks.size(); i++){
+    		if(tasks.get(i).getStatus().equals("ONGOING")){
+    			userView.add(tasks.get(i));
+    		}
+    	}
+    	
+    	return userView;
+    }
+    
     public void sortByDeadLine(){
     	
     }
