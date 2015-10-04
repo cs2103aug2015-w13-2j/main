@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
 This class implements methods from LogicInterface
-@@author Nguyen Tuong Van  
+@@author A0133387B 
 
  */
 
@@ -158,10 +158,13 @@ public class Logic implements LogicInterface{
     
     public void sortByDeadLine(ArrayList<Task> list){
     	//TODO: add suitable sorting algorithm here
+    	
     }
     
     public void sortByDeadLine(){
     	//TODO: add suitable sorting algorithm here
+    	//this method is invoked if no parameter is passed in -> sort the whole tasks
+    	//list and put them into the userView
     }
     
     /**
