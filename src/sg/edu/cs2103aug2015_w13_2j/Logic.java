@@ -1,5 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.io.IOException;
+
 /**
 This class implements methods from LogicInterface
 @author Nguyen Tuong Van  
@@ -135,8 +137,17 @@ public class Logic implements LogicInterface{
     	
     }
     
+    /**
+     * This method updates the tasks list upon a new session
+     *  
+     *  */
+    
     public void readFile(){
-    	
+    	try{
+    	    tasks = (ArrayList)FunDUE.sStorage.readFile("output.txt");//what should be the fileName field?
+    	} catch (Exception e){
+    		e.printStackTrace();
+    	}
     }
     
     public ArrayList<Task> getAllTask(){
