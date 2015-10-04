@@ -111,6 +111,15 @@ public class Logic implements LogicInterface{
     	return userView;
     }
     
+    /**
+     * This method lets user see all tasks which have not been marked completed after the deadline
+     * This only applies for tasks with due dates
+     * It works the same way as viewCompleted does
+     *  
+     * @return
+     *            the list of overdue tasks
+     * 
+     */
     public ArrayList<Task> viewOverdue(){
     	userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
