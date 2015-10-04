@@ -28,6 +28,7 @@ public class Logic implements LogicInterface{
         deadlines = new ArrayList<Task>();	
         floats = new ArrayList<Task>();	
         userView = new ArrayList<Task>();
+        readFile();
     }
     
     /**
@@ -122,6 +123,10 @@ public class Logic implements LogicInterface{
     }
     
     public void sortByDeadLine(){
+    	
+    }
+    
+    public void readFile(){
     	
     }
     
