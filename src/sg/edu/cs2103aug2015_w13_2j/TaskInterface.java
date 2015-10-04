@@ -15,7 +15,7 @@ public interface TaskInterface {
         CREATED, DEADLINE, NAME, TYPE, STATUS
     }
     
-    //@author Nguyen Tuong Van
+    //@@author A0133387B
   
     public enum Type {
         EVENT, DUE, FLOAT

@@ -37,7 +37,7 @@ public class Task implements TaskInterface {
     public Task(String name) {
         this();
         setName(name);
-        //@author Nguyen Tuong Van
+        //@@author A0133387B
         setStatus(Status.ONGOING);
     }
     

@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * This class contains methods for classes implementing the abstract class
  * 
- * @author Nguyen Tuong Van
+ * @@author Nguyen Tuong Van
  */
 
 public interface LogicInterface {
@@ -19,6 +19,8 @@ public interface LogicInterface {
     public void archiveTask(Task task);
 
     public void sortByDeadLine();
+    
+    public void sortByDeadLine(ArrayList<Task> list);
 
     public ArrayList<Task> getAllTask();
 

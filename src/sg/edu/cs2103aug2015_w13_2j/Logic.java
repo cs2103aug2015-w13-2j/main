@@ -4,10 +4,8 @@ import java.io.IOException;
 
 /**
 This class implements methods from LogicInterface
-@author Nguyen Tuong Van  
+@@author Nguyen Tuong Van  
 
-TODO: Should we include a HashMap besides the ArrayList of Tasks
-so as to store the task names as keys?
  */
 
 import java.util.*;
@@ -151,8 +149,19 @@ public class Logic implements LogicInterface{
     	return userView;
     }
     
+    /**
+     * This method sorts a list of tasks according to their deadlines(if any)
+     * The tasks with deadlines takes priority, followed by events sorted according to start time
+     * and floats to be added last, sorted by their names
+     *  
+     *  */
+    
+    public void sortByDeadLine(ArrayList<Task> list){
+    	//TODO: add suitable sorting algorithm here
+    }
+    
     public void sortByDeadLine(){
-    	
+    	//TODO: add suitable sorting algorithm here
     }
     
     /**
