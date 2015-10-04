@@ -18,7 +18,7 @@ public interface LogicInterface {
 
     public void archiveTask(Task task);
 
-    public void sort();
+    public void sortByDeadLine();
 
     public ArrayList<Task> getAllTask();
 
