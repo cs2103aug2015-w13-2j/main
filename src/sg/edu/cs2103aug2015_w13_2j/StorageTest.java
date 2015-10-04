@@ -2,8 +2,6 @@ package sg.edu.cs2103aug2015_w13_2j;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -13,21 +11,24 @@ public class StorageTest {
     private Storage storage = new Storage();
 
     @Test
-    public void readAndWriteTest() {
-        /* TODO:
-         * Create a sample List
-         * Write to a test file
-         * Read from test file
-         * See if sample list and obtained list are the same
+    public void readAndWriteTest() throws Exception {
+    	String filename = "StorageTest.txt";
+    	
+    	String stringToWrite = "NAME:Task one|CREATED:1443958836657|\nNAME:Task two|CREATED:1443958836657|\nNAME:Task three|CREATED:1443958836657|\n";
+    	storage.writeRawFile(stringToWrite, filename);
+    	List<Task> listWritten = storage.readFile(filename);
+    	storage.writeFile(listWritten, filename);
+    	String stringWritten = storage.readRawFile(filename);
+    	
+    	assertTrue(stringToWrite.equals(stringWritten));
+    }
+    
+    @Test
+    public void dataFilePathTest() throws Exception {
+        /* Not performed by storage eventually,
+         * but this is to test if Java's interaction
+         * with file directories work as intended.
          */
-    	List<Task> toWrite = new ArrayList<Task>();
-    	toWrite.add(new Task("Task one"));
-    	toWrite.add(new Task("Task two"));
-    	toWrite.add(new Task("Task three"));
-    	storage.writeFile(toWrite, "StorageTestTXT.txt");
-    	
-    	List<Task> toRead = storage.readFile("StorageTestTXT.txt");
-    	
-    	assertTrue(toWrite.equals(toRead));
+    	fail("Not yet implemented");
     }
 }
