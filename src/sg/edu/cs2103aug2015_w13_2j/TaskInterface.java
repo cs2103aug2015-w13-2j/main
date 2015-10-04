@@ -1,6 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.Date;
+import java.lang.reflect.Method;
 
 //@@author A0121410H
 
@@ -14,6 +15,23 @@ public interface TaskInterface {
     public enum Label {
         CREATED, DEADLINE, NAME
     }
+    
+    /**
+     * Sets a label-value pair of the Task object
+     * 
+     * @param label
+     *            The label to be set
+     * @param value
+     *            The value to set the label to or null to unset the label
+     */
+    public void setLabel(Label label, String value);
+
+    /**
+     * Retrieves the value of a label of the Task object
+     * 
+     * @return The value of the label or null if not set
+     */
+    public String getLabel(Label label);
     
     /**
      * Sets the name of this Task object as a label-value pair
@@ -31,22 +49,14 @@ public interface TaskInterface {
     public String getName();
 
     /**
-     * Sets a label-value pair of the Task object
+     * Sets the date and time the Task object was created.
+     * Used only in parseTask()
      * 
-     * @param label
-     *            The label to be set
-     * @param value
-     *            The value to set the label to or null to unset the label
+     * @param createdString
+     *            String representing the millisecond epoch
      */
-    public void setLabel(Label label, String value);
-
-    /**
-     * Retrieves the value of a label of the Task object
-     * 
-     * @return The value of the label or null if not set
-     */
-    public String getLabel(Label label);
-
+    public void setCreated(String createdString);
+    
     /**
      * Convenience method to retrieve the date and time this Task object was
      * created in a Date object
@@ -62,6 +72,15 @@ public interface TaskInterface {
      *            Date object representing the deadline or null to unset
      */
     public void setDeadline(Date deadline);
+    
+    /**
+     * Sets the deadline of the Task object
+     * Used only in parseTask()
+     * 
+     * @param deadlineString
+     *            String representing the millisecond epoch
+     */
+    public void setDeadline(String deadlineString);
 
     /**
      * Retrieves the deadline of the Task object
@@ -79,12 +98,15 @@ public interface TaskInterface {
     
     /**
      * Converts a string into its corresponding Task object
+     * Note: Exception must be thrown in all methods that call parseTask()
      * 
      * @param taskString
      *            A Task in its string format
      * @return The corresponding Task object after conversion
      */
-    public static Task parseTask(String taskString) {
-    	// TODO
+    public static Task parseTask(String taskString) throws Exception {
+    	Task task = new Task();
+    	// To be overriden in Task.java
+        return task;
     }
 }

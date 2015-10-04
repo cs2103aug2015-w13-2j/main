@@ -52,8 +52,8 @@ public class TaskTest {
     }
     
     @Test
-    public void conversionTest() {
-    	String taskString = "NAME:test task name|DEADLINE:1443886630410|CREATED:1443886630393|";
+    public void conversionTest() throws Exception {
+    	String taskString = "NAME:test task name|CREATED:1443886630393|DEADLINE:1443886630410|";
     	task = Task.parseTask(taskString);
     	String compareString = task.toString();
     	

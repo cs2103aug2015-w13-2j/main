@@ -1,5 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
@@ -37,6 +38,14 @@ public class Task implements TaskInterface {
         this();
         setName(name);
     }
+    
+    public void setLabel(Label label, String value) {
+        mLabels.put(label, value);
+    }
+
+    public String getLabel(Label label) {
+        return mLabels.get(label);
+    }
 
     public void setName(String name) {
         setLabel(Label.NAME, name);
@@ -46,12 +55,8 @@ public class Task implements TaskInterface {
         return getLabel(Label.NAME);
     }
 
-    public void setLabel(Label label, String value) {
-        mLabels.put(label, value);
-    }
-
-    public String getLabel(Label label) {
-        return mLabels.get(label);
+    public void setCreated(String createdString) {
+    	setLabel(Label.CREATED, createdString);
     }
 
     public Date getCreated() {
@@ -62,6 +67,10 @@ public class Task implements TaskInterface {
         setLabel(Label.DEADLINE, dateToString(deadline));
     }
 
+    public void setDeadline(String deadlineString) {
+    	setLabel(Label.DEADLINE, deadlineString);
+    }
+    
     public Date getDeadline() {
         return stringToDate(getLabel(Label.DEADLINE));
     }
@@ -117,5 +126,27 @@ public class Task implements TaskInterface {
         }
         
         return output;
+    }
+    
+    public static Task parseTask(String taskString) throws Exception {
+    	Task task = new Task();
+        
+        String[] attributes = taskString.split("\\|");
+        for(String pair : attributes) {
+            if(pair.isEmpty()) {
+                continue;
+            } else {
+                // Only splits by the first colon
+                String[] pairArray = pair.split(":", 2);
+                String labelName = pairArray[0].toLowerCase();
+                labelName = labelName.substring(0,1).toUpperCase() + labelName.substring(1);
+                String value = pairArray[1];
+
+                Method m = Task.class.getMethod("set" + labelName, String.class);
+                m.invoke(task, value);
+            }
+        }
+        
+        return task;
     }
 }
