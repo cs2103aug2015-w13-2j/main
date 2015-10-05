@@ -107,10 +107,11 @@ public class LogicTest {
 		System.out.println("Sorting all floats by name");
 		ArrayList<Task> list = logicComponent.sortByDeadline();
 		for(int i = 0; i< list.size(); i++){
-			System.out.println(list.get(i).getName());
+			System.out.println(list.get(i).getName() + " " + list.get(i).getType());
 		}
 		System.out.println("Seven becomes deadline");
 		seven.setDeadline(new Date());
+		assertTrue(seven.getStart() == null && seven.getDeadline() != null);
 		System.out.println("Seven's deadline = " + seven.getDeadline());
 		logicComponent.determineType(seven);
 		//logicComponent.editTask("SEVEN", seven);
@@ -118,7 +119,34 @@ public class LogicTest {
 		System.out.println("Seven's type = " + seven.getType());
 		list = logicComponent.sortByDeadline();
 		for(int i = 0; i< list.size(); i++){
-			System.out.println(list.get(i).getName());
+			System.out.println(list.get(i).getName() +" " + list.get(i).getType());
+		}
+		
+		System.out.println("Even more Seven ");
+		Task newSeven = new Task("SEVEN SEVEN");
+		newSeven.setDeadline(new Date());
+		newSeven.setStart(new Date());
+		logicComponent.editTask("SEVEN", newSeven);
+		list = logicComponent.sortByDeadline();
+		for(int i = 0; i< list.size(); i++){
+			System.out.println(list.get(i).getName() +" " +  list.get(i).getType());
+		}
+		
+		System.out.println("TWO's gonna get in front!");
+		Task newTwo = new Task("I AM THE NEW TWO");
+		newTwo.setDeadline(new Date());
+		newTwo.setStart(new Date());
+		logicComponent.editTask("TWO", newTwo);
+		
+		Task five = new Task("FIVE");
+		logicComponent.addTask(five);
+		Task six = new Task("SIX");
+		six.setDeadline(new Date());
+		logicComponent.addTask(six);
+		
+		list = logicComponent.sortByDeadline();
+		for(int i = 0; i< list.size(); i++){
+			System.out.println(list.get(i).getName() + " " +list.get(i).getType());
 		}
 	}
 }
