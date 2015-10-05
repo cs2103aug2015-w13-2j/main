@@ -81,7 +81,7 @@ public class Task implements TaskInterface {
    	 *******************************************************/
     
     public void setStart(Date start) {
-    	setLabel(Label.DEADLINE, dateToString(start));
+    	setLabel(Label.START, dateToString(start));
     }
   
     public void setStart(String startString) {

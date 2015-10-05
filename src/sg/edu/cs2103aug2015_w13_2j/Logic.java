@@ -32,7 +32,7 @@ public class Logic implements LogicInterface{
     }
     
     /**
-     * Add a new task
+     * Add a new task to the main arrayList and also determine the type of the task
      * @param task
      *            the new task to be added
      * 
@@ -40,8 +40,8 @@ public class Logic implements LogicInterface{
     public void addTask(Task task){
     	tasks.add(task);
     	
-    	if(task.getType() != null){
-    	
+    	determineType(task);
+    	 
     	   if(task.getType().equals("EVENT")){
     		  events.add(task);
     	   } else if (task.getType().equals("DUE")){
@@ -49,6 +49,24 @@ public class Logic implements LogicInterface{
     	   } else {
     		  floats.add(task);
     	   }
+    	
+    }
+    /**
+     * Determine the type of a task based on its start (if any) and end (if any) times
+     * @param task
+     *            the new task to be categorized
+     * 
+     */
+    
+    public void determineType(Task task){
+    	if(task.getDeadline() == null){// if deadLine == null, float
+    		task.setTypeFloat();
+    	} else {
+    		if (task.getStart() != null){//if deadLine != null and start != null, event
+    		    task.setTypeEvent();
+    	    } else {//if deadLine != null but start == null, then it's a task with deadline
+    		    task.setTypeDeadline();
+    	    }
     	}
     }
     
@@ -172,12 +190,55 @@ public class Logic implements LogicInterface{
     	//list and put them into the userView
     }
     
+    /**This method merges the details of a new task and the original task
+     * by checking the fields of the new task
+     * Those that are blank are kept unchanged in the original task
+     * While the fields that are not null in the new task will be updated in the original  task
+     * @param original
+     *                the task that is being updated
+     * @param newTask 
+     *                the task that is updating the original task
+     * @return 
+     *                the updated original task
+     */
+    
+    
+    public Task mergeDetails(Task original, Task newTask){
+    	//possible fields to update: name, start, end
+    	if(newTask.getName() != null){
+    		original.setName(newTask.getName());
+    	}
+    	
+    	if(newTask.getDeadline() != null){
+    		original.setDeadline(newTask.getDeadline());
+    	}
+    	
+    	if(newTask.getStart() != null){
+    		original.setStart(newTask.getStart());
+    	}
+    	
+    	if(newTask.getStatus().equals("COMPLETED")) {
+    		original.markCompleted();
+    	}
+    	
+    	if(newTask.getStatus().equals("DELETED")) {
+    		deleteTask(original);
+    	}
+    	
+    	if(newTask.getStatus().equals("ARCHIVED")) {
+    		archiveTask(original);
+    	}
+    	
+    	return original;
+    }
     
     /**
      * This method edits a task according to the fields specified by the user
      * It takes in a task formed by the name input by user, as well as the fields to changed
      * It then updates the task identified by the name
+     * the updating is taken care of by the method mergeDetails
      * Changes in the type of the task due to changes in the start and end time or status are also updated
+     * This information is updated manually by checking the changes (if any) in existence of start and deadline
      * @param 
      *            the new Task object formed by the requested changes
      * @return
@@ -187,31 +248,8 @@ public class Logic implements LogicInterface{
     public Task editTask(Task task){
     	Task original = findTaskByName(task.getName());
     	
-    	//possible fields to update: name, start, end
+    	mergeDetails(original, task);
     	
-    	if(task.getName() != null){
-    		original.setName(task.getName());
-    	}
-    	
-    	if(task.getDeadline() != null){
-    		original.setDeadline(task.getDeadline());
-    	}
-    	
-    	if(task.getStart() != null){
-    		original.setStart(task.getStart());
-    	}
-    	
-    	if(task.getStatus().equals("COMPLETED")) {
-    		original.markCompleted();
-    	}
-    	
-    	if(task.getStatus().equals("DELETED")) {
-    		deleteTask(original);
-    	}
-    	
-    	if(task.getStatus().equals("ARCHIVED")) {
-    		archiveTask(original);
-    	}
     	//potential edits to the type of task
     	
     	if(original.getStart() == null && original.getDeadline() == null ){//originally float
@@ -280,16 +318,27 @@ public class Logic implements LogicInterface{
        return result;
     }
     
-    /*
+    
     public static void main (String[] args){
     	Logic logic = new Logic();
     	Task task = new Task("first test task");
-    	System.out.println(task);
-    	System.out.println(task.getType());
     	logic.addTask(task);
+    	System.out.println(task.getType());
+    	
+    	task.setStart(new Date(new Long("23456")));//setStart seems to have some bug
+    	logic.determineType(task);
+    	System.out.println(task.getType());
+    	System.out.println("Start = " + task.getStart());
+    	
+    	task.setDeadline(new Date());
+    	logic.determineType(task);
+    	System.out.println(task.getType());
+    	System.out.println("Deadline = "  + task.getDeadline());    	
+    	
+    	
     	//logic.addTask(new Task("second test task"));
     	//System.out.println("First task was created at " + logic.findTaskByName("first test task").getCreated());
     }
-    */
+    
     
 }
