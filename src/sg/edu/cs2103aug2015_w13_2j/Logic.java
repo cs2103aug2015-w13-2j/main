@@ -353,7 +353,7 @@ public class Logic implements LogicInterface{
        return result;
     }
     
-    
+    /*
     public static void main (String[] args){
     	Logic logic = new Logic();
     	Task task = new Task("first test task");
@@ -370,7 +370,7 @@ public class Logic implements LogicInterface{
     	logic.determineType(task);
     	System.out.println(task.getType());
     	System.out.println("Deadline = "  + task.getDeadline());    
-    	*/
+    	
     	Task newTask = new Task("first test task");
 		newTask.setDeadline(new Date());
 		logic.determineType(newTask);
@@ -381,5 +381,5 @@ public class Logic implements LogicInterface{
     	//System.out.println("First task was created at " + logic.findTaskByName("first test task").getCreated());
     }
     
-    
+    */
 }
