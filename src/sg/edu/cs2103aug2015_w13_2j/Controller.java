@@ -78,11 +78,11 @@ public class Controller {
 		switch (command) {
 			case ADD:
 				log.log(Level.INFO, "Switched to 'add' command");
-				//TODO: Call LOGIC INTERFACE method
+				FunDUE.sLogic.addTask(task);
 				break;
 			case DELETE:
 				log.log(Level.INFO, "Switched to 'delete' command");
-				//TODO: Call LOGIC INTERFACE method
+				FunDUE.sLogic.deleteTask(task);
 				break;
 			case EDIT:
 				log.log(Level.INFO, "Switched to 'edit' command");
@@ -90,9 +90,12 @@ public class Controller {
 				break;
 			case MARK:
 				log.log(Level.INFO, "Switched to 'mark' command");
+				//TODO: Call LOGIC INTERFACE method
 				break;
 			case ARCHIVE:
-			
+				log.log(Level.INFO, "Switched to 'archive' command");
+				FunDUE.sLogic.archiveTask(task);
+				break;
 			case RETRIEVE:
 				
 			case FILTER:

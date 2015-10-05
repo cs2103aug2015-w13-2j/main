@@ -128,15 +128,15 @@ public class TaskAssembler {
 							+ "specified a flag.");
 		}
 		
+		// TODO: Note: Cases are switched by String type, but once Command class or
+		//			   valid token class is created, then will switch by its enum types.
 		switch (flagType) {
 			case "s" :
-				//TODO: Call task interface method Set start time of task when avail
+				task.setStart(date);
 				break;
 			case "e" :
 				//TODO: Call task interface method and Set end time of task when avail
-				break;
-			case "d" :
-				//TODO: Call task interface Set deadline time of task when avail
+				task.setDeadline(date);
 				break;
 			default :
 				// As an extra safety precaution
