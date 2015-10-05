@@ -159,7 +159,7 @@ public class Task implements TaskInterface {
         }
     }
     
-    //@@author Kenneth
+    //@@author A0124007X
     public String toString() {
     	String output = "";
     	

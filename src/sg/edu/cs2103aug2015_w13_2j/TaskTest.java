@@ -1,11 +1,9 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 import static org.junit.Assert.*;
-
-import java.util.Date;
-
 import org.junit.Test;
 
+import java.util.Date;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.Label;
 
 public class TaskTest {

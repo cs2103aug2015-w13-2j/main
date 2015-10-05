@@ -16,7 +16,6 @@ public interface TaskInterface {
     }
     
     //@@author A0133387B
-  
     public enum Type {
         EVENT, DUE, FLOAT
     }
@@ -24,7 +23,6 @@ public interface TaskInterface {
     public enum Status {
         ONGOING, COMPLETED, OVERDUE, ARCHIVED, DELETED
     }
-    
     
     /**
      * Sets a label-value pair of the Task object
@@ -99,6 +97,7 @@ public interface TaskInterface {
      */
     public Date getDeadline();
     
+    //@@author A0124007X
     /**
      * Converts Task object into string format for storage in the data file
      * 

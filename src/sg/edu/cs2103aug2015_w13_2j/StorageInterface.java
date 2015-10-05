@@ -3,7 +3,7 @@ package sg.edu.cs2103aug2015_w13_2j;
 import java.io.IOException;
 import java.util.List;
 
-//@@author A0121410H
+//@@author A0124007X
 public interface StorageInterface {
 	/**
      * Reads the contents of the specified text file
