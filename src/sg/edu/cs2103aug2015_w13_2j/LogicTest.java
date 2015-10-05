@@ -25,5 +25,12 @@ public class LogicTest {
         logicComponent.addTask(newTask);
         assertEquals("First", logicComponent.getTask(0).getName());
 	}
-
+    
+	public void testDelete(){
+		logicComponent = new Logic();
+		logicComponent.addTask(new Task("first test task"));
+		logicComponent.addTask(new Task("second test task"));
+		logicComponent.deleteTask(logicComponent.findTaskByName("first test task"));
+		assertEquals(logicComponent.getAllTasks().get(0).getName(), "second test task");
+	}
 }
