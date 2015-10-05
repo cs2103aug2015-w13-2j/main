@@ -8,14 +8,11 @@ import javafx.util.Pair;
 
 /**
  * This class determines the appropriate method of execution from
- * the Logic Interface. 
+ * user's input. 
  * 
- * It scans for the first token of the user input parsed by the 
+ * This class scans for the first token of the user input parsed by the 
  * Parser class and verifies it. The appropriate method for that 
  * command is then executed.
- * 
- * The Task object passed to the Logic Interface methods is handled
- * by the TaskAssembler class and not this class.
  * 
  * @author A0130894B
  *

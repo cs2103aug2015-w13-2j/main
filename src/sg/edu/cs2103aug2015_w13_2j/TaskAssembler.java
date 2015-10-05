@@ -10,11 +10,11 @@ import java.util.Vector;
 import javafx.util.Pair;
 
 /**
- * This class assigns the appropriate attributes of a Task 
- * corresponding to the flags in the user's input.
+ * This class assigns the task details specified in the 
+ * user's input to the appropriate attributes of a Task object.
  * 
  * More specifically, the task name and flags/flag-values stated 
- * in the user's input will be detected and assigned to the 
+ * in the user's input will be retrieved and assigned to the 
  * correct attributes of the Task object.
  * 
  * @author A0130894B
