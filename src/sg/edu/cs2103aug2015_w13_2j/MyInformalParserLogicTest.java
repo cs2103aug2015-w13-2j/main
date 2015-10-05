@@ -36,6 +36,10 @@ public class MyInformalParserLogicTest {
 		// 2.) Add a deadline
 		String userCmd3 = "edit -s 11/03 -e 11/11 'Do Something else'";
 		informalTest.printTaskDetails(userCmd3, 2);
+		
+		printTestLabel(4);
+		String userCmd4 = "delete 'Do CS2103T Prototype'";
+		informalTest.printTaskDetails(userCmd4, FunDUE.sLogic.getAllTasks().size());
 	}
 	
 	private static void printTestLabel(int index) {
