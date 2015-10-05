@@ -12,10 +12,11 @@ import java.util.Date;
 public interface TaskInterface {
     // Enumerated labels
     public enum Label {
-        CREATED, DEADLINE, NAME, TYPE, STATUS
+        CREATED, START, DEADLINE, NAME, TYPE, STATUS
     }
     
     //@@author A0133387B
+  
     public enum Type {
         EVENT, DUE, FLOAT
     }
@@ -23,6 +24,7 @@ public interface TaskInterface {
     public enum Status {
         ONGOING, COMPLETED, OVERDUE, ARCHIVED, DELETED
     }
+    
     
     /**
      * Sets a label-value pair of the Task object
@@ -73,6 +75,30 @@ public interface TaskInterface {
      */
     public Date getCreated();
 
+    /**
+     * Sets the start time of the Task object
+     * 
+     * @param deadline
+     *            Date object representing the deadline or null to unset
+     */
+    public void setStart(Date start);
+    
+    /**
+     * Sets the start time of the Task object
+     * Used only in parseTask()
+     * 
+     * @param deadlineString
+     *            String representing the millisecond epoch
+     */
+    public void setStart(String stringString);
+
+    /**
+     * Retrieves the start time of the Task object
+     * 
+     * @return Date object representing the deadline or null if not set
+     */
+    public Date getStart();
+    
     /**
      * Sets the deadline of the Task object
      * 

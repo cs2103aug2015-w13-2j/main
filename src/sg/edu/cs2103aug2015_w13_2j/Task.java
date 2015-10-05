@@ -48,6 +48,10 @@ public class Task implements TaskInterface {
     public String getLabel(Label label) {
         return mLabels.get(label);
     }
+    
+    /*******************************************************
+	 * NAME ACCESSORS
+	 *******************************************************/
 
     public void setName(String name) {
         setLabel(Label.NAME, name);
@@ -57,6 +61,10 @@ public class Task implements TaskInterface {
         return getLabel(Label.NAME);
     }
 
+    /*******************************************************
+   	 * CREATED ACCESSORS
+   	 *******************************************************/
+    
     public void setCreated(String createdString) {
     	setLabel(Label.CREATED, createdString);
     }
@@ -64,7 +72,27 @@ public class Task implements TaskInterface {
     public Date getCreated() {
         return stringToDate(getLabel(Label.CREATED));
     }
-
+    
+    /*******************************************************
+   	 * START ACCESSORS
+   	 *******************************************************/
+    
+    public void setStart(Date start) {
+    	setLabel(Label.DEADLINE, dateToString(start));
+    }
+  
+    public void setStart(String startString) {
+    	setLabel(Label.START, startString);
+    }
+    
+    public Date getStart() {
+    	return stringToDate(getLabel(Label.START));
+    }
+    
+    /*******************************************************
+   	 * DEADLINE ACCESSORS
+   	 *******************************************************/
+    
     public void setDeadline(Date deadline) {
         setLabel(Label.DEADLINE, dateToString(deadline));
     }
@@ -77,6 +105,9 @@ public class Task implements TaskInterface {
         return stringToDate(getLabel(Label.DEADLINE));
     }
 
+    /*******************************************************
+   	 * TYPE ACCESSORS
+   	 *******************************************************/
     
     /**Categorizes a task into one of the 3 types: an Event, Deadline, or Float
      * @param type
@@ -92,14 +123,20 @@ public class Task implements TaskInterface {
         return getLabel(Label.TYPE);
     }
     
+    /*******************************************************
+   	 * STATUS ACCESSORS
+   	 *******************************************************/
+    
     /**Categorizes the status of a task: ongoing, completed, overdue, archived, deleted
      * @param status
      *            the status to be set. Default for new task is ongoing
-     * @author Nguyen Tuong Van
-     * 
     */
     public void setStatus(Status status) {
         mLabels.put(Label.STATUS, status.toString());
+    }
+    
+    public String getStatus() {
+        return getLabel(Label.STATUS);
     }
     
     public void markDeleted() {
@@ -118,9 +155,9 @@ public class Task implements TaskInterface {
         this.setStatus(Status.OVERDUE);
     }
     
-    public String getStatus() {
-        return getLabel(Label.STATUS);
-    }
+    /*******************************************************
+   	 * UTILITY METHODS
+   	 *******************************************************/
     
     /**
      * Utility method to convert a String millisecond epoch to a Date object
