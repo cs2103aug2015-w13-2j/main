@@ -28,7 +28,7 @@ public class Logic implements LogicInterface{
         deadlines = new ArrayList<Task>();	
         floats = new ArrayList<Task>();	
         userView = new ArrayList<Task>();
-       // readFile();
+        readFile();
     }
     
     /**
@@ -77,7 +77,7 @@ public class Logic implements LogicInterface{
     /**
      * Delete a task
      * @param task
-     *            the new task to be deleted
+     *            the task to be deleted
      * 
      */
     public Task deleteTask(Task task){
@@ -89,6 +89,13 @@ public class Logic implements LogicInterface{
     	
     	return task;
     }
+    
+    /**
+     * Archive a task
+     * @param task
+     *            the task to be archived
+     * 
+     */
     
     public void archiveTask(Task task){
     	task.markArchived();
@@ -279,6 +286,7 @@ public class Logic implements LogicInterface{
     
     /**
      * This method updates the tasks list upon a new session
+     * It reads the file from the storage and fills up the internal ArrayList
      *  
      *  */
     
