@@ -93,6 +93,8 @@ public class Controller {
 			case EDIT:
 				log.log(Level.INFO, "Switched to 'edit' command");
 				//TODO: Call LOGIC INTERFACE method
+				String taskName = task.getName();
+				FunDUE.sLogic.editTask(taskName, task);
 				break;
 			case MARK:
 				log.log(Level.INFO, "Switched to 'mark' command");
