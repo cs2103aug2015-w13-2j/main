@@ -1,5 +1,10 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.util.Date;
+
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+
 import java.util.Vector;
 
 import javafx.util.Pair;
@@ -118,14 +123,30 @@ public class TaskAssembler {
 		
 		// String representation of first occurrence of date token after this flag
 		// TODO: Check for DATE_INVALID tokens and throw appropriate error message
-		String date = findValueOfToken(Parser.Token.DATE, indexOfNextToken);
+		String dateString = findValueOfToken(Parser.Token.DATE, indexOfNextToken);
 		
 		// TODO: For now, this error will not never thrown as invalid task
 		// 		 name errors will be thrown first due to Parser bug - not done yet.
-		if (date == null) {
+		if (dateString == null) {
 			throw new Error("No date specified for a particular flag. "
 							+ "Please input a date right after you have "
 							+ "specified a flag.");
+		}
+		
+		// TODO: Sample date format that is in 'dd/MM' form
+		// This is an overly simple example because a Date format
+		// has not been configured yet. This will be a sample for the
+		// prototype. 
+		// Note: This method does NOT handle date formats. 
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM");
+		Date date = null;
+		
+		try {
+
+			date = formatter.parse(dateString);
+
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
 		
 		// TODO: Note: Cases are switched by String type, but once Command class or
