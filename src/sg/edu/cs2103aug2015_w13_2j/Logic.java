@@ -93,7 +93,8 @@ public class Logic implements LogicInterface{
      *            the task to be deleted
      * 
      */
-    public Task deleteTask(Task task){
+    public Task deleteTask(String taskName){
+    	Task task = findTaskByName(taskName);
     	task.markDeleted();
     	tasks.remove(task);
     	events.remove(task);
@@ -110,10 +111,14 @@ public class Logic implements LogicInterface{
      * 
      */
     
-    public void archiveTask(Task task){
-    	task.markArchived();
+    public void archiveTask(String taskName){
+    	findTaskByName(taskName).markArchived();
     }
     
+    
+    public Task retrieveTask(String taskName){
+    	return findTaskByName(taskName);
+    }
     
     /**
      * This method lets user see all tasks they have previously marked as completed
@@ -264,11 +269,11 @@ public class Logic implements LogicInterface{
     	}
     	
     	if(newTask.getStatus().equals("DELETED")) {
-    		deleteTask(original);
+    		deleteTask(original.getName());
     	}
     	
     	if(newTask.getStatus().equals("ARCHIVED")) {
-    		archiveTask(original);
+    		archiveTask(original.getName());
     	}
     	
     	return original;

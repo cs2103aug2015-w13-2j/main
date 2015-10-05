@@ -14,9 +14,11 @@ public interface LogicInterface {
 
     public Task getTask(int index);
 
-    public Task deleteTask(Task task);
+    public Task deleteTask(String taskName);
 
-    public void archiveTask(Task task);
+    public void archiveTask(String taskName);
+    
+    public Task retrieveTask(String taskName);
 
     public ArrayList<Task> sortByDeadline();
     
