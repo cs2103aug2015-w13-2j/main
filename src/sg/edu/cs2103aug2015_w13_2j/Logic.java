@@ -11,7 +11,7 @@ This class implements methods from LogicInterface
 import java.util.*;
 
 public class Logic implements LogicInterface{
-    private ArrayList<Task> tasks;
+    private ArrayList<Task> tasks; //this ArrayList includes all added tasks, excluding deleted ones
     private ArrayList<Task> events;//TBC if needed
     private ArrayList<Task> deadlines;//TBC if needed
     private ArrayList<Task> floats;//TBC if needed
@@ -113,6 +113,7 @@ public class Logic implements LogicInterface{
     public void archiveTask(Task task){
     	task.markArchived();
     }
+    
     
     /**
      * This method lets user see all tasks they have previously marked as completed
@@ -352,7 +353,6 @@ public class Logic implements LogicInterface{
     	
        return result;
     }
-    
     /*
     public static void main (String[] args){
     	Logic logic = new Logic();

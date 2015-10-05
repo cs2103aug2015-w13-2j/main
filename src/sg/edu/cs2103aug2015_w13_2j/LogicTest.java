@@ -53,6 +53,7 @@ public class LogicTest {
 	public void testEdit(){
 		logicComponent = new Logic();
 		Task original = new Task("first test task");
+		assertEquals(original.getStatus(), "ONGOING");
 		logicComponent.addTask(original);
 		assertEquals(original.getType(), "FLOAT");
 		Task newTask = new Task("first test task");
@@ -71,4 +72,26 @@ public class LogicTest {
 		assertEquals(original.getName(), newTask.getName());
 	}
 	
+	@Test
+	public void testStatus(){
+		logicComponent = new Logic();
+		Task original = new Task("second test task");
+		logicComponent.addTask(original);
+		assertEquals(original.getStatus(), "ONGOING");
+		original.markCompleted();
+		assertEquals(original.getStatus(), "COMPLETED");
+		assertTrue(logicComponent.getAllTasks().size() == 1);
+		assertTrue(logicComponent.viewCompleted().size() == 1);
+		assertTrue(logicComponent.getFloats().size() == 1);
+		assertTrue(logicComponent.getEvents().isEmpty());
+		assertTrue(logicComponent.getDeadlines().isEmpty());
+		logicComponent.deleteTask(original);
+		assertEquals(original.getStatus(), "DELETED");
+		assertTrue(logicComponent.getAllTasks().isEmpty());
+		assertTrue(logicComponent.viewCompleted().isEmpty());
+		assertTrue(logicComponent.getFloats().isEmpty());
+		assertTrue(logicComponent.getEvents().isEmpty());
+		assertTrue(logicComponent.getDeadlines().isEmpty());
+		
+	}
 }
