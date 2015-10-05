@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.Type;
-
 import java.util.Iterator;
 
 //@@author A0121410H
