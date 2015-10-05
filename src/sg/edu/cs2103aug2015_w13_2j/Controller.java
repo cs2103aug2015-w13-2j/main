@@ -46,6 +46,11 @@ public class Controller {
 		this.taskAssembler = new TaskAssembler(this.listOfTokens);
 	}
 	
+	public Controller(Vector<Pair<Parser.Token, String>> listOfTokens) {
+		this.listOfTokens = listOfTokens;
+		this.taskAssembler = new TaskAssembler(this.listOfTokens);
+	}
+	
 	/**
 	 * Retrieves a list of available enum type commands 
 	 * 
@@ -65,8 +70,13 @@ public class Controller {
 	}
 	
 	/**
-	 * Executes command as specified by the user input
+	 * Executes command as specified by the user input. In the process, it
+	 * invokes the corresponding methods from the Logic class.
 	 * 
+	 * This method is for execution when Parser passes a parser object 
+	 * or the list of tokens representing the user input to this Controller 
+	 * class.
+
 	 * @throws   Error
 	 * 				Error when command is not of any accepted type
 	 */
@@ -77,7 +87,6 @@ public class Controller {
 		switch (command) {
 			case ADD:
 				log.log(Level.INFO, "Switched to 'add' command");
-				System.out.println(FunDUE.sLogic);
 				FunDUE.sLogic.addTask(task);
 				break;
 			case DELETE:
@@ -126,7 +135,6 @@ public class Controller {
 	 * 			   Error when a token not of the RESERVED Token type is found 
 	 * 			   to represent the command of the user's input
 	 */
-	// Convenience method for testing
 	public Commands getCommand(
 			Vector<Pair<Parser.Token, String>> listOfTokens) throws Error {
 		this.listOfTokens = listOfTokens;
