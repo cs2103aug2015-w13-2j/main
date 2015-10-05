@@ -57,8 +57,15 @@ public class LogicTest {
 		Task newTask = new Task("first test task");
 		newTask.setDeadline(new Date());
 		logicComponent.determineType(newTask);
-		logicComponent.editTask(newTask);
+		logicComponent.editTask("first test task", newTask);
 		assertEquals(original.getType(), "DUE");
+		newTask.setStart(new Date());
+		logicComponent.determineType(newTask);
+		logicComponent.editTask("first test task", newTask);
+		assertEquals(original.getType(), "EVENT");
+		newTask.setName("I have changed");
+		logicComponent.editTask("first test task", newTask);
+		assertEquals(original.getName(), newTask.getName());
 	}
 	
 }

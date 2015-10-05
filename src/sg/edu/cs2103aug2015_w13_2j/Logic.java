@@ -252,8 +252,8 @@ public class Logic implements LogicInterface{
      *            the updated task
      * 
      */
-    public Task editTask(Task task){
-    	Task original = findTaskByName(task.getName());
+    public Task editTask(String name, Task task){
+    	Task original = findTaskByName(name);
 	
     	//potential edits to the type of task
     	
@@ -346,7 +346,7 @@ public class Logic implements LogicInterface{
     	Task newTask = new Task("first test task");
 		newTask.setDeadline(new Date());
 		logic.determineType(newTask);
-		logic.editTask(newTask);
+		logic.editTask("first test task", newTask);
     	System.out.println(newTask.getType());
     	System.out.println(task.getType());
     	//logic.addTask(new Task("second test task"));
