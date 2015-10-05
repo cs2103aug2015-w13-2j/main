@@ -28,7 +28,7 @@ public class Logic implements LogicInterface{
         deadlines = new ArrayList<Task>();	
         floats = new ArrayList<Task>();	
         userView = new ArrayList<Task>();
-        readFile();
+       // readFile();
     }
     
     /**
@@ -40,12 +40,15 @@ public class Logic implements LogicInterface{
     public void addTask(Task task){
     	tasks.add(task);
     	
-    	if(task.getType().equals("EVENT")){
-    		events.add(task);
-    	} else if (task.getType().equals("DUE")){
-    		deadlines.add(task);
-    	} else {
-    		floats.add(task);
+    	if(task.getType() != null){
+    	
+    	   if(task.getType().equals("EVENT")){
+    		  events.add(task);
+    	   } else if (task.getType().equals("DUE")){
+    		  deadlines.add(task);
+    	   } else {
+    		  floats.add(task);
+    	   }
     	}
     }
     
@@ -59,12 +62,14 @@ public class Logic implements LogicInterface{
      *            the new task to be deleted
      * 
      */
-    public void deleteTask(Task task){
+    public Task deleteTask(Task task){
     	task.markDeleted();
     	tasks.remove(task);
     	events.remove(task);
     	deadlines.remove(task);
     	floats.remove(task);
+    	
+    	return task;
     }
     
     public void archiveTask(Task task){
@@ -167,6 +172,73 @@ public class Logic implements LogicInterface{
     	//list and put them into the userView
     }
     
+    
+    /**
+     * This method edits a task according to the fields specified by the user
+     * It takes in a task formed by the name input by user, as well as the fields to changed
+     * It then updates the task identified by the name
+     * Changes in the type of the task due to changes in the start and end time or status are also updated
+     * @param 
+     *            the new Task object formed by the requested changes
+     * @return
+     *            the updated task
+     * 
+     */
+    public Task editTask(Task task){
+    	Task original = findTaskByName(task.getName());
+    	
+    	//possible fields to update: name, start, end
+    	
+    	if(task.getName() != null){
+    		original.setName(task.getName());
+    	}
+    	
+    	if(task.getDeadline() != null){
+    		original.setDeadline(task.getDeadline());
+    	}
+    	
+    	if(task.getStart() != null){
+    		original.setStart(task.getStart());
+    	}
+    	
+    	if(task.getStatus().equals("COMPLETED")) {
+    		original.markCompleted();
+    	}
+    	
+    	if(task.getStatus().equals("DELETED")) {
+    		deleteTask(original);
+    	}
+    	
+    	if(task.getStatus().equals("ARCHIVED")) {
+    		archiveTask(original);
+    	}
+    	//potential edits to the type of task
+    	
+    	if(original.getStart() == null && original.getDeadline() == null ){//originally float
+    		if(task.getStart() != null && task.getDeadline() != null)  {//edited to events
+    			original.setTypeEvent();
+    		}
+    		
+    		if(task.getStart() == null && task.getDeadline() != null)  {//edited to deadline tasks
+    			original.setTypeDeadline();
+    		}
+    	} else if (original.getStart() != null && original.getDeadline() != null ){//originally event
+    		if(task.getDeadline() == null){//change to float
+    			original.setTypeFloat();
+    		} else if(task.getStart() == null){//change to task with deadline
+    			original.setTypeDeadline();
+    		}
+    	} else if (original.getStart() == null && original.getDeadline() != null){//originally task with deadline
+    		if(task.getDeadline() == null){//change to float
+    			original.setTypeFloat();
+    		} else if(task.getStart() != null && task.getDeadline() != null)  {//edited to event
+    			original.setTypeEvent();
+    		}
+    	}
+    	
+    	return original;
+    }
+    
     /**
      * This method updates the tasks list upon a new session
      *  
@@ -180,7 +252,7 @@ public class Logic implements LogicInterface{
     	}
     }
     
-    public ArrayList<Task> getAllTask(){
+    public ArrayList<Task> getAllTasks(){
     	return tasks;
     }
     
@@ -207,4 +279,17 @@ public class Logic implements LogicInterface{
     	
        return result;
     }
+    
+    /*
+    public static void main (String[] args){
+    	Logic logic = new Logic();
+    	Task task = new Task("first test task");
+    	System.out.println(task);
+    	System.out.println(task.getType());
+    	logic.addTask(task);
+    	//logic.addTask(new Task("second test task"));
+    	//System.out.println("First task was created at " + logic.findTaskByName("first test task").getCreated());
+    }
+    */
+    
 }
