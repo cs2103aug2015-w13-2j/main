@@ -51,6 +51,18 @@ public class Parser implements ParserInterface {
         startParserLoop();
     }
     
+    /**
+     * Executes command specified in the list of parsed tokens.
+     * 
+     * This method calls the Controller class' method to execute 
+     * the command.
+     */
+    public void executeCommand() {
+    	Controller controller = new Controller(mTokens);
+    	
+    	controller.startCommandExecution();
+    }
+    
     public Vector<Pair<Token, String>> getListOfTokens() {
 		return mTokens;
     }
