@@ -26,6 +26,7 @@ public class Task implements TaskInterface {
     public Task() {
         Date now = new Date();
         this.setLabel(Label.CREATED, String.valueOf(now.getTime()));
+        setStatus(Status.ONGOING);
     }
 
     /**
