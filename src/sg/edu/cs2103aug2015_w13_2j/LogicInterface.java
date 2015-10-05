@@ -23,6 +23,12 @@ public interface LogicInterface {
     public void sortByDeadLine(ArrayList<Task> list);
 
     public ArrayList<Task> getAllTasks();
+    
+    public ArrayList<Task> getEvents();
+    
+    public ArrayList<Task> getDeadlines();
+    
+    public ArrayList<Task> getFloats();
 
     /**
      * Echos back the command entered. For testing purposes and as a stub

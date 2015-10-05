@@ -74,6 +74,19 @@ public class Logic implements LogicInterface{
     	return tasks.get(index);
     }
     
+    
+    public ArrayList<Task> getEvents(){
+    	return events;
+    }
+
+    public ArrayList<Task> getDeadlines(){
+    	return deadlines;
+    }
+    
+    public ArrayList<Task> getFloats(){
+    	return floats;
+    }
+    
     /**
      * Delete a task
      * @param task
@@ -242,10 +255,12 @@ public class Logic implements LogicInterface{
     /**
      * This method edits a task according to the fields specified by the user
      * It takes in a task formed by the name input by user, as well as the fields to changed
-     * It then updates the task identified by the name
+     * It then updates the task identified by the name field in the method signature
      * the updating is taken care of by the method mergeDetails
      * Changes in the type of the task due to changes in the start and end time or status are also updated
      * This information is updated manually by checking the changes (if any) in existence of start and deadline
+     * @param 
+     *            the name of the Task user wishes to edit
      * @param 
      *            the new Task object formed by the requested changes
      * @return
@@ -260,22 +275,35 @@ public class Logic implements LogicInterface{
     	if(original.getStart() == null && original.getDeadline() == null ){//originally float
     		if(task.getStart() != null && task.getDeadline() != null)  {//edited to events
     			original.setTypeEvent();
+    			floats.remove(original);
+    			events.add(original);
     		}
     		
     		if(task.getStart() == null && task.getDeadline() != null)  {//edited to deadline tasks
     			original.setTypeDeadline();
+    			floats.remove(original);
+    			deadlines.add(original);
     		}
     	} else if (original.getStart() != null && original.getDeadline() != null ){//originally event
     		if(task.getDeadline() == null){//change to float
     			original.setTypeFloat();
+    			events.remove(original);
+    			floats.add(original);
+    			
     		} else if(task.getStart() == null){//change to task with deadline
     			original.setTypeDeadline();
+    			events.remove(original);
+    			deadlines.add(original);
     		}
     	} else if (original.getStart() == null && original.getDeadline() != null){//originally task with deadline
     		if(task.getDeadline() == null){//change to float
     			original.setTypeFloat();
+    			deadlines.remove(original);
+    			floats.add(original);
     		} else if(task.getStart() != null && task.getDeadline() != null)  {//edited to event
     			original.setTypeEvent();
+    			deadlines.remove(original);
+    			events.add(original);
     		}
     	}
     	

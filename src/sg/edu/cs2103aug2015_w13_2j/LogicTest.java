@@ -54,11 +54,14 @@ public class LogicTest {
 		logicComponent = new Logic();
 		Task original = new Task("first test task");
 		logicComponent.addTask(original);
+		assertEquals(original.getType(), "FLOAT");
 		Task newTask = new Task("first test task");
 		newTask.setDeadline(new Date());
 		logicComponent.determineType(newTask);
 		logicComponent.editTask("first test task", newTask);
 		assertEquals(original.getType(), "DUE");
+		assertTrue(logicComponent.getDeadlines().contains(original));
+		assertEquals(logicComponent.getFloats().contains(original), false);
 		newTask.setStart(new Date());
 		logicComponent.determineType(newTask);
 		logicComponent.editTask("first test task", newTask);
