@@ -28,7 +28,7 @@ public class Logic implements LogicInterface{
         deadlines = new ArrayList<Task>();	
         floats = new ArrayList<Task>();	
         userView = new ArrayList<Task>();
-        readFile();
+        //readFile();
     }
     
     /**
@@ -254,9 +254,7 @@ public class Logic implements LogicInterface{
      */
     public Task editTask(Task task){
     	Task original = findTaskByName(task.getName());
-    	
-    	mergeDetails(original, task);
-    	
+	
     	//potential edits to the type of task
     	
     	if(original.getStart() == null && original.getDeadline() == null ){//originally float
@@ -281,6 +279,7 @@ public class Logic implements LogicInterface{
     		}
     	}
     	
+    	mergeDetails(original, task);
     	return original;
     }
     
@@ -331,6 +330,7 @@ public class Logic implements LogicInterface{
     	Logic logic = new Logic();
     	Task task = new Task("first test task");
     	logic.addTask(task);
+    	/*
     	System.out.println(task.getType());
     	
     	task.setStart(new Date(new Long("23456")));//setStart seems to have some bug
@@ -341,9 +341,14 @@ public class Logic implements LogicInterface{
     	task.setDeadline(new Date());
     	logic.determineType(task);
     	System.out.println(task.getType());
-    	System.out.println("Deadline = "  + task.getDeadline());    	
-    	
-    	
+    	System.out.println("Deadline = "  + task.getDeadline());    
+    	*/
+    	Task newTask = new Task("first test task");
+		newTask.setDeadline(new Date());
+		logic.determineType(newTask);
+		logic.editTask(newTask);
+    	System.out.println(newTask.getType());
+    	System.out.println(task.getType());
     	//logic.addTask(new Task("second test task"));
     	//System.out.println("First task was created at " + logic.findTaskByName("first test task").getCreated());
     }

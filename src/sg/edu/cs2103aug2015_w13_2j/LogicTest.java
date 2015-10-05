@@ -48,4 +48,17 @@ public class LogicTest {
 		logicComponent.determineType(newTask);
 		assertEquals(newTask.getType(), "EVENT");
 	}
+	
+	@Test
+	public void testEdit(){
+		logicComponent = new Logic();
+		Task original = new Task("first test task");
+		logicComponent.addTask(original);
+		Task newTask = new Task("first test task");
+		newTask.setDeadline(new Date());
+		logicComponent.determineType(newTask);
+		logicComponent.editTask(newTask);
+		assertEquals(original.getType(), "DUE");
+	}
+	
 }
