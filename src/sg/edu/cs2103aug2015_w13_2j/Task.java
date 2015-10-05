@@ -4,6 +4,9 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+
+import sg.edu.cs2103aug2015_w13_2j.TaskInterface.Type;
+
 import java.util.Iterator;
 
 //@@author A0121410H
@@ -123,6 +126,17 @@ public class Task implements TaskInterface {
         return getLabel(Label.TYPE);
     }
     
+    public void setTypeDeadline() {
+        this.setType(Type.DUE);
+    }
+    
+    public void setTypeEvent() {
+        this.setType(Type.EVENT);
+    }
+    
+    public void setTypeFloat() {
+        this.setType(Type.FLOAT);
+    }
     /*******************************************************
    	 * STATUS ACCESSORS
    	 *******************************************************/
