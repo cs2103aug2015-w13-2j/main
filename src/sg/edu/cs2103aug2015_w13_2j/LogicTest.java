@@ -32,7 +32,7 @@ public class LogicTest {
 		logicComponent = new Logic();
 		logicComponent.addTask(new Task("first test task"));
 		logicComponent.addTask(new Task("second test task"));
-		logicComponent.deleteTask(logicComponent.findTaskByName("first test task"));
+		logicComponent.deleteTask("first test task");
 		assertEquals(logicComponent.getAllTasks().get(0).getName(), "second test task");
 	}
 	
@@ -87,7 +87,7 @@ public class LogicTest {
 		assertTrue(logicComponent.getFloats().size() == 1);
 		assertTrue(logicComponent.getEvents().isEmpty());
 		assertTrue(logicComponent.getDeadlines().isEmpty());
-		logicComponent.deleteTask(original);
+		logicComponent.deleteTask(original.getName());
 		assertEquals(original.getStatus(), "DELETED");
 		assertTrue(logicComponent.getAllTasks().isEmpty());
 		assertTrue(logicComponent.viewCompleted().isEmpty());
