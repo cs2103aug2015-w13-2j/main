@@ -20,18 +20,23 @@ public class Storage implements StorageInterface {
     }
 	
 	public String readRawFile(String filename) throws Exception {
+    	// Files.readAllBytes() uses UTF-8 character encoding
+    	// and ensures that the file is closed after all bytes are read
 		String content = new String(Files.readAllBytes(Paths.get(filename)));
 		return content;
 	}
 
     public List<Task> readFile(String filename) throws Exception {
-    	// Files.readAllLines() uses UTF-8 character encoding
-    	// and ensures that the file is closed after all bytes are read
-    	List<String> lines = Files.readAllLines(Paths.get(filename));
+    	String content = readRawFile(filename);
+    	String[] taskArray = content.split("\r\r|\n\n");
     	
     	List<Task> tasks = new ArrayList<Task>();
-    	for(String taskString : lines) {
-    		tasks.add(Task.parseTask(taskString));
+    	for(String taskString : taskArray) {
+    		if(taskString.isEmpty() || taskString.equals("\r") || taskString.equals("\n")) {
+    			continue;
+    		} else {
+    			tasks.add(Task.parseTask(taskString));
+    		}
     	}
         return tasks;
     }

@@ -13,8 +13,8 @@ public class StorageTest {
     @Test
     public void readAndWriteTest() throws Exception {
     	String filename = "StorageTest.txt";
-    	
-    	String stringToWrite = "NAME:Task one|CREATED:1443958836657|\nNAME:Task two|CREATED:1443958836657|\nNAME:Task three|CREATED:1443958836657|\n";
+
+    	String stringToWrite = "NAME:Task one\nCREATED:1443958836657\n\nNAME:Task two\nCREATED:1443958836657\n\nNAME:Task three\nCREATED:1443958836657\n\n";
     	storage.writeRawFile(stringToWrite, filename);
     	List<Task> listWritten = storage.readFile(filename);
     	storage.writeFile(listWritten, filename);

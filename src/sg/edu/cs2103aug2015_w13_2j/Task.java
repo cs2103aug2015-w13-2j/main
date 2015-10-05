@@ -229,7 +229,7 @@ public class Task implements TaskInterface {
     public static Task parseTask(String taskString) throws Exception {
     	Task task = new Task();
         
-        String[] attributes = taskString.split("\\r?\\n");
+        String[] attributes = taskString.split("\r|\n");
         for(String pair : attributes) {
             if(pair.isEmpty()) {
                 continue;
