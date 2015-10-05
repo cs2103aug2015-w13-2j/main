@@ -206,7 +206,7 @@ public class Task implements TaskInterface {
         while(labelIter.hasNext()){
             Label label = labelIter.next();
             String value = mLabels.get(label);
-            output += label.toString() + ":" + value + "|";
+            output += label.toString() + ":" + value + "\n";
         }
         
         return output;
@@ -215,7 +215,7 @@ public class Task implements TaskInterface {
     public static Task parseTask(String taskString) throws Exception {
     	Task task = new Task();
         
-        String[] attributes = taskString.split("\\|");
+        String[] attributes = taskString.split("\\r?\\n");
         for(String pair : attributes) {
             if(pair.isEmpty()) {
                 continue;
