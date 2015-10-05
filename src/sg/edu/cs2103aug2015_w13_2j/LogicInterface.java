@@ -14,7 +14,7 @@ public interface LogicInterface {
 
     public Task getTask(int index);
 
-    public void deleteTask(Task task);
+    public Task deleteTask(Task task);
 
     public void archiveTask(Task task);
 
@@ -22,7 +22,7 @@ public interface LogicInterface {
     
     public void sortByDeadLine(ArrayList<Task> list);
 
-    public ArrayList<Task> getAllTask();
+    public ArrayList<Task> getAllTasks();
 
     /**
      * Echos back the command entered. For testing purposes and as a stub
