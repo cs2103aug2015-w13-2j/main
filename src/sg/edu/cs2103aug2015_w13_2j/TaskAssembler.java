@@ -27,11 +27,11 @@ public class TaskAssembler {
 	public TaskAssembler(Vector<Pair<Parser.Token, String>> listOfTokens) {
 		this.listOfTokens = listOfTokens;
 		task = new Task();
-		
-		assembleTask();
 	}
 	
 	public Task getAssembledTask() {
+		assembleTask();
+
 		return this.task;
 	}
 	

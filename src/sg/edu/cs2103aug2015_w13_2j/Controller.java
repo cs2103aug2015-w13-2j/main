@@ -32,6 +32,7 @@ public class Controller {
 	private static final Logger log = 
 			Logger.getLogger(Controller.class.getName());
 	private Task task;
+	private TaskAssembler taskAssembler;
 	private Vector<Pair<Parser.Token, String>> listOfTokens;
 	
 	/**
@@ -42,10 +43,7 @@ public class Controller {
 	 */
 	public Controller(Parser parser) {
 		this.listOfTokens = parser.getListOfTokens();
-		TaskAssembler taskAssembler = new TaskAssembler(this.listOfTokens);
-		task = taskAssembler.getAssembledTask();
-		
-		startCommandExecution();
+		this.taskAssembler = new TaskAssembler(this.listOfTokens);
 	}
 	
 	/**
@@ -74,10 +72,12 @@ public class Controller {
 	 */
 	public void startCommandExecution() {
 		Commands command = getCommand();
+		task = taskAssembler.getAssembledTask();
 		
 		switch (command) {
 			case ADD:
 				log.log(Level.INFO, "Switched to 'add' command");
+				System.out.println(FunDUE.sLogic);
 				FunDUE.sLogic.addTask(task);
 				break;
 			case DELETE:
@@ -126,6 +126,14 @@ public class Controller {
 	 * 			   Error when a token not of the RESERVED Token type is found 
 	 * 			   to represent the command of the user's input
 	 */
+	// Convenience method for testing
+	public Commands getCommand(
+			Vector<Pair<Parser.Token, String>> listOfTokens) throws Error {
+		this.listOfTokens = listOfTokens;
+		
+		return this.getCommand();
+	}
+	
 	public Commands getCommand() throws Error {
 		Pair<Parser.Token, String> commandTokenPair;
 		
