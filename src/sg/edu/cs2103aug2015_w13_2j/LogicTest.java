@@ -2,7 +2,7 @@ package sg.edu.cs2103aug2015_w13_2j;
 
 import static org.junit.Assert.*;
 
-import java.util.Date;
+import java.util.*;
 
 import org.junit.Test;
 
@@ -93,5 +93,32 @@ public class LogicTest {
 		assertTrue(logicComponent.getEvents().isEmpty());
 		assertTrue(logicComponent.getDeadlines().isEmpty());
 		
+	}
+	
+	@Test
+	public void testSortByDeadline(){
+		logicComponent = new Logic();
+		Task one = new Task("ONE");
+		logicComponent.addTask(one);
+		Task two = new Task("TWO");
+		logicComponent.addTask(two);
+		Task seven = new Task("SEVEN");
+		logicComponent.addTask(seven);
+		System.out.println("Sorting all floats by name");
+		ArrayList<Task> list = logicComponent.sortByDeadline();
+		for(int i = 0; i< list.size(); i++){
+			System.out.println(list.get(i).getName());
+		}
+		System.out.println("Seven becomes deadline");
+		seven.setDeadline(new Date());
+		System.out.println("Seven's deadline = " + seven.getDeadline());
+		logicComponent.determineType(seven);
+		//logicComponent.editTask("SEVEN", seven);
+		//seven.setTypeDeadline();
+		System.out.println("Seven's type = " + seven.getType());
+		list = logicComponent.sortByDeadline();
+		for(int i = 0; i< list.size(); i++){
+			System.out.println(list.get(i).getName());
+		}
 	}
 }

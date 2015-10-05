@@ -18,9 +18,9 @@ public interface LogicInterface {
 
     public void archiveTask(Task task);
 
-    public void sortByDeadLine();
+    public ArrayList<Task> sortByDeadline();
     
-    public void sortByDeadLine(ArrayList<Task> list);
+    public ArrayList<Task> sortByDeadline(ArrayList<Task> list);
 
     public ArrayList<Task> getAllTasks();
     

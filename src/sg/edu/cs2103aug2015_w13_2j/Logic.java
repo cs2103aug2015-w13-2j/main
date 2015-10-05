@@ -200,15 +200,36 @@ public class Logic implements LogicInterface{
      *  
      *  */
     
-    public void sortByDeadLine(ArrayList<Task> list){
-    	//TODO: add suitable sorting algorithm here
+    public ArrayList<Task> sortByDeadline(ArrayList<Task> list){
+    	Collections.sort(list, new Comparator<Task>(){
+    		public int compare(Task task1, Task task2){
+    			if(task1.getType().equals(task2.getType())){
+    				if(task1.getType().equals("DUE")){
+    				    return task1.getDeadline().compareTo(task2.getDeadline()); 
+    				} else if (task1.getType().equals("EVENT")){
+    					return task1.getStart().compareTo(task2.getStart()); 
+    				} else {
+    					return task1.getName().compareTo(task2.getName()); 
+    				}
+    			} else {
+    				return task1.getType().compareTo(task2.getType());
+    			}
+    		}
+    	});
     	
+    	return list;
     }
     
-    public void sortByDeadLine(){
+    public ArrayList<Task> sortByDeadline(){
     	//TODO: add suitable sorting algorithm here
     	//this method is invoked if no parameter is passed in -> sort the whole tasks
     	//list and put them into the userView
+    	userView = new ArrayList<Task>();
+    	for(int i = 0; i < tasks.size(); i++){
+    		userView.add(tasks.get(i));
+    	}
+    	
+    	return sortByDeadline(userView);
     }
     
     /**This method merges the details of a new task and the original task
