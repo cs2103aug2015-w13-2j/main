@@ -1,14 +1,14 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-import java.io.IOException;
-
 /**
 This class implements methods from LogicInterface
 @@author A0133387B 
 
  */
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 public class Logic implements LogicInterface{
     private ArrayList<Task> tasks; //this ArrayList includes all added tasks, excluding deleted ones
@@ -34,6 +34,7 @@ public class Logic implements LogicInterface{
         deleted = new ArrayList<Task>();	
         userView = new ArrayList<Task>();
         //readFile();   <--- currently having an error
+        checkStatus();
     }
     
     /**
@@ -212,21 +213,32 @@ public class Logic implements LogicInterface{
     	return userView;
     }
     
+    public void checkStatus(){
+    	Date date = new Date();
+    	for(int i = 0; i < tasks.size(); i++){
+    		if(tasks.get(i).getDeadline() != null && tasks.get(i).getDeadline().compareTo(date) < 0){
+    			userView.add(tasks.get(i));
+    			tasks.get(i).markOverdue();
+    		}
+    	}
+    }
+    
     /**
-     * This method lets user see all tasks are still active
-     * It works the same way as viewCompleted does
+     * This method lets user see all tasks are still active (excluding those overdue, completed, deleted,
+     * and archived
      * @return
      *            the list of active tasks
      * 
      */
     public ArrayList<Task> viewOngoing(){
+    	ArrayList<Task> overdues = viewOverdue(); //this method filters out the tasks overdue by now
     	userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
     		if(tasks.get(i).getStatus().equals("ONGOING")){
     			userView.add(tasks.get(i));
     		}
     	}
-    	
+    	sortByDeadline(userView);
     	return userView;
     }
     
@@ -423,6 +435,9 @@ public class Logic implements LogicInterface{
     	
        return result;
     }
+    
+
+    
     /*
     public static void main (String[] args){
     	Logic logic = new Logic();
