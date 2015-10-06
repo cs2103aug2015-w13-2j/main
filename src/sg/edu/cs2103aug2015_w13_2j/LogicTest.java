@@ -151,4 +151,19 @@ public class LogicTest {
 			System.out.println(list.get(i).getName() + " " +list.get(i).getType());
 		}
 	}
+	
+	@Test
+	public void testOverdue(){
+		logicComponent = new Logic();
+		Task one = new Task("ONE");
+		logicComponent.addTask(one);
+		Task two = new Task("TWO");
+		logicComponent.addTask(two);
+		one.setDeadline(new Date(new Long("324567898")));
+		ArrayList<Task> list = logicComponent.list();
+		System.out.println("Testing list now");
+		for(int i = 0; i< list.size(); i++){
+			System.out.println(list.get(i).getName() + " " +list.get(i).getType() + " " + list.get(i).getStatus());
+		}
+	}
 }

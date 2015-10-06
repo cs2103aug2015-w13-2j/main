@@ -18,7 +18,10 @@ public class Logic implements LogicInterface{
     private ArrayList<Task> userView;//to store the user's latest requested list if any
                                      //eg. user filter(completed) all completed tasks will be store
                                      //here in case user wants to perform further request 
-   /**
+    private ArrayList<Task> archive;
+    private ArrayList<Task> deleted;
+    
+    /**
     * Constructor for the Logic component
     * 
     */
@@ -27,8 +30,10 @@ public class Logic implements LogicInterface{
         events = new ArrayList<Task>();	
         deadlines = new ArrayList<Task>();	
         floats = new ArrayList<Task>();	
+        archive = new ArrayList<Task>();
+        deleted = new ArrayList<Task>();	
         userView = new ArrayList<Task>();
-        //readFile();
+        //readFile();   <--- currently having an error
     }
     
     /**
@@ -100,7 +105,8 @@ public class Logic implements LogicInterface{
     	events.remove(task);
     	deadlines.remove(task);
     	floats.remove(task);
-    	
+    	archive.remove(task);
+    	deleted.add(task);
     	return task;
     }
     
@@ -112,13 +118,21 @@ public class Logic implements LogicInterface{
      */
     
     public void archiveTask(String taskName){
-    	findTaskByName(taskName).markArchived();
+    	Task archivedTask = findTaskByName(taskName);
+    	archivedTask.markArchived();
+    	archive.add(archivedTask);
     }
     
     
     public Task retrieveTask(String taskName){
     	return findTaskByName(taskName);
     }
+    
+    
+    public void markTaskCompleted(String taskName){
+    	 findTaskByName(taskName).markCompleted();
+    }
+    
     
     /**
      * This method lets user see all tasks they have previously marked as completed
@@ -142,8 +156,7 @@ public class Logic implements LogicInterface{
     }
     
     /**
-     * This method lets user see all tasks they have previously marked as completed
-     * It works the same way as viewCompleted does
+     * This method lets user see all tasks they have previously archived
      *  
      * @return
      *            the list of archived tasks
@@ -151,10 +164,27 @@ public class Logic implements LogicInterface{
      */
     public ArrayList<Task> viewArchived(){
     	userView = new ArrayList<Task>();
-    	for(int i = 0; i < tasks.size(); i++){
-    		if(tasks.get(i).getStatus().equals("ARCHIVED")){
-    			userView.add(tasks.get(i));
-    		}
+    	for(int i = 0; i < archive.size(); i++){
+    		userView.add(archive.get(i));
+    		
+    	}
+    	
+    	return userView;
+    }
+    
+    /**
+     * This method is NOT for user to implement
+     * It's used to ease the UNDO function later on
+     * 
+     * @return
+     *            the list of deleted tasks
+     * 
+     */
+    public ArrayList<Task> viewDeleted(){
+    	userView = new ArrayList<Task>();
+    	for(int i = 0; i < deleted.size(); i++){
+    		userView.add(deleted.get(i));
+    		
     	}
     	
     	return userView;
@@ -170,10 +200,12 @@ public class Logic implements LogicInterface{
      * 
      */
     public ArrayList<Task> viewOverdue(){
+    	Date date = new Date();
     	userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
-    		if(tasks.get(i).getStatus().equals("OVERDUE")){
+    		if(tasks.get(i).getDeadline() != null && tasks.get(i).getDeadline().compareTo(date) < 0){
     			userView.add(tasks.get(i));
+    			tasks.get(i).markOverdue();
     		}
     	}
     	
@@ -197,6 +229,18 @@ public class Logic implements LogicInterface{
     	
     	return userView;
     }
+    
+    public ArrayList<Task> list(){
+    	userView = viewOverdue();
+    	for(int i = 0; i < tasks.size(); i++){
+    		if(tasks.get(i).getStatus().equals("ONGOING") || tasks.get(i).getStatus().equals("COMPLETED")){
+    			userView.add(tasks.get(i));
+    		}
+    	}
+    	
+    	return userView;
+    }
+    
     
     /**
      * This method sorts a list of tasks according to their deadlines(if any)
