@@ -51,7 +51,7 @@ public class Task implements TaskInterface {
 	 * LABEL ACCESSORS
 	 * `-> NAME: string
 	 * `-> CREATED, START, END: date
-	 * `-> TYPE: EVENT / DEADLINE / FLOATING
+	 * `-> TYPE: EVENT / DEADLINE / FLOAT
 	 * `-> COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
 	 *******************************************************/
     
@@ -149,14 +149,14 @@ public class Task implements TaskInterface {
     }
     
     /*******************************************************
-   	 * (ACCESSORS) TYPE: EVENT / DEADLINE / FLOATING
+   	 * (ACCESSORS) TYPE: EVENT / DEADLINE / FLOAT
    	 *******************************************************/
     
     public void setType(String typeString) {
     	switch(typeString) {
     		case "EVENT":
     		case "DEADLINE":
-    		case "FLOATING":
+    		case "FLOAT":
     			setLabel(Label.TYPE, typeString);
     			break;
     	}

@@ -20,7 +20,7 @@ public class TaskTest {
     @Test
     public void userDefinedLabelsTest() {
         task = new Task();
-        Label[] labels = {Label.NAME, Label.CREATED, Label.DEADLINE};
+        Label[] labels = {Label.NAME, Label.CREATED, Label.END};
         String[] values = {"CS2103", "12345678"};
         
         // Set the labels
@@ -44,9 +44,9 @@ public class TaskTest {
         assertTrue(now.compareTo(task.getCreated()) >= 0);
         
         // Setting and retrieving deadlines
-        assertTrue(task.getDeadline() == null);
-        task.setDeadline(now);
-        assertTrue(now.compareTo(task.getDeadline()) == 0);
+        assertTrue(task.getEnd() == null);
+        task.setEnd(now);
+        assertTrue(now.compareTo(task.getEnd()) == 0);
     }
     
     @Test

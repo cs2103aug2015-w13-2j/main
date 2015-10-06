@@ -49,17 +49,17 @@ public class Logic implements LogicInterface{
      * 
      */
     public void addTask(Task task){
-    	tasks.add(task);
-    	
-    	determineType(task);
+		tasks.add(task);
+		
+		determineType(task);
     	 
-    	   if(task.getType().equals("EVENT")){
-    		  events.add(task);
-    	   } else if (task.getType().equals("DUE")){
-    		  deadlines.add(task);
-    	   } else {
-    		  floats.add(task);
-    	   }
+		if(task.getType().equals("EVENT")){
+			events.add(task);
+		} else if (task.getType().equals("DEADLINE")){
+			deadlines.add(task);
+		} else {
+			floats.add(task);
+		}
 
     	FunDUE.sFormatter.format(task, FormatterInterface.Format.LIST);//TODO: to be updated
     	
@@ -69,21 +69,23 @@ public class Logic implements LogicInterface{
     		e.printStackTrace();
     	}
     }
+    
     /**
      * Determine the type of a task based on its start (if any) and end (if any) times
      * @param task
      *            the new task to be categorized
-     * 
      */
-    
     public void determineType(Task task){
-    	if(task.getDeadline() == null){// if deadLine == null, float
-    		task.setTypeFloat();
+    	if(task.getEnd() == null){
+    		// if end == null, float
+    		task.setType("FLOAT");
     	} else {
-    		if (task.getStart() != null){//if deadLine != null and start != null, event
-    		    task.setTypeEvent();
-    	    } else {//if deadLine != null but start == null, then it's a task with deadline
-    		    task.setTypeDeadline();
+    		if (task.getStart() != null){
+    			// if end != null and start != null, event
+    		    task.setType("EVENT");
+    	    } else {
+    	    	// if end != null but start == null, deadline
+    		    task.setType("DEADLINE");
     	    }
     	}
     }
@@ -91,7 +93,6 @@ public class Logic implements LogicInterface{
     public Task getTask(int index){
     	return tasks.get(index);
     }
-    
     
     public ArrayList<Task> getEvents(){
     	return events;
@@ -113,13 +114,12 @@ public class Logic implements LogicInterface{
      */
     public Task deleteTask(String taskName){
     	Task task = findTaskByName(taskName);
-    	task.markDeleted();
     	tasks.remove(task);
     	events.remove(task);
     	deadlines.remove(task);
     	floats.remove(task);
     	archive.remove(task);
-    	deleted.add(task);
+    	//deleted.add(task);
     	FunDUE.sFormatter.format(task, FormatterInterface.Format.LIST); //TODO: to be updated
     	
     	try{
@@ -139,7 +139,7 @@ public class Logic implements LogicInterface{
     
     public void archiveTask(String taskName){
     	Task archivedTask = findTaskByName(taskName);
-    	archivedTask.markArchived();
+    	archivedTask.setArchived("TRUE");
     	archive.add(archivedTask);
     	FunDUE.sFormatter.format(archivedTask, FormatterInterface.Format.LIST); //TODO: to be updated
     }
@@ -152,7 +152,7 @@ public class Logic implements LogicInterface{
     
     public void markTaskCompleted(String taskName){
     	Task task = findTaskByName(taskName);
-    	task.markCompleted();
+    	task.setCompleted("TRUE");
     	FunDUE.sFormatter.format(task, FormatterInterface.Format.LIST); //TODO: to be updated
     	try{
     		FunDUE.sStorage.writeFile(tasks, "output.txt");//TODO: to be updated
@@ -171,11 +171,10 @@ public class Logic implements LogicInterface{
      *            the list of completed tasks
      * 
      */
-    
     public ArrayList<Task> viewCompleted(){
     	userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
-    		if(tasks.get(i).getStatus().equals("COMPLETED")){
+    		if(tasks.get(i).getCompleted().equals("TRUE")){
     			userView.add(tasks.get(i));
     		}
     	}
@@ -232,9 +231,8 @@ public class Logic implements LogicInterface{
     	Date date = new Date();
     	userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
-    		if(tasks.get(i).getDeadline() != null && tasks.get(i).getDeadline().compareTo(date) < 0){
+    		if(tasks.get(i).getEnd() != null && tasks.get(i).getEnd().compareTo(date) < 0){
     			userView.add(tasks.get(i));
-    			tasks.get(i).markOverdue();
     		}
     	}
     	FunDUE.sFormatter.format(userView, FormatterInterface.Format.LIST); //TODO: to be updated
@@ -244,9 +242,8 @@ public class Logic implements LogicInterface{
     public void checkStatus(){
     	Date date = new Date();
     	for(int i = 0; i < tasks.size(); i++){
-    		if(tasks.get(i).getDeadline() != null && tasks.get(i).getDeadline().compareTo(date) < 0){
+    		if(tasks.get(i).getEnd() != null && tasks.get(i).getEnd().compareTo(date) < 0){
     			userView.add(tasks.get(i));
-    			tasks.get(i).markOverdue();
     		}
     	}
     }
@@ -262,7 +259,7 @@ public class Logic implements LogicInterface{
     	ArrayList<Task> overdues = viewOverdue(); //this method filters out the tasks overdue by now
     	userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
-    		if(tasks.get(i).getStatus().equals("ONGOING")){
+    		if(tasks.get(i).getCompleted().equals("FALSE") && tasks.get(i).getArchived().equals("FALSE")){
     			userView.add(tasks.get(i));
     		}
     	}
@@ -274,7 +271,7 @@ public class Logic implements LogicInterface{
     public ArrayList<Task> list(){
     	userView = viewOverdue();
     	for(int i = 0; i < tasks.size(); i++){
-    		if(tasks.get(i).getStatus().equals("ONGOING") || tasks.get(i).getStatus().equals("COMPLETED")){
+    		if(tasks.get(i).getArchived().equals("FALSE")){
     			userView.add(tasks.get(i));
     		}
     	}
@@ -295,7 +292,7 @@ public class Logic implements LogicInterface{
     		public int compare(Task task1, Task task2){
     			if(task1.getType().equals(task2.getType())){
     				if(task1.getType().equals("DUE")){
-    				    return task1.getDeadline().compareTo(task2.getDeadline()); 
+    				    return task1.getEnd().compareTo(task2.getEnd()); 
     				} else if (task1.getType().equals("EVENT")){
     					return task1.getStart().compareTo(task2.getStart()); 
     				} else {
@@ -341,23 +338,23 @@ public class Logic implements LogicInterface{
     		original.setName(newTask.getName());
     	}
     	
-    	if(newTask.getDeadline() != null){
-    		original.setDeadline(newTask.getDeadline());
+    	if(newTask.getEnd() != null){
+    		original.setEnd(newTask.getEnd());
     	}
     	
     	if(newTask.getStart() != null){
     		original.setStart(newTask.getStart());
     	}
     	
-    	if(newTask.getStatus().equals("COMPLETED")) {
-    		original.markCompleted();
+    	if(newTask.getCompleted().equals("TRUE")) {
+    		original.setCompleted("TRUE");
     	}
     	
-    	if(newTask.getStatus().equals("DELETED")) {
-    		deleteTask(original.getName());
-    	}
+    	//if(newTask.getStatus().equals("DELETED")) {
+    		//deleteTask(original.getName());
+    	//}
     	
-    	if(newTask.getStatus().equals("ARCHIVED")) {
+    	if(newTask.getArchived().equals("TRUE")) {
     		archiveTask(original.getName());
     	}
     	
@@ -384,36 +381,36 @@ public class Logic implements LogicInterface{
 	
     	//potential edits to the type of task
     	
-    	if(original.getStart() == null && original.getDeadline() == null ){//originally float
-    		if(task.getStart() != null && task.getDeadline() != null)  {//edited to events
-    			original.setTypeEvent();
+    	if(original.getStart() == null && original.getEnd() == null ){//originally float
+    		if(task.getStart() != null && task.getEnd() != null)  {//edited to events
+    			original.setType("EVENT");
     			floats.remove(original);
     			events.add(original);
     		}
     		
-    		if(task.getStart() == null && task.getDeadline() != null)  {//edited to deadline tasks
-    			original.setTypeDeadline();
+    		if(task.getStart() == null && task.getEnd() != null)  {//edited to deadline tasks
+    			original.setType("DEADLINE");
     			floats.remove(original);
     			deadlines.add(original);
     		}
-    	} else if (original.getStart() != null && original.getDeadline() != null ){//originally event
-    		if(task.getDeadline() == null){//change to float
-    			original.setTypeFloat();
+    	} else if (original.getStart() != null && original.getEnd() != null ){//originally event
+    		if(task.getEnd() == null){//change to float
+    			original.setType("FLOAT");
     			events.remove(original);
     			floats.add(original);
     			
     		} else if(task.getStart() == null){//change to task with deadline
-    			original.setTypeDeadline();
+    			original.setType("DEADLINE");
     			events.remove(original);
     			deadlines.add(original);
     		}
-    	} else if (original.getStart() == null && original.getDeadline() != null){//originally task with deadline
-    		if(task.getDeadline() == null){//change to float
-    			original.setTypeFloat();
+    	} else if (original.getStart() == null && original.getEnd() != null){//originally task with deadline
+    		if(task.getEnd() == null){//change to float
+    			original.setType("FLOAT");
     			deadlines.remove(original);
     			floats.add(original);
-    		} else if(task.getStart() != null && task.getDeadline() != null)  {//edited to event
-    			original.setTypeEvent();
+    		} else if(task.getStart() != null && task.getEnd() != null)  {//edited to event
+    			original.setType("EVENT");
     			deadlines.remove(original);
     			events.add(original);
     		}

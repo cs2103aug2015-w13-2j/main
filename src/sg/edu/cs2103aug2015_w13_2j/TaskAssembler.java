@@ -164,7 +164,7 @@ public class TaskAssembler implements TaskAssemblerInterface {
 				break;
 			case "e" :
 				//TODO: Call task interface method and Set end time of task when avail
-				task.setDeadline(date);
+				task.setEnd(date);
 				break;
 			default :
 				// As an extra safety precaution

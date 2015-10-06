@@ -41,9 +41,9 @@ public class LogicTest {
 		logicComponent = new Logic();
 		Task newTask = new Task("first test task");
 		logicComponent.determineType(newTask);
-		assertTrue(newTask.getDeadline() == null);
+		assertTrue(newTask.getEnd() == null);
 		assertEquals(newTask.getType(), "FLOAT");
-		newTask.setDeadline(new Date());
+		newTask.setEnd(new Date());
 		logicComponent.determineType(newTask);
 		assertEquals(newTask.getType(), "DUE");
 		newTask.setStart(new Date());
@@ -55,11 +55,13 @@ public class LogicTest {
 	public void testEdit(){
 		logicComponent = new Logic();
 		Task original = new Task("first test task");
-		assertEquals(original.getStatus(), "ONGOING");
+		assertEquals(original.getCompleted(), "FALSE");
+		assertEquals(original.getArchived(), "FALSE");
+		assertEquals(original.getImportant(), "FALSE");
 		logicComponent.addTask(original);
 		assertEquals(original.getType(), "FLOAT");
 		Task newTask = new Task("first test task");
-		newTask.setDeadline(new Date());
+		newTask.setEnd(new Date());
 		logicComponent.determineType(newTask);
 		logicComponent.editTask("first test task", newTask);
 		assertEquals(original.getType(), "DUE");
@@ -79,16 +81,16 @@ public class LogicTest {
 		logicComponent = new Logic();
 		Task original = new Task("second test task");
 		logicComponent.addTask(original);
-		assertEquals(original.getStatus(), "ONGOING");
-		original.markCompleted();
-		assertEquals(original.getStatus(), "COMPLETED");
+		assertEquals(original.getCompleted(), "FALSE");
+		original.setCompleted("TRUE");
+		assertEquals(original.getCompleted(), "TRUE");
 		assertTrue(logicComponent.getAllTasks().size() == 1);
 		assertTrue(logicComponent.viewCompleted().size() == 1);
 		assertTrue(logicComponent.getFloats().size() == 1);
 		assertTrue(logicComponent.getEvents().isEmpty());
 		assertTrue(logicComponent.getDeadlines().isEmpty());
 		logicComponent.deleteTask(original.getName());
-		assertEquals(original.getStatus(), "DELETED");
+		//assertEquals(original.getStatus(), "DELETED");
 		assertTrue(logicComponent.getAllTasks().isEmpty());
 		assertTrue(logicComponent.viewCompleted().isEmpty());
 		assertTrue(logicComponent.getFloats().isEmpty());
@@ -112,9 +114,9 @@ public class LogicTest {
 			System.out.println(list.get(i).getName() + " " + list.get(i).getType());
 		}
 		System.out.println("Seven becomes deadline");
-		seven.setDeadline(new Date());
-		assertTrue(seven.getStart() == null && seven.getDeadline() != null);
-		System.out.println("Seven's deadline = " + seven.getDeadline());
+		seven.setEnd(new Date());
+		assertTrue(seven.getStart() == null && seven.getEnd() != null);
+		System.out.println("Seven's deadline = " + seven.getEnd());
 		logicComponent.determineType(seven);
 		//logicComponent.editTask("SEVEN", seven);
 		//seven.setTypeDeadline();
@@ -126,7 +128,7 @@ public class LogicTest {
 		
 		System.out.println("Even more Seven ");
 		Task newSeven = new Task("SEVEN SEVEN");
-		newSeven.setDeadline(new Date());
+		newSeven.setEnd(new Date());
 		newSeven.setStart(new Date());
 		logicComponent.editTask("SEVEN", newSeven);
 		list = logicComponent.sortByDeadline();
@@ -136,14 +138,14 @@ public class LogicTest {
 		
 		System.out.println("TWO's gonna get in front!");
 		Task newTwo = new Task("I AM THE NEW TWO");
-		newTwo.setDeadline(new Date());
+		newTwo.setEnd(new Date());
 		newTwo.setStart(new Date());
 		logicComponent.editTask("TWO", newTwo);
 		
 		Task five = new Task("FIVE");
 		logicComponent.addTask(five);
 		Task six = new Task("SIX");
-		six.setDeadline(new Date());
+		six.setEnd(new Date());
 		logicComponent.addTask(six);
 		
 		list = logicComponent.sortByDeadline();
@@ -159,11 +161,11 @@ public class LogicTest {
 		logicComponent.addTask(one);
 		Task two = new Task("TWO");
 		logicComponent.addTask(two);
-		one.setDeadline(new Date(new Long("324567898")));
+		one.setEnd(new Date(new Long("324567898")));
 		ArrayList<Task> list = logicComponent.list();
 		System.out.println("Testing list now");
 		for(int i = 0; i< list.size(); i++){
-			System.out.println(list.get(i).getName() + " " +list.get(i).getType() + " " + list.get(i).getStatus());
+			System.out.println(list.get(i).getName() + " " +list.get(i).getType() + " " + list.get(i).getCompleted() + " " + list.get(i).getArchived() + " " + list.get(i).getImportant());
 		}
 	}
 }

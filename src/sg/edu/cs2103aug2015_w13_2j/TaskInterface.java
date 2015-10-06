@@ -23,8 +23,8 @@ public interface TaskInterface {
     public enum Type {
     	// EVENT: START + END
     	// DEADLINE: END
-    	// FLOATING: N/A
-        EVENT, DEADLINE, FLOATING
+    	// FLOAT: N/A
+        EVENT, DEADLINE, FLOAT
     }
     
     //@@author A0124007X
@@ -43,7 +43,7 @@ public interface TaskInterface {
 	 * LABEL ACCESSORS
 	 * `-> NAME: string
 	 * `-> CREATED, START, END: date
-	 * `-> TYPE: EVENT / DEADLINE / FLOATING
+	 * `-> TYPE: EVENT / DEADLINE / FLOAT
 	 * `-> COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
 	 *******************************************************/
     
@@ -151,13 +151,13 @@ public interface TaskInterface {
     public Date getEnd();
     
     /*******************************************************
-   	 * (ACCESSORS) TYPE: EVENT / DEADLINE / FLOATING
+   	 * (ACCESSORS) TYPE: EVENT / DEADLINE / FLOAT
    	 *******************************************************/
     
     /**
      * Categorizes a task into one of the 3 types: an Event, Deadline, or Floating Task
      * @param typeString
-     *            one of 3 types of tasks: Event / Deadline / Floating
+     *            one of 3 types of tasks: Event / Deadline / Float
      * @author Nguyen Tuong Van
      * 
     */
