@@ -14,9 +14,9 @@ public class StorageTest {
     public void readAndWriteTest() throws Exception {
     	String filename = "StorageTest.txt";
 
-    	String stringToWrite = "STATUS:ONGOING\nCREATED:1443958836657\nNAME:Task one\n\n";
-    	stringToWrite += "STATUS:ONGOING\nCREATED:1443958836657\nNAME:Task two\n\n";
-    	stringToWrite += "STATUS:ONGOING\nCREATED:1443958836657\nNAME:Task three\n\n";
+    	String stringToWrite = "NAME:Task one\nCOMPLETED:FALSE\nARCHIVED:FALSE\nCREATED:1443958836657\nIMPORTANT:FALSE\n\n";
+    	stringToWrite += "NAME:Task two\nCOMPLETED:FALSE\nARCHIVED:FALSE\nCREATED:1443958836657\nIMPORTANT:FALSE\n\n";
+    	stringToWrite += "NAME:Task three\nCOMPLETED:FALSE\nARCHIVED:FALSE\nCREATED:1443958836657\nIMPORTANT:FALSE\n\n";
     	storage.writeRawFile(stringToWrite, filename);
     	List<Task> listWritten = storage.readFile(filename);
     	storage.writeFile(listWritten, filename);
@@ -40,5 +40,23 @@ public class StorageTest {
     	String dataFilePath = storage.readRawFile("DATA_FILE_PATH");
     	System.out.println(dataFilePath);
     	storage.writeRawFile("", dataFilePath);
+    }
+    
+    @Test
+    public void stringEscapeTest() throws Exception {
+    	/* StringEscapeTestInput.txt looks like this:
+    	 * > NAME:Task one" has s'trange\ncharacters
+    	 * > COMPLETED:FALSE
+    	 * > ARCHIVED:FALSE
+    	 * > CREATED:1443958836657
+    	 * > IMPORTANT:FALSE
+    	 */
+    	List<Task> list = storage.readFile("StringEscapeTestInput.txt");
+    	storage.writeFile(list, "StringEscapeTestOutput.txt");
+    	
+    	String inputContent = storage.readRawFile("StringEscapeTestInput.txt");
+    	String outputContent = storage.readRawFile("StringEscapeTestOutput.txt");
+    	
+    	assertTrue(inputContent.equals(outputContent));
     }
 }
