@@ -1,6 +1,5 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -15,23 +14,11 @@ public class Parser implements ParserInterface {
     }
 
     public enum Token {
-        RESERVED("RESERVED"), DATE("DATE"), DATE_INVALID("DATE_INVALID"), FLAG(
-                "FLAG"), FLAG_INVALID("FLAG_INVALID"), ID("ID"), ID_INVALID(
-                "ID_INVALID"), NAME("NAME"), WHITESPACE("WHITESPACE"),
-                ALPHA_NUM("ALPHA_NUM");
-
-        private String mValue;
-
-        Token(String value) {
-            mValue = value;
-        }
-
-        public String getValue() {
-            return mValue;
-        }
+        RESERVED, DATE, DATE_INVALID, FLAG, FLAG_INVALID, ID, ID_INVALID, NAME, WHITESPACE, ALPHA_NUM;
     }
 
-    public static final String[] RESERVED = { "add", "delete", "edit", "list", "sort" };
+    public static final String[] RESERVED = { "add", "delete", "edit", "list",
+            "sort" };
     public static final String[] FLAGS = { "e", "s" };
 
     private State mState = State.GENERAL;
@@ -39,41 +26,36 @@ public class Parser implements ParserInterface {
     private int mParserPos;
     private Vector<Pair<Token, String>> mTokens = new Vector<Pair<Token, String>>();
 
-    public Parser() {
-        // Empty constructor
-    }
-
     public void parseCommand(String command) {
         mState = State.GENERAL;
         mCommand = command;
         mParserPos = 0;
         mTokens.clear();
         startParserLoop();
-        this.executeCommand();
+        //this.executeCommand();
     }
-    
+
     /**
      * Executes command specified in the list of parsed tokens.
      * 
-     * This method calls the Controller class' method to execute 
-     * the command.
+     * This method calls the Controller class' method to execute the command.
      */
     public void executeCommand() {
-    	Controller controller = new Controller(this.getListOfTokens());
-    	
-    	controller.startCommandExecution();
+        Controller controller = new Controller(this.getListOfTokens());
+
+        controller.startCommandExecution();
     }
-    
+
     public Vector<Pair<Token, String>> getListOfTokens() {
-		return mTokens;
+        return mTokens;
     }
-    
+
     public String getParsedTokens() {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < mTokens.size(); i++) {
             sb.append('[');
-            sb.append(mTokens.get(i).getKey().getValue());
+            sb.append(mTokens.get(i).getKey());
             if (mTokens.get(i).getValue() != null) {
                 sb.append('=');
                 sb.append(mTokens.get(i).getValue());
@@ -106,21 +88,26 @@ public class Parser implements ParserInterface {
                 break;
             case DATE:
                 s = nextDelimiter(' ');
-                addToken(Token.DATE, s);
+                try {
+                    String dateString = ParserInterface.parseDate(s);
+                    addToken(Token.DATE, dateString);
+                } catch (IllegalDateFormatException e) {
+                    addToken(Token.DATE_INVALID, s);
+                }
                 mState = State.GENERAL;
                 break;
             case FLAG:
                 // Consume dash character
                 next();
+                s = nextDelimiter(' ');
 
                 // Check if flag is valid and add token
-                String flag = String.valueOf(next());
-                if (isValidFlag(flag)) {
-                    addToken(Token.FLAG, String.valueOf(flag));
+                if (isValidFlag(s)) {
+                    addToken(Token.FLAG, s);
                     // TODO: May not always transition to date state
                     mState = State.DATE;
                 } else {
-                    addToken(Token.FLAG_INVALID, String.valueOf(flag));
+                    addToken(Token.FLAG_INVALID, s);
                     mState = State.GENERAL;
                 }
                 break;
@@ -142,7 +129,7 @@ public class Parser implements ParserInterface {
                     Integer.parseInt(s);
                     addToken(Token.ID, s);
                 } catch (NumberFormatException e) {
-                    //e.printStackTrace();
+                    // e.printStackTrace();
                     addToken(Token.ID_INVALID, s);
                 }
                 mState = State.GENERAL;

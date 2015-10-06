@@ -9,8 +9,7 @@ public class FunDUE {
     public static Storage sStorage;
 
     /**
-     * Initializes all the components and injects the dependencies to each
-     * component
+     * Initializes all the components
      */
     public FunDUE() {
         sTextUI = new TextUI();

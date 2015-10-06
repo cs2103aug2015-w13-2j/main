@@ -2,7 +2,12 @@ package sg.edu.cs2103aug2015_w13_2j;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import org.junit.Test;
+
+import sg.edu.cs2103aug2015_w13_2j.ParserInterface.IllegalDateFormatException;
 
 public class ParserTest {
     // Use the same Parser object across all test cases
@@ -19,13 +24,24 @@ public class ParserTest {
 
     @Test
     public void parserTokenizerTest() {
+        Calendar date1 = new GregorianCalendar(2015, 9 - 1, 23);
+
         String command = "add -s 23/09 -e 4pm *@(*#(!&@! 'Task name'";
         String expected = "[RESERVED=add][WHITESPACE][FLAG=s][WHITESPACE]"
-                + "[DATE=23/09][WHITESPACE][FLAG=e][WHITESPACE][DATE=4pm]"
+                + "[DATE=" + date1.getTimeInMillis()
+                + "][WHITESPACE][FLAG=e][WHITESPACE][DATE_INVALID=4pm]"
                 + "[WHITESPACE][ALPHA_NUM=*@(*#(!&@!][WHITESPACE]"
                 + "[NAME=Task name]";
 
         testParser(command, expected);
+    }
+
+    @Test
+    public void parserDateParserTest() throws IllegalDateFormatException {
+        // Normal date with all relevant information
+        assertEquals("1442937600000", ParserInterface.parseDate("23/09/2015"));
+
+        assertEquals("1442937600000", ParserInterface.parseDate("23/09"));
     }
 
     /*****************************************************************
@@ -94,12 +110,18 @@ public class ParserTest {
      *****************************************************************/
     @Test
     public void parseAllOptionsTest() {
+        Calendar date1 = new GregorianCalendar(2015, 9 - 1, 23);
+        Calendar date2 = new GregorianCalendar(2015, 9 - 1, 24);
+        Calendar date3 = new GregorianCalendar(2015, 9 - 1, 25);
         // Test cases for valid options
         String validOptions = "-s 23/09 -e 24/09";
-        String validOptionsExpected = "[FLAG=s][WHITESPACE][DATE=23/09]"
-                + "[WHITESPACE][FLAG=e][WHITESPACE][DATE=24/09]";
+        String validOptionsExpected = "[FLAG=s][WHITESPACE][DATE="
+                + date1.getTimeInMillis() + "]"
+                + "[WHITESPACE][FLAG=e][WHITESPACE][DATE="
+                + date2.getTimeInMillis() + "]";
         String singleValidOption = "-s 23/09";
-        String singleValidOptionExpected = "[FLAG=s][WHITESPACE][DATE=23/09]";
+        String singleValidOptionExpected = "[FLAG=s][WHITESPACE][DATE="
+                + date1.getTimeInMillis() + "]";
         String emptyToken = "";
         String emptyTokenExpected = "";
 
@@ -111,12 +133,13 @@ public class ParserTest {
         String singleToken = "-s";
         String singleTokenExpected = "[FLAG=s]";
         String invalidSecondOption = "-s 23/09 24/09 -e 25/09";
-        String invalidSecondOptionExpected = "[FLAG=s][WHITESPACE][DATE=23/09]"
+        String invalidSecondOptionExpected = "[FLAG=s][WHITESPACE][DATE="
+                + date1.getTimeInMillis() + "]"
                 + "[WHITESPACE][ID_INVALID=24/09][WHITESPACE][FLAG=e]"
-                + "[WHITESPACE][DATE=25/09]";
+                + "[WHITESPACE][DATE=" + date3.getTimeInMillis() + "]";
         String invalidSecondOptionField = "-s 23/09 -e";
         String invalidSecondOptionFieldExpected = "[FLAG=s][WHITESPACE]"
-                + "[DATE=23/09][WHITESPACE][FLAG=e]";
+                + "[DATE=" + date1.getTimeInMillis() + "][WHITESPACE][FLAG=e]";
 
         testParser(singleToken, singleTokenExpected);
         testParser(invalidSecondOption, invalidSecondOptionExpected);
@@ -124,20 +147,20 @@ public class ParserTest {
 
         // Test cases for having an invalid option
         String singleInvalidToken = "-ss";
-        String singleInvalidTokenExpected = "[FLAG=s][DATE_INVALID=s]";
+        String singleInvalidTokenExpected = "[FLAG_INVALID=ss]";
         String invalidOptionWithField = "-ss 23/09";
-        String invalidOptionWithFieldExpected = "[FLAG=s][DATE_INVALID=s]"
-                + "[WHITESPACE][ID_INVALID=23/09]";
+        String invalidOptionWithFieldExpected = "[FLAG_INVALID=ss][WHITESPACE]"
+                + "[ID_INVALID=23/09]";
 
         testParser(singleInvalidToken, singleInvalidTokenExpected);
         testParser(invalidOptionWithField, invalidOptionWithFieldExpected);
-    
+
         // Test cases for having an invalid flag followed by task name
         String invalidFlagThenTaskName = "add -s 'Do Homework'";
         String invalidFlagThenTaskNameExpected = "[RESERVED=add][WHITESPACE]"
-        		+ "[FLAG=s][NAME=Do Homework]";
+                + "[FLAG=s][WHITESPACE][DATE_INVALID='Do][WHITESPACE]"
+                + "[ALPHA_NUM=Homework']";
         testParser(invalidFlagThenTaskName, invalidFlagThenTaskNameExpected);
     }
-    
-   
+
 }
