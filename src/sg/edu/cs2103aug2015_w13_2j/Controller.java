@@ -31,7 +31,7 @@ public class Controller {
 	private static final Logger log = 
 			Logger.getLogger(Controller.class.getName());
 	private Task task;
-	private TaskAssembler taskAssembler;
+	private TaskAssemblerInterface taskAssembler;
 	private Vector<Pair<Parser.Token, String>> listOfTokens;
 	
 	/**
@@ -83,7 +83,7 @@ public class Controller {
 		Commands command = getCommand();
 		String taskName;
 		String date;
-		
+
 		switch (command) {
 			case ADD:
 				log.log(Level.INFO, "Switched to 'add' command");

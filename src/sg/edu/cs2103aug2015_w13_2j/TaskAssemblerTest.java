@@ -13,7 +13,7 @@ import org.junit.Test;
  */
 public class TaskAssemblerTest {
 
-	private TaskAssembler taskAssembler;
+	private TaskAssemblerInterface taskAssembler;
 	
 	private void setUpTestTaskAssembler(String commandLine) {
 		Parser parser = new Parser();
