@@ -13,7 +13,7 @@ public class MyInformalParserLogicTest {
 	public MyInformalParserLogicTest() {
 		new FunDUE();
 		
-		FunDUE.sTextUI.print("Hello world!");
+		//FunDUE.sTextUI.print("Hello world!");
 		
 		this.parser = FunDUE.sParser;
 		this.logic = FunDUE.sLogic;
@@ -35,7 +35,7 @@ public class MyInformalParserLogicTest {
 		// 1.) Change start time
 		// 2.) Add a deadline
 		String userCmd3 = "edit -s 11/03 -e 11/11 'Do Something else'";
-		informalTest.printTaskDetails(userCmd3, 2);
+		//informalTest.printTaskDetails(userCmd3, 2);
 		
 		printTestLabel(4);
 		String userCmd4 = "list";
@@ -43,7 +43,7 @@ public class MyInformalParserLogicTest {
 		
 		printTestLabel(5);
 		String userCmd5 = "delete 'Do CS2103T Prototype'";
-		informalTest.printTaskDetails(userCmd5, 1);
+		//informalTest.printTaskDetails(userCmd5, 1);
 	}
 
 	private static void printTestLabel(int index) {
@@ -95,7 +95,7 @@ public class MyInformalParserLogicTest {
 	
 	private void printListCommand(String userCmd) {
 		parser.parseCommand(userCmd);
-		parser.executeCommand();
+		System.out.println(parser.getListOfTokens());
 		
 		for (Task task: FunDUE.sLogic.list()) {
 			System.out.println(task);

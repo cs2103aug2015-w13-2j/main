@@ -134,7 +134,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
             if(mTextField.getText().equalsIgnoreCase("snake")) {
                 new SnakeTXT();
             } else {
-                FunDUE.sParser.parseCommand(mTextField.getText() + NEWLINE);
+                FunDUE.sParser.parseCommand(mTextField.getText());//deleted NEWLINE
             }
             mTextField.setText(null);
             break;
