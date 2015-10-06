@@ -19,14 +19,20 @@ public class Task implements TaskInterface {
     // Maps labels to their values
     private HashMap<Label, String> mLabels = new HashMap<Label, String>();
 
+    /*******************************************************
+	 * CONSTRUCTORS
+	 *******************************************************/
+    
     /**
      * Zero parameter constructor that creates and initializes a new Task object
      * and records the time of creation
      */
     public Task() {
         Date now = new Date();
-        this.setLabel(Label.CREATED, String.valueOf(now.getTime()));
-        setStatus(Status.ONGOING);
+        setCreated(String.valueOf(now.getTime()));
+        setCompleted("FALSE");
+        setArchived("FALSE");
+        setImportant("FALSE");
     }
 
     /**
@@ -39,9 +45,15 @@ public class Task implements TaskInterface {
     public Task(String name) {
         this();
         setName(name);
-        //@@author A0133387B
-        setStatus(Status.ONGOING);
     }
+    
+    /*******************************************************
+	 * LABEL ACCESSORS
+	 * `-> NAME: string
+	 * `-> CREATED, START, END: date
+	 * `-> TYPE: EVENT / DEADLINE / FLOATING
+	 * `-> COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
+	 *******************************************************/
     
     public void setLabel(Label label, String value) {
         mLabels.put(label, value);
@@ -52,7 +64,7 @@ public class Task implements TaskInterface {
     }
     
     /*******************************************************
-	 * NAME ACCESSORS
+	 * (ACCESSORS) NAME: string
 	 *******************************************************/
 
     public void setName(String name) {
@@ -64,9 +76,9 @@ public class Task implements TaskInterface {
     }
 
     /*******************************************************
-   	 * CREATED ACCESSORS
+   	 * (ACCESSORS) CREATED, START, END: date
    	 *******************************************************/
-    
+
     public void setCreated(String createdString) {
     	setLabel(Label.CREATED, createdString);
     }
@@ -74,11 +86,7 @@ public class Task implements TaskInterface {
     public Date getCreated() {
         return stringToDate(getLabel(Label.CREATED));
     }
-    
-    /*******************************************************
-   	 * START ACCESSORS
-   	 *******************************************************/
-    
+
     public void setStart(Date start) {
     	setLabel(Label.START, dateToString(start));
     }
@@ -90,87 +98,18 @@ public class Task implements TaskInterface {
     public Date getStart() {
     	return stringToDate(getLabel(Label.START));
     }
-    
-    /*******************************************************
-   	 * DEADLINE ACCESSORS
-   	 *******************************************************/
-    
-    public void setDeadline(Date deadline) {
-        setLabel(Label.DEADLINE, dateToString(deadline));
+
+    public void setEnd(Date end) {
+        setLabel(Label.END, dateToString(end));
     }
 
-    public void setDeadline(String deadlineString) {
-    	setLabel(Label.DEADLINE, deadlineString);
+    public void setEnd(String endString) {
+    	setLabel(Label.END, endString);
     }
     
-    public Date getDeadline() {
-        return stringToDate(getLabel(Label.DEADLINE));
+    public Date getEnd() {
+        return stringToDate(getLabel(Label.END));
     }
-
-    /*******************************************************
-   	 * TYPE ACCESSORS
-   	 *******************************************************/
-    
-    /**Categorizes a task into one of the 3 types: an Event, Deadline, or Float
-     * @param type
-     *            one of 3 types of tasks: due (with deadline), event, or float
-     * @author Nguyen Tuong Van
-     * 
-    */
-    public void setType(Type type) {
-        mLabels.put(Label.TYPE, type.toString());
-    }
-
-    public String getType() {
-        return getLabel(Label.TYPE);
-    }
-    
-    public void setTypeDeadline() {
-        this.setType(Type.DUE);
-    }
-    
-    public void setTypeEvent() {
-        this.setType(Type.EVENT);
-    }
-    
-    public void setTypeFloat() {
-        this.setType(Type.FLOAT);
-    }
-    /*******************************************************
-   	 * STATUS ACCESSORS
-   	 *******************************************************/
-    
-    /**Categorizes the status of a task: ongoing, completed, overdue, archived, deleted
-     * @param status
-     *            the status to be set. Default for new task is ongoing
-    */
-    public void setStatus(Status status) {
-        mLabels.put(Label.STATUS, status.toString());
-    }
-    
-    public String getStatus() {
-        return getLabel(Label.STATUS);
-    }
-    
-    public void markDeleted() {
-    	this.setStatus(Status.DELETED);
-    }
-
-    public void markCompleted() {
-        this.setStatus(Status.COMPLETED);
-    }
-    
-    public void markArchived() {
-        this.setStatus(Status.ARCHIVED);
-    }
-    
-    public void markOverdue() {
-        this.setStatus(Status.OVERDUE);
-    }
-    
-    /*******************************************************
-   	 * UTILITY METHODS
-   	 *******************************************************/
     
     /**
      * Utility method to convert a String millisecond epoch to a Date object
@@ -208,6 +147,74 @@ public class Task implements TaskInterface {
             return String.valueOf(date.getTime());
         }
     }
+    
+    /*******************************************************
+   	 * (ACCESSORS) TYPE: EVENT / DEADLINE / FLOATING
+   	 *******************************************************/
+    
+    public void setType(String typeString) {
+    	switch(typeString) {
+    		case "EVENT":
+    		case "DEADLINE":
+    		case "FLOATING":
+    			setLabel(Label.TYPE, typeString);
+    			break;
+    	}
+    }
+
+    public String getType() {
+        return getLabel(Label.TYPE);
+    }
+
+    /*******************************************************
+   	 * (ACCESSORS) COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
+   	 *******************************************************/
+    
+    // COMPLETED
+    public void setCompleted(String completedString) {
+    	switch(completedString) {
+    		case "TRUE":
+    		case "FALSE":
+    			setLabel(Label.COMPLETED, completedString);
+    			break;
+    	}
+    }
+    
+    public String getCompleted() {
+        return getLabel(Label.COMPLETED);
+    }
+    
+    // ARCHIVED
+    public void setArchived(String archivedString) {
+    	switch(archivedString) {
+    		case "TRUE":
+    		case "FALSE":
+    			setLabel(Label.ARCHIVED, archivedString);
+    			break;
+    	}
+    }
+    
+    public String getArchived() {
+        return getLabel(Label.ARCHIVED);
+    }
+    
+    // IMPORTANT
+    public void setImportant(String importantString) {
+    	switch(importantString) {
+    		case "TRUE":
+    		case "FALSE":
+    			setLabel(Label.IMPORTANT, importantString);
+    			break;
+    	}
+    }
+    
+    public String getImportant() {
+        return getLabel(Label.IMPORTANT);
+    }
+    
+    /*******************************************************
+   	 * STRING <-> TASK CONVERSION METHODS
+   	 *******************************************************/
     
     //@@author A0124007X
     public String toString() {
