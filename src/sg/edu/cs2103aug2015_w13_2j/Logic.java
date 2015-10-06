@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class Logic implements LogicInterface{
     private ArrayList<Task> tasks; //this ArrayList includes all added tasks, excluding deleted ones
@@ -25,18 +26,19 @@ public class Logic implements LogicInterface{
     * Constructor for the Logic component
     * 
     */
-    public Logic(){
-        tasks = new ArrayList<Task>();	
-        events = new ArrayList<Task>();	
-        deadlines = new ArrayList<Task>();	
-        floats = new ArrayList<Task>();	
+    public Logic() {
+        tasks = new ArrayList<Task>();
+        events = new ArrayList<Task>();
+        deadlines = new ArrayList<Task>();
+        floats = new ArrayList<Task>();
         archive = new ArrayList<Task>();
-        deleted = new ArrayList<Task>();	
+        deleted = new ArrayList<Task>();
         userView = new ArrayList<Task>();
-        //readFile();   <--- currently having an error
         checkStatus();
         try{
-    		FunDUE.sStorage.writeFile(tasks, "output.txt");//TODO: to be updated
+        	//String DATA_FILE_PATH = FunDUE.sStorage.readRawFile("DATA_FILE_PATH");
+        	//List<Task> testing = FunDUE.sStorage.readFile(DATA_FILE_PATH);
+        	//FunDUE.sStorage.writeFile(tasks, "output.txt");//TODO: to be updated
     	} catch (Exception e){
     		e.printStackTrace();
     	}

@@ -15,8 +15,8 @@ public class FunDUE {
         sTextUI = new TextUI();
         sParser = new Parser();
         sFormatter = new Formatter();
-        sLogic = new Logic();
         sStorage = new Storage();
+        sLogic = new Logic();
     }
 
     public static void main(String[] args) {
