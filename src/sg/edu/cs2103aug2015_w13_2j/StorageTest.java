@@ -14,7 +14,9 @@ public class StorageTest {
     public void readAndWriteTest() throws Exception {
     	String filename = "StorageTest.txt";
 
-    	String stringToWrite = "NAME:Task one\nCREATED:1443958836657\n\nNAME:Task two\nCREATED:1443958836657\n\nNAME:Task three\nCREATED:1443958836657\n\n";
+    	String stringToWrite = "STATUS:ONGOING\nCREATED:1443958836657\nNAME:Task one\n\n";
+    	stringToWrite += "STATUS:ONGOING\nCREATED:1443958836657\nNAME:Task two\n\n";
+    	stringToWrite += "STATUS:ONGOING\nCREATED:1443958836657\nNAME:Task three\n\n";
     	storage.writeRawFile(stringToWrite, filename);
     	List<Task> listWritten = storage.readFile(filename);
     	storage.writeFile(listWritten, filename);
