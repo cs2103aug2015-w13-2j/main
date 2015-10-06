@@ -35,6 +35,11 @@ public class Logic implements LogicInterface{
         userView = new ArrayList<Task>();
         //readFile();   <--- currently having an error
         checkStatus();
+        try{
+    		FunDUE.sStorage.writeFile(tasks, "output.txt");//TODO: to be updated
+    	} catch (Exception e){
+    		e.printStackTrace();
+    	}
     }
     
     /**
@@ -57,6 +62,12 @@ public class Logic implements LogicInterface{
     	   }
 
     	FunDUE.sFormatter.format(task, FormatterInterface.Format.LIST);//TODO: to be updated
+    	
+    	try{
+    		FunDUE.sStorage.writeFile(tasks, "output.txt");//TODO: to be updated
+    	} catch (Exception e){
+    		e.printStackTrace();
+    	}
     }
     /**
      * Determine the type of a task based on its start (if any) and end (if any) times
@@ -110,6 +121,12 @@ public class Logic implements LogicInterface{
     	archive.remove(task);
     	deleted.add(task);
     	FunDUE.sFormatter.format(task, FormatterInterface.Format.LIST); //TODO: to be updated
+    	
+    	try{
+    		FunDUE.sStorage.writeFile(tasks, "output.txt");//TODO: to be updated
+    	} catch (Exception e){
+    		e.printStackTrace();
+    	}
     	return task;
     }
     
@@ -137,6 +154,11 @@ public class Logic implements LogicInterface{
     	Task task = findTaskByName(taskName);
     	task.markCompleted();
     	FunDUE.sFormatter.format(task, FormatterInterface.Format.LIST); //TODO: to be updated
+    	try{
+    		FunDUE.sStorage.writeFile(tasks, "output.txt");//TODO: to be updated
+    	} catch (Exception e){
+    		e.printStackTrace();
+    	}
     }
     
     
@@ -296,7 +318,7 @@ public class Logic implements LogicInterface{
     	for(int i = 0; i < tasks.size(); i++){
     		userView.add(tasks.get(i));
     	}
-    	FunDUE.sFormatter.format(userView, FormatterInterface.Format.LIST); //TODO: to be updated
+    	//FunDUE.sFormatter.format(userView, FormatterInterface.Format.LIST); //TODO: to be updated
     	return sortByDeadline(userView);
     }
     
@@ -399,6 +421,11 @@ public class Logic implements LogicInterface{
     	
     	mergeDetails(original, task);
     	FunDUE.sFormatter.format(original, FormatterInterface.Format.LIST); //TODO: to be updated
+    	try{
+    		FunDUE.sStorage.writeFile(tasks, "output.txt");//TODO: to be updated
+    	} catch (Exception e){
+    		e.printStackTrace();
+    	}
     	return original;
     }
     
@@ -447,5 +474,35 @@ public class Logic implements LogicInterface{
     	
        return result;
     }
+
     
+    /*
+    public static void main (String[] args){
+    	Logic logic = new Logic();
+    	Task task = new Task("first test task");
+    	logic.addTask(task);
+    	/*
+    	System.out.println(task.getType());
+    	
+    	task.setStart(new Date(new Long("23456")));//setStart seems to have some bug
+    	logic.determineType(task);
+    	System.out.println(task.getType());
+    	System.out.println("Start = " + task.getStart());
+    	
+    	task.setDeadline(new Date());
+    	logic.determineType(task);
+    	System.out.println(task.getType());
+    	System.out.println("Deadline = "  + task.getDeadline());    
+    	
+    	Task newTask = new Task("first test task");
+		newTask.setDeadline(new Date());
+		logic.determineType(newTask);
+		logic.editTask("first test task", newTask);
+    	System.out.println(newTask.getType());
+    	System.out.println(task.getType());
+    	//logic.addTask(new Task("second test task"));
+    	//System.out.println("First task was created at " + logic.findTaskByName("first test task").getCreated());
+    }
+    
+    */
 }

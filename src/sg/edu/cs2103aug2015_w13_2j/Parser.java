@@ -31,7 +31,7 @@ public class Parser implements ParserInterface {
         }
     }
 
-    public static final String[] RESERVED = { "add", "delete", "edit", "list" };
+    public static final String[] RESERVED = { "add", "delete", "edit", "list", "sort" };
     public static final String[] FLAGS = { "e", "s" };
 
     private State mState = State.GENERAL;
@@ -49,6 +49,7 @@ public class Parser implements ParserInterface {
         mParserPos = 0;
         mTokens.clear();
         startParserLoop();
+        this.executeCommand();
     }
     
     /**
@@ -58,7 +59,7 @@ public class Parser implements ParserInterface {
      * the command.
      */
     public void executeCommand() {
-    	Controller controller = new Controller(mTokens);
+    	Controller controller = new Controller(this.getListOfTokens());
     	
     	controller.startCommandExecution();
     }

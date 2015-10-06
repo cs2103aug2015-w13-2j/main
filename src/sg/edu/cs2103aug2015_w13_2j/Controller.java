@@ -22,7 +22,7 @@ public class Controller {
 	 * Enum class representing all available commands supported
 	 */
 	public enum Commands {
-		ADD, DELETE, LIST, EDIT, MARK, 
+		ADD, DELETE, LIST, EDIT, MARK, SORT,
 		ARCHIVE, RETRIEVE, 
 		FILTER, SUMMARISE,
 		EXPORT, HELP, EXIT
@@ -31,7 +31,7 @@ public class Controller {
 	private static final Logger log = 
 			Logger.getLogger(Controller.class.getName());
 	private Task task;
-	private TaskAssemblerInterface taskAssembler;
+	private TaskAssembler taskAssembler;
 	private Vector<Pair<Parser.Token, String>> listOfTokens;
 	
 	/**
@@ -83,7 +83,7 @@ public class Controller {
 		Commands command = getCommand();
 		String taskName;
 		String date;
-
+		
 		switch (command) {
 			case ADD:
 				log.log(Level.INFO, "Switched to 'add' command");
@@ -110,6 +110,10 @@ public class Controller {
 				log.log(Level.INFO, "Switched to 'mark' command");
 				// TODO: Mark command once done in Logic
 				break;
+			case SORT:
+				log.log(Level.INFO, "Switched to 'sort' command");
+				FunDUE.sLogic.sortByDeadline();
+				break;	
 			case ARCHIVE:
 				log.log(Level.INFO, "Switched to 'archive' command");
 				taskName = taskAssembler.getTaskNameFromTokens(this.listOfTokens);
@@ -164,7 +168,7 @@ public class Controller {
 			commandTokenPair = listOfTokens.get(0);
 			Parser.Token commandType = commandTokenPair.getKey();
 			String commandName = commandTokenPair.getValue();
-			
+
 			if (commandType.equals(Parser.Token.RESERVED)) {
 				Commands recognisedCommand = 
 						Commands.valueOf(commandName.toUpperCase());
