@@ -19,7 +19,7 @@ import javafx.util.Pair;
  * 
  * @author A0130894B
  */
-public class TaskAssembler {
+public class TaskAssembler implements TaskAssemblerInterface {
 	private Task task;
 	private Vector<Pair<Parser.Token, String>> listOfTokens;
 	
@@ -34,6 +34,13 @@ public class TaskAssembler {
 		task = new Task();
 	}
 	
+	/**
+	 * Creates a Task object from the list of tokens specified in this 
+	 * task assembler and returns that task object.
+	 * 
+	 * @return A task object containing appropriate task names and 
+	 * 		   flags as specified by the user input.
+	 */
 	public Task getAssembledTask() {
 		assembleTask();
 
@@ -51,45 +58,6 @@ public class TaskAssembler {
 	private void assembleTask() {
 		setTaskName();
 		setTaskFlags();
-	}
-	
-	/**
-	 * Gets the task name that is specified in user's input. If no valid
-	 * task name is found in the user's input, then the taskName will be
-	 * null.
-	 * 
-	 * @return Task name or null if task name in user's input is not found
-	 */
-	public String getTaskNameFromTokens() {
-		return getTaskNameFromTokens(this.listOfTokens);
-	}
-	
-	public String getTaskNameFromTokens(
-			Vector<Pair<Parser.Token, String>> listOfTokens) {
-		this.listOfTokens = listOfTokens;
-		String taskName = findValueOfToken(Parser.Token.NAME, 0);
-		
-		return taskName;
-	}
-	
-	/**
-	 * Gets the date that is specified in user's input. If no valid
-	 * date is found in the user's input, then the date will be
-	 * null.
-	 * 
-	 * @return The date in String format or null if task name in user's 
-	 * 		   input is not found
-	 */
-	public String getDateFromTokens() {
-		return findValueOfToken(Parser.Token.DATE, 0);
-	}
-	
-	public String getDateFromTokens(
-			Vector<Pair<Parser.Token, String>> listOfTokens) {
-		this.listOfTokens = listOfTokens;
-		String date = findValueOfToken(Parser.Token.DATE, 0);
-		
-		return date;
 	}
 	
 	/**
@@ -208,6 +176,45 @@ public class TaskAssembler {
 	/*************************************************************************
 	 * UTILITY METHODS
 	 *************************************************************************/
+	/**
+	 * Gets the first occurrence of the task name that is specified in user's 
+	 * input. If no valid task name is found in the user's input, then the 
+	 * taskName returned will be null.
+	 * 
+	 * @return Task name or null if task name in user's input is not found
+	 */
+	private String getTaskNameFromTokens() {
+		return getTaskNameFromTokens(this.listOfTokens);
+	}
+	
+	public String getTaskNameFromTokens(
+			Vector<Pair<Parser.Token, String>> listOfTokens) {
+		this.listOfTokens = listOfTokens;
+		String taskName = findValueOfToken(Parser.Token.NAME, 0);
+		
+		return taskName;
+	}
+	
+	/**
+	 * Gets the first occurrence of the date that is specified in 
+	 * user's input. If no valid date is found in the user's input, 
+	 * then the date returned will be null.
+	 * 
+	 * @return The date in String format or null if task name in user's 
+	 * 		   input is not found
+	 */
+	private String getDateFromTokens() {
+		return findValueOfToken(Parser.Token.DATE, 0);
+	}
+	
+	public String getDateFromTokens(
+			Vector<Pair<Parser.Token, String>> listOfTokens) {
+		this.listOfTokens = listOfTokens;
+		String date = findValueOfToken(Parser.Token.DATE, 0);
+		
+		return date;
+	}
+	
 	/**
 	 * Finds the value of the first occurrence of a specified token type from a
 	 * starting index. If the specified token is not found, a null token value 
