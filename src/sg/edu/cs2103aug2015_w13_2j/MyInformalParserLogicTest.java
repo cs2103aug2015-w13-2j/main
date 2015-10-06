@@ -39,7 +39,7 @@ public class MyInformalParserLogicTest {
 		
 		printTestLabel(4);
 		String userCmd4 = "delete 'Do CS2103T Prototype'";
-		informalTest.printTaskDetails(userCmd4, FunDUE.sLogic.getAllTasks().size());
+		informalTest.printTaskDetails(userCmd4, 1);
 	}
 	
 	private static void printTestLabel(int index) {

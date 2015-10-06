@@ -80,6 +80,7 @@ public class Controller {
 	public void startCommandExecution() {
 		Commands command = getCommand();
 		task = taskAssembler.getAssembledTask();
+		String taskName = task.getName();
 		
 		switch (command) {
 			case ADD:
@@ -88,24 +89,23 @@ public class Controller {
 				break;
 			case DELETE:
 				log.log(Level.INFO, "Switched to 'delete' command");
-				FunDUE.sLogic.deleteTask(task);
+				FunDUE.sLogic.deleteTask(taskName);
 				break;
 			case EDIT:
 				log.log(Level.INFO, "Switched to 'edit' command");
-				//TODO: Call LOGIC INTERFACE method
-				String taskName = task.getName();
 				FunDUE.sLogic.editTask(taskName, task);
 				break;
 			case MARK:
 				log.log(Level.INFO, "Switched to 'mark' command");
-				//TODO: Call LOGIC INTERFACE method
 				break;
 			case ARCHIVE:
 				log.log(Level.INFO, "Switched to 'archive' command");
-				FunDUE.sLogic.archiveTask(task);
+				FunDUE.sLogic.archiveTask(taskName);
 				break;
 			case RETRIEVE:
-				
+				log.log(Level.INFO, "Switched to 'retrieve' command");
+				FunDUE.sLogic.retrieveTask(taskName);
+				break;
 			case FILTER:
 				
 			case SUMMARISE:
