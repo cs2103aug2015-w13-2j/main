@@ -22,7 +22,9 @@ public class Controller {
 	 * Enum class representing all available commands supported
 	 */
 	public enum Commands {
-		ADD, DELETE, EDIT, MARK, ARCHIVE, RETRIEVE, FILTER, SUMMARISE,
+		ADD, DELETE, LIST, EDIT, MARK, 
+		ARCHIVE, RETRIEVE, 
+		FILTER, SUMMARISE,
 		EXPORT, HELP, EXIT
 	}
 	
@@ -79,37 +81,51 @@ public class Controller {
 	 */
 	public void startCommandExecution() {
 		Commands command = getCommand();
-		task = taskAssembler.getAssembledTask();
-		String taskName = task.getName();
+		String taskName;
+		String date;
 		
 		switch (command) {
 			case ADD:
 				log.log(Level.INFO, "Switched to 'add' command");
+				task = taskAssembler.getAssembledTask();
+				taskName = task.getName();
 				FunDUE.sLogic.addTask(task);
 				break;
 			case DELETE:
 				log.log(Level.INFO, "Switched to 'delete' command");
+				taskName = taskAssembler.getTaskNameFromTokens(this.listOfTokens);
 				FunDUE.sLogic.deleteTask(taskName);
+				break;
+			case LIST:
+				log.log(Level.INFO, "Switched to 'list' command");
+				FunDUE.sLogic.list();
 				break;
 			case EDIT:
 				log.log(Level.INFO, "Switched to 'edit' command");
+				task = taskAssembler.getAssembledTask();
+				taskName = task.getName();
 				FunDUE.sLogic.editTask(taskName, task);
 				break;
 			case MARK:
 				log.log(Level.INFO, "Switched to 'mark' command");
+				// TODO: Mark command once done in Logic
 				break;
 			case ARCHIVE:
 				log.log(Level.INFO, "Switched to 'archive' command");
+				taskName = taskAssembler.getTaskNameFromTokens(this.listOfTokens);
 				FunDUE.sLogic.archiveTask(taskName);
 				break;
 			case RETRIEVE:
 				log.log(Level.INFO, "Switched to 'retrieve' command");
+				taskName = taskAssembler.getTaskNameFromTokens(this.listOfTokens);
 				FunDUE.sLogic.retrieveTask(taskName);
 				break;
 			case FILTER:
 				
 			case SUMMARISE:
-				
+				date = taskAssembler.getDateFromTokens(this.listOfTokens);
+				// TODO: Summarise command once done in Logic
+				break;
 			case EXPORT:
 				
 			case HELP:

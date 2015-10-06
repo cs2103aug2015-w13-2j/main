@@ -10,8 +10,8 @@ import java.util.Vector;
 import javafx.util.Pair;
 
 /**
- * This class assigns the task details specified in the 
- * user's input to the appropriate attributes of a Task object.
+ * This class interprets the user's input and assigns the task details 
+ * specified to the appropriate attributes of a Task object.
  * 
  * More specifically, the task name and flags/flag-values stated 
  * in the user's input will be retrieved and assigned to the 
@@ -54,6 +54,45 @@ public class TaskAssembler {
 	}
 	
 	/**
+	 * Gets the task name that is specified in user's input. If no valid
+	 * task name is found in the user's input, then the taskName will be
+	 * null.
+	 * 
+	 * @return Task name or null if task name in user's input is not found
+	 */
+	public String getTaskNameFromTokens() {
+		return getTaskNameFromTokens(this.listOfTokens);
+	}
+	
+	public String getTaskNameFromTokens(
+			Vector<Pair<Parser.Token, String>> listOfTokens) {
+		this.listOfTokens = listOfTokens;
+		String taskName = findValueOfToken(Parser.Token.NAME, 0);
+		
+		return taskName;
+	}
+	
+	/**
+	 * Gets the date that is specified in user's input. If no valid
+	 * date is found in the user's input, then the date will be
+	 * null.
+	 * 
+	 * @return The date in String format or null if task name in user's 
+	 * 		   input is not found
+	 */
+	public String getDateFromTokens() {
+		return findValueOfToken(Parser.Token.DATE, 0);
+	}
+	
+	public String getDateFromTokens(
+			Vector<Pair<Parser.Token, String>> listOfTokens) {
+		this.listOfTokens = listOfTokens;
+		String date = findValueOfToken(Parser.Token.DATE, 0);
+		
+		return date;
+	}
+	
+	/**
 	 * Sets the task's name as specified in the user's input. If no valid 
 	 * task name is specified, then an error will be thrown.
 	 * 
@@ -61,7 +100,7 @@ public class TaskAssembler {
 	 * 			Error when no valid task name is specified in user's input
 	 */
 	private void setTaskName() throws Error {
-		String taskName = findValueOfToken(Parser.Token.NAME, 0);
+		String taskName = getTaskNameFromTokens();
 		
 		if (taskName == null) {
 			throw new Error("Invalid task name entered");
