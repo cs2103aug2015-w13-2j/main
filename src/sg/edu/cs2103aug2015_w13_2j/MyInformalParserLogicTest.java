@@ -38,10 +38,14 @@ public class MyInformalParserLogicTest {
 		informalTest.printTaskDetails(userCmd3, 2);
 		
 		printTestLabel(4);
-		String userCmd4 = "delete 'Do CS2103T Prototype'";
-		informalTest.printTaskDetails(userCmd4, 1);
+		String userCmd4 = "list";
+		informalTest.printListCommand(userCmd4);
+		
+		printTestLabel(5);
+		String userCmd5 = "delete 'Do CS2103T Prototype'";
+		informalTest.printTaskDetails(userCmd5, 1);
 	}
-	
+
 	private static void printTestLabel(int index) {
 		System.out.println("\n\n");
 		System.out.println("***************************************");
@@ -87,6 +91,15 @@ public class MyInformalParserLogicTest {
 			System.out.println("Status: " + currentTask.getLabel(status));
 		}
 		System.out.println("****-------****------END TEST-------****------****");
+	}
+	
+	private void printListCommand(String userCmd) {
+		parser.parseCommand(userCmd);
+		parser.executeCommand();
+		
+		for (Task task: FunDUE.sLogic.list()) {
+			System.out.println(task);
+		}
 	}
 
 }
