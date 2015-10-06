@@ -32,7 +32,7 @@ public class Parser implements ParserInterface {
         mParserPos = 0;
         mTokens.clear();
         startParserLoop();
-        //this.executeCommand();
+        this.executeCommand();
     }
 
     /**
