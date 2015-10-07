@@ -18,11 +18,11 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.Label;
  */
 
 public class LogicTest {
-    
+    FunDUE funDue = new FunDUE();
     private Logic logicComponent;
 	@Test
 	public void testAdd() {
-		logicComponent = new Logic();
+		logicComponent = FunDUE.sLogic;
         Task newTask = new Task("First"); 
         logicComponent.addTask(newTask);
         assertEquals("First", logicComponent.getTask(0).getName());
@@ -45,7 +45,7 @@ public class LogicTest {
 		assertEquals(newTask.getType(), "FLOAT");
 		newTask.setEnd(new Date());
 		logicComponent.determineType(newTask);
-		assertEquals(newTask.getType(), "DUE");
+		assertEquals(newTask.getType(), "DEADLINE");
 		newTask.setStart(new Date());
 		logicComponent.determineType(newTask);
 		assertEquals(newTask.getType(), "EVENT");
@@ -64,7 +64,7 @@ public class LogicTest {
 		newTask.setEnd(new Date());
 		logicComponent.determineType(newTask);
 		logicComponent.editTask("first test task", newTask);
-		assertEquals(original.getType(), "DUE");
+		assertEquals(original.getType(), "DEADLINE");
 		assertTrue(logicComponent.getDeadlines().contains(original));
 		assertEquals(logicComponent.getFloats().contains(original), false);
 		newTask.setStart(new Date());

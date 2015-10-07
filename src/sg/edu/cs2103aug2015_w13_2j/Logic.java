@@ -62,7 +62,9 @@ public class Logic implements LogicInterface{
 		} else {
 			floats.add(task);
 		}
-
+        System.out.println("Added " + task.getName());
+        System.out.println(FunDUE.sFormatter);
+        System.out.println(FormatterInterface.Format.LIST);
     	FunDUE.sFormatter.format(task, FormatterInterface.Format.LIST);//TODO: to be updated
     	
     	try{
@@ -237,7 +239,7 @@ public class Logic implements LogicInterface{
     			userView.add(tasks.get(i));
     		}
     	}
-    	FunDUE.sFormatter.format(userView, FormatterInterface.Format.LIST); //TODO: to be updated
+    	//FunDUE.sFormatter.format(userView, FormatterInterface.Format.LIST); //TODO: to be updated
     	return userView;
     }
     
@@ -271,7 +273,9 @@ public class Logic implements LogicInterface{
     }
     
     public ArrayList<Task> list(){
-    	userView = viewOverdue();
+    	//userView = viewOverdue();
+    	checkStatus();
+    	userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
     		if(tasks.get(i).getArchived().equals("FALSE")){
     			userView.add(tasks.get(i));
@@ -293,7 +297,7 @@ public class Logic implements LogicInterface{
     	Collections.sort(list, new Comparator<Task>(){
     		public int compare(Task task1, Task task2){
     			if(task1.getType().equals(task2.getType())){
-    				if(task1.getType().equals("DUE")){
+    				if(task1.getType().equals("DEADLINE")){
     				    return task1.getEnd().compareTo(task2.getEnd()); 
     				} else if (task1.getType().equals("EVENT")){
     					return task1.getStart().compareTo(task2.getStart()); 

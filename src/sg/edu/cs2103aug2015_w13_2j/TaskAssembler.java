@@ -130,32 +130,16 @@ public class TaskAssembler implements TaskAssemblerInterface {
 		
 		// String representation of first occurrence of date token after this flag
 		// TODO: Check for DATE_INVALID tokens and throw appropriate error message
-		String dateString = findValueOfToken(Parser.Token.DATE, indexOfNextToken);
+		String date = findValueOfToken(Parser.Token.DATE, indexOfNextToken);
 		
 		// TODO: For now, this error will not never thrown as invalid task
 		// 		 name errors will be thrown first due to Parser bug - not done yet.
-		if (dateString == null) {
+		if (date == null) {
 			throw new Error("No date specified for a particular flag. "
 							+ "Please input a date right after you have "
 							+ "specified a flag.");
 		}
-		
-		// TODO: Sample date format that is in 'dd/MM' form
-		// This is an overly simple example because a Date format
-		// has not been configured yet. This will be a sample for the
-		// prototype. 
-		// Note: This method does NOT handle date formats. 
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM");
-		Date date = null;
-		
-		try {
-
-			date = formatter.parse(dateString);
-
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
+				
 		// TODO: Note: Cases are switched by String type, but once Command class or
 		//			   valid token class is created, then will switch by its enum types.
 		switch (flagType) {
