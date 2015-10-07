@@ -11,9 +11,14 @@ import java.util.Date;
  */
 public interface TaskInterface {
 	/*******************************************************
-	 * ENUMS
+	 * AUTHORISED VALUES
+	 * `-> NAME: string
+	 * `-> CREATED, START, END: date
+	 * `-> TYPE: EVENT / DEADLINE / FLOAT
+	 * `-> COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
 	 *******************************************************/
 	
+	/*
     // Enumerated labels
     public enum Label {
         NAME, CREATED, START, END, TYPE, COMPLETED, ARCHIVED, IMPORTANT
@@ -38,13 +43,10 @@ public interface TaskInterface {
     public enum Important {
     	TRUE, FALSE
     }
+    */
     
     /*******************************************************
 	 * LABEL ACCESSORS
-	 * `-> NAME: string
-	 * `-> CREATED, START, END: date
-	 * `-> TYPE: EVENT / DEADLINE / FLOAT
-	 * `-> COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
 	 *******************************************************/
     
     /**
