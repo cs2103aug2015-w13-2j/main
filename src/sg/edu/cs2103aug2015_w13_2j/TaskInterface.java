@@ -55,14 +55,14 @@ public interface TaskInterface {
      * @param value
      *            The value to set the label to or null to unset the label
      */
-    public void setLabel(Label label, String value);
+    public void setLabel(String label, String value);
 
     /**
      * Retrieves the value of a label of the Task object
      * 
      * @return The value of the label or null if not set
      */
-    public String getLabel(Label label);
+    public String getLabel(String label);
     
     /*******************************************************
 	 * (ACCESSORS) NAME: string

@@ -17,7 +17,7 @@ import java.util.Iterator;
  */
 public class Task implements TaskInterface {
     // Maps labels to their values
-    private HashMap<Label, String> mLabels = new HashMap<Label, String>();
+    private HashMap<String, String> mLabels = new HashMap<String, String>();
 
     /*******************************************************
 	 * CONSTRUCTORS
@@ -55,11 +55,11 @@ public class Task implements TaskInterface {
 	 * `-> COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
 	 *******************************************************/
     
-    public void setLabel(Label label, String value) {
+    public void setLabel(String label, String value) {
         mLabels.put(label, value);
     }
 
-    public String getLabel(Label label) {
+    public String getLabel(String label) {
         return mLabels.get(label);
     }
     
@@ -68,11 +68,11 @@ public class Task implements TaskInterface {
 	 *******************************************************/
 
     public void setName(String name) {
-        setLabel(Label.NAME, name);
+        setLabel("NAME", name);
     }
 
     public String getName() {
-        return getLabel(Label.NAME);
+        return getLabel("NAME");
     }
 
     /*******************************************************
@@ -80,35 +80,35 @@ public class Task implements TaskInterface {
    	 *******************************************************/
 
     public void setCreated(String createdString) {
-    	setLabel(Label.CREATED, createdString);
+    	setLabel("CREATED", createdString);
     }
 
     public Date getCreated() {
-        return stringToDate(getLabel(Label.CREATED));
+        return stringToDate(getLabel("CREATED"));
     }
 
     public void setStart(Date start) {
-    	setLabel(Label.START, dateToString(start));
+    	setLabel("START", dateToString(start));
     }
   
     public void setStart(String startString) {
-    	setLabel(Label.START, startString);
+    	setLabel("START", startString);
     }
     
     public Date getStart() {
-    	return stringToDate(getLabel(Label.START));
+    	return stringToDate(getLabel("START"));
     }
 
     public void setEnd(Date end) {
-        setLabel(Label.END, dateToString(end));
+        setLabel("END", dateToString(end));
     }
 
     public void setEnd(String endString) {
-    	setLabel(Label.END, endString);
+    	setLabel("END", endString);
     }
     
     public Date getEnd() {
-        return stringToDate(getLabel(Label.END));
+        return stringToDate(getLabel("END"));
     }
     
     /**
@@ -157,13 +157,13 @@ public class Task implements TaskInterface {
     		case "EVENT":
     		case "DEADLINE":
     		case "FLOAT":
-    			setLabel(Label.TYPE, typeString);
+    			setLabel("TYPE", typeString);
     			break;
     	}
     }
 
     public String getType() {
-        return getLabel(Label.TYPE);
+        return getLabel("TYPE");
     }
 
     /*******************************************************
@@ -175,13 +175,13 @@ public class Task implements TaskInterface {
     	switch(completedString) {
     		case "TRUE":
     		case "FALSE":
-    			setLabel(Label.COMPLETED, completedString);
+    			setLabel("COMPLETED", completedString);
     			break;
     	}
     }
     
     public String getCompleted() {
-        return getLabel(Label.COMPLETED);
+        return getLabel("COMPLETED");
     }
     
     // ARCHIVED
@@ -189,13 +189,13 @@ public class Task implements TaskInterface {
     	switch(archivedString) {
     		case "TRUE":
     		case "FALSE":
-    			setLabel(Label.ARCHIVED, archivedString);
+    			setLabel("ARCHIVED", archivedString);
     			break;
     	}
     }
     
     public String getArchived() {
-        return getLabel(Label.ARCHIVED);
+        return getLabel("ARCHIVED");
     }
     
     // IMPORTANT
@@ -203,13 +203,13 @@ public class Task implements TaskInterface {
     	switch(importantString) {
     		case "TRUE":
     		case "FALSE":
-    			setLabel(Label.IMPORTANT, importantString);
+    			setLabel("IMPORTANT", importantString);
     			break;
     	}
     }
     
     public String getImportant() {
-        return getLabel(Label.IMPORTANT);
+        return getLabel("IMPORTANT");
     }
     
     /*******************************************************
@@ -220,13 +220,13 @@ public class Task implements TaskInterface {
     public String toString() {
     	String output = "";
     	
-        Set<Label> labelSet = mLabels.keySet();
-        Iterator<Label> labelIter = labelSet.iterator();
+        Set<String> labelSet = mLabels.keySet();
+        Iterator<String> labelIter = labelSet.iterator();
         
         while(labelIter.hasNext()){
-            Label label = labelIter.next();
+            String label = labelIter.next();
             String value = mLabels.get(label);
-            output += label.toString() + ":" + value + "\n";
+            output += label + ":" + value + "\n";
         }
         
         return output;

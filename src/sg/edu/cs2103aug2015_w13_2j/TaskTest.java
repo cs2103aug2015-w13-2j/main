@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.Date;
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.Label;
 
 public class TaskTest {
     // Use the same task object across the tests
@@ -20,7 +19,7 @@ public class TaskTest {
     @Test
     public void userDefinedLabelsTest() {
         task = new Task();
-        Label[] labels = {Label.NAME, Label.CREATED, Label.END};
+        String[] labels = {"NAME", "CREATED", "END"};
         String[] values = {"CS2103", "12345678"};
         
         // Set the labels

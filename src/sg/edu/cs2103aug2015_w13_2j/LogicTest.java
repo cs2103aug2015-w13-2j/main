@@ -8,8 +8,6 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.Label;
-
 
 /**Test cases for the Logic Component
  * 

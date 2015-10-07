@@ -76,19 +76,13 @@ public class MyInformalParserLogicTest {
 			System.out.println("Task toString for Storage (On a new line, without dotted'...'): \n...\n"
 					+ currentTask.toString() + "...");
 			// Test for labels
-			TaskInterface.Label created = TaskInterface.Label.CREATED;
-			TaskInterface.Label start = TaskInterface.Label.START;
-			TaskInterface.Label end = TaskInterface.Label.END;
-			TaskInterface.Label name = TaskInterface.Label.NAME;
-			TaskInterface.Label type = TaskInterface.Label.TYPE;
-			TaskInterface.Label completed = TaskInterface.Label.COMPLETED;
 			System.out.println("---------------TEST TASK LABELS---------------");
-			System.out.println("Created: " + currentTask.getLabel(created));
-			System.out.println("Start: " + currentTask.getLabel(start));
-			System.out.println("End: " + currentTask.getLabel(end));
-			System.out.println("Name: " + currentTask.getLabel(name));
-			System.out.println("Type: " + currentTask.getLabel(type));
-			System.out.println("Completion status: " + currentTask.getLabel(completed));
+			System.out.println("Created: " + currentTask.getCreated());
+			System.out.println("Start: " + currentTask.getStart());
+			System.out.println("End: " + currentTask.getEnd());
+			System.out.println("Name: " + currentTask.getName());
+			System.out.println("Type: " + currentTask.getType());
+			System.out.println("Completion status: " + currentTask.getCompleted());
 		}
 		System.out.println("****-------****------END TEST-------****------****");
 	}
