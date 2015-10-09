@@ -70,20 +70,10 @@ public interface LogicInterface {
     public Task editTask(String taskName, Task task);
     
     public ArrayList<Task> sortByDeadline();
-    
-    public ArrayList<Task> sortByDeadline(ArrayList<Task> list);
 
     public ArrayList<Task> getAllTasks();
     
-    public ArrayList<Task> getEvents();
-    
-    public ArrayList<Task> getDeadlines();
-    
-    public ArrayList<Task> getFloats();
-    
     public ArrayList<Task> list();
-    
-    public ArrayList<Task> viewOngoing();
     
     public ArrayList<Task> viewOverdue();
     

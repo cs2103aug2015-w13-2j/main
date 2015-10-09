@@ -63,8 +63,6 @@ public class LogicTest {
 		logicComponent.determineType(newTask);
 		logicComponent.editTask("first test task", newTask);
 		assertEquals(original.getType(), "DEADLINE");
-		assertTrue(logicComponent.getDeadlines().contains(original));
-		assertEquals(logicComponent.getFloats().contains(original), false);
 		newTask.setStart(new Date());
 		logicComponent.determineType(newTask);
 		logicComponent.editTask("first test task", newTask);
@@ -84,17 +82,10 @@ public class LogicTest {
 		assertEquals(original.getCompleted(), "TRUE");
 		assertTrue(logicComponent.getAllTasks().size() == 1);
 		assertTrue(logicComponent.viewCompleted().size() == 1);
-		assertTrue(logicComponent.getFloats().size() == 1);
-		assertTrue(logicComponent.getEvents().isEmpty());
-		assertTrue(logicComponent.getDeadlines().isEmpty());
 		logicComponent.deleteTask(original.getName());
 		//assertEquals(original.getStatus(), "DELETED");
 		assertTrue(logicComponent.getAllTasks().isEmpty());
 		assertTrue(logicComponent.viewCompleted().isEmpty());
-		assertTrue(logicComponent.getFloats().isEmpty());
-		assertTrue(logicComponent.getEvents().isEmpty());
-		assertTrue(logicComponent.getDeadlines().isEmpty());
-		
 	}
 	
 	@Test

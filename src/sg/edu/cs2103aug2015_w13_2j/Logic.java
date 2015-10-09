@@ -13,32 +13,19 @@ import java.util.List;
 
 public class Logic implements LogicInterface{
     private ArrayList<Task> tasks; //this ArrayList includes all added tasks, excluding deleted ones
-    private ArrayList<Task> events;//TBC if needed
-    private ArrayList<Task> deadlines;//TBC if needed
-    private ArrayList<Task> floats;//TBC if needed
-    private ArrayList<Task> userView;//to store the user's latest requested list if any
-                                     //eg. user filter(completed) all completed tasks will be store
-                                     //here in case user wants to perform further request 
-    private ArrayList<Task> archive;
-    private ArrayList<Task> deleted;
-    
+
     /**
     * Constructor for the Logic component
     * 
     */
     public Logic() {
         tasks = new ArrayList<Task>();
-        events = new ArrayList<Task>();
-        deadlines = new ArrayList<Task>();
-        floats = new ArrayList<Task>();
-        archive = new ArrayList<Task>();
-        deleted = new ArrayList<Task>();
-        userView = new ArrayList<Task>();
-        checkStatus();
+        
         try{
-        	//String DATA_FILE_PATH = FunDUE.sStorage.readRawFile("DATA_FILE_PATH");
-        	//List<Task> testing = FunDUE.sStorage.readFile(DATA_FILE_PATH);
-        	//FunDUE.sStorage.writeFile(tasks, "output.txt");//TODO: to be updated
+            String DATA_FILE_PATH = FunDUE.sStorage.readRawFile("DATA_FILE_PATH");
+        	List<Task> testing = FunDUE.sStorage.readFile(DATA_FILE_PATH);
+        	//checkStatus();
+        	FunDUE.sStorage.writeFile(tasks, "output.txt");//TODO: to be updated
     	} catch (Exception e){
     		e.printStackTrace();
     	}
@@ -55,13 +42,6 @@ public class Logic implements LogicInterface{
 		
 		determineType(task);
     	 
-		if(task.getType().equals("EVENT")){
-			events.add(task);
-		} else if (task.getType().equals("DEADLINE")){
-			deadlines.add(task);
-		} else {
-			floats.add(task);
-		}
         System.out.println("Added " + task.getName());
         System.out.println(FunDUE.sFormatter);
         System.out.println(FormatterInterface.Format.LIST);
@@ -98,17 +78,6 @@ public class Logic implements LogicInterface{
     	return tasks.get(index);
     }
     
-    public ArrayList<Task> getEvents(){
-    	return events;
-    }
-
-    public ArrayList<Task> getDeadlines(){
-    	return deadlines;
-    }
-    
-    public ArrayList<Task> getFloats(){
-    	return floats;
-    }
     
     /**
      * Delete a task
@@ -119,11 +88,6 @@ public class Logic implements LogicInterface{
     public Task deleteTask(String taskName){
     	Task task = findTaskByName(taskName);
     	tasks.remove(task);
-    	events.remove(task);
-    	deadlines.remove(task);
-    	floats.remove(task);
-    	archive.remove(task);
-    	//deleted.add(task);
     	FunDUE.sFormatter.format(task, FormatterInterface.Format.LIST); //TODO: to be updated
     	
     	try{
@@ -144,7 +108,6 @@ public class Logic implements LogicInterface{
     public void archiveTask(String taskName){
     	Task archivedTask = findTaskByName(taskName);
     	archivedTask.setArchived("TRUE");
-    	archive.add(archivedTask);
     	FunDUE.sFormatter.format(archivedTask, FormatterInterface.Format.LIST); //TODO: to be updated
     }
     
@@ -176,7 +139,7 @@ public class Logic implements LogicInterface{
      * 
      */
     public ArrayList<Task> viewCompleted(){
-    	userView = new ArrayList<Task>();
+    	ArrayList<Task> userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
     		if(tasks.get(i).getCompleted().equals("TRUE")){
     			userView.add(tasks.get(i));
@@ -195,11 +158,8 @@ public class Logic implements LogicInterface{
      * 
      */
     public ArrayList<Task> viewArchived(){
-    	userView = new ArrayList<Task>();
-    	for(int i = 0; i < archive.size(); i++){
-    		userView.add(archive.get(i));
-    		
-    	}
+    	ArrayList<Task> userView = new ArrayList<Task>();
+    
     	FunDUE.sFormatter.format(userView, FormatterInterface.Format.LIST); //TODO: to be updated
     	return userView;
     }
@@ -213,11 +173,8 @@ public class Logic implements LogicInterface{
      * 
      */
     public ArrayList<Task> viewDeleted(){
-    	userView = new ArrayList<Task>();
-    	for(int i = 0; i < deleted.size(); i++){
-    		userView.add(deleted.get(i));
-    		
-    	}
+    	ArrayList<Task> userView = new ArrayList<Task>();
+    	
     	FunDUE.sFormatter.format(userView, FormatterInterface.Format.LIST); //TODO: to be updated
     	return userView;
     }
@@ -233,7 +190,7 @@ public class Logic implements LogicInterface{
      */
     public ArrayList<Task> viewOverdue(){
     	Date date = new Date();
-    	userView = new ArrayList<Task>();
+    	ArrayList<Task> userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
     		if(tasks.get(i).getEnd() != null && tasks.get(i).getEnd().compareTo(date) < 0){
     			userView.add(tasks.get(i));
@@ -243,6 +200,7 @@ public class Logic implements LogicInterface{
     	return userView;
     }
     
+    /*
     public void checkStatus(){
     	Date date = new Date();
     	for(int i = 0; i < tasks.size(); i++){
@@ -252,30 +210,11 @@ public class Logic implements LogicInterface{
     	}
     }
     
-    /**
-     * This method lets user see all tasks are still active (excluding those overdue, completed, deleted,
-     * and archived
-     * @return
-     *            the list of active tasks
-     * 
-     */
-    public ArrayList<Task> viewOngoing(){
-    	ArrayList<Task> overdues = viewOverdue(); //this method filters out the tasks overdue by now
-    	userView = new ArrayList<Task>();
-    	for(int i = 0; i < tasks.size(); i++){
-    		if(tasks.get(i).getCompleted().equals("FALSE") && tasks.get(i).getArchived().equals("FALSE")){
-    			userView.add(tasks.get(i));
-    		}
-    	}
-    	sortByDeadline(userView);
-    	FunDUE.sFormatter.format(userView, FormatterInterface.Format.LIST); //TODO: to be updated
-    	return userView;
-    }
+    */
     
     public ArrayList<Task> list(){
-    	//userView = viewOverdue();
-    	checkStatus();
-    	userView = new ArrayList<Task>();
+    	//checkStatus();
+    	ArrayList<Task> userView = new ArrayList<Task>();
     	for(int i = 0; i < tasks.size(); i++){
     		if(tasks.get(i).getArchived().equals("FALSE")){
     			userView.add(tasks.get(i));
@@ -293,7 +232,11 @@ public class Logic implements LogicInterface{
      *  
      *  */
     
-    public ArrayList<Task> sortByDeadline(ArrayList<Task> list){
+    public ArrayList<Task> sortByDeadline(){
+    	ArrayList<Task> list = new ArrayList<Task>(); 
+    	for(int i = 0; i < tasks.size(); i++){
+    		list.add(tasks.get(i));
+    	}
     	Collections.sort(list, new Comparator<Task>(){
     		public int compare(Task task1, Task task2){
     			if(task1.getType().equals(task2.getType())){
@@ -309,22 +252,11 @@ public class Logic implements LogicInterface{
     			}
     		}
     	});
-    	FunDUE.sFormatter.format(userView, FormatterInterface.Format.LIST); //TODO: to be updated
+    	FunDUE.sFormatter.format(list, FormatterInterface.Format.LIST); //TODO: to be updated
     	return list;
     }
     
-    public ArrayList<Task> sortByDeadline(){
-    	//TODO: add suitable sorting algorithm here
-    	//this method is invoked if no parameter is passed in -> sort the whole tasks
-    	//list and put them into the userView
-    	userView = new ArrayList<Task>();
-    	for(int i = 0; i < tasks.size(); i++){
-    		userView.add(tasks.get(i));
-    	}
-    	//FunDUE.sFormatter.format(userView, FormatterInterface.Format.LIST); //TODO: to be updated
-    	return sortByDeadline(userView);
-    }
-    
+
     /**This method merges the details of a new task and the original task
      * by checking the fields of the new task
      * Those that are blank are kept unchanged in the original task
@@ -390,35 +322,25 @@ public class Logic implements LogicInterface{
     	if(original.getStart() == null && original.getEnd() == null ){//originally float
     		if(task.getStart() != null && task.getEnd() != null)  {//edited to events
     			original.setType("EVENT");
-    			floats.remove(original);
-    			events.add(original);
     		}
     		
     		if(task.getStart() == null && task.getEnd() != null)  {//edited to deadline tasks
     			original.setType("DEADLINE");
-    			floats.remove(original);
-    			deadlines.add(original);
     		}
     	} else if (original.getStart() != null && original.getEnd() != null ){//originally event
     		if(task.getEnd() == null){//change to float
     			original.setType("FLOAT");
-    			events.remove(original);
-    			floats.add(original);
     			
     		} else if(task.getStart() == null){//change to task with deadline
     			original.setType("DEADLINE");
-    			events.remove(original);
-    			deadlines.add(original);
     		}
     	} else if (original.getStart() == null && original.getEnd() != null){//originally task with deadline
     		if(task.getEnd() == null){//change to float
     			original.setType("FLOAT");
-    			deadlines.remove(original);
-    			floats.add(original);
+    	
     		} else if(task.getStart() != null && task.getEnd() != null)  {//edited to event
     			original.setType("EVENT");
-    			deadlines.remove(original);
-    			events.add(original);
+    		
     		}
     	}
     	
@@ -479,12 +401,12 @@ public class Logic implements LogicInterface{
     }
 
     
-    /*
+    
     public static void main (String[] args){
     	Logic logic = new Logic();
     	Task task = new Task("first test task");
     	logic.addTask(task);
-    	/*
+    	
     	System.out.println(task.getType());
     	
     	task.setStart(new Date(new Long("23456")));//setStart seems to have some bug
@@ -492,13 +414,13 @@ public class Logic implements LogicInterface{
     	System.out.println(task.getType());
     	System.out.println("Start = " + task.getStart());
     	
-    	task.setDeadline(new Date());
+    	task.setEnd(new Date());
     	logic.determineType(task);
     	System.out.println(task.getType());
-    	System.out.println("Deadline = "  + task.getDeadline());    
+    	System.out.println("Deadline = "  + task.getEnd());    
     	
     	Task newTask = new Task("first test task");
-		newTask.setDeadline(new Date());
+		newTask.setEnd(new Date());
 		logic.determineType(newTask);
 		logic.editTask("first test task", newTask);
     	System.out.println(newTask.getType());
@@ -507,5 +429,5 @@ public class Logic implements LogicInterface{
     	//System.out.println("First task was created at " + logic.findTaskByName("first test task").getCreated());
     }
     
-    */
+    
 }
