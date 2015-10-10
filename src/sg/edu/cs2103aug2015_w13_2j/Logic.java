@@ -7,6 +7,7 @@ import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
+import sg.edu.cs2103aug2015_w13_2j.TextUI.Message;
 
 public class Logic implements LogicInterface {
 	private FunDUE mAppInstance;
@@ -33,36 +34,41 @@ public class Logic implements LogicInterface {
 				try {
 					switch (pair.getValue()) {
 					case "add":
-						Task task = addTask(tokens);
-						mAppInstance.getTextUIInstance().display(mTasks);
+						addTask(tokens);
+						mAppInstance.getTextUIInstance().feedback(Message.LOGIC_ADDED);
 						break;
 					case "edit":
 						editTask(tokens);
+						mAppInstance.getTextUIInstance().feedback(Message.LOGIC_EDITED);
 						break;
 					case "list":
-						mAppInstance.getTextUIInstance().display(mTasks);
+						mAppInstance.getTextUIInstance().feedback(Message.CLEAR);
 						break;
 					case "delete":
 						deleteTask(tokens);
+						mAppInstance.getTextUIInstance().feedback(Message.LOGIC_DELETED);
 						break;
 					default:
-						// TODO: Unimplemented command
+						System.err.println("[Logic] Unimplemented command: " + pair.getValue());
+						mAppInstance.getTextUIInstance().feedback(Message.ERROR_COMMAND_NOT_IMPLEMENTED);
 						break;
 					}
 				} catch (InvalidTaskException e) {
 					System.err.println("[Logic] Invalid Task");
-					// TODO: Dispatch to error class
+					mAppInstance.getTextUIInstance().feedback(Message.ERROR_INVALID_TASK);
 				} catch (TaskNotFoundException e) {
 					System.err.println("[Logic] Task not found");
-					// TODO: Dispatch to error class
+					mAppInstance.getTextUIInstance().feedback(Message.ERROR_TASK_NOT_FOUND);
 				}
+				mAppInstance.getTextUIInstance().display(mTasks);
 				return;
 			}
 		}
+		mAppInstance.getTextUIInstance().feedback(Message.ERROR_COMMAND_NOT_RECOGNIZED);
 	}
 	
 	public void echo(String s) {
-		mAppInstance.getTextUIInstance().print(s);
+		//mAppInstance.getTextUIInstance().print(s);
 	}
 
 	/**
