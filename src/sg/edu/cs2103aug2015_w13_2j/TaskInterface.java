@@ -5,17 +5,10 @@ import java.util.Date;
 //@@author A0121410H
 
 public interface TaskInterface {
-	/**
-	 * Checks if this Task object is valid. The only condition is that it
-	 * <b>must</b> have a non-zero length name set, all other attributes can be
-	 * missing. An invalid Task object should not be used
-	 * 
-	 * @return True if the Task object is valid, false otherwise
-	 * @throws InvalidTaskException
-	 *             Thrown when the Task object being checked is invalid
-	 */
-	public boolean isValid() throws InvalidTaskException;
-
+	/*******************************************************
+	 * LABEL ACCESSORS
+	 *******************************************************/
+	
 	/**
 	 * Sets a label-value pair of the Task object
 	 * 
@@ -165,6 +158,10 @@ public interface TaskInterface {
 
 	public String getImportant();
 
+	/*******************************************************
+	 * MISCELLANEOUS
+	 *******************************************************/
+	
 	// @@author A0121410H
 	public class InvalidTaskException extends Exception {
 		private static final long serialVersionUID = 4591179171294898925L;
@@ -174,6 +171,17 @@ public interface TaskInterface {
 		private static final long serialVersionUID = 1619684577187818793L;
 	}
 
+	/**
+	 * Checks if this Task object is valid. The only condition is that it
+	 * <b>must</b> have a non-zero length name set, all other attributes can be
+	 * missing. An invalid Task object should not be used
+	 * 
+	 * @return True if the Task object is valid, false otherwise
+	 * @throws InvalidTaskException
+	 *             Thrown when the Task object being checked is invalid
+	 */
+	public boolean isValid() throws InvalidTaskException;
+	
 	// @@author A0124007X
 	/**
 	 * Converts a string into its corresponding Task object

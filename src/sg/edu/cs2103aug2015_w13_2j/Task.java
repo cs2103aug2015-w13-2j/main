@@ -41,8 +41,7 @@ public class Task implements TaskInterface {
 	}
 
 	/*******************************************************
-	 * LABEL ACCESSORS `-> NAME: string `-> CREATED, START, END: date `-> TYPE:
-	 * EVENT / DEADLINE / FLOAT `-> COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
+	 * LABEL ACCESSORS
 	 *******************************************************/
 
 	public void setLabel(String label, String value) {
@@ -201,6 +200,10 @@ public class Task implements TaskInterface {
 	public String getImportant() {
 		return getLabel("IMPORTANT");
 	}
+	
+	/*******************************************************
+	 * MISCELLANEOUS
+	 *******************************************************/
 
 	public boolean isValid() throws InvalidTaskException {
 		if (getLabel("NAME") == null || getLabel("NAME").length() == 0) {
