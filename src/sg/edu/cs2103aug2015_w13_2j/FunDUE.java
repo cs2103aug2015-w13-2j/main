@@ -1,7 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 //@@author A0121410H
-public class FunDUE implements FunDUEInterface {
+public class FunDUE {
 	private TextUI mTextUI;
 	private Parser mParser;
 	private Logic mLogic;
