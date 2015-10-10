@@ -18,13 +18,13 @@ public class Formatter implements FormatterInterface {
     }
     
     public void format(Task t, Format f) {
-        mAppInstance.getTextUIInstance().println(t.getName());
+        mAppInstance.getTextUIInstance().println(t.toString());
     }
     
     public void format(List<Task> tasks, Format f) {
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < tasks.size(); i++) {
-            sb.append(tasks.get(i).getName() + TextUI.NEWLINE);
+            sb.append(tasks.get(i).toString() + TextUI.NEWLINE);
         }
         mAppInstance.getTextUIInstance().print(sb.toString());
     }

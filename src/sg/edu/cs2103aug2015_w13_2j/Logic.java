@@ -1,46 +1,33 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 
 import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.FormatterInterface.Format;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
+import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 
 public class Logic implements LogicInterface {
 	private FunDUE mAppInstance;
 	private ArrayList<Task> mTasks = new ArrayList<Task>();
 
-	// This ArrayList includes all added tasks, excluding deleted ones
-	private ArrayList<Task> tasks = new ArrayList<Task>();
-	private ArrayList<Task> userView = new ArrayList<Task>();
-	/**
-	 * Constructor for the Logic component
-	 * 
-	 */
 	public Logic(FunDUE appInstance) {
 		mAppInstance = appInstance;
 	}
 
 	/*
-	public void init() {
-		try {
-			String DATA_FILE_PATH = mAppInstance.getStorageInstance().readRawFile("DATA_FILE_PATH");
-			List<Task> testing = mAppInstance.getStorageInstance().readFile(DATA_FILE_PATH);
-			// checkStatus();
-<<<<<<< HEAD
-			mAppInstance.getStorageInstance().writeFile(mTasks, "output.txt");
-=======
-			mAppInstance.getStorageInstance().writeFile(tasks, "DATA_FILE_PATH");
->>>>>>> 2f2762fa379c83f29936541cc4744bd9db8a7932
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	*/
+	 * public void init() { try { String DATA_FILE_PATH =
+	 * mAppInstance.getStorageInstance().readRawFile("DATA_FILE_PATH");
+	 * List<Task> testing =
+	 * mAppInstance.getStorageInstance().readFile(DATA_FILE_PATH); //
+	 * checkStatus(); <<<<<<< HEAD
+	 * mAppInstance.getStorageInstance().writeFile(mTasks, "output.txt");
+	 * ======= mAppInstance.getStorageInstance().writeFile(tasks,
+	 * "DATA_FILE_PATH"); >>>>>>> 2f2762fa379c83f29936541cc4744bd9db8a7932 }
+	 * catch (Exception e) { e.printStackTrace(); } }
+	 */
 	public void executeCommand(ArrayList<Pair<Token, String>> tokens) {
 		for (Pair<Token, String> pair : tokens) {
 			if (pair.getKey() == Token.RESERVED) {
@@ -51,67 +38,67 @@ public class Logic implements LogicInterface {
 						mAppInstance.getFormatterInstance().format(task, Format.LIST);
 						break;
 					case "edit":
-
+						editTask(tokens);
 						break;
 					case "list":
 						mAppInstance.getFormatterInstance().format(mTasks, Format.LIST);
 						break;
 					case "delete":
-
+						deleteTask(tokens);
 						break;
 					default:
 						// TODO: Unimplemented command
 						break;
 					}
 				} catch (InvalidTaskException e) {
+					System.err.println("[Logic] Invalid Task");
+					// TODO: Dispatch to error class
+				} catch (TaskNotFoundException e) {
+					System.err.println("[Logic] Task not found");
 					// TODO: Dispatch to error class
 				}
+				return;
 			}
 		}
 	}
+	
+	public void echo(String s) {
+		mAppInstance.getFormatterInstance().passThrough(s);
+	}
 
 	/**
-<<<<<<< HEAD
-	 * Constructs the Task object from the parsed tokens and adds it to the
-	 * master list of Tasks
+	 * Updates the passed in Task object based on the parsed tokens
 	 * 
 	 * @param tokens
-	 *            The tokens parsed from the command <b>including</b> the add
-	 *            token itself
+	 *            The tokens parsed from the command <b>including</b> the
+	 *            command token itself but <b>excluding</b> any previously used
+	 *            identifiers
 	 * @throws InvalidTaskException
 	 *             Thrown when the Task constructed from the parsed tokens is
 	 *             invalid
-=======
-	 * This method clears the current view and return to the main view
-	 * which is all tasks
-	 * and prepares for the next request
 	 */
-	
-    public void escapeCurrentView(){
-		userView = new ArrayList<Task>();
-	}
-	
-	/**
-	 * This method returns all the tasks inside the to-do list, excluding only deleted tasks 
->>>>>>> 2f2762fa379c83f29936541cc4744bd9db8a7932
-	 */
-	private Task addTask(ArrayList<Pair<Token, String>> tokens) throws InvalidTaskException {
-		Task task = new Task();
+	private Task updateTask(ArrayList<Pair<Token, String>> tokens, Task task) throws InvalidTaskException {
 		Iterator<Pair<Token, String>> iter = tokens.iterator();
 
 		while (iter.hasNext()) {
 			Pair<Token, String> pair = iter.next();
 			switch (pair.getKey()) {
 			case FLAG:
-				switch (pair.getValue()) {
+				String flag = pair.getValue();
+				switch (flag) {
 				// Flags which expect the next token to be a date
 				case Parser.FLAG_END:
 				case Parser.FLAG_START:
 					if (iter.hasNext()) {
-						Pair<Token, String> nextToken = iter.next();
-						assert(nextToken.getKey() == Token.DATE || nextToken.getKey() == Token.DATE_INVALID);
-						if (nextToken.getKey() == Token.DATE) {
-
+						Pair<Token, String> nextPair = iter.next();
+						assert(nextPair.getKey() == Token.DATE || nextPair.getKey() == Token.DATE_INVALID);
+						// Only set valid dates
+						if (nextPair.getKey() == Token.DATE) {
+							if (flag == Parser.FLAG_END) {
+								task.setEnd(nextPair.getValue());
+							} else if (flag == Parser.FLAG_START) {
+								task.setStart(nextPair.getValue());
+							}
 						}
 					}
 					break;
@@ -128,314 +115,98 @@ public class Logic implements LogicInterface {
 			case ID_INVALID:
 			case RESERVED:
 			case WHITESPACE:
-				// Do nothing as token is invalid for the add command or out of
-				// place
+				// Do nothing
 				break;
 			}
 		}
 
+		// Check if the constructed Task is valid
 		if (task.isValid()) {
-			mTasks.add(task);
 			return task;
 		} else {
 			return null;
 		}
 	}
 
-	/**
-	 * Find a task based on name
-	 * 
-	 * @param name
-	 *            the name being searched for
-	 * @return the Task with the name requested if there is only one task with
-	 *         that name, or a list of tasks with the same name
-	 */
-	public ArrayList<Task> findTaskByName(String name) {
-		ArrayList<Task> userView = new ArrayList<Task>();
-		for (int i = 0; i < mTasks.size(); i++) {
-			if (mTasks.get(i).getName().equals(name)) {
-				userView.add(mTasks.get(i));
-			}
-		}
-
-		return userView;
-	}
-	
-	/**
-	 * Get a task based on the index of the main arrayList
-	 * @param index
-     *            the index of the task required
-	 */
-	
-	public Task getTask(int index) {
-		return mTasks.get(index);
-	}
-	
-	/**
-	 * Add a new task to the main arrayList and also determine the type of the
-	 * task
-	 * 
-	 * @param task
-	 *            the new task to be added
-	 * 
-	 */
-	public void addTask(Task task) {
+	private Task addTask(ArrayList<Pair<Token, String>> tokens) throws InvalidTaskException {
+		Task task = updateTask(tokens, new Task());
 		mTasks.add(task);
+		System.out.println("[Logic] Added task");
+		System.out.print(task);
+		return task;
+	}
 
-		determineType(task);
+	private void editTask(ArrayList<Pair<Token, String>> tokens) throws TaskNotFoundException, InvalidTaskException {
+		Iterator<Pair<Token, String>> iter = tokens.iterator();
+		Task task = null;
 
-		System.out.println("Added " + task.getName());
-		System.out.println(mAppInstance.getFormatterInstance());
-		System.out.println(FormatterInterface.Format.LIST);
-		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST);
-
-		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "DATA_FILE_PATH");
-		} catch (Exception e) {
-			e.printStackTrace();
+		// First iteration to retrieve the corresponding Task object
+		while (iter.hasNext() && task == null) {
+			Pair<Token, String> pair = iter.next();
+			switch (pair.getKey()) {
+			case NAME:
+			case ID:
+				int index = pair.getKey() == Token.ID ? Integer.parseInt(pair.getValue())
+						: getTaskIndexByName(pair.getValue());
+				task = getTask(index);
+				// Remove the first identifying name or ID such that future ones
+				// will update the Task's name
+				iter.remove();
+				break;
+			default:
+				break;
+			}
 		}
+
+		System.out.println("[Logic] Editing task");
+		System.out.println("[Logic] Before");
+		System.out.print(task);
+		updateTask(tokens, task);
+		System.out.println("[Logic] After");
+		System.out.print(task);
 	}
 
 	/**
-	 * Determine the type of a task based on its start (if any) and end (if any)
-	 * times
-	 * 
-	 * @param task
-	 *            the new task to be categorized
+	 * Deletes the task with the specified ID or name (ID has greater precedence
+	 * over name) from the master task list
+	 *
+	 * @param tokens
+	 *            The tokens parsed from the command <b>including</b> the
+	 *            command token itself
+	 * @throws TaskNotFoundException
+	 *             Thrown when the provided task name could not be found or ID
+	 *             is out of bounds
 	 */
-	public void determineType(Task task) {
-		if (task.getEnd() == null) {
-			// if end == null, float
-			task.setType("FLOAT");
-		} else {
-			if (task.getStart() != null) {
-				// if end != null and start != null, event
-				task.setType("EVENT");
-			} else {
-				// if end != null but start == null, deadline
-				task.setType("DEADLINE");
+	private void deleteTask(ArrayList<Pair<Token, String>> tokens) throws TaskNotFoundException {
+		Iterator<Pair<Token, String>> iter = tokens.iterator();
+
+		while (iter.hasNext()) {
+			Pair<Token, String> pair = iter.next();
+			switch (pair.getKey()) {
+			case ALPHA_NUM:
+			case DATE:
+			case DATE_INVALID:
+			case FLAG:
+			case FLAG_INVALID:
+				// Do nothing
+				break;
+			case ID_INVALID:
+				// Do nothing
+				break;
+			case ID:
+			case NAME:
+				int index = pair.getKey() == Token.ID ? Integer.parseInt(pair.getValue())
+						: getTaskIndexByName(pair.getValue());
+				System.out.println("[Logic] Removing task");
+				Task task = removeTask(index);
+				System.out.print(task);
+				return;
+			case RESERVED:
+			case WHITESPACE:
+				// Do nothing
+				break;
 			}
 		}
-	}
-
-	/**
-	 * Delete a task
-	 * 
-	 * @param task
-	 *            the task to be deleted
-	 * 
-	 */
-	public Task deleteTask(int taskIndex) {
-		Task removedTask = new Task();
-    	if(!userView.isEmpty()){
-    		removedTask = userView.remove(taskIndex);
-    	} else {
-    		removedTask = tasks.get(taskIndex);
-    	}
-    	tasks.remove(removedTask);
-		mAppInstance.getFormatterInstance().format(removedTask, FormatterInterface.Format.LIST); 
-		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "DATA_FILE_PATH");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return removedTask;
-	}
-
-	/**
-	 * Archive a task
-	 * 
-	 * @param task
-	 *            the task to be archived
-	 * 
-	 */
-	public void archiveTask(int taskIndex){
-		Task archivedTask = new Task();
-    	if(!userView.isEmpty()){
-    		archivedTask = userView.get(taskIndex);
-    	} else {
-    		archivedTask = tasks.get(taskIndex);
-    	}
-    	archivedTask.setArchived("TRUE");
-		mAppInstance.getFormatterInstance().format(archivedTask, FormatterInterface.Format.LIST); 
-		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "DATA_FILE_PATH");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void markTaskCompleted(int taskIndex){
-		Task completedTask = new Task();
-    	if(!userView.isEmpty()){
-    		completedTask = userView.get(taskIndex);
-    	} else {
-    		completedTask = tasks.get(taskIndex);
-    	}
-    	completedTask.setCompleted("TRUE");
-		mAppInstance.getFormatterInstance().format(completedTask, FormatterInterface.Format.LIST); 
-		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "DATA_FILE_PATH");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/*
-	 * public void checkStatus(){ Date date = new Date(); for(int i = 0; i <
-	 * tasks.size(); i++){ if(tasks.get(i).getEnd() != null &&
-	 * tasks.get(i).getEnd().compareTo(date) < 0){ userView.add(tasks.get(i)); }
-	 * } }
-	 * 
-	 */
-
-	public ArrayList<Task> list() {
-		// checkStatus();
-		ArrayList<Task> userView = new ArrayList<Task>();
-		for (int i = 0; i < mTasks.size(); i++) {
-			if (mTasks.get(i).getArchived().equals("FALSE")) {
-				userView.add(mTasks.get(i));
-			}
-		}
-		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST);
-		return userView;
-	}
-
-	/**
-	 * This method sorts a list of tasks according to their deadlines(if any)
-	 * The tasks with deadlines takes priority, followed by events sorted
-	 * according to start time and floats to be added last, sorted by their
-	 * names
-	 * 
-	 */
-
-	public ArrayList<Task> sortByDeadline() {
-		if(userView.isEmpty()){
-		    for (int i = 0; i < tasks.size(); i++) {
-			    userView.add(tasks.get(i));
-		    }
-		}
-		
-		Collections.sort(userView, new Comparator<Task>() {
-			public int compare(Task task1, Task task2) {
-				if (task1.getType().equals(task2.getType())) {
-					if (task1.getType().equals("DEADLINE")) {
-						return task1.getEnd().compareTo(task2.getEnd());
-					} else if (task1.getType().equals("EVENT")) {
-						return task1.getStart().compareTo(task2.getStart());
-					} else {
-						return task1.getName().compareTo(task2.getName());
-					}
-				} else {
-					return task1.getType().compareTo(task2.getType());
-				}
-			}
-		});
-		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST); 
-		return userView;
-	}
-
-	/**
-	 * This method merges the details of a new task and the original task by
-	 * checking the fields of the new task Those that are blank are kept
-	 * unchanged in the original task While the fields that are not null in the
-	 * new task will be updated in the original task
-	 * 
-	 * @param original
-	 *            the task that is being updated
-	 * @param newTask
-	 *            the task that is updating the original task
-	 * @return the updated original task
-	 */
-
-	public Task mergeDetails(Task original, Task newTask) {
-		// possible fields to update: name, start, end
-		if (newTask.getName() != null) {
-			original.setName(newTask.getName());
-		}
-
-		if (newTask.getEnd() != null) {
-			original.setEnd(newTask.getEnd());
-		}
-
-		if (newTask.getStart() != null) {
-			original.setStart(newTask.getStart());
-		}
-
-		if (newTask.getCompleted().equals("TRUE")) {
-			original.setCompleted("TRUE");
-		}
-
-		if (newTask.getArchived().equals("TRUE")) {
-			original.setArchived("TRUE");
-		}
-
-		return original;
-	}
-
-	/**
-	 * This method edits a task according to the fields specified by the user It
-	 * takes in a task formed by the name input by user, as well as the fields
-	 * to changed It then updates the task identified by the name field in the
-	 * method signature the updating is taken care of by the method mergeDetails
-	 * Changes in the type of the task due to changes in the start and end time
-	 * or status are also updated This information is updated manually by
-	 * checking the changes (if any) in existence of start and deadline
-	 * 
-	 * @param the
-	 *            name of the Task user wishes to edit
-	 * @param the
-	 *            new Task object formed by the requested changes
-	 * @return the updated task
-	 * 
-	 */
-	public Task editTask(Task original, Task edittingTask) {
-
-		// potential edits to the type of task
-
-		if (original.getStart() == null && original.getEnd() == null) {// originally
-			if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited to events
-				original.setType("EVENT");
-			}
-
-			if (edittingTask.getStart() == null && edittingTask.getEnd() != null) {// edited
-																					// to
-				// deadline
-				// tasks
-				original.setType("DEADLINE");
-			}
-		} else if (original.getStart() != null && original.getEnd() != null) {// originally
-																				// event
-			if (edittingTask.getEnd() == null) {// change to float
-				original.setType("FLOAT");
-
-			} else if (edittingTask.getStart() == null) {// change to task with
-															// deadline
-				original.setType("DEADLINE");
-			}
-		} else if (original.getStart() == null && original.getEnd() != null) {// originally
-																				// task
-																				// with
-																				// deadline
-			if (edittingTask.getEnd() == null) {// change to float
-				original.setType("FLOAT");
-
-			} else if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited
-				// to
-				// event
-				original.setType("EVENT");
-
-			}
-		}
-
-		mergeDetails(original, edittingTask);
-		mAppInstance.getFormatterInstance().format(original, FormatterInterface.Format.LIST);
-		try {
-			mAppInstance.getStorageInstance().writeFile(mTasks, "output.txt");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return original;
 	}
 
 	/**
@@ -444,6 +215,7 @@ public class Logic implements LogicInterface {
 	 * 
 	 */
 
+	/*
 	public void readFile() {
 		try {
 			tasks = (ArrayList) mAppInstance.getStorageInstance().readFile("DATA_FILE_PATH");
@@ -451,30 +223,62 @@ public class Logic implements LogicInterface {
 			e.printStackTrace();
 		}
 	}
+	*/
 
-	public void echo(String s) {
-		mAppInstance.getFormatterInstance().passThrough(s);
+	/**
+	 * Retrieves the index of the first occurrence of a Task object with the
+	 * name provided
+	 * 
+	 * @param name
+	 *            The name of the Task object to find
+	 * @return The index of the Task object or -1 if none is found
+	 */
+	private int getTaskIndexByName(String name) {
+		for (int i = 0; i < mTasks.size(); i++) {
+			if (mTasks.get(i).getName().compareTo(name) == 0) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
-	/*
-	 * public static void main(String[] args) { Logic logic = new Logic(); Task
-	 * task = new Task("first test task"); logic.addTask(task);
+	/**
+	 * Convenience method to retrieve a task with an index specified by
+	 * non-sanitized user input or to be chained with the return value of
+	 * {@link Logic#getTaskIndexByName(String)}. Throws an exception if the
+	 * index is out of bounds
 	 * 
-	 * System.out.println(task.getType());
-	 * 
-	 * task.setStart(new Date(new Long("23456")));// setStart seems to have //
-	 * some bug logic.determineType(task); System.out.println(task.getType());
-	 * System.out.println("Start = " + task.getStart());
-	 * 
-	 * task.setEnd(new Date()); logic.determineType(task);
-	 * System.out.println(task.getType()); System.out.println("Deadline = " +
-	 * task.getEnd());
-	 * 
-	 * Task newTask = new Task("first test task"); newTask.setEnd(new Date());
-	 * logic.determineType(newTask); logic.editTask("first test task", newTask);
-	 * System.out.println(newTask.getType());
-	 * System.out.println(task.getType()); // logic.addTask(new Task(
-	 * "second test task")); // System.out.println("First task was created at "
-	 * + // logic.findTaskByName("first test task").getCreated()); }
+	 * @param index
+	 *            The index of the Task object to retrieve
+	 * @return The Task object with the specified index
+	 * @throws TaskNotFoundException
+	 *             Thrown when the index specified is out of bounds
 	 */
+	private Task getTask(int index) throws TaskNotFoundException {
+		if (index >= 0 && index < mTasks.size()) {
+			return mTasks.get(index);
+		} else {
+			throw new TaskNotFoundException();
+		}
+	}
+
+	/**
+	 * Convenience method to remove a task with an index specified by
+	 * non-sanitized user input or to be chained with the return value of
+	 * {@link Logic#getTaskIndexByName(String)}. Throws an exception if the
+	 * index is out of bounds
+	 * 
+	 * @param index
+	 *            The index of the Task object to be removed
+	 * @return The Task object that was removed
+	 * @throws TaskNotFoundException
+	 *             Thrown when the index specified is out of bounds
+	 */
+	private Task removeTask(int index) throws TaskNotFoundException {
+		if (index >= 0 && index < mTasks.size()) {
+			return mTasks.remove(index);
+		} else {
+			throw new TaskNotFoundException();
+		}
+	}
 }

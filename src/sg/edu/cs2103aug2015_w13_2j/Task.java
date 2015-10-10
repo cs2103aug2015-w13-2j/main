@@ -14,12 +14,7 @@ import java.util.Map.Entry;
  * @author Zhu Chunqi
  */
 public class Task implements TaskInterface {
-	// Maps labels to their values
 	private HashMap<String, String> mLabels = new HashMap<String, String>();
-
-	/*******************************************************
-	 * CONSTRUCTORS
-	 *******************************************************/
 
 	/**
 	 * Zero parameter constructor that creates and initializes a new Task object
@@ -35,7 +30,7 @@ public class Task implements TaskInterface {
 
 	/**
 	 * Constructor to create a task with the name as provided. Internally
-	 * creates a new Task object and calls setName(name)
+	 * creates a new Task object and calls {@link Task#setName(String)}
 	 * 
 	 * @param name
 	 *            The name to be given to the newly created task

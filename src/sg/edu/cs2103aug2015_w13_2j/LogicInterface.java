@@ -1,7 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
@@ -23,77 +22,10 @@ public interface LogicInterface {
 	public void executeCommand(ArrayList<Pair<Token, String>> tokens);
 
 	/**
-	 * This method adds in a new task to the to-do list
-	 *
-	 * @param task
-	 *            the new task to be added
-	 */
-
-	public void addTask(Task task);
-
-
-
-	/**
-	 * This method delete the task with the specified index from the to-do list
-	 *
-	 * @param taskName
-	 *            the name requested by user or other classes
-	 * @param currentList
-	 *            current view of tasks 
-	 * @return task the deleted task with the requested index
-	 */
-
-	public Task deleteTask(int taskIndex);
-
-	/**
-	 * This method archives the task with the specified index from the to-do list
-	 *
-	 * @param taskName
-	 *            the index requested by user or other classes
-	 * @param currentList
-	 *            current view of tasks 
-	 */
-
-	public void archiveTask(int taskIndex);
-	/**
-	 * This method marks the task with the specified index from the to-do list as
-	 * completed
-	 *
-	 * @param taskName
-	 *            the index requested by user or other classes
-	 * @param currentList
-	 *            current view of tasks 
-	 */
-
-	public void markTaskCompleted(int taskIndex);
-
-	/**
-	 * This method updates the task original task
-	 * by merging the task with the new Task object created by user's command
-	 *
-	 * @param original
-	 *            the original task
-	 * @param task
-	 *            the new Task object created by user's command
-	 * @return task the updated task with the original 
-	 */
-
-	public Task editTask(Task original, Task edittingTask);
-
-	public ArrayList<Task> sortByDeadline();
-	
-	public Task getTask(int index);
-
-	public ArrayList<Task> list();
-
-	
-
-	/**
 	 * Echos back the command entered. For testing purposes and as a stub
 	 * 
 	 * @param s
 	 *            The string to echo back
 	 */
 	public void echo(String s);
-
 }

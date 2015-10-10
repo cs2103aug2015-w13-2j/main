@@ -169,6 +169,10 @@ public interface TaskInterface {
 	public class InvalidTaskException extends Exception {
 		private static final long serialVersionUID = 4591179171294898925L;
 	}
+	
+	public class TaskNotFoundException extends Exception {
+		private static final long serialVersionUID = 1619684577187818793L;
+	}
 
 	// @@author A0124007X
 	/**
