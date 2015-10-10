@@ -17,26 +17,24 @@ import org.junit.Test;
 
 public class LogicTest {
     FunDUE funDue = new FunDUE();
-    private Logic logicComponent;
+    private Logic logicComponent = funDue.getLogicInstance();
+   
 	@Test
 	public void testAdd() {
-		logicComponent = FunDUE.sLogic;
         Task newTask = new Task("First"); 
         logicComponent.addTask(newTask);
         assertEquals("First", logicComponent.getTask(0).getName());
 	}
 	@Test
 	public void testDelete(){
-		logicComponent = new Logic();
 		logicComponent.addTask(new Task("first test task"));
 		logicComponent.addTask(new Task("second test task"));
-		logicComponent.deleteTask("first test task");
+		logicComponent.deleteTask(logicComponent.getAllTasks(), 0);
 		assertEquals(logicComponent.getAllTasks().get(0).getName(), "second test task");
 	}
 	
 	@Test
 	public void testDetermineType(){
-		logicComponent = new Logic();
 		Task newTask = new Task("first test task");
 		logicComponent.determineType(newTask);
 		assertTrue(newTask.getEnd() == null);
@@ -51,7 +49,6 @@ public class LogicTest {
 	
 	@Test
 	public void testEdit(){
-		logicComponent = new Logic();
 		Task original = new Task("first test task");
 		assertEquals(original.getCompleted(), "FALSE");
 		assertEquals(original.getArchived(), "FALSE");
@@ -61,36 +58,35 @@ public class LogicTest {
 		Task newTask = new Task("first test task");
 		newTask.setEnd(new Date());
 		logicComponent.determineType(newTask);
-		logicComponent.editTask("first test task", newTask);
+		logicComponent.editTask(original, newTask);
 		assertEquals(original.getType(), "DEADLINE");
 		newTask.setStart(new Date());
 		logicComponent.determineType(newTask);
-		logicComponent.editTask("first test task", newTask);
+		logicComponent.editTask(original, newTask);
 		assertEquals(original.getType(), "EVENT");
 		newTask.setName("I have changed");
-		logicComponent.editTask("first test task", newTask);
+		logicComponent.editTask(original, newTask);
 		assertEquals(original.getName(), newTask.getName());
 	}
 	
 	@Test
 	public void testStatus(){
-		logicComponent = new Logic();
 		Task original = new Task("second test task");
 		logicComponent.addTask(original);
 		assertEquals(original.getCompleted(), "FALSE");
 		original.setCompleted("TRUE");
 		assertEquals(original.getCompleted(), "TRUE");
-		assertTrue(logicComponent.getAllTasks().size() == 1);
-		assertTrue(logicComponent.viewCompleted().size() == 1);
-		logicComponent.deleteTask(original.getName());
+		ArrayList<Task> all = logicComponent.getAllTasks();
+		assertTrue(all.size() == 1);
+		//assertTrue(logicComponent.viewCompleted().size() == 1);
+		logicComponent.deleteTask(all, all.indexOf(original));
 		//assertEquals(original.getStatus(), "DELETED");
-		assertTrue(logicComponent.getAllTasks().isEmpty());
-		assertTrue(logicComponent.viewCompleted().isEmpty());
+		assertTrue(all.isEmpty());
+		//assertTrue(logicComponent.viewCompleted().isEmpty());
 	}
 	
 	@Test
 	public void testSortByDeadline(){
-		logicComponent = new Logic();
 		Task one = new Task("ONE");
 		logicComponent.addTask(one);
 		Task two = new Task("TWO");
@@ -119,7 +115,7 @@ public class LogicTest {
 		Task newSeven = new Task("SEVEN SEVEN");
 		newSeven.setEnd(new Date());
 		newSeven.setStart(new Date());
-		logicComponent.editTask("SEVEN", newSeven);
+		logicComponent.editTask(seven, newSeven);
 		list = logicComponent.sortByDeadline();
 		for(int i = 0; i< list.size(); i++){
 			System.out.println(list.get(i).getName() +" " +  list.get(i).getType());
@@ -129,7 +125,7 @@ public class LogicTest {
 		Task newTwo = new Task("I AM THE NEW TWO");
 		newTwo.setEnd(new Date());
 		newTwo.setStart(new Date());
-		logicComponent.editTask("TWO", newTwo);
+		logicComponent.editTask(two, newTwo);
 		
 		Task five = new Task("FIVE");
 		logicComponent.addTask(five);
@@ -145,7 +141,6 @@ public class LogicTest {
 	
 	@Test
 	public void testOverdue(){
-		logicComponent = new Logic();
 		Task one = new Task("ONE");
 		logicComponent.addTask(one);
 		Task two = new Task("TWO");
