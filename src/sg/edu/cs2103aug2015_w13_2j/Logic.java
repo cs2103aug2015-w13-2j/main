@@ -52,6 +52,16 @@ public class Logic implements LogicInterface {
 		return tasks;
 	}
 	
+	/**
+	 * Get a task based on the index of the main arrayList
+	 * @param index
+     *            the index of the task required
+	 */
+	
+	public Task getTask(int index) {
+		return tasks.get(index);
+	}
+
 	 /**
      * Find a task based on name
      * @param name
@@ -117,9 +127,6 @@ public class Logic implements LogicInterface {
 		}
 	}
 
-	public Task getTask(int index) {
-		return tasks.get(index);
-	}
 
 	/**
 	 * Delete a task

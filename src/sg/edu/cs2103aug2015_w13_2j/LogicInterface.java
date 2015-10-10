@@ -83,6 +83,8 @@ public interface LogicInterface {
 	public ArrayList<Task> sortByDeadline();
 
 	public ArrayList<Task> getAllTasks();
+	
+	public Task getTask(int index);
 
 	public ArrayList<Task> list();
 
