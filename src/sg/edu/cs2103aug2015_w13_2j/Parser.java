@@ -7,12 +7,6 @@ import javafx.util.Pair;
 
 //@@author A0121410H
 public class Parser implements ParserInterface {
-	private FunDUE mAppInstance;
-
-	private enum State {
-		GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
-	}
-
 	public enum Token {
 		RESERVED, DATE, DATE_INVALID, FLAG, FLAG_INVALID, ID, ID_INVALID, NAME, WHITESPACE, ALPHA_NUM;
 	}
@@ -20,6 +14,11 @@ public class Parser implements ParserInterface {
 	public static final String[] RESERVED = { "add", "delete", "edit", "list", "sort" };
 	public static final String[] FLAGS = { "e", "s" };
 
+	private enum State {
+		GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
+	}
+	
+	private FunDUE mAppInstance;
 	private State mState;
 	private String mCommand;
 	private int mParserPos;
