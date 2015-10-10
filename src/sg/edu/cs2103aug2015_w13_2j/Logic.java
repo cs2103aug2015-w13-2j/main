@@ -45,6 +45,33 @@ public class Logic implements LogicInterface {
 	}
 	
 	/**
+	 * This method returns all the tasks inside the to-do list, excluding only deleted tasks 
+	 */
+
+	public ArrayList<Task> getAllTasks() {
+		return tasks;
+	}
+	
+	 /**
+     * Find a task based on name
+     * @param name
+     *            the name being searched for 
+     * @return 
+     *        the Task with the name requested if there is only one task with that name, or 
+     *        a list of tasks with the same name
+     */
+    public ArrayList<Task> findTaskByName(String name){
+    	ArrayList<Task> userView = new ArrayList<Task>();
+    	for(int i = 0; i < tasks.size(); i++){
+    		if(tasks.get(i).getName().equals(name)){
+    			userView.add(tasks.get(i));
+    		}
+    	}
+    	
+       return userView;
+    }
+	
+	/**
 	 * Add a new task to the main arrayList and also determine the type of the task
 	 * 
 	 * @param task
@@ -234,9 +261,6 @@ public class Logic implements LogicInterface {
 			original.setCompleted("TRUE");
 		}
 
-		// if(newTask.getStatus().equals("DELETED")) {
-		// deleteTask(original.getName());
-		// }
 
 		if (newTask.getArchived().equals("TRUE")) {
 			original.setArchived("TRUE");
@@ -303,10 +327,7 @@ public class Logic implements LogicInterface {
 		mergeDetails(original, edittingTask);
 		mAppInstance.getFormatterInstance().format(original, FormatterInterface.Format.LIST); 
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");// TODO:
-																				// to
-																				// be
-			// updated
+			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -327,37 +348,11 @@ public class Logic implements LogicInterface {
 		}
 	}
 
-	/**
-	 * This method returns all the tasks inside the to-do list, excluding only deleted tasks 
-	 */
-
-	public ArrayList<Task> getAllTasks() {
-		return tasks;
-	}
-
 	public void echo(String s) {
 		mAppInstance.getFormatterInstance().passThrough(s);
 	}
 
-    /**
-     * Find a task based on name
-     * @param name
-     *            the name being searched for 
-     * @return 
-     *        the Task with the name requested if there is only one task with that name, or 
-     *        a list of tasks with the same name
-     */
-    public ArrayList<Task> findTaskByName(String name){
-    	//for the case of only one task with the name first
-    	ArrayList<Task> userView = new ArrayList<Task>();
-    	for(int i = 0; i < tasks.size(); i++){
-    		if(tasks.get(i).getName().equals(name)){
-    			userView.add(tasks.get(i));
-    		}
-    	}
-    	
-       return userView;
-    }
+   
 
 	/*
 	 * public static void main(String[] args) { Logic logic = new Logic(); Task
