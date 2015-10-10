@@ -15,10 +15,6 @@ import java.util.List;
 * @author Lu Yang Kenneth
 */
 public class Storage implements StorageInterface {
-	public Storage() {
-        // Empty constructor
-    }
-	
 	public String readRawFile(String filename) throws Exception {
     	// Files.readAllBytes() uses UTF-8 character encoding
     	// and ensures that the file is closed after all bytes are read

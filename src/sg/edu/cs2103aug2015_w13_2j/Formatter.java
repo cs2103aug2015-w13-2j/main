@@ -11,12 +11,14 @@ import java.util.List;
 * @author Lu Yang Kenneth
 */
 public class Formatter implements FormatterInterface {
-    public Formatter() {
-        // Empty constructor
+	private FunDUE mAppInstance;
+	
+    public Formatter(FunDUE appInstance) {
+        mAppInstance = appInstance;
     }
     
     public void format(Task t, Format f) {
-        FunDUE.sTextUI.println(t.getName());
+        mAppInstance.getTextUIInstance().println(t.getName());
     }
     
     public void format(List<Task> tasks, Format f) {
@@ -24,10 +26,10 @@ public class Formatter implements FormatterInterface {
         for(int i = 0; i < tasks.size(); i++) {
             sb.append(tasks.get(i).getName() + TextUI.NEWLINE);
         }
-        FunDUE.sTextUI.print(sb.toString());
+        mAppInstance.getTextUIInstance().print(sb.toString());
     }
     
     public void passThrough(String s) {
-        FunDUE.sTextUI.print(s);
+		mAppInstance.getTextUIInstance().print(s);
     }
 }

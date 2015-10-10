@@ -5,10 +5,10 @@ import java.util.Vector;
 
 import javafx.util.Pair;
 
-/**
- * 
- */
+//@@author A0121410H
 public class Parser implements ParserInterface {
+	private FunDUE mAppInstance;
+	
     private enum State {
         GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
     }
@@ -21,18 +21,24 @@ public class Parser implements ParserInterface {
             "sort" };
     public static final String[] FLAGS = { "e", "s" };
 
-    private State mState = State.GENERAL;
+    private State mState;
     private String mCommand;
     private int mParserPos;
     private Vector<Pair<Token, String>> mTokens = new Vector<Pair<Token, String>>();
 
+    public Parser(FunDUE appInstance) {
+    	mAppInstance = appInstance;
+    }
+    
     public void parseCommand(String command) {
-        mState = State.GENERAL;
-        mCommand = command;
+        startParserLoop(command);
+        this.executeCommand();
+    }
+    
+    private void resetParser() {
+    	mState = State.GENERAL;
         mParserPos = 0;
         mTokens.clear();
-        startParserLoop();
-        this.executeCommand();
     }
 
     /**
@@ -66,7 +72,11 @@ public class Parser implements ParserInterface {
         return sb.toString();
     }
 
-    private void startParserLoop() {
+    private void startParserLoop(String command) {
+    	// Reset the internal state of the parser
+    	resetParser();
+    	mCommand = command;
+    	
         // Buffer to store parsed tokens
         String s;
         char openingQuote = '"';
