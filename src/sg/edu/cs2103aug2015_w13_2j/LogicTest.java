@@ -27,9 +27,10 @@ public class LogicTest {
 	}
 	@Test
 	public void testDelete(){
+		System.out.println("TESTING DELETE BY INDEX");
 		logicComponent.addTask(new Task("first test task"));
 		logicComponent.addTask(new Task("second test task"));
-		logicComponent.deleteTask(logicComponent.getAllTasks(), 0);
+		logicComponent.deleteTask(0);
 		assertEquals(logicComponent.getAllTasks().get(0).getName(), "second test task");
 	}
 	
@@ -79,7 +80,7 @@ public class LogicTest {
 		ArrayList<Task> all = logicComponent.getAllTasks();
 		assertTrue(all.size() == 1);
 		//assertTrue(logicComponent.viewCompleted().size() == 1);
-		logicComponent.deleteTask(all, all.indexOf(original));
+		logicComponent.deleteTask(all.indexOf(original));
 		//assertEquals(original.getStatus(), "DELETED");
 		assertTrue(all.isEmpty());
 		//assertTrue(logicComponent.viewCompleted().isEmpty());
