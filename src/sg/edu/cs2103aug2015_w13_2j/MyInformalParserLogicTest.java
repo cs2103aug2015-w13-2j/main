@@ -11,12 +11,12 @@ public class MyInformalParserLogicTest {
 	private Logic logic;
 	
 	public MyInformalParserLogicTest() {
-		new FunDUE();
+		FunDUE funDue = new FunDUE();
 		
 		//FunDUE.sTextUI.print("Hello world!");
 		
-		this.parser = FunDUE.sParser;
-		this.logic = FunDUE.sLogic;
+		this.parser = funDue.getParserInstance();
+		this.logic = funDue.getLogicInstance();
 	}
 	
 	public static void main(String[] args) {
@@ -91,7 +91,7 @@ public class MyInformalParserLogicTest {
 		parser.parseCommand(userCmd);
 		System.out.println(parser.getListOfTokens());
 		
-		for (Task task: FunDUE.sLogic.list()) {
+		for (Task task: logic.list()) {
 			System.out.println(task);
 		}
 	}

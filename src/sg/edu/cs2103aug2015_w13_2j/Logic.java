@@ -135,7 +135,17 @@ public class Logic implements LogicInterface {
 
 		return userView;
 	}
-
+	
+	/**
+	 * Get a task based on the index of the main arrayList
+	 * @param index
+     *            the index of the task required
+	 */
+	
+	public Task getTask(int index) {
+		return mTasks.get(index);
+	}
+	
 	/**
 	 * Add a new task to the main arrayList and also determine the type of the
 	 * task
@@ -181,10 +191,6 @@ public class Logic implements LogicInterface {
 				task.setType("DEADLINE");
 			}
 		}
-	}
-
-	public Task getTask(int index) {
-		return mTasks.get(index);
 	}
 
 	/**

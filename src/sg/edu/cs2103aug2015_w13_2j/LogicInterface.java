@@ -81,6 +81,8 @@ public interface LogicInterface {
 	public Task editTask(Task original, Task edittingTask);
 
 	public ArrayList<Task> sortByDeadline();
+	
+	public Task getTask(int index);
 
 	public ArrayList<Task> list();
 
