@@ -20,7 +20,7 @@ public class Logic implements LogicInterface {
 
 	// This ArrayList includes all added tasks, excluding deleted ones
 	private ArrayList<Task> tasks = new ArrayList<Task>();
-
+	private ArrayList<Task> userView = new ArrayList<Task>();
 	/**
 	 * Constructor for the Logic component
 	 * 
@@ -34,7 +34,7 @@ public class Logic implements LogicInterface {
 			String DATA_FILE_PATH = mAppInstance.getStorageInstance().readRawFile("DATA_FILE_PATH");
 			List<Task> testing = mAppInstance.getStorageInstance().readFile(DATA_FILE_PATH);
 			// checkStatus();
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+			mAppInstance.getStorageInstance().writeFile(tasks, "DATA_FILE_PATH");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -42,6 +42,16 @@ public class Logic implements LogicInterface {
 
 	public void executeCommand(Vector<Pair<Token, String>> tokens){
 		
+	}
+	
+	/**
+	 * This method clears the current view and return to the main view
+	 * which is all tasks
+	 * and prepares for the next request
+	 */
+	
+    public void escapeCurrentView(){
+		userView = new ArrayList<Task>();
 	}
 	
 	/**
@@ -99,7 +109,7 @@ public class Logic implements LogicInterface {
 		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST);
 
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+			mAppInstance.getStorageInstance().writeFile(tasks, "DATA_FILE_PATH");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -135,15 +145,17 @@ public class Logic implements LogicInterface {
 	 *            the task to be deleted
 	 * 
 	 */
-	public Task deleteTask(ArrayList<Task> currentList, int taskIndex) {
-        Task removedTask = currentList.remove(taskIndex);
-    	
-    	if(!currentList.equals(tasks)){
-    		tasks.remove(removedTask);
+	public Task deleteTask(int taskIndex) {
+		Task removedTask = new Task();
+    	if(!userView.isEmpty()){
+    		removedTask = userView.remove(taskIndex);
+    	} else {
+    		removedTask = tasks.get(taskIndex);
     	}
+    	tasks.remove(removedTask);
 		mAppInstance.getFormatterInstance().format(removedTask, FormatterInterface.Format.LIST); 
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+			mAppInstance.getStorageInstance().writeFile(tasks, "DATA_FILE_PATH");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -158,24 +170,34 @@ public class Logic implements LogicInterface {
 	 * 
 	 */
 
-	public void archiveTask(ArrayList<Task> currentList, int taskIndex){
-    	Task archivedTask = currentList.get(taskIndex);
+	public void archiveTask(int taskIndex){
+		Task archivedTask = new Task();
+    	if(!userView.isEmpty()){
+    		archivedTask = userView.get(taskIndex);
+    	} else {
+    		archivedTask = tasks.get(taskIndex);
+    	}
     	archivedTask.setArchived("TRUE");
 		mAppInstance.getFormatterInstance().format(archivedTask, FormatterInterface.Format.LIST); 
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+			mAppInstance.getStorageInstance().writeFile(tasks, "DATA_FILE_PATH");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 
-	public void markTaskCompleted(ArrayList<Task> currentList, int taskIndex){
-    	Task task = currentList.get(taskIndex);
-    	task.setCompleted("TRUE");
-		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST); 
+	public void markTaskCompleted(int taskIndex){
+		Task completedTask = new Task();
+    	if(!userView.isEmpty()){
+    		completedTask = userView.get(taskIndex);
+    	} else {
+    		completedTask = tasks.get(taskIndex);
+    	}
+    	completedTask.setCompleted("TRUE");
+		mAppInstance.getFormatterInstance().format(completedTask, FormatterInterface.Format.LIST); 
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+			mAppInstance.getStorageInstance().writeFile(tasks, "DATA_FILE_PATH");
 	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -212,11 +234,13 @@ public class Logic implements LogicInterface {
 	 */
 
 	public ArrayList<Task> sortByDeadline() {
-		ArrayList<Task> list = new ArrayList<Task>();
-		for (int i = 0; i < tasks.size(); i++) {
-			list.add(tasks.get(i));
+		if(userView.isEmpty()){
+		    for (int i = 0; i < tasks.size(); i++) {
+			    userView.add(tasks.get(i));
+		    }
 		}
-		Collections.sort(list, new Comparator<Task>() {
+		
+		Collections.sort(userView, new Comparator<Task>() {
 			public int compare(Task task1, Task task2) {
 				if (task1.getType().equals(task2.getType())) {
 					if (task1.getType().equals("DEADLINE")) {
@@ -231,10 +255,8 @@ public class Logic implements LogicInterface {
 				}
 			}
 		});
-		mAppInstance.getFormatterInstance().format(list, FormatterInterface.Format.LIST); // TODO:
-		// to be
-		// updated
-		return list;
+		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST); 
+		return userView;
 	}
 
 	/**
@@ -298,8 +320,8 @@ public class Logic implements LogicInterface {
 
 		if (original.getStart() == null && original.getEnd() == null) {// originally
 																		// float
-			if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited to
-																	// events
+			if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited to events
+																	
 				original.setType("EVENT");
 			}
 
@@ -349,7 +371,7 @@ public class Logic implements LogicInterface {
 
 	public void readFile() {
 		try {
-			tasks = (ArrayList) mAppInstance.getStorageInstance().readFile("output.txt");
+			tasks = (ArrayList) mAppInstance.getStorageInstance().readFile("DATA_FILE_PATH");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

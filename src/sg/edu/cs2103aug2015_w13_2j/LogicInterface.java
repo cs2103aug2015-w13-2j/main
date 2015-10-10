@@ -43,7 +43,7 @@ public interface LogicInterface {
 	 * @return task the deleted task with the requested index
 	 */
 
-	public Task deleteTask(ArrayList<Task> currentList, int taskIndex);
+	public Task deleteTask(int taskIndex);
 
 	/**
 	 * This method archives the task with the specified index from the to-do list
@@ -54,7 +54,7 @@ public interface LogicInterface {
 	 *            current view of tasks 
 	 */
 
-	public void archiveTask(ArrayList<Task> currentList, int taskIndex);
+	public void archiveTask(int taskIndex);
 	/**
 	 * This method marks the task with the specified index from the to-do list as
 	 * completed
@@ -65,7 +65,7 @@ public interface LogicInterface {
 	 *            current view of tasks 
 	 */
 
-	public void markTaskCompleted(ArrayList<Task> currentList, int taskIndex);
+	public void markTaskCompleted(int taskIndex);
 
 	/**
 	 * This method updates the task original task
