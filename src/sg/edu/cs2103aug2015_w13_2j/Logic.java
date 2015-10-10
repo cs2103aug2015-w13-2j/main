@@ -34,18 +34,18 @@ public class Logic implements LogicInterface {
 			String DATA_FILE_PATH = mAppInstance.getStorageInstance().readRawFile("DATA_FILE_PATH");
 			List<Task> testing = mAppInstance.getStorageInstance().readFile(DATA_FILE_PATH);
 			// checkStatus();
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");// TODO:
-																				// to
-																				// be
-			// updated
+			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	public void executeCommand(Vector<Pair<Token, String>> tokens){
+		
+	}
+	
 	/**
-	 * Add a new task to the main arrayList and also determine the type of the
-	 * task
+	 * Add a new task to the main arrayList and also determine the type of the task
 	 * 
 	 * @param task
 	 *            the new task to be added
@@ -59,15 +59,10 @@ public class Logic implements LogicInterface {
 		System.out.println("Added " + task.getName());
 		System.out.println(mAppInstance.getFormatterInstance());
 		System.out.println(FormatterInterface.Format.LIST);
-		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST);// TODO:
-		// to be
-		// updated
+		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST);
 
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");// TODO:
-																				// to
-																				// be
-			// updated
+			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -106,22 +101,19 @@ public class Logic implements LogicInterface {
 	 *            the task to be deleted
 	 * 
 	 */
-	public Task deleteTask(String taskName) {
-		Task task = findTaskByName(taskName);
-		tasks.remove(task);
-		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST); // TODO:
-		// to be
-		// updated
-
+	public Task deleteTask(ArrayList<Task> currentList, int taskIndex) {
+        Task removedTask = currentList.remove(taskIndex);
+    	
+    	if(!currentList.equals(tasks)){
+    		tasks.remove(removedTask);
+    	}
+		mAppInstance.getFormatterInstance().format(removedTask, FormatterInterface.Format.LIST); 
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");// TODO:
-																				// to
-																				// be
-			// updated
+			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return task;
+		return removedTask;
 	}
 
 	/**
@@ -132,112 +124,30 @@ public class Logic implements LogicInterface {
 	 * 
 	 */
 
-	public void archiveTask(String taskName) {
-		Task archivedTask = findTaskByName(taskName);
-		archivedTask.setArchived("TRUE");
-		mAppInstance.getFormatterInstance().format(archivedTask, FormatterInterface.Format.LIST); // TODO:
-		// to
-		// be
-		// updated
-	}
-
-	public Task retrieveTask(String taskName) {
-		return findTaskByName(taskName);
-	}
-
-	public void markTaskCompleted(String taskName) {
-		Task task = findTaskByName(taskName);
-		task.setCompleted("TRUE");
-		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST); // TODO:
-		// to be
-		// updated
+	public void archiveTask(ArrayList<Task> currentList, int taskIndex){
+    	Task archivedTask = currentList.get(taskIndex);
+    	archivedTask.setArchived("TRUE");
+		mAppInstance.getFormatterInstance().format(archivedTask, FormatterInterface.Format.LIST); 
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");// TODO:
-																				// to
-																				// be
-			// updated
+			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * This method lets user see all tasks they have previously marked as
-	 * completed It traverses the tasks list to take out all completed task, put
-	 * them into the userView list and prints out the tasks
-	 * 
-	 * @return the list of completed tasks
-	 * 
-	 */
-	public ArrayList<Task> viewCompleted() {
-		ArrayList<Task> userView = new ArrayList<Task>();
-		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.get(i).getCompleted().equals("TRUE")) {
-				userView.add(tasks.get(i));
-			}
+
+	public void markTaskCompleted(ArrayList<Task> currentList, int taskIndex){
+    	Task task = currentList.get(taskIndex);
+    	task.setCompleted("TRUE");
+		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST); 
+		try {
+			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+	
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST); // TODO:
-		// to
-		// be
-		// updated
-		return userView;
 	}
 
-	/**
-	 * This method lets user see all tasks they have previously archived
-	 * 
-	 * @return the list of archived tasks
-	 * 
-	 */
-	public ArrayList<Task> viewArchived() {
-		ArrayList<Task> userView = new ArrayList<Task>();
-
-		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST); // TODO:
-		// to
-		// be
-		// updated
-		return userView;
-	}
-
-	/**
-	 * This method is NOT for user to implement It's used to ease the UNDO
-	 * function later on
-	 * 
-	 * @return the list of deleted tasks
-	 * 
-	 */
-	public ArrayList<Task> viewDeleted() {
-		ArrayList<Task> userView = new ArrayList<Task>();
-
-		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST); // TODO:
-		// to
-		// be
-		// updated
-		return userView;
-	}
-
-	/**
-	 * This method lets user see all tasks which have not been marked completed
-	 * after the deadline This only applies for tasks with due dates It works
-	 * the same way as viewCompleted does
-	 * 
-	 * @return the list of overdue tasks
-	 * 
-	 */
-	public ArrayList<Task> viewOverdue() {
-		Date date = new Date();
-		ArrayList<Task> userView = new ArrayList<Task>();
-		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.get(i).getEnd() != null && tasks.get(i).getEnd().compareTo(date) < 0) {
-				userView.add(tasks.get(i));
-			}
-		}
-		// mAppInstance.getFormatterInstance().format(userView,
-		// FormatterInterface.Format.LIST);
-		// //TODO: to be updated
-		return userView;
-	}
 
 	/*
 	 * public void checkStatus(){ Date date = new Date(); for(int i = 0; i <
@@ -255,10 +165,7 @@ public class Logic implements LogicInterface {
 				userView.add(tasks.get(i));
 			}
 		}
-		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST); // TODO:
-		// to
-		// be
-		// updated
+		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST); 
 		return userView;
 	}
 
@@ -332,7 +239,7 @@ public class Logic implements LogicInterface {
 		// }
 
 		if (newTask.getArchived().equals("TRUE")) {
-			archiveTask(original.getName());
+			original.setArchived("TRUE");
 		}
 
 		return original;
@@ -354,39 +261,38 @@ public class Logic implements LogicInterface {
 	 * @return the updated task
 	 * 
 	 */
-	public Task editTask(String name, Task task) {
-		Task original = findTaskByName(name);
-
+	public Task editTask(Task original, Task edittingTask) {
+	
 		// potential edits to the type of task
 
 		if (original.getStart() == null && original.getEnd() == null) {// originally
 																		// float
-			if (task.getStart() != null && task.getEnd() != null) {// edited to
+			if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited to
 																	// events
 				original.setType("EVENT");
 			}
 
-			if (task.getStart() == null && task.getEnd() != null) {// edited to
+			if (edittingTask.getStart() == null && edittingTask.getEnd() != null) {// edited to
 																	// deadline
 																	// tasks
 				original.setType("DEADLINE");
 			}
 		} else if (original.getStart() != null && original.getEnd() != null) {// originally
 																				// event
-			if (task.getEnd() == null) {// change to float
+			if (edittingTask.getEnd() == null) {// change to float
 				original.setType("FLOAT");
 
-			} else if (task.getStart() == null) {// change to task with deadline
+			} else if (edittingTask.getStart() == null) {// change to task with deadline
 				original.setType("DEADLINE");
 			}
 		} else if (original.getStart() == null && original.getEnd() != null) {// originally
 																				// task
 																				// with
 																				// deadline
-			if (task.getEnd() == null) {// change to float
+			if (edittingTask.getEnd() == null) {// change to float
 				original.setType("FLOAT");
 
-			} else if (task.getStart() != null && task.getEnd() != null) {// edited
+			} else if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited
 																			// to
 																			// event
 				original.setType("EVENT");
@@ -394,11 +300,8 @@ public class Logic implements LogicInterface {
 			}
 		}
 
-		mergeDetails(original, task);
-		mAppInstance.getFormatterInstance().format(original, FormatterInterface.Format.LIST); // TODO:
-		// to
-		// be
-		// updated
+		mergeDetails(original, edittingTask);
+		mAppInstance.getFormatterInstance().format(original, FormatterInterface.Format.LIST); 
 		try {
 			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");// TODO:
 																				// to
@@ -418,20 +321,14 @@ public class Logic implements LogicInterface {
 
 	public void readFile() {
 		try {
-			tasks = (ArrayList) mAppInstance.getStorageInstance().readFile("output.txt");// what
-			// should
-			// be
-			// the
-			// fileName
-			// field?
+			tasks = (ArrayList) mAppInstance.getStorageInstance().readFile("output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * This method returns all the tasks inside the to-do list (which excludes
-	 * deleted tasks)
+	 * This method returns all the tasks inside the to-do list, excluding only deleted tasks 
 	 */
 
 	public ArrayList<Task> getAllTasks() {
@@ -442,31 +339,25 @@ public class Logic implements LogicInterface {
 		mAppInstance.getFormatterInstance().passThrough(s);
 	}
 
-	/**
-	 * Find a task based on name
-	 * 
-	 * @param name
-	 *            the name being searched for
-	 * @return the Task with the name requested
-	 */
-	public Task findTaskByName(String name) {
-		// for the case of only one task with the name first
-		Task result = new Task();
-		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.get(i).getName().equals(name)) {
-				result = tasks.get(i);
-				break; // for now, only output the first occurrence
-			}
-		}
-
-		return result;
-	}
-
-	@Override
-	public void executeCommand(Vector<Pair<Token, String>> tokens) {
-		// TODO Auto-generated method stub
-		
-	}
+    /**
+     * Find a task based on name
+     * @param name
+     *            the name being searched for 
+     * @return 
+     *        the Task with the name requested if there is only one task with that name, or 
+     *        a list of tasks with the same name
+     */
+    public ArrayList<Task> findTaskByName(String name){
+    	//for the case of only one task with the name first
+    	ArrayList<Task> userView = new ArrayList<Task>();
+    	for(int i = 0; i < tasks.size(); i++){
+    		if(tasks.get(i).getName().equals(name)){
+    			userView.add(tasks.get(i));
+    		}
+    	}
+    	
+       return userView;
+    }
 
 	/*
 	 * public static void main(String[] args) { Logic logic = new Logic(); Task

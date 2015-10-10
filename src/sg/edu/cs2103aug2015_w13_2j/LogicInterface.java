@@ -31,57 +31,54 @@ public interface LogicInterface {
 
 	public void addTask(Task task);
 
+
+
 	/**
-	 * This method retrieves the task with the specified name
+	 * This method delete the task with the specified index from the to-do list
 	 *
 	 * @param taskName
 	 *            the name requested by user or other classes
-	 * @return task the task with the requested name
+	 * @param currentList
+	 *            current view of tasks 
+	 * @return task the deleted task with the requested index
 	 */
 
-	public Task retrieveTask(String taskName);
+	public Task deleteTask(ArrayList<Task> currentList, int taskIndex);
 
 	/**
-	 * This method delete the task with the specified name from the to-do list
+	 * This method archives the task with the specified index from the to-do list
 	 *
 	 * @param taskName
-	 *            the name requested by user or other classes
-	 * @return task the deleted task with the requested name
+	 *            the index requested by user or other classes
+	 * @param currentList
+	 *            current view of tasks 
 	 */
 
-	public Task deleteTask(String taskName);
-
+	public void archiveTask(ArrayList<Task> currentList, int taskIndex);
 	/**
-	 * This method archives the task with the specified name from the to-do list
-	 *
-	 * @param taskName
-	 *            the name requested by user or other classes
-	 */
-
-	public void archiveTask(String taskName);
-
-	/**
-	 * This method marks the task with the specified name from the to-do list as
+	 * This method marks the task with the specified index from the to-do list as
 	 * completed
 	 *
 	 * @param taskName
-	 *            the name requested by user or other classes
+	 *            the index requested by user or other classes
+	 * @param currentList
+	 *            current view of tasks 
 	 */
 
-	public void markTaskCompleted(String taskName);
+	public void markTaskCompleted(ArrayList<Task> currentList, int taskIndex);
 
 	/**
-	 * This method updates the task with the specified name from the to-do list
+	 * This method updates the task original task
 	 * by merging the task with the new Task object created by user's command
 	 *
-	 * @param taskName
-	 *            the name requested by user or other classes
+	 * @param original
+	 *            the original task
 	 * @param task
 	 *            the new Task object created by user's command
-	 * @return task the updated task with the original requested name
+	 * @return task the updated task with the original 
 	 */
 
-	public Task editTask(String taskName, Task task);
+	public Task editTask(Task original, Task edittingTask);
 
 	public ArrayList<Task> sortByDeadline();
 
@@ -89,13 +86,7 @@ public interface LogicInterface {
 
 	public ArrayList<Task> list();
 
-	public ArrayList<Task> viewOverdue();
-
-	public ArrayList<Task> viewCompleted();
-
-	public ArrayList<Task> viewArchived();
-
-	public ArrayList<Task> viewDeleted();
+	
 
 	/**
 	 * Echos back the command entered. For testing purposes and as a stub
