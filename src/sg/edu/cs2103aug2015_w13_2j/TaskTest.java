@@ -49,11 +49,10 @@ public class TaskTest {
     }
     
     @Test
-    public void conversionTest() throws Exception {
+    public void conversionTest() {
     	String taskString = "NAME:test task name\nCREATED:1443886630393\nDEADLINE:1443886630410\n";
-    	task = Task.parseTask(taskString);
-    	String compareString = task.toString();
+    	task = TaskInterface.parseTask(taskString);
     	
-    	assertTrue(taskString.equals(compareString));
+    	assertEquals(taskString, task.toString());
     }
 }

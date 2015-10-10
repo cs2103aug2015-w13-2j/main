@@ -1,11 +1,21 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-import java.lang.reflect.Method;
 import java.util.Date;
 
 //@@author A0121410H
 
 public interface TaskInterface {
+	/**
+	 * Checks if this Task object is valid. The only condition is that it
+	 * <b>must</b> have a non-zero length name set, all other attributes can be
+	 * missing. An invalid Task object should not be used
+	 * 
+	 * @return True if the Task object is valid, false otherwise
+	 * @throws InvalidTaskException
+	 *             Thrown when the Task object being checked is invalid
+	 */
+	public boolean isValid() throws InvalidTaskException;
+
 	/**
 	 * Sets a label-value pair of the Task object
 	 * 
@@ -155,9 +165,10 @@ public interface TaskInterface {
 
 	public String getImportant();
 
-	/*******************************************************
-	 * STRING <-> TASK CONVERSION METHODS
-	 *******************************************************/
+	// @@author A0121410H
+	public class InvalidTaskException extends Exception {
+		private static final long serialVersionUID = 4591179171294898925L;
+	}
 
 	// @@author A0124007X
 	/**

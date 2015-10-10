@@ -26,13 +26,10 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 	// The (fixed) size of the window
 	private static final Dimension PREFERRED_SIZE = new Dimension(800, 600);
 
-	// UI components that need to be accessed and updated
-	private static JTextField mTextField;
-	private static JTextPane mTextPane;
-
-	private int mPrevLen = 0;
-
 	private FunDUE mAppInstance;
+	private JTextField mTextField;
+	private JTextPane mTextPane;
+	private int mPrevLen = 0;
 
 	public TextUI(FunDUE appInstance) {
 		mAppInstance = appInstance;
@@ -138,7 +135,8 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 			if (mTextField.getText().equalsIgnoreCase("snake")) {
 				new SnakeTXT();
 			} else {
-				mAppInstance.getParserInstance().parseCommand(mTextField.getText());
+				System.out.println("[TextUI] Command: " + mTextField.getText());
+				mAppInstance.getParserInstance().parseAndExecuteCommand(mTextField.getText());
 			}
 			mTextField.setText(null);
 			break;

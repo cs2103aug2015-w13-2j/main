@@ -4,9 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.Set;
 
-//@@author A0121410H
+// @@author A0121410H
 
 /**
  * Task class that encapsulates all the data that represents a task for e.g. the
@@ -206,6 +205,14 @@ public class Task implements TaskInterface {
 
 	public String getImportant() {
 		return getLabel("IMPORTANT");
+	}
+
+	public boolean isValid() throws InvalidTaskException {
+		if (getLabel("NAME") == null || getLabel("NAME").length() == 0) {
+			throw new InvalidTaskException();
+		} else {
+			return true;
+		}
 	}
 
 	// @@author A0124007X

@@ -1,7 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Vector;
 
 import javafx.util.Pair;
 
@@ -12,17 +12,20 @@ public class Parser implements ParserInterface {
 	}
 
 	public static final String[] RESERVED = { "add", "delete", "edit", "list", "sort" };
-	public static final String[] FLAGS = { "e", "s" };
+
+	public static final String FLAG_END = "e";
+	public static final String FLAG_START = "s";
+	public static final String[] FLAGS = { FLAG_END, FLAG_START };
 
 	private enum State {
 		GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
 	}
-	
+
 	private FunDUE mAppInstance;
 	private State mState;
 	private String mCommand;
 	private int mParserPos;
-	private Vector<Pair<Token, String>> mTokens = new Vector<Pair<Token, String>>();
+	private ArrayList<Pair<Token, String>> mTokens = new ArrayList<Pair<Token, String>>();
 
 	public Parser(FunDUE appInstance) {
 		mAppInstance = appInstance;
@@ -39,19 +42,15 @@ public class Parser implements ParserInterface {
 	public void executeCommand() {
 		mAppInstance.getLogicInstance().executeCommand(mTokens);
 	}
-	
+
 	public void parseAndExecuteCommand(String command) {
 		parseCommand(command);
+		System.out.println("[Parser] Parsed tokens: " + getParsedTokens());
 		executeCommand();
-	}
-
-	public Vector<Pair<Token, String>> getListOfTokens() {
-		return mTokens;
 	}
 
 	public String getParsedTokens() {
 		StringBuilder sb = new StringBuilder();
-
 		for (int i = 0; i < mTokens.size(); i++) {
 			sb.append('[');
 			sb.append(mTokens.get(i).getKey());
@@ -61,7 +60,6 @@ public class Parser implements ParserInterface {
 			}
 			sb.append(']');
 		}
-
 		return sb.toString();
 	}
 
@@ -75,7 +73,6 @@ public class Parser implements ParserInterface {
 			trim();
 
 			switch (mState) {
-
 			case ALPHA_NUM:
 				s = nextDelimiter(' ');
 				if (isReserved(s)) {
@@ -202,11 +199,9 @@ public class Parser implements ParserInterface {
 	 */
 	private String nextDelimiter(char delimiter) {
 		StringBuilder sb = new StringBuilder();
-
 		while (hasNext() && peek() != delimiter) {
 			sb.append(next());
 		}
-
 		return sb.toString();
 	}
 

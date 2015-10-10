@@ -1,85 +1,151 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-/**
-This class implements methods from LogicInterface
-@@author A0133387B 
-
- */
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Vector;
+import java.util.Iterator;
 
 import javafx.util.Pair;
+import sg.edu.cs2103aug2015_w13_2j.FormatterInterface.Format;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
+import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 
 public class Logic implements LogicInterface {
 	private FunDUE mAppInstance;
+	private ArrayList<Task> mTasks = new ArrayList<Task>();
 
-	// This ArrayList includes all added tasks, excluding deleted ones
-	private ArrayList<Task> tasks = new ArrayList<Task>();
-
-	/**
-	 * Constructor for the Logic component
-	 * 
-	 */
 	public Logic(FunDUE appInstance) {
 		mAppInstance = appInstance;
 	}
 
+	/*
 	public void init() {
 		try {
 			String DATA_FILE_PATH = mAppInstance.getStorageInstance().readRawFile("DATA_FILE_PATH");
 			List<Task> testing = mAppInstance.getStorageInstance().readFile(DATA_FILE_PATH);
 			// checkStatus();
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+			mAppInstance.getStorageInstance().writeFile(mTasks, "output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	*/
+	public void executeCommand(ArrayList<Pair<Token, String>> tokens) {
+		for (Pair<Token, String> pair : tokens) {
+			if (pair.getKey() == Token.RESERVED) {
+				try {
+					switch (pair.getValue()) {
+					case "add":
+						Task task = addTask(tokens);
+						mAppInstance.getFormatterInstance().format(task, Format.LIST);
+						break;
+					case "edit":
 
-	public void executeCommand(Vector<Pair<Token, String>> tokens){
-		
+						break;
+					case "list":
+						mAppInstance.getFormatterInstance().format(mTasks, Format.LIST);
+						break;
+					case "delete":
+
+						break;
+					default:
+						// TODO: Unimplemented command
+						break;
+					}
+				} catch (InvalidTaskException e) {
+					// TODO: Dispatch to error class
+				}
+			}
+		}
 	}
-	
+
 	/**
-	 * This method returns all the tasks inside the to-do list, excluding only deleted tasks 
+	 * Constructs the Task object from the parsed tokens and adds it to the
+	 * master list of Tasks
+	 * 
+	 * @param tokens
+	 *            The tokens parsed from the command <b>including</b> the add
+	 *            token itself
+	 * @throws InvalidTaskException
+	 *             Thrown when the Task constructed from the parsed tokens is
+	 *             invalid
 	 */
+	private Task addTask(ArrayList<Pair<Token, String>> tokens) throws InvalidTaskException {
+		Task task = new Task();
+		Iterator<Pair<Token, String>> iter = tokens.iterator();
 
-	public ArrayList<Task> getAllTasks() {
-		return tasks;
+		while (iter.hasNext()) {
+			Pair<Token, String> pair = iter.next();
+			switch (pair.getKey()) {
+			case FLAG:
+				switch (pair.getValue()) {
+				// Flags which expect the next token to be a date
+				case Parser.FLAG_END:
+				case Parser.FLAG_START:
+					if (iter.hasNext()) {
+						Pair<Token, String> nextToken = iter.next();
+						assert(nextToken.getKey() == Token.DATE || nextToken.getKey() == Token.DATE_INVALID);
+						if (nextToken.getKey() == Token.DATE) {
+
+						}
+					}
+					break;
+				}
+				break;
+			case NAME:
+				task.setName(pair.getValue());
+				break;
+			case ALPHA_NUM:
+			case DATE:
+			case DATE_INVALID:
+			case FLAG_INVALID:
+			case ID:
+			case ID_INVALID:
+			case RESERVED:
+			case WHITESPACE:
+				// Do nothing as token is invalid for the add command or out of
+				// place
+				break;
+			}
+		}
+
+		if (task.isValid()) {
+			mTasks.add(task);
+			return task;
+		} else {
+			return null;
+		}
 	}
-	
-	 /**
-     * Find a task based on name
-     * @param name
-     *            the name being searched for 
-     * @return 
-     *        the Task with the name requested if there is only one task with that name, or 
-     *        a list of tasks with the same name
-     */
-    public ArrayList<Task> findTaskByName(String name){
-    	ArrayList<Task> userView = new ArrayList<Task>();
-    	for(int i = 0; i < tasks.size(); i++){
-    		if(tasks.get(i).getName().equals(name)){
-    			userView.add(tasks.get(i));
-    		}
-    	}
-    	
-       return userView;
-    }
-	
+
 	/**
-	 * Add a new task to the main arrayList and also determine the type of the task
+	 * Find a task based on name
+	 * 
+	 * @param name
+	 *            the name being searched for
+	 * @return the Task with the name requested if there is only one task with
+	 *         that name, or a list of tasks with the same name
+	 */
+	public ArrayList<Task> findTaskByName(String name) {
+		ArrayList<Task> userView = new ArrayList<Task>();
+		for (int i = 0; i < mTasks.size(); i++) {
+			if (mTasks.get(i).getName().equals(name)) {
+				userView.add(mTasks.get(i));
+			}
+		}
+
+		return userView;
+	}
+
+	/**
+	 * Add a new task to the main arrayList and also determine the type of the
+	 * task
 	 * 
 	 * @param task
 	 *            the new task to be added
 	 * 
 	 */
 	public void addTask(Task task) {
-		tasks.add(task);
+		mTasks.add(task);
 
 		determineType(task);
 
@@ -89,7 +155,7 @@ public class Logic implements LogicInterface {
 		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST);
 
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+			mAppInstance.getStorageInstance().writeFile(mTasks, "output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -118,7 +184,7 @@ public class Logic implements LogicInterface {
 	}
 
 	public Task getTask(int index) {
-		return tasks.get(index);
+		return mTasks.get(index);
 	}
 
 	/**
@@ -129,14 +195,14 @@ public class Logic implements LogicInterface {
 	 * 
 	 */
 	public Task deleteTask(ArrayList<Task> currentList, int taskIndex) {
-        Task removedTask = currentList.remove(taskIndex);
-    	
-    	if(!currentList.equals(tasks)){
-    		tasks.remove(removedTask);
-    	}
-		mAppInstance.getFormatterInstance().format(removedTask, FormatterInterface.Format.LIST); 
+		Task removedTask = currentList.remove(taskIndex);
+
+		if (!currentList.equals(mTasks)) {
+			mTasks.remove(removedTask);
+		}
+		mAppInstance.getFormatterInstance().format(removedTask, FormatterInterface.Format.LIST);
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+			mAppInstance.getStorageInstance().writeFile(mTasks, "output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -151,30 +217,28 @@ public class Logic implements LogicInterface {
 	 * 
 	 */
 
-	public void archiveTask(ArrayList<Task> currentList, int taskIndex){
-    	Task archivedTask = currentList.get(taskIndex);
-    	archivedTask.setArchived("TRUE");
-		mAppInstance.getFormatterInstance().format(archivedTask, FormatterInterface.Format.LIST); 
+	public void archiveTask(ArrayList<Task> currentList, int taskIndex) {
+		Task archivedTask = currentList.get(taskIndex);
+		archivedTask.setArchived("TRUE");
+		mAppInstance.getFormatterInstance().format(archivedTask, FormatterInterface.Format.LIST);
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+			mAppInstance.getStorageInstance().writeFile(mTasks, "output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-
-	public void markTaskCompleted(ArrayList<Task> currentList, int taskIndex){
-    	Task task = currentList.get(taskIndex);
-    	task.setCompleted("TRUE");
-		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST); 
+	public void markTaskCompleted(ArrayList<Task> currentList, int taskIndex) {
+		Task task = currentList.get(taskIndex);
+		task.setCompleted("TRUE");
+		mAppInstance.getFormatterInstance().format(task, FormatterInterface.Format.LIST);
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
-	
+			mAppInstance.getStorageInstance().writeFile(mTasks, "output.txt");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 
 	/*
 	 * public void checkStatus(){ Date date = new Date(); for(int i = 0; i <
@@ -187,12 +251,12 @@ public class Logic implements LogicInterface {
 	public ArrayList<Task> list() {
 		// checkStatus();
 		ArrayList<Task> userView = new ArrayList<Task>();
-		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.get(i).getArchived().equals("FALSE")) {
-				userView.add(tasks.get(i));
+		for (int i = 0; i < mTasks.size(); i++) {
+			if (mTasks.get(i).getArchived().equals("FALSE")) {
+				userView.add(mTasks.get(i));
 			}
 		}
-		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST); 
+		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST);
 		return userView;
 	}
 
@@ -206,8 +270,8 @@ public class Logic implements LogicInterface {
 
 	public ArrayList<Task> sortByDeadline() {
 		ArrayList<Task> list = new ArrayList<Task>();
-		for (int i = 0; i < tasks.size(); i++) {
-			list.add(tasks.get(i));
+		for (int i = 0; i < mTasks.size(); i++) {
+			list.add(mTasks.get(i));
 		}
 		Collections.sort(list, new Comparator<Task>() {
 			public int compare(Task task1, Task task2) {
@@ -261,7 +325,6 @@ public class Logic implements LogicInterface {
 			original.setCompleted("TRUE");
 		}
 
-
 		if (newTask.getArchived().equals("TRUE")) {
 			original.setArchived("TRUE");
 		}
@@ -286,19 +349,21 @@ public class Logic implements LogicInterface {
 	 * 
 	 */
 	public Task editTask(Task original, Task edittingTask) {
-	
+
 		// potential edits to the type of task
 
 		if (original.getStart() == null && original.getEnd() == null) {// originally
 																		// float
-			if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited to
-																	// events
+			if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited
+																					// to
+				// events
 				original.setType("EVENT");
 			}
 
-			if (edittingTask.getStart() == null && edittingTask.getEnd() != null) {// edited to
-																	// deadline
-																	// tasks
+			if (edittingTask.getStart() == null && edittingTask.getEnd() != null) {// edited
+																					// to
+				// deadline
+				// tasks
 				original.setType("DEADLINE");
 			}
 		} else if (original.getStart() != null && original.getEnd() != null) {// originally
@@ -306,7 +371,8 @@ public class Logic implements LogicInterface {
 			if (edittingTask.getEnd() == null) {// change to float
 				original.setType("FLOAT");
 
-			} else if (edittingTask.getStart() == null) {// change to task with deadline
+			} else if (edittingTask.getStart() == null) {// change to task with
+															// deadline
 				original.setType("DEADLINE");
 			}
 		} else if (original.getStart() == null && original.getEnd() != null) {// originally
@@ -317,17 +383,17 @@ public class Logic implements LogicInterface {
 				original.setType("FLOAT");
 
 			} else if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited
-																			// to
-																			// event
+				// to
+				// event
 				original.setType("EVENT");
 
 			}
 		}
 
 		mergeDetails(original, edittingTask);
-		mAppInstance.getFormatterInstance().format(original, FormatterInterface.Format.LIST); 
+		mAppInstance.getFormatterInstance().format(original, FormatterInterface.Format.LIST);
 		try {
-			mAppInstance.getStorageInstance().writeFile(tasks, "output.txt");
+			mAppInstance.getStorageInstance().writeFile(mTasks, "output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -342,7 +408,7 @@ public class Logic implements LogicInterface {
 
 	public void readFile() {
 		try {
-			tasks = (ArrayList) mAppInstance.getStorageInstance().readFile("output.txt");
+			mTasks = (ArrayList) mAppInstance.getStorageInstance().readFile("output.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -351,8 +417,6 @@ public class Logic implements LogicInterface {
 	public void echo(String s) {
 		mAppInstance.getFormatterInstance().passThrough(s);
 	}
-
-   
 
 	/*
 	 * public static void main(String[] args) { Logic logic = new Logic(); Task

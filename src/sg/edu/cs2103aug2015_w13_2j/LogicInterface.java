@@ -20,7 +20,7 @@ public interface LogicInterface {
 	 * @param tokens
 	 *            The parsed tokens
 	 */
-	public void executeCommand(Vector<Pair<Token, String>> tokens);
+	public void executeCommand(ArrayList<Pair<Token, String>> tokens);
 
 	/**
 	 * This method adds in a new task to the to-do list
@@ -81,8 +81,6 @@ public interface LogicInterface {
 	public Task editTask(Task original, Task edittingTask);
 
 	public ArrayList<Task> sortByDeadline();
-
-	public ArrayList<Task> getAllTasks();
 
 	public ArrayList<Task> list();
 
