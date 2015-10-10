@@ -20,6 +20,21 @@ public interface ParserInterface {
 	public void parseCommand(String command);
 
 	/**
+	 * Passes the parsed tokens to the Logic component to be executed
+	 */
+	public void executeCommand();
+
+	/**
+	 * Convenience method to parse the command and executes it
+	 * 
+	 * @param command
+	 *            The command string entered by the user
+	 * @see ParserInterface#parseCommand
+	 * @see ParserInterface#executeCommand
+	 */
+	public void parseAndExecuteCommand(String command);
+
+	/**
 	 * Retrieves a string in the format of [token1=value][token2=value]...
 	 * representing the tokens parsed from the given command
 	 * 

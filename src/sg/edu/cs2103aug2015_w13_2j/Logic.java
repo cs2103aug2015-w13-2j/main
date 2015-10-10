@@ -10,6 +10,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
+
+import javafx.util.Pair;
+import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 
 public class Logic implements LogicInterface {
 	private FunDUE mAppInstance;
@@ -456,6 +460,12 @@ public class Logic implements LogicInterface {
 		}
 
 		return result;
+	}
+
+	@Override
+	public void executeCommand(Vector<Pair<Token, String>> tokens) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/*
