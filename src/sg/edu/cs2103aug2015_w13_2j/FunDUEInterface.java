@@ -23,13 +23,6 @@ public interface FunDUEInterface {
 	public Logic getLogicInstance();
 
 	/**
-	 * Retrieves the Formatter component of this application instance
-	 * 
-	 * @return The Formatter component
-	 */
-	public Formatter getFormatterInstance();
-
-	/**
 	 * Retrieves the Storage component of this application instance
 	 * 
 	 * @return The Storage component

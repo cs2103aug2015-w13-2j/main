@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javafx.util.Pair;
-import sg.edu.cs2103aug2015_w13_2j.FormatterInterface.Format;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
@@ -35,13 +34,13 @@ public class Logic implements LogicInterface {
 					switch (pair.getValue()) {
 					case "add":
 						Task task = addTask(tokens);
-						mAppInstance.getFormatterInstance().format(task, Format.LIST);
+						mAppInstance.getTextUIInstance().display(mTasks);
 						break;
 					case "edit":
 						editTask(tokens);
 						break;
 					case "list":
-						mAppInstance.getFormatterInstance().format(mTasks, Format.LIST);
+						mAppInstance.getTextUIInstance().display(mTasks);
 						break;
 					case "delete":
 						deleteTask(tokens);
@@ -63,7 +62,7 @@ public class Logic implements LogicInterface {
 	}
 	
 	public void echo(String s) {
-		mAppInstance.getFormatterInstance().passThrough(s);
+		mAppInstance.getTextUIInstance().print(s);
 	}
 
 	/**

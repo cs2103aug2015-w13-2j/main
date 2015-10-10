@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -72,62 +73,22 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 		this.setVisible(true);
 		mTextField.requestFocusInWindow();
 	}
-
-	public void print(String s) {
-		print(s, 0);
-	}
-
-	public void printr(String s) {
-		print(s, mPrevLen);
-	}
-
-	public void println(String s) {
-		print(s + NEWLINE);
-	}
-
-	public void printlnr(String s) {
-		printr(s + NEWLINE);
-	}
-
-	/**
-	 * Internally used method to print the string to the text pane at the
-	 * specified position from the end of the document. If provided offset is
-	 * not 0, the method will first remove string of length offset from the end
-	 * of document and then prints the provided string
-	 * 
-	 * @param s
-	 *            The string to be printed
-	 * @param offset
-	 *            Positive integer representing offset from end of document
-	 */
-	private void print(String s, int offset) {
-		StyledDocument document = mTextPane.getStyledDocument();
-		try {
-			mPrevLen = s.length();
-			// Remove string of length offset from end of document
-			if (offset > 0) {
-				document.remove(document.getLength() - offset, offset);
-			}
-			document.insertString(document.getLength(), s, null);
-		} catch (BadLocationException e) {
-			e.printStackTrace();
+	
+	public void display(ArrayList<Task> tasks) {
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < tasks.size(); i++) {
+			sb.append(i);
+			sb.append(": ");
+			sb.append(tasks.get(i).getName());
+			sb.append('\n');
 		}
+		printr(sb.toString());
 	}
 
-	public void addTextFieldKeyListener(KeyListener listener) {
-		mTextField.addKeyListener(listener);
-	}
-
-	public void removeTextFieldKeyListener(KeyListener listener) {
-		mTextField.removeKeyListener(listener);
-	}
-
-	@Override
 	public void keyTyped(KeyEvent e) {
 		// Empty function
 	}
 
-	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_ENTER:
@@ -154,8 +115,56 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 		}
 	}
 
-	@Override
 	public void keyReleased(KeyEvent e) {
 		// Empty function
+	}
+
+	public void print(String s) {
+		print(s, 0);
+	}
+
+	public void printr(String s) {
+		print(s, mPrevLen);
+	}
+
+	public void println(String s) {
+		print(s + NEWLINE);
+	}
+
+	public void printlnr(String s) {
+		printr(s + NEWLINE);
+	}
+
+	public void addTextFieldKeyListener(KeyListener listener) {
+		mTextField.addKeyListener(listener);
+	}
+
+	public void removeTextFieldKeyListener(KeyListener listener) {
+		mTextField.removeKeyListener(listener);
+	}
+	
+	/**
+	 * Internally used method to print the string to the text pane at the
+	 * specified position from the end of the document. If provided offset is
+	 * not 0, the method will first remove string of length offset from the end
+	 * of document and then prints the provided string
+	 * 
+	 * @param s
+	 *            The string to be printed
+	 * @param offset
+	 *            Positive integer representing offset from end of document
+	 */
+	private void print(String s, int offset) {
+		StyledDocument document = mTextPane.getStyledDocument();
+		try {
+			mPrevLen = s.length();
+			// Remove string of length offset from end of document
+			if (offset > 0) {
+				document.remove(document.getLength() - offset, offset);
+			}
+			document.insertString(document.getLength(), s, null);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
 	}
 }

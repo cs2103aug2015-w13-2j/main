@@ -4,7 +4,6 @@ package sg.edu.cs2103aug2015_w13_2j;
 public class FunDUE implements FunDUEInterface {
 	private TextUI mTextUI;
 	private Parser mParser;
-	private Formatter mFormatter;
 	private Logic mLogic;
 	private Storage mStorage;
 
@@ -16,7 +15,6 @@ public class FunDUE implements FunDUEInterface {
 	public FunDUE() {
 		mTextUI = new TextUI(this);
 		mParser = new Parser(this);
-		mFormatter = new Formatter(this);
 		mLogic = new Logic(this);
 		mStorage = new Storage();
 	}
@@ -27,10 +25,6 @@ public class FunDUE implements FunDUEInterface {
 
 	public Parser getParserInstance() {
 		return mParser;
-	}
-
-	public Formatter getFormatterInstance() {
-		return mFormatter;
 	}
 
 	public Logic getLogicInstance() {

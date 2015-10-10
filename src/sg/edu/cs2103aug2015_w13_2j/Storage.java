@@ -31,7 +31,7 @@ public class Storage implements StorageInterface {
     		if(taskString.isEmpty() || taskString.equals("\r") || taskString.equals("\n")) {
     			continue;
     		} else {
-    			tasks.add(Task.parseTask(taskString));
+    			tasks.add(TaskInterface.parseTask(taskString));
     		}
     	}
         return tasks;
