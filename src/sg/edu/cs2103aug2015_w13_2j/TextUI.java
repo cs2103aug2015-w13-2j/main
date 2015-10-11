@@ -20,242 +20,279 @@ import javax.swing.text.StyledDocument;
 
 //@@author A0121410H
 public class TextUI extends JFrame implements TextUIInterface, KeyListener {
-	public enum Message {
-		CLEAR("", FeedbackType.INFO),
-		
-		// Errors
-		ERROR_INVALID_TASK("Invalid task. Did you remember to include quotes around the task name?", FeedbackType.ERROR),
-		ERROR_TASK_NOT_FOUND("Task not found. Did you enter the index correctly?", FeedbackType.ERROR),
-		ERROR_COMMAND_NOT_IMPLEMENTED("The command that you have entered has not been implemented.", FeedbackType.ERROR),
-		ERROR_COMMAND_NOT_RECOGNIZED("Command not recognized.", FeedbackType.ERROR),
-		
-		// Infomative
-		LOGIC_ADDED("Task added successfully.", FeedbackType.INFO),
-		LOGIC_EDITED("Task edited successfully.", FeedbackType.INFO),
-		LOGIC_DELETED("Task deleted successfully.", FeedbackType.INFO);
+    /**
+     * Enumeration of user feedback messages to the user. As this is implemented
+     * as an enum, the messages do not contain dynamic data. Each enum element
+     * is self contained with the message text {@link Message#getMessage()} and
+     * styling {@link Message#getType()} to be shown to the user
+     * 
+     * @author Zhu Chunqi
+     *
+     */
+    public enum Message {
+        // Used to clear the feedback label
+        CLEAR("", FeedbackType.INFO),
 
-		private String mMsg;
-		private FeedbackType mType;
+        // Errors
+        ERROR_INVALID_TASK("Invalid task. Did you remember to include quotes around the task name?", FeedbackType.ERROR),
+        ERROR_TASK_NOT_FOUND("Task not found. Did you enter the index correctly?", FeedbackType.ERROR),
+        ERROR_COMMAND_NOT_IMPLEMENTED("The command that you have entered has not been implemented.", FeedbackType.ERROR),
+        ERROR_COMMAND_NOT_RECOGNIZED("Command not recognized.", FeedbackType.ERROR),
 
-		private Message(String s, FeedbackType type) {
-			mMsg = s;
-			mType = type;
-		}
+        // Informative
+        LOGIC_ADDED("Task added successfully.", FeedbackType.INFO),
+        LOGIC_EDITED("Task edited successfully.", FeedbackType.INFO),
+        LOGIC_DELETED("Task deleted successfully.", FeedbackType.INFO);
 
-		public String getMessage() {
-			return mMsg;
-		}
+        private String mMsg;
+        private FeedbackType mType;
 
-		public FeedbackType getType() {
-			return mType;
-		}
-	}
+        private Message(String s, FeedbackType type) {
+            mMsg = s;
+            mType = type;
+        }
 
-	public enum FeedbackType {
-		INFO(Color.BLACK), ERROR(Color.RED);
+        /**
+         * Retrieves the message text
+         * 
+         * @return The message text
+         */
+        public String getMessage() {
+            return mMsg;
+        }
 
-		private Color mColor;
+        /**
+         * Retrieves the FeedbackType enum containing the styling information
+         * for this message
+         * 
+         * @return FeedbackType enum for this message
+         * @see FeedbackType
+         */
+        public FeedbackType getType() {
+            return mType;
+        }
+    }
 
-		private FeedbackType(Color color) {
-			mColor = color;
-		}
+    /**
+     * Enumeration of the styling for the different types of user feedback
+     * messages. The color of font to be used for each feedback type can be
+     * retrieved via {@link FeedbackType#getColor()}
+     * 
+     * @author Zhu Chunqi
+     *
+     */
+    public enum FeedbackType {
+        INFO(Color.BLACK), ERROR(Color.RED);
 
-		public Color getColor() {
-			return mColor;
-		}
-	}
+        private Color mColor;
 
-	// For portability across Unix and Windows systems
-	public static final String NEWLINE = System.getProperty("line.separator");
+        private FeedbackType(Color color) {
+            mColor = color;
+        }
 
-	private static final Font FONT = new Font("consolas", Font.BOLD, 16);
+        /**
+         * Retrieves the color that should be used to style this type of
+         * feedback
+         * 
+         * @return Color object to be used for this type of feedback
+         */
+        public Color getColor() {
+            return mColor;
+        }
+    }
 
-	// Serialization ID
-	private static final long serialVersionUID = 7758912303888211773L;
+    // For portability across Unix and Windows systems
+    public static final String NEWLINE = System.getProperty("line.separator");
 
-	// The (fixed) size of the window
-	private static final Dimension PREFERRED_SIZE = new Dimension(800, 600);
+    private static final Font FONT = new Font("consolas", Font.BOLD, 16);
 
-	private FunDUE mAppInstance;
-	private JTextField mTextField;
-	private JTextPane mTextPane;
-	private JLabel mLabel;
-	private int mPrevLen = 0;
+    // Serialization ID
+    private static final long serialVersionUID = 7758912303888211773L;
 
-	public TextUI(FunDUE appInstance) {
-		mAppInstance = appInstance;
+    // The (fixed) size of the window
+    private static final Dimension PREFERRED_SIZE = new Dimension(800, 600);
 
-		// Create and set up window
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setResizable(false);
+    private FunDUE mAppInstance;
+    private JTextField mTextField;
+    private JTextPane mTextPane;
+    private JLabel mLabel;
+    private int mPrevLen = 0;
 
-		Container contentPane = this.getContentPane();
-		contentPane.setLayout(new GridBagLayout());
-		contentPane.setPreferredSize(PREFERRED_SIZE);
+    public TextUI(FunDUE appInstance) {
+        mAppInstance = appInstance;
 
-		// Will be reused for each GUI component
-		GridBagConstraints constraints = null;
+        // Create and set up window
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
 
-		mTextPane = new JTextPane();
-		mTextPane.setEditable(false);
-		mTextPane.setFont(FONT);
-		mTextPane.setBackground(Color.BLACK);
-		mTextPane.setForeground(Color.WHITE);
-		JScrollPane scrollPane = new JScrollPane(mTextPane);
-		constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.weighty = 1.0;
-		constraints.weightx = 1.0;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		contentPane.add(scrollPane, constraints);
+        Container contentPane = this.getContentPane();
+        contentPane.setLayout(new GridBagLayout());
+        contentPane.setPreferredSize(PREFERRED_SIZE);
 
-		mLabel = new JLabel("Test");
-		mLabel.setFont(FONT);
-		constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		contentPane.add(mLabel, constraints);
+        // Will be reused for each GUI component
+        GridBagConstraints constraints = null;
 
-		mTextField = new JTextField();
-		mTextField.addKeyListener(this);
-		mTextField.setFont(FONT);
-		constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-		contentPane.add(mTextField, constraints);
+        mTextPane = new JTextPane();
+        mTextPane.setEditable(false);
+        mTextPane.setFont(FONT);
+        mTextPane.setBackground(Color.BLACK);
+        mTextPane.setForeground(Color.WHITE);
+        JScrollPane scrollPane = new JScrollPane(mTextPane);
+        constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weighty = 1.0;
+        constraints.weightx = 1.0;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        contentPane.add(scrollPane, constraints);
 
-		// Display the window
-		this.setLocation(100, 100);
-		this.pack();
-		this.setVisible(true);
-		mTextField.requestFocusInWindow();
-	}
+        mLabel = new JLabel("Test");
+        mLabel.setFont(FONT);
+        constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        contentPane.add(mLabel, constraints);
 
-	public void display(ArrayList<Task> tasks) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < tasks.size(); i++) {
-			sb.append(i);
-			sb.append(": ");
-			sb.append(tasks.get(i).getName());
-			sb.append('\n');
-		}
-		printr(sb.toString());
-	}
+        mTextField = new JTextField();
+        mTextField.addKeyListener(this);
+        mTextField.setFont(FONT);
+        constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        contentPane.add(mTextField, constraints);
 
-	public void feedback(Message m) {
-		mLabel.setForeground(m.getType().getColor());
-		mLabel.setText(m.getMessage());
-	}
+        // Display the window
+        this.setLocation(100, 100);
+        this.pack();
+        this.setVisible(true);
+        mTextField.requestFocusInWindow();
+    }
 
-	public void addTextFieldKeyListener(KeyListener listener) {
-		mTextField.addKeyListener(listener);
-	}
+    public void display(ArrayList<Task> tasks) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tasks.size(); i++) {
+            sb.append(i);
+            sb.append(": ");
+            sb.append(tasks.get(i).getName());
+            sb.append('\n');
+        }
+        printr(sb.toString());
+    }
 
-	public void removeTextFieldKeyListener(KeyListener listener) {
-		mTextField.removeKeyListener(listener);
-	}
+    public void feedback(Message m) {
+        mLabel.setForeground(m.getType().getColor());
+        mLabel.setText(m.getMessage());
+    }
 
-	public void keyTyped(KeyEvent e) {
-		// Empty function
-	}
+    public void addTextFieldKeyListener(KeyListener listener) {
+        mTextField.addKeyListener(listener);
+    }
 
-	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_ENTER:
-			// Hijack the snake command
-			if (mTextField.getText().equalsIgnoreCase("snake")) {
-				new SnakeTXT();
-			} else {
-				System.out.println("[TextUI] Command: " + mTextField.getText());
-				mAppInstance.getParserInstance().parseAndExecuteCommand(mTextField.getText());
-			}
-			mTextField.setText(null);
-			break;
-		case KeyEvent.VK_UP:
-			// TODO: Pass to parser
-			break;
-		case KeyEvent.VK_DOWN:
-			// TODO: Pass to parser
-			break;
-		case KeyEvent.VK_ESCAPE:
-			System.exit(0);
-			break;
-		default:
-			break;
-		}
-	}
+    public void removeTextFieldKeyListener(KeyListener listener) {
+        mTextField.removeKeyListener(listener);
+    }
 
-	public void keyReleased(KeyEvent e) {
-		// Empty function
-	}
+    public void keyTyped(KeyEvent e) {
+        // Empty function
+    }
 
-	/**
-	 * Prints the string to the text pane
-	 * 
-	 * @param s
-	 *            The string to be printed
-	 */
-	private void print(String s) {
-		print(s, 0);
-	}
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+        case KeyEvent.VK_ENTER:
+            // Hijack the snake command
+            if (mTextField.getText().equalsIgnoreCase("snake")) {
+                new SnakeTXT();
+            } else {
+                System.out.println("[TextUI] Command: " + mTextField.getText());
+                mAppInstance.getParserInstance().parseAndExecuteCommand(
+                        mTextField.getText());
+            }
+            mTextField.setText(null);
+            break;
+        case KeyEvent.VK_UP:
+            // TODO: Pass to parser
+            break;
+        case KeyEvent.VK_DOWN:
+            // TODO: Pass to parser
+            break;
+        case KeyEvent.VK_ESCAPE:
+            System.exit(0);
+            break;
+        default:
+            break;
+        }
+    }
 
-	/**
-	 * Prints the string to replace the previously printed string
-	 * 
-	 * @param s
-	 *            The string to be printed in replacement of previous string
-	 */
-	private void printr(String s) {
-		print(s, mPrevLen);
-	}
+    public void keyReleased(KeyEvent e) {
+        // Empty function
+    }
 
-	/**
-	 * Prints the string to the text pane with a newline. Internally calls print
-	 * with newline appended to the provided string
-	 * 
-	 * @param s
-	 *            The string to be printed
-	 */
-	private void println(String s) {
-		print(s + NEWLINE);
-	}
+    /**
+     * Prints the string to the text pane
+     * 
+     * @param s
+     *            The string to be printed
+     */
+    private void print(String s) {
+        print(s, 0);
+    }
 
-	/**
-	 * Prints the string to replace the previously printed string with a
-	 * newline. Internally calls printr with newline appended to provided string
-	 * 
-	 * @param s
-	 *            The string the be printed in replacement of previous string
-	 */
-	private void printlnr(String s) {
-		printr(s + NEWLINE);
-	}
+    /**
+     * Prints the string to replace the previously printed string
+     * 
+     * @param s
+     *            The string to be printed in replacement of previous string
+     */
+    private void printr(String s) {
+        print(s, mPrevLen);
+    }
 
-	/**
-	 * Internally used method to print the string to the text pane at the
-	 * specified position from the end of the document. If provided offset is
-	 * not 0, the method will first remove string of length offset from the end
-	 * of document and then prints the provided string
-	 * 
-	 * @param s
-	 *            The string to be printed
-	 * @param offset
-	 *            Positive integer representing offset from end of document
-	 */
-	private void print(String s, int offset) {
-		StyledDocument document = mTextPane.getStyledDocument();
-		try {
-			mPrevLen = s.length();
-			// Remove string of length offset from end of document
-			if (offset > 0) {
-				document.remove(document.getLength() - offset, offset);
-			}
-			document.insertString(document.getLength(), s, null);
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * Prints the string to the text pane with a newline. Internally calls print
+     * with newline appended to the provided string
+     * 
+     * @param s
+     *            The string to be printed
+     */
+    private void println(String s) {
+        print(s + NEWLINE);
+    }
+
+    /**
+     * Prints the string to replace the previously printed string with a
+     * newline. Internally calls printr with newline appended to provided string
+     * 
+     * @param s
+     *            The string the be printed in replacement of previous string
+     */
+    private void printlnr(String s) {
+        printr(s + NEWLINE);
+    }
+
+    /**
+     * Internally used method to print the string to the text pane at the
+     * specified position from the end of the document. If provided offset is
+     * not 0, the method will first remove string of length offset from the end
+     * of document and then prints the provided string
+     * 
+     * @param s
+     *            The string to be printed
+     * @param offset
+     *            Positive integer representing offset from end of document
+     */
+    private void print(String s, int offset) {
+        StyledDocument document = mTextPane.getStyledDocument();
+        try {
+            mPrevLen = s.length();
+            // Remove string of length offset from end of document
+            if (offset > 0) {
+                document.remove(document.getLength() - offset, offset);
+            }
+            document.insertString(document.getLength(), s, null);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+    }
 }
