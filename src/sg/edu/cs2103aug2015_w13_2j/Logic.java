@@ -17,17 +17,6 @@ public class Logic implements LogicInterface {
 		mAppInstance = appInstance;
 	}
 
-	/*
-	 * public void init() { try { String DATA_FILE_PATH =
-	 * mAppInstance.getStorageInstance().readRawFile("DATA_FILE_PATH");
-	 * List<Task> testing =
-	 * mAppInstance.getStorageInstance().readFile(DATA_FILE_PATH); //
-	 * checkStatus(); <<<<<<< HEAD
-	 * mAppInstance.getStorageInstance().writeFile(mTasks, "output.txt");
-	 * ======= mAppInstance.getStorageInstance().writeFile(tasks,
-	 * "DATA_FILE_PATH"); >>>>>>> 2f2762fa379c83f29936541cc4744bd9db8a7932 }
-	 * catch (Exception e) { e.printStackTrace(); } }
-	 */
 	public void executeCommand(ArrayList<Pair<Token, String>> tokens) {
 		for (Pair<Token, String> pair : tokens) {
 			if (pair.getKey() == Token.RESERVED) {
@@ -219,11 +208,12 @@ public class Logic implements LogicInterface {
 	 * from the storage and fills up the internal ArrayList
 	 * 
 	 */
-
 	/*
+	// Why is this public?
 	public void readFile() {
 		try {
-			tasks = (ArrayList) mAppInstance.getStorageInstance().readFile("DATA_FILE_PATH");
+			String path = mAppInstance.getStorageInstance().readRawFile("DATA_FILE_PATH");
+			tasks = (ArrayList) mAppInstance.getStorageInstance().readFile(path);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
