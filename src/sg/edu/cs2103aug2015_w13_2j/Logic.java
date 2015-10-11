@@ -1,6 +1,8 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import javafx.util.Pair;
@@ -125,6 +127,8 @@ public class Logic implements LogicInterface {
 	private Task addTask(ArrayList<Pair<Token, String>> tokens) throws InvalidTaskException {
 		Task task = updateTask(tokens, new Task());
 		mTasks.add(task);
+		determineType(task);
+		sortByDeadline();
 		System.out.println("[Logic] Added task");
 		System.out.print(task);
 		return task;
@@ -158,6 +162,7 @@ public class Logic implements LogicInterface {
 		updateTask(tokens, task);
 		System.out.println("[Logic] After");
 		System.out.print(task);
+		sortByDeadline();
 	}
 
 	/**
@@ -201,6 +206,7 @@ public class Logic implements LogicInterface {
 				break;
 			}
 		}
+		
 	}
 
 	/**
@@ -271,7 +277,9 @@ public class Logic implements LogicInterface {
 	 */
 	private Task removeTask(int index) throws TaskNotFoundException {
 		if (index >= 0 && index < mTasks.size()) {
-			return mTasks.remove(index);
+			Task toRemove = mTasks.remove(index);
+			sortByDeadline();
+			return toRemove;
 		} else {
 			throw new TaskNotFoundException();
 		}
@@ -298,4 +306,57 @@ public class Logic implements LogicInterface {
 			throw new TaskNotFoundException();
 		}
 	}
+	
+	/**
+	 * This method sorts a list of tasks according to their deadlines(if any)
+	 * The tasks with deadlines takes priority, followed by events sorted
+	 * according to start time and floats to be added last, sorted by their
+	 * names
+	 * 
+	 */
+
+	public ArrayList<Task> sortByDeadline() {
+
+		Collections.sort(mTasks, new Comparator<Task>() {
+			public int compare(Task task1, Task task2) {
+				if (task1.getType().equals(task2.getType())) {
+					if (task1.getType().equals("DEADLINE")) {
+						return task1.getEnd().compareTo(task2.getEnd());
+					} else if (task1.getType().equals("EVENT")) {
+						return task1.getStart().compareTo(task2.getStart());
+					} else {
+						return task1.getName().compareTo(task2.getName());
+					}
+				} else {
+					return task1.getType().compareTo(task2.getType());
+				}
+			}
+		});
+
+		return mTasks;
+	}
+	
+
+	/**
+	 * Determine the type of a task based on its start (if any) and end (if any)
+	 * times
+	 * 
+	 * @param task
+	 *            the new task to be categorized
+	 */
+	public void determineType(Task task) {
+		if (task.getEnd() == null) {
+			// if end == null, float
+			task.setType("FLOAT");
+		} else {
+			if (task.getStart() != null) {
+				// if end != null and start != null, event
+				task.setType("EVENT");
+			} else {
+				// if end != null but start == null, deadline
+				task.setType("DEADLINE");
+			}
+		}
+	}
+
 }
