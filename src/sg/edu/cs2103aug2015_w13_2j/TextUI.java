@@ -8,7 +8,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -104,7 +106,22 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     // For portability across Unix and Windows systems
     public static final String NEWLINE = System.getProperty("line.separator");
 
+    // Internally used constants for formatting the UI
     private static final Font FONT = new Font("consolas", Font.BOLD, 16);
+    private static final int WIDTH_ID = 4;
+    private static final int WIDTH_NAME = 47;
+    private static final int WIDTH_DATE = 16;
+    private static final int WIDTH_TOTAL = WIDTH_ID + 1 + WIDTH_NAME + 1 + WIDTH_DATE + 1 + WIDTH_DATE;
+    private static final String HEADER_ID = "ID";
+    private static final String HEADER_NAME = "TASK NAME";
+    private static final String HEADER_START = "START";
+    private static final String HEADER_END = "END";
+    private static final String HEADER_NO_TASKS = "NO TASKS TO DISPLAY";
+    private static final char SEPARATOR_VERTICAL = '|';
+    private static final char SEPARATOR_HORIZONTAL = '-';
+    private static final char SEPARATOR_CROSS = '+';
+    private static final char SEPARATOR_BLANK = ' ';
+    private static final SimpleDateFormat FORMAT_DATE = new SimpleDateFormat("dd/MM/yy'T'HH:mm");
 
     // Serialization ID
     private static final long serialVersionUID = 7758912303888211773L;
@@ -172,12 +189,19 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 
     public void display(ArrayList<Task> tasks) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < tasks.size(); i++) {
-            sb.append(i);
-            sb.append(": ");
-            sb.append(tasks.get(i).getName());
-            sb.append('\n');
+        writeHeader(sb);
+        writeSeparator(sb);
+        if(tasks.size() > 0) {
+            for (int i = 0; i < tasks.size(); i++) {
+                writeTask(sb, tasks.get(i), i);
+            }
+        } else {
+            sb.append(SEPARATOR_VERTICAL);
+            writeCentered(sb, HEADER_NO_TASKS, WIDTH_TOTAL);
+            sb.append(SEPARATOR_VERTICAL);
+            sb.append(NEWLINE);
         }
+        writeSeparator(sb);
         printr(sb.toString());
     }
 
@@ -227,6 +251,89 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 
     public void keyReleased(KeyEvent e) {
         // Empty function
+    }
+    
+    private void writeHeader(StringBuilder sb) {
+        sb.append(SEPARATOR_VERTICAL);
+        writeCentered(sb, HEADER_ID, WIDTH_ID);
+        sb.append(SEPARATOR_VERTICAL);
+        writeCentered(sb, HEADER_NAME, WIDTH_NAME);
+        sb.append(SEPARATOR_VERTICAL);
+        writeCentered(sb, HEADER_START, WIDTH_DATE);
+        sb.append(SEPARATOR_VERTICAL);
+        writeCentered(sb, HEADER_END, WIDTH_DATE);
+        sb.append(SEPARATOR_VERTICAL);
+        sb.append(NEWLINE);
+    }
+    
+    private void writeSeparator(StringBuilder sb) {
+        sb.append(SEPARATOR_CROSS);
+        writeRepeat(sb, SEPARATOR_HORIZONTAL, WIDTH_ID);
+        sb.append(SEPARATOR_CROSS);
+        writeRepeat(sb, SEPARATOR_HORIZONTAL, WIDTH_NAME);
+        sb.append(SEPARATOR_CROSS);
+        writeRepeat(sb, SEPARATOR_HORIZONTAL, WIDTH_DATE);
+        sb.append(SEPARATOR_CROSS);
+        writeRepeat(sb, SEPARATOR_HORIZONTAL, WIDTH_DATE);
+        sb.append(SEPARATOR_CROSS);
+        sb.append(NEWLINE);
+    }
+    
+    private void writeTask(StringBuilder sb, Task t, int id) {
+        sb.append(SEPARATOR_VERTICAL);
+        writeID(sb, id);
+        sb.append(SEPARATOR_VERTICAL);
+        writeTaskName(sb, t.getName());
+        sb.append(SEPARATOR_VERTICAL);
+        writeDate(sb, t.getStart());
+        sb.append(SEPARATOR_VERTICAL);
+        writeDate(sb, t.getEnd());
+        sb.append(SEPARATOR_VERTICAL);
+        sb.append(NEWLINE);
+    }
+    
+    private void writeCentered(StringBuilder sb, String header, int width) {
+        assert(header.length() < width);
+        int start = (width - header.length()) / 2;
+        writeRepeat(sb, SEPARATOR_BLANK, start);
+        sb.append(header);
+        writeRepeat(sb, SEPARATOR_BLANK, width - start- header.length());
+    }
+    
+    private void writeID(StringBuilder sb, int id) {
+        assert(id >= 0 && id <= 9999);
+        // TODO: Assumed width to be 4
+        if(id < 10) {
+            sb.append("  " + id + " ");
+        } else if(id < 100) {
+            sb.append(" " + id + " ");
+        } else if(id < 1000) {
+            sb.append(id);
+        }
+    }
+    
+    private void writeTaskName(StringBuilder sb, String taskName) {
+        assert(taskName != null && taskName.length() > 0);
+        if(taskName.length() < WIDTH_NAME) {
+            sb.append(taskName);
+            writeRepeat(sb, SEPARATOR_BLANK, WIDTH_NAME - taskName.length());
+        } else {
+            sb.append(taskName.substring(0, WIDTH_NAME - 3) + "...");
+        }
+    }
+    
+    private void writeDate(StringBuilder sb, Date date) {
+        if(date == null) {
+            writeCentered(sb, "---", WIDTH_DATE);
+        } else {
+            writeCentered(sb, FORMAT_DATE.format(date), WIDTH_DATE);
+        }
+    }
+    
+    private void writeRepeat(StringBuilder sb, char c, int n) {
+        for(int i = 0; i < n; i++) {
+            sb.append(c);
+        }
     }
 
     /**
