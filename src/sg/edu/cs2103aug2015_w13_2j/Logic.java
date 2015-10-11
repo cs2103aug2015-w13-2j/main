@@ -215,7 +215,6 @@ public class Logic implements LogicInterface {
 	 * 
 	 */
 	/*
-	// Why is this public?
 	private void readFile() {
 		try {
 			String path = mAppInstance.getStorageInstance().readRawFile("DATA_FILE_PATH");
