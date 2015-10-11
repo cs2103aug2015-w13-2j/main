@@ -216,7 +216,7 @@ public class Logic implements LogicInterface {
 	 */
 	/*
 	// Why is this public?
-	public void readFile() {
+	private void readFile() {
 		try {
 			String path = mAppInstance.getStorageInstance().readRawFile("DATA_FILE_PATH");
 			tasks = (ArrayList) mAppInstance.getStorageInstance().readFile(path);
@@ -315,7 +315,7 @@ public class Logic implements LogicInterface {
 	 * 
 	 */
 
-	public ArrayList<Task> sortByDeadline() {
+	private ArrayList<Task> sortByDeadline() {
 
 		Collections.sort(mTasks, new Comparator<Task>() {
 			public int compare(Task task1, Task task2) {
@@ -344,7 +344,7 @@ public class Logic implements LogicInterface {
 	 * @param task
 	 *            the new task to be categorized
 	 */
-	public void determineType(Task task) {
+	private void determineType(Task task) {
 		if (task.getEnd() == null) {
 			// if end == null, float
 			task.setType("FLOAT");
