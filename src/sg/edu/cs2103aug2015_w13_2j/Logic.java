@@ -20,6 +20,15 @@ public class Logic implements LogicInterface {
 	}
 
 	public void executeCommand(ArrayList<Pair<Token, String>> tokens) {
+	    // Remove whitespaces first
+	    Iterator<Pair<Token, String>> iter = tokens.iterator();
+	    while(iter.hasNext()) {
+	        Pair<Token, String> pair = iter.next();
+	        if(pair.getKey() == Token.WHITESPACE) {
+	            iter.remove();
+	        }
+	    }
+	    
 		for (Pair<Token, String> pair : tokens) {
 			if (pair.getKey() == Token.RESERVED) {
 				try {
@@ -73,7 +82,7 @@ public class Logic implements LogicInterface {
 	 *             Thrown when the Task constructed from the parsed tokens is
 	 *             invalid
 	 */
-	private Task updateTask(ArrayList<Pair<Token, String>> tokens, Task task) throws InvalidTaskException {
+	private void updateTask(ArrayList<Pair<Token, String>> tokens, Task task) throws InvalidTaskException {
 		Iterator<Pair<Token, String>> iter = tokens.iterator();
 
 		while (iter.hasNext()) {
@@ -85,14 +94,15 @@ public class Logic implements LogicInterface {
 				// Flags which expect the next token to be a date
 				case Parser.FLAG_END:
 				case Parser.FLAG_START:
+				    System.out.println("[Logic] Flag encountered: " + flag);
 					if (iter.hasNext()) {
 						Pair<Token, String> nextPair = iter.next();
 						assert(nextPair.getKey() == Token.DATE || nextPair.getKey() == Token.DATE_INVALID);
 						// Only set valid dates
 						if (nextPair.getKey() == Token.DATE) {
-							if (flag == Parser.FLAG_END) {
+							if (flag.compareTo(Parser.FLAG_END) == 0) {
 								task.setEnd(nextPair.getValue());
-							} else if (flag == Parser.FLAG_START) {
+							} else if (flag.compareTo(Parser.FLAG_START) == 0) {
 								task.setStart(nextPair.getValue());
 							}
 						}
@@ -117,15 +127,12 @@ public class Logic implements LogicInterface {
 		}
 
 		// Check if the constructed Task is valid
-		if (task.isValid()) {
-			return task;
-		} else {
-			return null;
-		}
+		task.isValid();
 	}
 
 	private Task addTask(ArrayList<Pair<Token, String>> tokens) throws InvalidTaskException {
-		Task task = updateTask(tokens, new Task());
+		Task task = new Task();
+		updateTask(tokens, task);
 		mTasks.add(task);
 		determineType(task);
 		sortByDeadline();
