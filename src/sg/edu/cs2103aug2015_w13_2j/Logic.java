@@ -299,6 +299,9 @@ public class Logic implements LogicInterface {
 		}
 	}
 	
+	
+	//@@author A0133387B
+	
 	private Task archiveTask(int index) throws TaskNotFoundException {
 		Task archivedTask = new Task();
 		if (index >= 0 && index < mTasks.size()) {
@@ -344,6 +347,18 @@ public class Logic implements LogicInterface {
 				}
 			}
 		});
+
+		return mTasks;
+	}
+	
+	
+	private ArrayList<Task> search(String keyword) {
+		ArrayList<Task> containKeyword = new ArrayList<Task>();
+		for(int i= 0; i < mTasks.size(); i++){
+			if(mTasks.get(i).getName().toLowerCase().contains(keyword.toLowerCase())){
+				containKeyword.add(mTasks.get(i));
+			}
+		}
 
 		return mTasks;
 	}
