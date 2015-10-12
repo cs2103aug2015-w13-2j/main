@@ -70,6 +70,28 @@ public class Logic implements LogicInterface {
 	public void echo(String s) {
 		//mAppInstance.getTextUIInstance().print(s);
 	}
+	
+	/**
+	 * Reads the tasks from data file to mTasks
+	 */
+	private void readFile() {
+		try {
+			mTasks = (ArrayList) mAppInstance.getStorageInstance().readTasksFromDataFile();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Writes the list of tasks in mTasks to the data file
+	 */
+	private void writeFile() {
+		try {
+			mAppInstance.getStorageInstance().writeTasksToDataFile(mTasks);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Updates the passed in Task object based on the parsed tokens
@@ -217,22 +239,6 @@ public class Logic implements LogicInterface {
 	}
 
 	/**
-	 * This method updates the tasks list upon a new session It reads the file
-	 * from the storage and fills up the internal ArrayList
-	 * 
-	 */
-	/*
-	private void readFile() {
-		try {
-			String path = mAppInstance.getStorageInstance().readRawFile("DATA_FILE_PATH");
-			tasks = (ArrayList) mAppInstance.getStorageInstance().readFile(path);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	*/
-
-	/**
 	 * Retrieves the index of the first occurrence of a Task object with the
 	 * name provided
 	 * 
@@ -320,9 +326,7 @@ public class Logic implements LogicInterface {
 	 * names
 	 * 
 	 */
-
 	private ArrayList<Task> sortByDeadline() {
-
 		Collections.sort(mTasks, new Comparator<Task>() {
 			public int compare(Task task1, Task task2) {
 				if (task1.getType().equals(task2.getType())) {
