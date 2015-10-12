@@ -189,9 +189,11 @@ public class Logic implements LogicInterface {
 		System.out.println("[Logic] Before");
 		System.out.print(task);
 		updateTask(tokens, task);
+		determineType(task);
+		sortByDeadline();
 		System.out.println("[Logic] After");
 		System.out.print(task);
-		sortByDeadline();
+		
 	}
 
 	/**
