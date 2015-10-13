@@ -21,6 +21,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
 //@@author A0121410H
+
 public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     /**
      * Enumeration of user feedback messages to the user. As this is implemented
@@ -188,6 +189,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     }
 
     public void display(ArrayList<Task> tasks) {
+        clear();
         StringBuilder sb = new StringBuilder();
         writeHeader(sb);
         writeSeparator(sb);
@@ -209,6 +211,14 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         mLabel.setForeground(m.getType().getColor());
         mLabel.setText(m.getMessage());
     }
+    
+    public void print(String s) {
+        print(s, 0);
+    }
+
+    public void printr(String s) {
+        print(s, mPrevLen);
+    }
 
     public void addTextFieldKeyListener(KeyListener listener) {
         mTextField.addKeyListener(listener);
@@ -227,7 +237,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         case KeyEvent.VK_ENTER:
             // Hijack the snake command
             if (mTextField.getText().equalsIgnoreCase("snake")) {
-                new SnakeTXT();
+                new SnakeTXT(this);
             } else {
                 System.out.println("[TextUI] Command: " + mTextField.getText());
                 mAppInstance.getParserInstance().parseAndExecuteCommand(
@@ -337,26 +347,6 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     }
 
     /**
-     * Prints the string to the text pane
-     * 
-     * @param s
-     *            The string to be printed
-     */
-    private void print(String s) {
-        print(s, 0);
-    }
-
-    /**
-     * Prints the string to replace the previously printed string
-     * 
-     * @param s
-     *            The string to be printed in replacement of previous string
-     */
-    private void printr(String s) {
-        print(s, mPrevLen);
-    }
-
-    /**
      * Prints the string to the text pane with a newline. Internally calls print
      * with newline appended to the provided string
      * 
@@ -398,6 +388,19 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
                 document.remove(document.getLength() - offset, offset);
             }
             document.insertString(document.getLength(), s, null);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Utility function to clear the text pane at the start of each display call
+     */
+    private void clear() {
+        StyledDocument document = mTextPane.getStyledDocument();
+        try {
+            document.remove(0, document.getLength());
+            mPrevLen = 0;
         } catch (BadLocationException e) {
             e.printStackTrace();
         }

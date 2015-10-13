@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import sg.edu.cs2103aug2015_w13_2j.TextUI.Message;
 
 //@@author A0121410H
+
 public interface TextUIInterface {
     /**
      * Displays the list of Task objects
@@ -25,6 +26,22 @@ public interface TextUIInterface {
      * @see TextUI.Message
      */
     public void feedback(Message m);
+
+    /**
+     * Prints the string to the text pane
+     * 
+     * @param s
+     *            The string to be printed
+     */
+    public void print(String s);
+
+    /**
+     * Prints the string to replace the previously printed string
+     * 
+     * @param s
+     *            The string to be printed in replacement of previous string
+     */
+    public void printr(String s);
 
     /**
      * Registers the object as a KeyListener for the JTextField component to

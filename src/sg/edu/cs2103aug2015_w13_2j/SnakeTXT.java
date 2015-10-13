@@ -62,18 +62,14 @@ public class SnakeTXT implements ActionListener, KeyListener {
 
     // RNG for food placement
     private Random mRandom = new Random();
+    
+    private TextUI mTextUI;
 
-    public SnakeTXT() {
-        // Check that the TextUI component has been initialized
-        if (FunDUE.sTextUI == null) {
-            return;
-        }
+    public SnakeTXT(TextUI textUI) {
+        mTextUI = textUI;
         
         // Register as the KeyListener for text field
-        FunDUE.sTextUI.addTextFieldKeyListener(this);
-
-        // Print blank line to be replaced
-        FunDUE.sTextUI.print(TextUI.NEWLINE);
+        mTextUI.addTextFieldKeyListener(this);
 
         // Clear the board and mark initial snake locations
         clearBoard();
@@ -156,16 +152,16 @@ public class SnakeTXT implements ActionListener, KeyListener {
         }
 
         // Update the text pane with the resulting string buffer
-        FunDUE.sTextUI.printr(mBuffer.toString());
+        mTextUI.printr(mBuffer.toString());
     }
 
     private void gameOver() {
         // Deregister as KeyListener and prepare to exit
-        FunDUE.sTextUI.removeTextFieldKeyListener(this);
+        mTextUI.removeTextFieldKeyListener(this);
         mTimer.stop();
 
         // Print game over message
-        FunDUE.sTextUI.print(String.format(MESSAGE_GAME_OVER, mScore));
+        mTextUI.print(String.format(MESSAGE_GAME_OVER, mScore));
     }
 
     private void clearOutput() {
