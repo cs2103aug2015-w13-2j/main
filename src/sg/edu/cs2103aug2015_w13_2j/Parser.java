@@ -11,7 +11,8 @@ public class Parser implements ParserInterface {
 		RESERVED, DATE, DATE_INVALID, FLAG, FLAG_INVALID, ID, ID_INVALID, NAME, WHITESPACE, ALPHA_NUM;
 	}
 
-	public static final String[] RESERVED = { "add", "delete", "edit", "list", "sort", "search" };
+	public static final String[] RESERVED = 
+	    { "add", "delete", "edit", "list", "sort", "search", "archive", "retrieve" };
 
 	public static final String FLAG_END = "e";
 	public static final String FLAG_START = "s";

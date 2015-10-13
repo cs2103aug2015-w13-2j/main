@@ -59,6 +59,16 @@ public class Logic implements LogicInterface {
                     case "search":
                         searchTask(tokens);
                         break;
+                    case "archive":
+                        archiveTask(tokens);
+                        mAppInstance.getTextUIInstance().feedback(
+                                Message.LOGIC_ARCHIVED);
+                        break;
+                    case "retrieve":
+                        retrieveTask(tokens);
+                        mAppInstance.getTextUIInstance().feedback(
+                                Message.LOGIC_RETRIEVED);
+                        break;
                     default:
                         System.err.println("[Logic] Unimplemented command: "
                                 + pair.getValue());
@@ -319,6 +329,91 @@ public class Logic implements LogicInterface {
         }
 
     }
+    
+    /**
+     * Archives the task with the specified ID from the master task list
+     *
+     * @param tokens
+     *            The tokens parsed from the command <b>including</b> the
+     *            command token itself
+     * @throws TaskNotFoundException
+     *             Thrown when the provided task name of the ID could not 
+     *             be found or ID is out of bounds
+     */
+    private void archiveTask(ArrayList<Pair<Token, String>> tokens)
+            throws TaskNotFoundException {
+        Iterator<Pair<Token, String>> iter = tokens.iterator();
+
+        while (iter.hasNext()) {
+            Pair<Token, String> pair = iter.next();
+            switch (pair.getKey()) {
+            case ALPHA_NUM:
+            case DATE:
+            case DATE_INVALID:
+            case FLAG:
+            case FLAG_INVALID:
+            case ID_INVALID:
+                // Do nothing
+                break;
+            case ID:
+            case NAME:
+                // TODO: 
+                // No display view for tasks found in user interface yet.
+                // Do nothing first.
+                int index = pair.getKey() == Token.ID ? Integer.parseInt(pair
+                        .getValue()) : getTaskIndexByName(pair.getValue());
+                System.out.println("[Logic] Archiving task");
+                Task task = archive(index);
+                System.out.print(task);
+            case RESERVED:
+            case WHITESPACE:
+                // Do nothing
+                break;
+            }
+        }
+
+    }
+    
+    /**
+     * Retrieves the task with the specified ID from the master task list
+     *
+     * @param tokens
+     *            The tokens parsed from the command <b>including</b> the
+     *            command token itself
+     * @throws TaskNotFoundException
+     *             Thrown when the provided task name of the ID could not 
+     *             be found or ID is out of bounds
+     */
+    private void retrieveTask(ArrayList<Pair<Token, String>> tokens)
+            throws TaskNotFoundException {
+        Iterator<Pair<Token, String>> iter = tokens.iterator();
+        
+        while (iter.hasNext()) {
+            Pair<Token, String> pair = iter.next();
+            switch (pair.getKey()) {
+            case ALPHA_NUM:
+            case DATE:
+            case DATE_INVALID:
+            case FLAG:
+            case FLAG_INVALID:
+            case ID_INVALID:
+                // Do nothing
+                break;
+            case ID:
+            case NAME:
+                int index = pair.getKey() == Token.ID ? Integer.parseInt(pair
+                        .getValue()) : getTaskIndexByName(pair.getValue());
+                System.out.println("[Logic] Retrieving task");
+                Task task = retrieve(index);
+                System.out.print(task);
+            case RESERVED:
+            case WHITESPACE:
+                // Do nothing
+                break;
+            }
+        }
+        
+    }
 
     /**
      * Retrieves the index of the first occurrence of a Task object with the
@@ -382,7 +477,7 @@ public class Logic implements LogicInterface {
 
     //@@author A0133387B
 
-    private Task archiveTask(int index) throws TaskNotFoundException {
+    private Task archive(int index) throws TaskNotFoundException {
         Task archivedTask = new Task();
         if (index >= 0 && index < mTasks.size()) {
             archivedTask = mTasks.get(index);
@@ -393,7 +488,7 @@ public class Logic implements LogicInterface {
         }
     }
 
-    private Task retrieveTask(int index) throws TaskNotFoundException {
+    private Task retrieve(int index) throws TaskNotFoundException {
         Task retrievedTask = new Task();
         if (index >= 0 && index < mTasks.size()) {
             retrievedTask = mTasks.get(index);

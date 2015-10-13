@@ -47,6 +47,8 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         LOGIC_ADDED("Task added successfully.", FeedbackType.INFO),
         LOGIC_EDITED("Task edited successfully.", FeedbackType.INFO),
         LOGIC_DELETED("Task deleted successfully.", FeedbackType.INFO),
+        LOGIC_ARCHIVED("Task archived successfully.", FeedbackType.INFO),
+        LOGIC_RETRIEVED("Task retrieved successfully.", FeedbackType.INFO),
         LOGIC_SEARCH_FOUND("Task(s) found.", FeedbackType.INFO),
         LOGIC_SEARCH_NOT_FOUND("Task(s) not found.", FeedbackType.INFO);
 
