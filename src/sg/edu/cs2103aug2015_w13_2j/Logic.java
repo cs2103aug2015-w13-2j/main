@@ -184,7 +184,9 @@ public class Logic implements LogicInterface {
     private Task addTask(ArrayList<Pair<Token, String>> tokens)
             throws InvalidTaskException {
         Task task = new Task();
-        updateTask(tokens, task);
+        updateTask(tokens, task); 
+        //expects task to be valid first before adding
+        assert(task.isValid());
         mTasks.add(task);
         determineType(task);
         sortByDeadline();
@@ -423,7 +425,7 @@ public class Logic implements LogicInterface {
      *            The name of the Task object to find
      * @return The index of the Task object or -1 if none is found
      */
-    private int getTaskIndexByName(String name) {
+    protected int getTaskIndexByName(String name) { //changed to protected to aid testing
         for (int i = 0; i < mTasks.size(); i++) {
             if (mTasks.get(i).getName().compareTo(name) == 0) {
                 return i;
@@ -481,6 +483,9 @@ public class Logic implements LogicInterface {
         Task archivedTask = new Task();
         if (index >= 0 && index < mTasks.size()) {
             archivedTask = mTasks.get(index);
+            //when calling this method, the user is expected to be in the main view and thus,
+            //the task must have the ARCHIVE view set to FALSE
+            assert(archivedTask.getArchived().equals("FALSE"));
             archivedTask.setArchived("TRUE");
             return archivedTask;
         } else {
@@ -492,6 +497,9 @@ public class Logic implements LogicInterface {
         Task retrievedTask = new Task();
         if (index >= 0 && index < mTasks.size()) {
             retrievedTask = mTasks.get(index);
+            //when calling this method, the user is expected to be in the archive view and thus,
+            //the task must have the ARCHIVE view set to TRUE
+            assert(retrievedTask.getArchived().equals("TRUE"));
             retrievedTask.setArchived("FALSE");
             return retrievedTask;
         } else {
@@ -509,6 +517,9 @@ public class Logic implements LogicInterface {
     private ArrayList<Task> sortByDeadline() {
         Collections.sort(mTasks, new Comparator<Task>() {
             public int compare(Task task1, Task task2) {
+            	//Each task always has a type before invoking this method 
+            	assert(task1.getType() != null && task1.getType() != null);
+            	
                 if (task1.getType().equals(task2.getType())) {
                     if (task1.getType().equals("DEADLINE")) {
                         return task1.getEnd().compareTo(task2.getEnd());
@@ -527,15 +538,15 @@ public class Logic implements LogicInterface {
     }
 
     private ArrayList<Task> search(String keyword) {
-        ArrayList<Task> containKeyword = new ArrayList<Task>();
+        ArrayList<Task> tasksWithKeyword = new ArrayList<Task>();
         for (int i = 0; i < mTasks.size(); i++) {
             if (mTasks.get(i).getName().toLowerCase()
                     .contains(keyword.toLowerCase())) {
-                containKeyword.add(mTasks.get(i));
+            	tasksWithKeyword.add(mTasks.get(i));
             }
         }
 
-        return containKeyword;
+        return tasksWithKeyword;
     }
 
     /**
@@ -546,16 +557,22 @@ public class Logic implements LogicInterface {
      *            the new task to be categorized
      */
     private void determineType(Task task) {
+    	assert(task != null);
+    	
         if (task.getEnd() == null) {
             // if end == null, float
             task.setType("FLOAT");
+            LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
+            
         } else {
             if (task.getStart() != null) {
                 // if end != null and start != null, event
-                task.setType("EVENT");
+                task.setType("EVENT"); 
+                LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
             } else {
                 // if end != null but start == null, deadline
-                task.setType("DEADLINE");
+                task.setType("DEADLINE");   
+                LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
             }
         }
     }

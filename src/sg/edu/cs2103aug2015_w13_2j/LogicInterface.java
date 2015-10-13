@@ -9,7 +9,6 @@ import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
  * This interface contains methods for classes implementing it as well as for
  * other components Parser, Formatter, TextUI, Controller to access it
  * 
- * @author Nguyen Tuong Van
  */
 
 public interface LogicInterface {
