@@ -1,5 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.util.logging.Logger;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +14,8 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.TextUI.Message;
 
 public class Logic implements LogicInterface {
+    private static final Logger LOGGER = 
+            Logger.getLogger(Logic.class.getName());
     private FunDUE mAppInstance;
     private ArrayList<Task> mTasks = new ArrayList<Task>();
 
@@ -51,6 +55,9 @@ public class Logic implements LogicInterface {
                         deleteTask(tokens);
                         mAppInstance.getTextUIInstance().feedback(
                                 Message.LOGIC_DELETED);
+                        break;
+                    case "search":
+                        searchTask(tokens);
                         break;
                     default:
                         System.err.println("[Logic] Unimplemented command: "
@@ -254,6 +261,64 @@ public class Logic implements LogicInterface {
         }
 
     }
+    
+    //@@author A0130894B
+    /**
+     * Searches for a task with the specified name from the master task list
+     *
+     * @param tokens
+     *            The tokens parsed from the command <b>including</b> the
+     *            command token itself
+     */
+    private void searchTask(ArrayList<Pair<Token, String>> tokens) {
+        Iterator<Pair<Token, String>> iter = tokens.iterator();
+
+        while (iter.hasNext()) {
+            Pair<Token, String> pair = iter.next();
+            switch (pair.getKey()) {
+            case ALPHA_NUM:
+                mAppInstance.getTextUIInstance().feedback(
+                        Message.ERROR_INVALID_SEARCH_TERM);
+                break;
+            case DATE:
+            case DATE_INVALID:
+            case FLAG:
+            case FLAG_INVALID:
+            case ID_INVALID:
+            case ID:
+                // Do nothing
+                break;
+            case NAME:
+                // To demonstrate use of assert & logger during tut 14 Oct
+                ArrayList<Task> tasksFound = search(pair.getValue());
+                assert(tasksFound != null);
+                
+                String tasksFoundNames = "";
+                for (Task task: tasksFound) {
+                    tasksFoundNames += task.getName() + " | ";
+                }
+                
+                LOGGER.info("[Logic] All searched tasks: " + tasksFoundNames);
+                
+                if (!tasksFound.isEmpty()) {    
+                    // TODO: 
+                    // No display view for tasks found in user interface yet.
+                    // Do nothing first.
+                    mAppInstance.getTextUIInstance().feedback(
+                            Message.LOGIC_SEARCH_FOUND);
+                } else {
+                    mAppInstance.getTextUIInstance().feedback(
+                            Message.LOGIC_SEARCH_NOT_FOUND);
+                }
+                break;
+            case RESERVED:
+            case WHITESPACE:
+                // Do nothing
+                break;
+            }
+        }
+
+    }
 
     /**
      * Retrieves the index of the first occurrence of a Task object with the
@@ -271,7 +336,8 @@ public class Logic implements LogicInterface {
         }
         return -1;
     }
-
+    
+    //@@author A0121410H
     /**
      * Convenience method to retrieve a task with an index specified by
      * non-sanitized user input or to be chained with the return value of
@@ -314,7 +380,7 @@ public class Logic implements LogicInterface {
         }
     }
 
-    // @@author A0133387B
+    //@@author A0133387B
 
     private Task archiveTask(int index) throws TaskNotFoundException {
         Task archivedTask = new Task();
@@ -374,7 +440,7 @@ public class Logic implements LogicInterface {
             }
         }
 
-        return mTasks;
+        return containKeyword;
     }
 
     /**

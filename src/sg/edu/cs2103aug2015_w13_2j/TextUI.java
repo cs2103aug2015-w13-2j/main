@@ -39,13 +39,16 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         // Errors
         ERROR_INVALID_TASK("Invalid task. Did you remember to include quotes around the task name?", FeedbackType.ERROR),
         ERROR_TASK_NOT_FOUND("Task not found. Did you enter the index correctly?", FeedbackType.ERROR),
+        ERROR_INVALID_SEARCH_TERM("Invalid search term. Did you enter it with double quotes?", FeedbackType.ERROR),
         ERROR_COMMAND_NOT_IMPLEMENTED("The command that you have entered has not been implemented.", FeedbackType.ERROR),
         ERROR_COMMAND_NOT_RECOGNIZED("Command not recognized.", FeedbackType.ERROR),
 
         // Informative
         LOGIC_ADDED("Task added successfully.", FeedbackType.INFO),
         LOGIC_EDITED("Task edited successfully.", FeedbackType.INFO),
-        LOGIC_DELETED("Task deleted successfully.", FeedbackType.INFO);
+        LOGIC_DELETED("Task deleted successfully.", FeedbackType.INFO),
+        LOGIC_SEARCH_FOUND("Task(s) found.", FeedbackType.INFO),
+        LOGIC_SEARCH_NOT_FOUND("Task(s) not found.", FeedbackType.INFO);
 
         private String mMsg;
         private FeedbackType mType;
