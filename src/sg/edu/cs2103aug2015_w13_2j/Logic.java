@@ -548,7 +548,50 @@ public class Logic implements LogicInterface {
 
         return tasksWithKeyword;
     }
+    
+    /**
+     * Get the list of overdue tasks
+     * TODO: If no overdue tasks, print message saying no overdue?
+     */
+    private ArrayList<Task> viewOverdue(){
+    	 ArrayList<Task> overdueTasks = new ArrayList<Task>();
+         for (int i = 0; i < mTasks.size(); i++) {
+        	 if(mTasks.get(i).isOverdue())
+        	 overdueTasks.add(mTasks.get(i));
+         }
 
+         return overdueTasks;
+    }
+    
+    /**
+     * Get the list of ongoing tasks (meaning not archived)
+     */
+    
+    private ArrayList<Task> viewOngoing(){
+   	 ArrayList<Task> ongoingTasks = new ArrayList<Task>();
+        for (int i = 0; i < mTasks.size(); i++) {
+       	 if(mTasks.get(i).getArchived().equals("FALSE"))
+       		ongoingTasks.add(mTasks.get(i));
+        }
+
+        return ongoingTasks;
+   }
+
+    /**
+     * Get the list of archived tasks
+     * TODO: Same thing, a message if there is no archived task?
+     */
+    
+    private ArrayList<Task> viewArchived(){
+   	 ArrayList<Task> archivedTasks = new ArrayList<Task>();
+        for (int i = 0; i < mTasks.size(); i++) {
+        	if(mTasks.get(i).getArchived().equals("TRUE"))
+       		archivedTasks.add(mTasks.get(i));
+        }
+
+        return archivedTasks;
+   }
+    
     /**
      * Determine the type of a task based on its start (if any) and end (if any)
      * times
@@ -562,17 +605,17 @@ public class Logic implements LogicInterface {
         if (task.getEnd() == null) {
             // if end == null, float
             task.setType("FLOAT");
-            LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
+            LOGGER.info("[Logic]: Set type of task " + task.getName() + " to " + task.getType());
             
         } else {
             if (task.getStart() != null) {
                 // if end != null and start != null, event
                 task.setType("EVENT"); 
-                LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
+                LOGGER.info("[Logic]: Set type of task " + task.getName() + " to " + task.getType());
             } else {
                 // if end != null but start == null, deadline
                 task.setType("DEADLINE");   
-                LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
+                LOGGER.info("[Logic]: Set type of task " + task.getName() + " to " + task.getType());
             }
         }
     }

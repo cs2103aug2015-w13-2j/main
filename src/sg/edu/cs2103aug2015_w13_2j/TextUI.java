@@ -127,6 +127,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private static final String HEADER_START = "START";
     private static final String HEADER_END = "END";
     private static final String HEADER_NO_TASKS = "NO TASKS TO DISPLAY";
+    private static final String HEADER_NO_OVERDUE_TASKS = "YOU HAVE NO OVERDUE TASKS";
     private static final String SEPARATOR_VERTICAL = "|";
     private static final String SEPARATOR_HORIZONTAL = "-";
     private static final String SEPARATOR_CROSS = "+";

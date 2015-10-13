@@ -122,7 +122,7 @@ public interface TaskInterface {
      * 
      * @param typeString
      *            one of 3 types of tasks: Event / Deadline / Float
-     * @author Nguyen Tuong Van
+     * @@author A0133387B
      * 
      */
     public void setType(String typeString);
