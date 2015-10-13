@@ -5,205 +5,214 @@ import java.util.Date;
 //@@author A0121410H
 
 public interface TaskInterface {
-	/*******************************************************
-	 * LABEL ACCESSORS
-	 *******************************************************/
-	
-	/**
-	 * Sets a label-value pair of the Task object
-	 * 
-	 * @param label
-	 *            The label to be set
-	 * @param value
-	 *            The value to set the label to or null to unset the label
-	 */
-	public void setLabel(String label, String value);
+    /*******************************************************
+     * LABEL ACCESSORS
+     *******************************************************/
 
-	/**
-	 * Retrieves the value of a label of the Task object
-	 * 
-	 * @return The value of the label or null if not set
-	 */
-	public String getLabel(String label);
+    /**
+     * Sets a label-value pair of the Task object
+     * 
+     * @param label
+     *            The label to be set
+     * @param value
+     *            The value to set the label to or null to unset the label
+     */
+    public void setLabel(String label, String value);
 
-	/*******************************************************
-	 * (ACCESSORS) NAME: string
-	 *******************************************************/
+    /**
+     * Retrieves the value of a label of the Task object
+     * 
+     * @return The value of the label or null if not set
+     */
+    public String getLabel(String label);
 
-	/**
-	 * Sets the name of this Task object as a label-value pair
-	 * 
-	 * @param name
-	 *            The string to set the task's name to
-	 */
-	public void setName(String name);
+    /*******************************************************
+     * (ACCESSORS) NAME: string
+     *******************************************************/
 
-	/**
-	 * Retrieves the name label of this Task object
-	 * 
-	 * @return The name of the Task object or null if not set
-	 */
-	public String getName();
+    /**
+     * Sets the name of this Task object as a label-value pair
+     * 
+     * @param name
+     *            The string to set the task's name to
+     */
+    public void setName(String name);
 
-	/*******************************************************
-	 * (ACCESSORS) CREATED, START, END: date
-	 *******************************************************/
+    /**
+     * Retrieves the name label of this Task object
+     * 
+     * @return The name of the Task object or null if not set
+     */
+    public String getName();
 
-	/**
-	 * Sets the date and time the Task object was created. Used only in
-	 * parseTask()
-	 * 
-	 * @param createdString
-	 *            String representing the millisecond epoch
-	 */
-	public void setCreated(String createdString);
+    /*******************************************************
+     * (ACCESSORS) CREATED, START, END: date
+     *******************************************************/
 
-	/**
-	 * Convenience method to retrieve the date and time this Task object was
-	 * created in a Date object
-	 * 
-	 * @return Date object representing the date and time created
-	 */
-	public Date getCreated();
+    /**
+     * Sets the date and time the Task object was created. Used only in
+     * parseTask()
+     * 
+     * @param createdString
+     *            String representing the millisecond epoch
+     */
+    public void setCreated(String createdString);
 
-	/**
-	 * Sets the start date of the Task object
-	 * 
-	 * @param start
-	 *            Date object representing the start date or null to unset
-	 */
-	public void setStart(Date start);
+    /**
+     * Convenience method to retrieve the date and time this Task object was
+     * created in a Date object
+     * 
+     * @return Date object representing the date and time created
+     */
+    public Date getCreated();
 
-	/**
-	 * Sets the start date of the Task object
-	 * 
-	 * @param startString
-	 *            String representing the millisecond epoch
-	 */
-	public void setStart(String startString);
+    /**
+     * Sets the start date of the Task object
+     * 
+     * @param start
+     *            Date object representing the start date or null to unset
+     */
+    public void setStart(Date start);
 
-	/**
-	 * Retrieves the start date of the Task object
-	 * 
-	 * @return Date object representing the start date or null if not set
-	 */
-	public Date getStart();
+    /**
+     * Sets the start date of the Task object
+     * 
+     * @param startString
+     *            String representing the millisecond epoch
+     */
+    public void setStart(String startString);
 
-	/**
-	 * Sets the end date of the Task object
-	 * 
-	 * @param end
-	 *            Date object representing the end date or null to unset
-	 */
-	public void setEnd(Date end);
+    /**
+     * Retrieves the start date of the Task object
+     * 
+     * @return Date object representing the start date or null if not set
+     */
+    public Date getStart();
 
-	/**
-	 * Sets the end date of the Task object
-	 * 
-	 * @param endString
-	 *            String representing the millisecond epoch
-	 */
-	public void setEnd(String endString);
+    /**
+     * Sets the end date of the Task object
+     * 
+     * @param end
+     *            Date object representing the end date or null to unset
+     */
+    public void setEnd(Date end);
 
-	/**
-	 * Retrieves the end date of the Task object
-	 * 
-	 * @return Date object representing the end date or null if not set
-	 */
-	public Date getEnd();
+    /**
+     * Sets the end date of the Task object
+     * 
+     * @param endString
+     *            String representing the millisecond epoch
+     */
+    public void setEnd(String endString);
 
-	/*******************************************************
-	 * (ACCESSORS) TYPE: EVENT / DEADLINE / FLOAT
-	 *******************************************************/
+    /**
+     * Retrieves the end date of the Task object
+     * 
+     * @return Date object representing the end date or null if not set
+     */
+    public Date getEnd();
 
-	/**
-	 * Categorizes a task into one of the 3 types: an Event, Deadline, or
-	 * Floating Task
-	 * 
-	 * @param typeString
-	 *            one of 3 types of tasks: Event / Deadline / Float
-	 * @author Nguyen Tuong Van
-	 * 
-	 */
-	public void setType(String typeString);
+    /*******************************************************
+     * (ACCESSORS) TYPE: EVENT / DEADLINE / FLOAT
+     *******************************************************/
 
-	public String getType();
+    /**
+     * Categorizes a task into one of the 3 types: an Event, Deadline, or
+     * Floating Task
+     * 
+     * @param typeString
+     *            one of 3 types of tasks: Event / Deadline / Float
+     * @author Nguyen Tuong Van
+     * 
+     */
+    public void setType(String typeString);
 
-	/*******************************************************
-	 * (ACCESSORS) COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
-	 *******************************************************/
+    public String getType();
 
-	/**
-	 * Sets true or false for a property of the task
-	 * 
-	 * @param propertyString
-	 *            where property is completed or archived or important
-	 * 
-	 *            Gets the flag for a property of the task
-	 * @return String representing true or false for a property of the task
-	 */
+    /*******************************************************
+     * (ACCESSORS) COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
+     *******************************************************/
 
-	// COMPLETED
-	public void setCompleted(String completedString);
+    /**
+     * Sets true or false for a property of the task
+     * 
+     * @param propertyString
+     *            where property is completed or archived or important
+     * 
+     *            Gets the flag for a property of the task
+     * @return String representing true or false for a property of the task
+     */
 
-	public String getCompleted();
+    // COMPLETED
+    public void setCompleted(String completedString);
 
-	// ARCHIVED
-	public void setArchived(String archivedString);
+    public String getCompleted();
 
-	public String getArchived();
+    // ARCHIVED
+    public void setArchived(String archivedString);
 
-	// IMPORTANT
-	public void setImportant(String importantString);
+    public String getArchived();
 
-	public String getImportant();
+    // IMPORTANT
+    public void setImportant(String importantString);
 
-	/*******************************************************
-	 * MISCELLANEOUS
-	 *******************************************************/
-	
-	// @@author A0121410H
-	public class InvalidTaskException extends Exception {
-		private static final long serialVersionUID = 4591179171294898925L;
-	}
-	
-	public class TaskNotFoundException extends Exception {
-		private static final long serialVersionUID = 1619684577187818793L;
-	}
+    public String getImportant();
 
-	/**
-	 * Checks if this Task object is valid. The only condition is that it
-	 * <b>must</b> have a non-zero length name set, all other attributes can be
-	 * missing. An invalid Task object should not be used
-	 * 
-	 * @return True if the Task object is valid, false otherwise
-	 * @throws InvalidTaskException
-	 *             Thrown when the Task object being checked is invalid
-	 */
-	public boolean isValid() throws InvalidTaskException;
-	
-	// @@author A0124007X
-	/**
-	 * Converts a string into its corresponding Task object
-	 * 
-	 * @param taskString
-	 *            The string representing a Task object
-	 * @return The constructed Task object
-	 */
-	public static Task parseTask(String taskString) {
-		Task task = new Task();
-		String[] attributes = taskString.split("\r|\n");
-		for (String pair : attributes) {
-			if (!pair.isEmpty()) {
-				// Only splits by the first colon
-				String[] pairTokens = pair.split(":", 2);
-				if (pairTokens.length == 2) {
-					String label = pairTokens[0].toUpperCase();
-					String value = pairTokens[1];
-					task.setLabel(label, value);
-				}
-			}
-		}
-		return task;
-	}
+    /*******************************************************
+     * MISCELLANEOUS
+     *******************************************************/
+
+    // @@author A0121410H
+    public class InvalidTaskException extends Exception {
+        private static final long serialVersionUID = 4591179171294898925L;
+    }
+
+    public class TaskNotFoundException extends Exception {
+        private static final long serialVersionUID = 1619684577187818793L;
+    }
+
+    /**
+     * Checks if this Task object is overdue. The internal label END of the task
+     * is compared with the current date time
+     * 
+     * @return True if the END label is set and is before the current date time,
+     *         false if otherwise or END is null
+     */
+    public boolean isOverdue();
+
+    /**
+     * Checks if this Task object is valid. The only condition is that it
+     * <b>must</b> have a non-zero length name set, all other attributes can be
+     * missing. An invalid Task object should not be used
+     * 
+     * @return True if the Task object is valid, false otherwise
+     * @throws InvalidTaskException
+     *             Thrown when the Task object being checked is invalid
+     */
+    public boolean isValid() throws InvalidTaskException;
+
+    // @@author A0124007X
+    /**
+     * Converts a string into its corresponding Task object
+     * 
+     * @param taskString
+     *            The string representing a Task object
+     * @return The constructed Task object
+     */
+    public static Task parseTask(String taskString) {
+        Task task = new Task();
+        String[] attributes = taskString.split("\r|\n");
+        for (String pair : attributes) {
+            if (!pair.isEmpty()) {
+                // Only splits by the first colon
+                String[] pairTokens = pair.split(":", 2);
+                if (pairTokens.length == 2) {
+                    String label = pairTokens[0].toUpperCase();
+                    String value = pairTokens[1];
+                    task.setLabel(label, value);
+                }
+            }
+        }
+        return task;
+    }
 }

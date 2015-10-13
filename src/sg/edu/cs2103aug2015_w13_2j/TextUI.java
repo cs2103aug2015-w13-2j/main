@@ -17,7 +17,11 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 //@@author A0121410H
@@ -123,10 +127,11 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private static final String HEADER_START = "START";
     private static final String HEADER_END = "END";
     private static final String HEADER_NO_TASKS = "NO TASKS TO DISPLAY";
-    private static final char SEPARATOR_VERTICAL = '|';
-    private static final char SEPARATOR_HORIZONTAL = '-';
-    private static final char SEPARATOR_CROSS = '+';
-    private static final char SEPARATOR_BLANK = ' ';
+    private static final String SEPARATOR_VERTICAL = "|";
+    private static final String SEPARATOR_HORIZONTAL = "-";
+    private static final String SEPARATOR_CROSS = "+";
+    private static final String SEPARATOR_BLANK = " ";
+    private static final Color COLOR_OVERDUE = Color.RED;
     private static final SimpleDateFormat FORMAT_DATE = new SimpleDateFormat("dd/MM/yy'T'HH:mm");
 
     // Serialization ID
@@ -195,28 +200,26 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 
     public void display(ArrayList<Task> tasks) {
         clear();
-        StringBuilder sb = new StringBuilder();
-        writeHeader(sb);
-        writeSeparator(sb);
-        if(tasks.size() > 0) {
+        writeHeader();
+        writeSeparator();
+        if (tasks.size() > 0) {
             for (int i = 0; i < tasks.size(); i++) {
-                writeTask(sb, tasks.get(i), i);
+                writeTask(tasks.get(i), i);
             }
         } else {
-            sb.append(SEPARATOR_VERTICAL);
-            writeCentered(sb, HEADER_NO_TASKS, WIDTH_TOTAL);
-            sb.append(SEPARATOR_VERTICAL);
-            sb.append(NEWLINE);
+            print(SEPARATOR_VERTICAL);
+            writeCentered(HEADER_NO_TASKS, WIDTH_TOTAL);
+            print(SEPARATOR_VERTICAL);
+            print(NEWLINE);
         }
-        writeSeparator(sb);
-        printr(sb.toString());
+        writeSeparator();
     }
 
     public void feedback(Message m) {
         mLabel.setForeground(m.getType().getColor());
         mLabel.setText(m.getMessage());
     }
-    
+
     public void print(String s) {
         print(s, 0);
     }
@@ -267,87 +270,100 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     public void keyReleased(KeyEvent e) {
         // Empty function
     }
-    
-    private void writeHeader(StringBuilder sb) {
-        sb.append(SEPARATOR_VERTICAL);
-        writeCentered(sb, HEADER_ID, WIDTH_ID);
-        sb.append(SEPARATOR_VERTICAL);
-        writeCentered(sb, HEADER_NAME, WIDTH_NAME);
-        sb.append(SEPARATOR_VERTICAL);
-        writeCentered(sb, HEADER_START, WIDTH_DATE);
-        sb.append(SEPARATOR_VERTICAL);
-        writeCentered(sb, HEADER_END, WIDTH_DATE);
-        sb.append(SEPARATOR_VERTICAL);
-        sb.append(NEWLINE);
+
+    private void writeHeader() {
+        print(SEPARATOR_VERTICAL);
+        writeCentered(HEADER_ID, WIDTH_ID);
+        print(SEPARATOR_VERTICAL);
+        writeCentered(HEADER_NAME, WIDTH_NAME);
+        print(SEPARATOR_VERTICAL);
+        writeCentered(HEADER_START, WIDTH_DATE);
+        print(SEPARATOR_VERTICAL);
+        writeCentered(HEADER_END, WIDTH_DATE);
+        print(SEPARATOR_VERTICAL);
+        print(NEWLINE);
     }
-    
-    private void writeSeparator(StringBuilder sb) {
-        sb.append(SEPARATOR_CROSS);
-        writeRepeat(sb, SEPARATOR_HORIZONTAL, WIDTH_ID);
-        sb.append(SEPARATOR_CROSS);
-        writeRepeat(sb, SEPARATOR_HORIZONTAL, WIDTH_NAME);
-        sb.append(SEPARATOR_CROSS);
-        writeRepeat(sb, SEPARATOR_HORIZONTAL, WIDTH_DATE);
-        sb.append(SEPARATOR_CROSS);
-        writeRepeat(sb, SEPARATOR_HORIZONTAL, WIDTH_DATE);
-        sb.append(SEPARATOR_CROSS);
-        sb.append(NEWLINE);
+
+    private void writeSeparator() {
+        print(SEPARATOR_CROSS);
+        writeRepeat(SEPARATOR_HORIZONTAL, WIDTH_ID);
+        print(SEPARATOR_CROSS);
+        writeRepeat(SEPARATOR_HORIZONTAL, WIDTH_NAME);
+        print(SEPARATOR_CROSS);
+        writeRepeat(SEPARATOR_HORIZONTAL, WIDTH_DATE);
+        print(SEPARATOR_CROSS);
+        writeRepeat(SEPARATOR_HORIZONTAL, WIDTH_DATE);
+        print(SEPARATOR_CROSS);
+        print(NEWLINE);
     }
-    
-    private void writeTask(StringBuilder sb, Task t, int id) {
-        sb.append(SEPARATOR_VERTICAL);
-        writeID(sb, id);
-        sb.append(SEPARATOR_VERTICAL);
-        writeTaskName(sb, t.getName());
-        sb.append(SEPARATOR_VERTICAL);
-        writeDate(sb, t.getStart());
-        sb.append(SEPARATOR_VERTICAL);
-        writeDate(sb, t.getEnd());
-        sb.append(SEPARATOR_VERTICAL);
-        sb.append(NEWLINE);
+
+    private void writeTask(Task t, int id) {
+        StyledDocument document = mTextPane.getStyledDocument();
+
+        print(SEPARATOR_VERTICAL);
+        int startLoc = document.getLength();
+        writeID(id);
+        print(SEPARATOR_VERTICAL);
+        writeTaskName(t.getName());
+        print(SEPARATOR_VERTICAL);
+        writeDate(t.getStart());
+        print(SEPARATOR_VERTICAL);
+        writeDate(t.getEnd());
+        int endLoc = document.getLength();
+        print(SEPARATOR_VERTICAL);
+        print(NEWLINE);
+
+        if (t.isOverdue()) {
+            StyleContext styleContext = StyleContext.getDefaultStyleContext();
+            AttributeSet attributeSet = styleContext.addAttribute(
+                    SimpleAttributeSet.EMPTY, StyleConstants.Background,
+                    COLOR_OVERDUE);
+            document.setCharacterAttributes(startLoc, endLoc - startLoc,
+                    attributeSet, false);
+        }
     }
-    
-    private void writeCentered(StringBuilder sb, String header, int width) {
-        assert(header.length() < width);
+
+    private void writeCentered(String header, int width) {
+        assert (header.length() < width);
         int start = (width - header.length()) / 2;
-        writeRepeat(sb, SEPARATOR_BLANK, start);
-        sb.append(header);
-        writeRepeat(sb, SEPARATOR_BLANK, width - start- header.length());
+        writeRepeat(SEPARATOR_BLANK, start);
+        print(header);
+        writeRepeat(SEPARATOR_BLANK, width - start - header.length());
     }
-    
-    private void writeID(StringBuilder sb, int id) {
-        assert(id >= 0 && id <= 9999);
+
+    private void writeID(int id) {
+        assert (id >= 0 && id <= 9999);
         // TODO: Assumed width to be 4
-        if(id < 10) {
-            sb.append("  " + id + " ");
-        } else if(id < 100) {
-            sb.append(" " + id + " ");
-        } else if(id < 1000) {
-            sb.append(id);
+        if (id < 10) {
+            print("  " + id + " ");
+        } else if (id < 100) {
+            print(" " + id + " ");
+        } else if (id < 1000) {
+            print(String.valueOf(id));
         }
     }
-    
-    private void writeTaskName(StringBuilder sb, String taskName) {
-        assert(taskName != null && taskName.length() > 0);
-        if(taskName.length() < WIDTH_NAME) {
-            sb.append(taskName);
-            writeRepeat(sb, SEPARATOR_BLANK, WIDTH_NAME - taskName.length());
+
+    private void writeTaskName(String taskName) {
+        assert (taskName != null && taskName.length() > 0);
+        if (taskName.length() < WIDTH_NAME) {
+            print(taskName);
+            writeRepeat(SEPARATOR_BLANK, WIDTH_NAME - taskName.length());
         } else {
-            sb.append(taskName.substring(0, WIDTH_NAME - 3) + "...");
+            print(taskName.substring(0, WIDTH_NAME - 3) + "...");
         }
     }
-    
-    private void writeDate(StringBuilder sb, Date date) {
-        if(date == null) {
-            writeCentered(sb, "---", WIDTH_DATE);
+
+    private void writeDate(Date date) {
+        if (date == null) {
+            writeCentered("---", WIDTH_DATE);
         } else {
-            writeCentered(sb, FORMAT_DATE.format(date), WIDTH_DATE);
+            writeCentered(FORMAT_DATE.format(date), WIDTH_DATE);
         }
     }
-    
-    private void writeRepeat(StringBuilder sb, char c, int n) {
-        for(int i = 0; i < n; i++) {
-            sb.append(c);
+
+    private void writeRepeat(String s, int n) {
+        for (int i = 0; i < n; i++) {
+            print(s);
         }
     }
 
@@ -397,7 +413,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Utility function to clear the text pane at the start of each display call
      */

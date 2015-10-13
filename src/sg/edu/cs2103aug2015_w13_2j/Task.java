@@ -205,6 +205,19 @@ public class Task implements TaskInterface {
 	 * MISCELLANEOUS
 	 *******************************************************/
 
+	public boolean isOverdue() {
+	    Date deadline = getEnd();
+	    if(deadline == null) {
+	        return false;
+	    } else {
+	        if(deadline.compareTo(new Date()) < 0) {
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    }
+	}
+	
 	public boolean isValid() throws InvalidTaskException {
 		if (getLabel("NAME") == null || getLabel("NAME").length() == 0) {
 			throw new InvalidTaskException();
