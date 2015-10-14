@@ -3,8 +3,6 @@ package sg.edu.cs2103aug2015_w13_2j;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-import sg.edu.cs2103aug2015_w13_2j.TextUI.Message;
-
 //@@author A0121410H
 
 public interface TextUIInterface {
@@ -25,7 +23,7 @@ public interface TextUIInterface {
      *            The Message enum to be displayed
      * @see TextUI.Message
      */
-    public void feedback(Message m);
+    public void feedback(FeedbackMessage m);
 
     /**
      * Prints the string to the text pane

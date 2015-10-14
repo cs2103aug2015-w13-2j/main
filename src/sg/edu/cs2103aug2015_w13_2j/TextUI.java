@@ -27,92 +27,6 @@ import javax.swing.text.StyledDocument;
 //@@author A0121410H
 
 public class TextUI extends JFrame implements TextUIInterface, KeyListener {
-    /**
-     * Enumeration of user feedback messages to the user. As this is implemented
-     * as an enum, the messages do not contain dynamic data. Each enum element
-     * is self contained with the message text {@link Message#getMessage()} and
-     * styling {@link Message#getType()} to be shown to the user
-     * 
-     * @author Zhu Chunqi
-     *
-     */
-    public enum Message {
-        // Used to clear the feedback label
-        CLEAR("", FeedbackType.INFO),
-
-        // Errors
-        ERROR_INVALID_TASK("Invalid task. Did you remember to include quotes around the task name?", FeedbackType.ERROR),
-        ERROR_TASK_NOT_FOUND("Task not found. Did you enter the index correctly?", FeedbackType.ERROR),
-        ERROR_INVALID_SEARCH_TERM("Invalid search term. Did you enter it with double quotes?", FeedbackType.ERROR),
-        ERROR_COMMAND_NOT_IMPLEMENTED("The command that you have entered has not been implemented.", FeedbackType.ERROR),
-        ERROR_COMMAND_NOT_RECOGNIZED("Command not recognized.", FeedbackType.ERROR),
-
-        // Informative
-        LOGIC_ADDED("Task added successfully.", FeedbackType.INFO),
-        LOGIC_EDITED("Task edited successfully.", FeedbackType.INFO),
-        LOGIC_DELETED("Task deleted successfully.", FeedbackType.INFO),
-        LOGIC_ARCHIVED("Task archived successfully.", FeedbackType.INFO),
-        LOGIC_RETRIEVED("Task retrieved successfully.", FeedbackType.INFO),
-        LOGIC_SEARCH_FOUND("Task(s) found.", FeedbackType.INFO),
-        LOGIC_SEARCH_NOT_FOUND("Task(s) not found.", FeedbackType.INFO);
-
-        private String mMsg;
-        private FeedbackType mType;
-
-        private Message(String s, FeedbackType type) {
-            mMsg = s;
-            mType = type;
-        }
-
-        /**
-         * Retrieves the message text
-         * 
-         * @return The message text
-         */
-        public String getMessage() {
-            return mMsg;
-        }
-
-        /**
-         * Retrieves the FeedbackType enum containing the styling information
-         * for this message
-         * 
-         * @return FeedbackType enum for this message
-         * @see FeedbackType
-         */
-        public FeedbackType getType() {
-            return mType;
-        }
-    }
-
-    /**
-     * Enumeration of the styling for the different types of user feedback
-     * messages. The color of font to be used for each feedback type can be
-     * retrieved via {@link FeedbackType#getColor()}
-     * 
-     * @author Zhu Chunqi
-     *
-     */
-    public enum FeedbackType {
-        INFO(Color.BLACK), ERROR(Color.RED);
-
-        private Color mColor;
-
-        private FeedbackType(Color color) {
-            mColor = color;
-        }
-
-        /**
-         * Retrieves the color that should be used to style this type of
-         * feedback
-         * 
-         * @return Color object to be used for this type of feedback
-         */
-        public Color getColor() {
-            return mColor;
-        }
-    }
-
     // For portability across Unix and Windows systems
     public static final String NEWLINE = System.getProperty("line.separator");
 
@@ -133,7 +47,8 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private static final String SEPARATOR_CROSS = "+";
     private static final String SEPARATOR_BLANK = " ";
     private static final Color COLOR_OVERDUE = Color.RED;
-    private static final SimpleDateFormat FORMAT_DATE = new SimpleDateFormat("dd/MM/yy'T'HH:mm");
+    private static final SimpleDateFormat FORMAT_DATE = new SimpleDateFormat(
+            "dd/MM/yy'T'HH:mm");
 
     // Serialization ID
     private static final long serialVersionUID = 7758912303888211773L;
@@ -143,7 +58,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 
     // Self instance
     private static TextUI sInstance;
-    
+
     // UI Components
     private JTextField mTextField;
     private JTextPane mTextPane;
@@ -187,7 +102,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         writeSeparator();
     }
 
-    public void feedback(Message m) {
+    public void feedback(FeedbackMessage m) {
         mLabel.setForeground(m.getType().getColor());
         mLabel.setText(m.getMessage());
     }

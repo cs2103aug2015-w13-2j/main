@@ -1,17 +1,15 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-import java.util.logging.Logger;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
-import sg.edu.cs2103aug2015_w13_2j.TextUI.Message;
 
 public class Logic implements LogicInterface {
     private static Logic sInstance;
@@ -59,49 +57,49 @@ public class Logic implements LogicInterface {
                     switch (pair.getValue()) {
                     case "add":
                         addTask(tokens);
-                        TextUI.getInstance().feedback(Message.LOGIC_ADDED);
+                        TextUI.getInstance().feedback(FeedbackMessage.LOGIC_ADDED);
                         break;
                     case "edit":
                         editTask(tokens);
-                        TextUI.getInstance().feedback(Message.LOGIC_EDITED);
+                        TextUI.getInstance().feedback(FeedbackMessage.LOGIC_EDITED);
                         break;
                     case "list":
-                        TextUI.getInstance().feedback(Message.CLEAR);
+                        TextUI.getInstance().feedback(FeedbackMessage.CLEAR);
                         break;
                     case "delete":
                         deleteTask(tokens);
-                        TextUI.getInstance().feedback(Message.LOGIC_DELETED);
+                        TextUI.getInstance().feedback(FeedbackMessage.LOGIC_DELETED);
                         break;
                     case "search":
                         searchTask(tokens);
                         break;
                     case "archive":
                         archiveTask(tokens);
-                        TextUI.getInstance().feedback(Message.LOGIC_ARCHIVED);
+                        TextUI.getInstance().feedback(FeedbackMessage.LOGIC_ARCHIVED);
                         break;
                     case "retrieve":
                         retrieveTask(tokens);
-                        TextUI.getInstance().feedback(Message.LOGIC_RETRIEVED);
+                        TextUI.getInstance().feedback(FeedbackMessage.LOGIC_RETRIEVED);
                         break;
                     default:
                         System.err.println("[Logic] Unimplemented command: "
                                 + pair.getValue());
                         TextUI.getInstance().feedback(
-                                Message.ERROR_COMMAND_NOT_IMPLEMENTED);
+                                FeedbackMessage.ERROR_COMMAND_NOT_IMPLEMENTED);
                         break;
                     }
                 } catch (InvalidTaskException e) {
                     System.err.println("[Logic] Invalid Task");
-                    TextUI.getInstance().feedback(Message.ERROR_INVALID_TASK);
+                    TextUI.getInstance().feedback(FeedbackMessage.ERROR_INVALID_TASK);
                 } catch (TaskNotFoundException e) {
                     System.err.println("[Logic] Task not found");
-                    TextUI.getInstance().feedback(Message.ERROR_TASK_NOT_FOUND);
+                    TextUI.getInstance().feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
                 }
                 TextUI.getInstance().display(mTasks);
                 return;
             }
         }
-        TextUI.getInstance().feedback(Message.ERROR_COMMAND_NOT_RECOGNIZED);
+        TextUI.getInstance().feedback(FeedbackMessage.ERROR_COMMAND_NOT_RECOGNIZED);
     }
 
     public void echo(String s) {
@@ -300,7 +298,7 @@ public class Logic implements LogicInterface {
             switch (pair.getKey()) {
             case ALPHA_NUM:
                 TextUI.getInstance()
-                        .feedback(Message.ERROR_INVALID_SEARCH_TERM);
+                        .feedback(FeedbackMessage.ERROR_INVALID_SEARCH_TERM);
                 break;
             case DATE:
             case DATE_INVALID:
@@ -326,10 +324,10 @@ public class Logic implements LogicInterface {
                     // TODO:
                     // No display view for tasks found in user interface yet.
                     // Do nothing first.
-                    TextUI.getInstance().feedback(Message.LOGIC_SEARCH_FOUND);
+                    TextUI.getInstance().feedback(FeedbackMessage.LOGIC_SEARCH_FOUND);
                 } else {
                     TextUI.getInstance().feedback(
-                            Message.LOGIC_SEARCH_NOT_FOUND);
+                            FeedbackMessage.LOGIC_SEARCH_NOT_FOUND);
                 }
                 break;
             case RESERVED:
@@ -584,7 +582,7 @@ public class Logic implements LogicInterface {
     }
 
     /**
-     * Get the list of overdue tasks TODO: If no overdue tasks, print message
+     * Get the list of overdue tasks TODO: If no overdue tasks, print FeedbackMessage
      * saying no overdue?
      */
     private ArrayList<Task> viewOverdue() {
@@ -612,7 +610,7 @@ public class Logic implements LogicInterface {
     }
 
     /**
-     * Get the list of archived tasks TODO: Same thing, a message if there is no
+     * Get the list of archived tasks TODO: Same thing, a FeedbackMessage if there is no
      * archived task?
      */
 
