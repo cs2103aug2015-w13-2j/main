@@ -13,7 +13,8 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.TextUI.Message;
 
-public class Logic implements LogicInterface {
+public class Logic implements LogicInterface{
+	
     private static final Logger LOGGER = 
             Logger.getLogger(Logic.class.getName());
     private FunDUE mAppInstance;
@@ -492,6 +493,29 @@ public class Logic implements LogicInterface {
             throw new TaskNotFoundException();
         }
     }
+    
+    /**Mark a task as important
+     * 
+     * @param index
+     *             the ID of the task in current list
+     * @return
+     *             the task that was marked important
+     * @throws TaskNotFoundException
+     */
+    
+    private Task markImportant(int index) throws TaskNotFoundException {
+        Task importantTask = new Task();
+        if (index >= 0 && index < mTasks.size()) {
+        	importantTask = mTasks.get(index);
+            if(importantTask.getImportant().equals("FALSE")){
+            	importantTask.setImportant("TRUE");
+            }
+            return importantTask;
+        } else {
+            throw new TaskNotFoundException();
+        }
+    }
+
 
     private Task retrieve(int index) throws TaskNotFoundException {
         Task retrievedTask = new Task();
