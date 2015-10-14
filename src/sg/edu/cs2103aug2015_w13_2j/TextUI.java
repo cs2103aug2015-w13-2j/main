@@ -8,50 +8,20 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
 
 //@@author A0121410H
 
 public class TextUI extends JFrame implements TextUIInterface, KeyListener {
-    // For portability across Unix and Windows systems
-    public static final String NEWLINE = System.getProperty("line.separator");
-
-    // Internally used constants for formatting the UI
-    private static final Font FONT = new Font("consolas", Font.BOLD, 16);
-    private static final int WIDTH_ID = 4;
-    private static final int WIDTH_NAME = 47;
-    private static final int WIDTH_DATE = 16;
-    private static final int WIDTH_TOTAL = WIDTH_ID + 1 + WIDTH_NAME + 1 + WIDTH_DATE + 1 + WIDTH_DATE;
-    private static final String HEADER_ID = "ID";
-    private static final String HEADER_NAME = "TASK NAME";
-    private static final String HEADER_START = "START";
-    private static final String HEADER_END = "END";
-    private static final String HEADER_NO_TASKS = "NO TASKS TO DISPLAY";
-    private static final String HEADER_NO_OVERDUE_TASKS = "YOU HAVE NO OVERDUE TASKS";
-    private static final String SEPARATOR_VERTICAL = "|";
-    private static final String SEPARATOR_HORIZONTAL = "-";
-    private static final String SEPARATOR_CROSS = "+";
-    private static final String SEPARATOR_BLANK = " ";
-    private static final Color COLOR_OVERDUE = Color.RED;
-    private static final SimpleDateFormat FORMAT_DATE = new SimpleDateFormat(
-            "dd/MM/yy'T'HH:mm");
-
-    // Serialization ID
     private static final long serialVersionUID = 7758912303888211773L;
+    
+    // Font constant used by all UI elements
+    private static final Font FONT = new Font("consolas", Font.BOLD, 16);
 
     // The (fixed) size of the window
     private static final Dimension PREFERRED_SIZE = new Dimension(800, 600);
@@ -61,9 +31,8 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 
     // UI Components
     private JTextField mTextField;
-    private JTextPane mTextPane;
+    private TextPane mTextPane;
     private JLabel mLabel;
-    private int mPrevLen = 0;
 
     /**
      * Protected constructor
@@ -85,34 +54,12 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     }
 
     public void display(ArrayList<Task> tasks) {
-        clear();
-        writeSeparator();
-        writeHeader();
-        writeSeparator();
-        if (tasks.size() > 0) {
-            for (int i = 0; i < tasks.size(); i++) {
-                writeTask(tasks.get(i), i);
-            }
-        } else {
-            print(SEPARATOR_VERTICAL);
-            writeCentered(HEADER_NO_TASKS, WIDTH_TOTAL);
-            print(SEPARATOR_VERTICAL);
-            print(NEWLINE);
-        }
-        writeSeparator();
+        mTextPane.display(tasks);
     }
 
     public void feedback(FeedbackMessage m) {
         mLabel.setForeground(m.getType().getColor());
         mLabel.setText(m.getMessage());
-    }
-
-    public void print(String s) {
-        print(s, 0);
-    }
-
-    public void printr(String s) {
-        print(s, mPrevLen);
     }
 
     public void addTextFieldKeyListener(KeyListener listener) {
@@ -158,7 +105,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     }
 
     /**
-     * Initialize and show the UI Elements. The UI consists a JTextPane which
+     * Initializes and shows the UI Elements. The UI consists a JTextPane which
      * displays styled text to the user, a JLabel which displays styled text
      * feedback from executing user commands, and a JTextField which accepts
      * user input
@@ -175,7 +122,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         // Will be reused for each UI element
         GridBagConstraints constraints = null;
 
-        mTextPane = new JTextPane();
+        mTextPane = new TextPane();
         mTextPane.setEditable(false);
         mTextPane.setFont(FONT);
         mTextPane.setBackground(Color.BLACK);
@@ -211,161 +158,5 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         this.pack();
         this.setVisible(true);
         mTextField.requestFocusInWindow();
-    }
-
-    private void writeHeader() {
-        print(SEPARATOR_VERTICAL);
-        writeCentered(HEADER_ID, WIDTH_ID);
-        print(SEPARATOR_VERTICAL);
-        writeCentered(HEADER_NAME, WIDTH_NAME);
-        print(SEPARATOR_VERTICAL);
-        writeCentered(HEADER_START, WIDTH_DATE);
-        print(SEPARATOR_VERTICAL);
-        writeCentered(HEADER_END, WIDTH_DATE);
-        print(SEPARATOR_VERTICAL);
-        print(NEWLINE);
-    }
-
-    private void writeSeparator() {
-        print(SEPARATOR_CROSS);
-        writeRepeat(SEPARATOR_HORIZONTAL, WIDTH_ID);
-        print(SEPARATOR_CROSS);
-        writeRepeat(SEPARATOR_HORIZONTAL, WIDTH_NAME);
-        print(SEPARATOR_CROSS);
-        writeRepeat(SEPARATOR_HORIZONTAL, WIDTH_DATE);
-        print(SEPARATOR_CROSS);
-        writeRepeat(SEPARATOR_HORIZONTAL, WIDTH_DATE);
-        print(SEPARATOR_CROSS);
-        print(NEWLINE);
-    }
-
-    private void writeTask(Task t, int id) {
-        StyledDocument document = mTextPane.getStyledDocument();
-
-        print(SEPARATOR_VERTICAL);
-        int startLoc = document.getLength();
-        writeID(id);
-        print(SEPARATOR_VERTICAL);
-        writeTaskName(t.getName());
-        print(SEPARATOR_VERTICAL);
-        writeDate(t.getStart());
-        print(SEPARATOR_VERTICAL);
-        writeDate(t.getEnd());
-        int endLoc = document.getLength();
-        print(SEPARATOR_VERTICAL);
-        print(NEWLINE);
-
-        if (t.isOverdue()) {
-            StyleContext styleContext = StyleContext.getDefaultStyleContext();
-            AttributeSet attributeSet = styleContext.addAttribute(
-                    SimpleAttributeSet.EMPTY, StyleConstants.Background,
-                    COLOR_OVERDUE);
-            document.setCharacterAttributes(startLoc, endLoc - startLoc,
-                    attributeSet, false);
-        }
-    }
-
-    private void writeCentered(String header, int width) {
-        assert (header.length() < width);
-        int start = (width - header.length()) / 2;
-        writeRepeat(SEPARATOR_BLANK, start);
-        print(header);
-        writeRepeat(SEPARATOR_BLANK, width - start - header.length());
-    }
-
-    private void writeID(int id) {
-        assert (id >= 0 && id <= 9999);
-        // TODO: Assumed width to be 4
-        if (id < 10) {
-            print("  " + id + " ");
-        } else if (id < 100) {
-            print(" " + id + " ");
-        } else if (id < 1000) {
-            print(String.valueOf(id));
-        }
-    }
-
-    private void writeTaskName(String taskName) {
-        assert (taskName != null && taskName.length() > 0);
-        if (taskName.length() < WIDTH_NAME) {
-            print(taskName);
-            writeRepeat(SEPARATOR_BLANK, WIDTH_NAME - taskName.length());
-        } else {
-            print(taskName.substring(0, WIDTH_NAME - 3) + "...");
-        }
-    }
-
-    private void writeDate(Date date) {
-        if (date == null) {
-            writeCentered("---", WIDTH_DATE);
-        } else {
-            writeCentered(FORMAT_DATE.format(date), WIDTH_DATE);
-        }
-    }
-
-    private void writeRepeat(String s, int n) {
-        for (int i = 0; i < n; i++) {
-            print(s);
-        }
-    }
-
-    /**
-     * Prints the string to the text pane with a newline. Internally calls print
-     * with newline appended to the provided string
-     * 
-     * @param s
-     *            The string to be printed
-     */
-    private void println(String s) {
-        print(s + NEWLINE);
-    }
-
-    /**
-     * Prints the string to replace the previously printed string with a
-     * newline. Internally calls printr with newline appended to provided string
-     * 
-     * @param s
-     *            The string the be printed in replacement of previous string
-     */
-    private void printlnr(String s) {
-        printr(s + NEWLINE);
-    }
-
-    /**
-     * Internally used method to print the string to the text pane at the
-     * specified position from the end of the document. If provided offset is
-     * not 0, the method will first remove string of length offset from the end
-     * of document and then prints the provided string
-     * 
-     * @param s
-     *            The string to be printed
-     * @param offset
-     *            Positive integer representing offset from end of document
-     */
-    private void print(String s, int offset) {
-        StyledDocument document = mTextPane.getStyledDocument();
-        try {
-            mPrevLen = s.length();
-            // Remove string of length offset from end of document
-            if (offset > 0) {
-                document.remove(document.getLength() - offset, offset);
-            }
-            document.insertString(document.getLength(), s, null);
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Utility function to clear the text pane at the start of each display call
-     */
-    private void clear() {
-        StyledDocument document = mTextPane.getStyledDocument();
-        try {
-            document.remove(0, document.getLength());
-            mPrevLen = 0;
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
-    }
+    }    
 }

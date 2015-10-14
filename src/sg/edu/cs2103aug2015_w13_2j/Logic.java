@@ -21,6 +21,7 @@ public class Logic implements LogicInterface {
      * Protected constructor
      */
     protected Logic() {
+        // Do nothing
     }
 
     /**

@@ -26,22 +26,6 @@ public interface TextUIInterface {
     public void feedback(FeedbackMessage m);
 
     /**
-     * Prints the string to the text pane
-     * 
-     * @param s
-     *            The string to be printed
-     */
-    public void print(String s);
-
-    /**
-     * Prints the string to replace the previously printed string
-     * 
-     * @param s
-     *            The string to be printed in replacement of previous string
-     */
-    public void printr(String s);
-
-    /**
      * Registers the object as a KeyListener for the JTextField component to
      * receive key events
      * 
