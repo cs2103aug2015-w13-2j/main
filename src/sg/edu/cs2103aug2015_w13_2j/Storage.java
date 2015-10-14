@@ -17,14 +17,31 @@ import java.util.List;
 public class Storage implements StorageInterface {
 	private final String FILE_THAT_STORES_FILEPATH = "DATA_FILE_PATH";
 	private final String DEFAULT_DATAFILEPATH = "./FunDUE_DATA_FILE.txt";
+	
+	private static Storage sInstance;
 	private String _datafilepath;
 	
-	public Storage() {
+	/**
+	 * Protected constructor
+	 */
+	protected Storage() {
 		try {
 			getDataFilePath();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+     * Retrieves the singleton instance of the Storage component
+     * 
+     * @return Storage component
+     */
+	public static Storage getInstance() {
+	    if(sInstance == null) {
+	        sInstance = new Storage();
+	    }
+	    return sInstance;
 	}
 	
 	public List<Task> readTasksFromDataFile() throws Exception {

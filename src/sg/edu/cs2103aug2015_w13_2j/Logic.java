@@ -13,18 +13,37 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.TextUI.Message;
 
-public class Logic implements LogicInterface{
-	
-    private static final Logger LOGGER = 
-            Logger.getLogger(Logic.class.getName());
-    private FunDUE mAppInstance;
+public class Logic implements LogicInterface {
+    private static Logic sInstance;
+    private static final Logger LOGGER = Logger
+            .getLogger(Logic.class.getName());
     private ArrayList<Task> mTasks = new ArrayList<Task>();
 
-    public Logic(FunDUE appInstance) {
-        mAppInstance = appInstance;
+    /**
+     * Protected constructor
+     */
+    protected Logic() {
     }
 
-    public void executeCommand(ArrayList<Pair<Token, String>> tokens) {
+    /**
+     * Retrieves the singleton instance of the Logic component
+     * 
+     * @return Logic component
+     */
+    public static Logic getInstance() {
+        if (sInstance == null) {
+            sInstance = new Logic();
+        }
+        return sInstance;
+    }
+
+    public void executeCommand(String command) {
+        ArrayList<Pair<Token, String>> tokens = Parser.getInstance()
+                .parseCommand(command);
+        executeCommand(tokens);
+    }
+
+    private void executeCommand(ArrayList<Pair<Token, String>> tokens) {
         // Remove whitespaces first
         Iterator<Pair<Token, String>> iter = tokens.iterator();
         while (iter.hasNext()) {
@@ -40,62 +59,53 @@ public class Logic implements LogicInterface{
                     switch (pair.getValue()) {
                     case "add":
                         addTask(tokens);
-                        mAppInstance.getTextUIInstance().feedback(
-                                Message.LOGIC_ADDED);
+                        TextUI.getInstance().feedback(Message.LOGIC_ADDED);
                         break;
                     case "edit":
                         editTask(tokens);
-                        mAppInstance.getTextUIInstance().feedback(
-                                Message.LOGIC_EDITED);
+                        TextUI.getInstance().feedback(Message.LOGIC_EDITED);
                         break;
                     case "list":
-                        mAppInstance.getTextUIInstance()
-                                .feedback(Message.CLEAR);
+                        TextUI.getInstance().feedback(Message.CLEAR);
                         break;
                     case "delete":
                         deleteTask(tokens);
-                        mAppInstance.getTextUIInstance().feedback(
-                                Message.LOGIC_DELETED);
+                        TextUI.getInstance().feedback(Message.LOGIC_DELETED);
                         break;
                     case "search":
                         searchTask(tokens);
                         break;
                     case "archive":
                         archiveTask(tokens);
-                        mAppInstance.getTextUIInstance().feedback(
-                                Message.LOGIC_ARCHIVED);
+                        TextUI.getInstance().feedback(Message.LOGIC_ARCHIVED);
                         break;
                     case "retrieve":
                         retrieveTask(tokens);
-                        mAppInstance.getTextUIInstance().feedback(
-                                Message.LOGIC_RETRIEVED);
+                        TextUI.getInstance().feedback(Message.LOGIC_RETRIEVED);
                         break;
                     default:
                         System.err.println("[Logic] Unimplemented command: "
                                 + pair.getValue());
-                        mAppInstance.getTextUIInstance().feedback(
+                        TextUI.getInstance().feedback(
                                 Message.ERROR_COMMAND_NOT_IMPLEMENTED);
                         break;
                     }
                 } catch (InvalidTaskException e) {
                     System.err.println("[Logic] Invalid Task");
-                    mAppInstance.getTextUIInstance().feedback(
-                            Message.ERROR_INVALID_TASK);
+                    TextUI.getInstance().feedback(Message.ERROR_INVALID_TASK);
                 } catch (TaskNotFoundException e) {
                     System.err.println("[Logic] Task not found");
-                    mAppInstance.getTextUIInstance().feedback(
-                            Message.ERROR_TASK_NOT_FOUND);
+                    TextUI.getInstance().feedback(Message.ERROR_TASK_NOT_FOUND);
                 }
-                mAppInstance.getTextUIInstance().display(mTasks);
+                TextUI.getInstance().display(mTasks);
                 return;
             }
         }
-        mAppInstance.getTextUIInstance().feedback(
-                Message.ERROR_COMMAND_NOT_RECOGNIZED);
+        TextUI.getInstance().feedback(Message.ERROR_COMMAND_NOT_RECOGNIZED);
     }
 
     public void echo(String s) {
-        // mAppInstance.getTextUIInstance().print(s);
+        // TextUI.getInstance().print(s);
     }
 
     /**
@@ -103,8 +113,7 @@ public class Logic implements LogicInterface{
      */
     private void readFile() {
         try {
-            mTasks = (ArrayList) mAppInstance.getStorageInstance()
-                    .readTasksFromDataFile();
+            mTasks = (ArrayList) Storage.getInstance().readTasksFromDataFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -115,7 +124,7 @@ public class Logic implements LogicInterface{
      */
     private void writeFile() {
         try {
-            mAppInstance.getStorageInstance().writeTasksToDataFile(mTasks);
+            Storage.getInstance().writeTasksToDataFile(mTasks);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -185,9 +194,9 @@ public class Logic implements LogicInterface{
     private Task addTask(ArrayList<Pair<Token, String>> tokens)
             throws InvalidTaskException {
         Task task = new Task();
-        updateTask(tokens, task); 
-        //expects task to be valid first before adding
-        assert(task.isValid());
+        updateTask(tokens, task);
+        // expects task to be valid first before adding
+        assert (task.isValid());
         mTasks.add(task);
         determineType(task);
         sortByDeadline();
@@ -274,8 +283,8 @@ public class Logic implements LogicInterface{
         }
 
     }
-    
-    //@@author A0130894B
+
+    // @@author A0130894B
     /**
      * Searches for a task with the specified name from the master task list
      *
@@ -290,8 +299,8 @@ public class Logic implements LogicInterface{
             Pair<Token, String> pair = iter.next();
             switch (pair.getKey()) {
             case ALPHA_NUM:
-                mAppInstance.getTextUIInstance().feedback(
-                        Message.ERROR_INVALID_SEARCH_TERM);
+                TextUI.getInstance()
+                        .feedback(Message.ERROR_INVALID_SEARCH_TERM);
                 break;
             case DATE:
             case DATE_INVALID:
@@ -304,23 +313,22 @@ public class Logic implements LogicInterface{
             case NAME:
                 // To demonstrate use of assert & logger during tut 14 Oct
                 ArrayList<Task> tasksFound = search(pair.getValue());
-                assert(tasksFound != null);
-                
+                assert (tasksFound != null);
+
                 String tasksFoundNames = "";
-                for (Task task: tasksFound) {
+                for (Task task : tasksFound) {
                     tasksFoundNames += task.getName() + " | ";
                 }
-                
+
                 LOGGER.info("[Logic] All searched tasks: " + tasksFoundNames);
-                
-                if (!tasksFound.isEmpty()) {    
-                    // TODO: 
+
+                if (!tasksFound.isEmpty()) {
+                    // TODO:
                     // No display view for tasks found in user interface yet.
                     // Do nothing first.
-                    mAppInstance.getTextUIInstance().feedback(
-                            Message.LOGIC_SEARCH_FOUND);
+                    TextUI.getInstance().feedback(Message.LOGIC_SEARCH_FOUND);
                 } else {
-                    mAppInstance.getTextUIInstance().feedback(
+                    TextUI.getInstance().feedback(
                             Message.LOGIC_SEARCH_NOT_FOUND);
                 }
                 break;
@@ -332,7 +340,7 @@ public class Logic implements LogicInterface{
         }
 
     }
-    
+
     /**
      * Archives the task with the specified ID from the master task list
      *
@@ -340,8 +348,8 @@ public class Logic implements LogicInterface{
      *            The tokens parsed from the command <b>including</b> the
      *            command token itself
      * @throws TaskNotFoundException
-     *             Thrown when the provided task name of the ID could not 
-     *             be found or ID is out of bounds
+     *             Thrown when the provided task name of the ID could not be
+     *             found or ID is out of bounds
      */
     private void archiveTask(ArrayList<Pair<Token, String>> tokens)
             throws TaskNotFoundException {
@@ -360,7 +368,7 @@ public class Logic implements LogicInterface{
                 break;
             case ID:
             case NAME:
-                // TODO: 
+                // TODO:
                 // No display view for tasks found in user interface yet.
                 // Do nothing first.
                 int index = pair.getKey() == Token.ID ? Integer.parseInt(pair
@@ -376,7 +384,7 @@ public class Logic implements LogicInterface{
         }
 
     }
-    
+
     /**
      * Retrieves the task with the specified ID from the master task list
      *
@@ -384,13 +392,13 @@ public class Logic implements LogicInterface{
      *            The tokens parsed from the command <b>including</b> the
      *            command token itself
      * @throws TaskNotFoundException
-     *             Thrown when the provided task name of the ID could not 
-     *             be found or ID is out of bounds
+     *             Thrown when the provided task name of the ID could not be
+     *             found or ID is out of bounds
      */
     private void retrieveTask(ArrayList<Pair<Token, String>> tokens)
             throws TaskNotFoundException {
         Iterator<Pair<Token, String>> iter = tokens.iterator();
-        
+
         while (iter.hasNext()) {
             Pair<Token, String> pair = iter.next();
             switch (pair.getKey()) {
@@ -415,7 +423,7 @@ public class Logic implements LogicInterface{
                 break;
             }
         }
-        
+
     }
 
     /**
@@ -426,7 +434,8 @@ public class Logic implements LogicInterface{
      *            The name of the Task object to find
      * @return The index of the Task object or -1 if none is found
      */
-    protected int getTaskIndexByName(String name) { //changed to protected to aid testing
+    protected int getTaskIndexByName(String name) { // changed to protected to
+                                                    // aid testing
         for (int i = 0; i < mTasks.size(); i++) {
             if (mTasks.get(i).getName().compareTo(name) == 0) {
                 return i;
@@ -434,8 +443,8 @@ public class Logic implements LogicInterface{
         }
         return -1;
     }
-    
-    //@@author A0121410H
+
+    // @@author A0121410H
     /**
      * Convenience method to retrieve a task with an index specified by
      * non-sanitized user input or to be chained with the return value of
@@ -478,37 +487,38 @@ public class Logic implements LogicInterface{
         }
     }
 
-    //@@author A0133387B
+    // @@author A0133387B
 
     private Task archive(int index) throws TaskNotFoundException {
         Task archivedTask = new Task();
         if (index >= 0 && index < mTasks.size()) {
             archivedTask = mTasks.get(index);
-            //when calling this method, the user is expected to be in the main view and thus,
-            //the task must have the ARCHIVE view set to FALSE
-            assert(archivedTask.getArchived().equals("FALSE"));
+            // when calling this method, the user is expected to be in the main
+            // view and thus,
+            // the task must have the ARCHIVE view set to FALSE
+            assert (archivedTask.getArchived().equals("FALSE"));
             archivedTask.setArchived("TRUE");
             return archivedTask;
         } else {
             throw new TaskNotFoundException();
         }
     }
-    
-    /**Mark a task as important
+
+    /**
+     * Mark a task as important
      * 
      * @param index
-     *             the ID of the task in current list
-     * @return
-     *             the task that was marked important
+     *            the ID of the task in current list
+     * @return the task that was marked important
      * @throws TaskNotFoundException
      */
-    
+
     private Task markImportant(int index) throws TaskNotFoundException {
         Task importantTask = new Task();
         if (index >= 0 && index < mTasks.size()) {
-        	importantTask = mTasks.get(index);
-            if(importantTask.getImportant().equals("FALSE")){
-            	importantTask.setImportant("TRUE");
+            importantTask = mTasks.get(index);
+            if (importantTask.getImportant().equals("FALSE")) {
+                importantTask.setImportant("TRUE");
             }
             return importantTask;
         } else {
@@ -516,14 +526,14 @@ public class Logic implements LogicInterface{
         }
     }
 
-
     private Task retrieve(int index) throws TaskNotFoundException {
         Task retrievedTask = new Task();
         if (index >= 0 && index < mTasks.size()) {
             retrievedTask = mTasks.get(index);
-            //when calling this method, the user is expected to be in the archive view and thus,
-            //the task must have the ARCHIVE view set to TRUE
-            assert(retrievedTask.getArchived().equals("TRUE"));
+            // when calling this method, the user is expected to be in the
+            // archive view and thus,
+            // the task must have the ARCHIVE view set to TRUE
+            assert (retrievedTask.getArchived().equals("TRUE"));
             retrievedTask.setArchived("FALSE");
             return retrievedTask;
         } else {
@@ -541,9 +551,9 @@ public class Logic implements LogicInterface{
     private ArrayList<Task> sortByDeadline() {
         Collections.sort(mTasks, new Comparator<Task>() {
             public int compare(Task task1, Task task2) {
-            	//Each task always has a type before invoking this method 
-            	assert(task1.getType() != null && task1.getType() != null);
-            	
+                // Each task always has a type before invoking this method
+                assert (task1.getType() != null && task1.getType() != null);
+
                 if (task1.getType().equals(task2.getType())) {
                     if (task1.getType().equals("DEADLINE")) {
                         return task1.getEnd().compareTo(task2.getEnd());
@@ -566,56 +576,56 @@ public class Logic implements LogicInterface{
         for (int i = 0; i < mTasks.size(); i++) {
             if (mTasks.get(i).getName().toLowerCase()
                     .contains(keyword.toLowerCase())) {
-            	tasksWithKeyword.add(mTasks.get(i));
+                tasksWithKeyword.add(mTasks.get(i));
             }
         }
 
         return tasksWithKeyword;
     }
-    
-    /**
-     * Get the list of overdue tasks
-     * TODO: If no overdue tasks, print message saying no overdue?
-     */
-    private ArrayList<Task> viewOverdue(){
-    	 ArrayList<Task> overdueTasks = new ArrayList<Task>();
-         for (int i = 0; i < mTasks.size(); i++) {
-        	 if(mTasks.get(i).isOverdue())
-        	 overdueTasks.add(mTasks.get(i));
-         }
 
-         return overdueTasks;
+    /**
+     * Get the list of overdue tasks TODO: If no overdue tasks, print message
+     * saying no overdue?
+     */
+    private ArrayList<Task> viewOverdue() {
+        ArrayList<Task> overdueTasks = new ArrayList<Task>();
+        for (int i = 0; i < mTasks.size(); i++) {
+            if (mTasks.get(i).isOverdue())
+                overdueTasks.add(mTasks.get(i));
+        }
+
+        return overdueTasks;
     }
-    
+
     /**
      * Get the list of ongoing tasks (meaning not archived)
      */
-    
-    private ArrayList<Task> viewOngoing(){
-   	 ArrayList<Task> ongoingTasks = new ArrayList<Task>();
+
+    private ArrayList<Task> viewOngoing() {
+        ArrayList<Task> ongoingTasks = new ArrayList<Task>();
         for (int i = 0; i < mTasks.size(); i++) {
-       	 if(mTasks.get(i).getArchived().equals("FALSE"))
-       		ongoingTasks.add(mTasks.get(i));
+            if (mTasks.get(i).getArchived().equals("FALSE"))
+                ongoingTasks.add(mTasks.get(i));
         }
 
         return ongoingTasks;
-   }
+    }
 
     /**
-     * Get the list of archived tasks
-     * TODO: Same thing, a message if there is no archived task?
+     * Get the list of archived tasks TODO: Same thing, a message if there is no
+     * archived task?
      */
-    
-    private ArrayList<Task> viewArchived(){
-   	 ArrayList<Task> archivedTasks = new ArrayList<Task>();
+
+    private ArrayList<Task> viewArchived() {
+        ArrayList<Task> archivedTasks = new ArrayList<Task>();
         for (int i = 0; i < mTasks.size(); i++) {
-        	if(mTasks.get(i).getArchived().equals("TRUE"))
-       		archivedTasks.add(mTasks.get(i));
+            if (mTasks.get(i).getArchived().equals("TRUE"))
+                archivedTasks.add(mTasks.get(i));
         }
 
         return archivedTasks;
-   }
-    
+    }
+
     /**
      * Determine the type of a task based on its start (if any) and end (if any)
      * times
@@ -624,22 +634,25 @@ public class Logic implements LogicInterface{
      *            the new task to be categorized
      */
     private void determineType(Task task) {
-    	assert(task != null);
-    	
+        assert (task != null);
+
         if (task.getEnd() == null) {
             // if end == null, float
             task.setType("FLOAT");
-            LOGGER.info("[Logic]: Set type of task " + task.getName() + " to " + task.getType());
-            
+            LOGGER.info("[Logic]: Set type of task " + task.getName() + " to "
+                    + task.getType());
+
         } else {
             if (task.getStart() != null) {
                 // if end != null and start != null, event
-                task.setType("EVENT"); 
-                LOGGER.info("[Logic]: Set type of task " + task.getName() + " to " + task.getType());
+                task.setType("EVENT");
+                LOGGER.info("[Logic]: Set type of task " + task.getName()
+                        + " to " + task.getType());
             } else {
                 // if end != null but start == null, deadline
-                task.setType("DEADLINE");   
-                LOGGER.info("[Logic]: Set type of task " + task.getName() + " to " + task.getType());
+                task.setType("DEADLINE");
+                LOGGER.info("[Logic]: Set type of task " + task.getName()
+                        + " to " + task.getType());
             }
         }
     }

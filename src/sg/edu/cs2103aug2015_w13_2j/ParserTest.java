@@ -11,7 +11,7 @@ import sg.edu.cs2103aug2015_w13_2j.ParserInterface.IllegalDateFormatException;
 
 public class ParserTest {
     // Use the same Parser object across all test cases
-    private Parser mParser = new Parser(null);
+    private Parser mParser = Parser.getInstance();
 
     private void testParser(String command, String expected) {
         System.out.println("Parsing: " + command);

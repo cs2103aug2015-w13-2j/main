@@ -141,66 +141,37 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     // The (fixed) size of the window
     private static final Dimension PREFERRED_SIZE = new Dimension(800, 600);
 
-    private FunDUE mAppInstance;
+    // Self instance
+    private static TextUI sInstance;
+    
+    // UI Components
     private JTextField mTextField;
     private JTextPane mTextPane;
     private JLabel mLabel;
     private int mPrevLen = 0;
 
-    public TextUI(FunDUE appInstance) {
-        mAppInstance = appInstance;
+    /**
+     * Protected constructor
+     */
+    protected TextUI() {
+        createUI();
+    }
 
-        // Create and set up window
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
-
-        Container contentPane = this.getContentPane();
-        contentPane.setLayout(new GridBagLayout());
-        contentPane.setPreferredSize(PREFERRED_SIZE);
-
-        // Will be reused for each GUI component
-        GridBagConstraints constraints = null;
-
-        mTextPane = new JTextPane();
-        mTextPane.setEditable(false);
-        mTextPane.setFont(FONT);
-        mTextPane.setBackground(Color.BLACK);
-        mTextPane.setForeground(Color.WHITE);
-        JScrollPane scrollPane = new JScrollPane(mTextPane);
-        constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.weighty = 1.0;
-        constraints.weightx = 1.0;
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        contentPane.add(scrollPane, constraints);
-
-        mLabel = new JLabel("Test");
-        mLabel.setFont(FONT);
-        constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        contentPane.add(mLabel, constraints);
-
-        mTextField = new JTextField();
-        mTextField.addKeyListener(this);
-        mTextField.setFont(FONT);
-        constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        contentPane.add(mTextField, constraints);
-
-        // Display the window
-        this.setLocation(100, 100);
-        this.pack();
-        this.setVisible(true);
-        mTextField.requestFocusInWindow();
+    /**
+     * Retrieves the singleton instance of the TextUI component
+     * 
+     * @return TextUI component
+     */
+    public static TextUI getInstance() {
+        if (sInstance == null) {
+            sInstance = new TextUI();
+        }
+        return sInstance;
     }
 
     public void display(ArrayList<Task> tasks) {
         clear();
+        writeSeparator();
         writeHeader();
         writeSeparator();
         if (tasks.size() > 0) {
@@ -249,8 +220,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
                 new SnakeTXT(this);
             } else {
                 System.out.println("[TextUI] Command: " + mTextField.getText());
-                mAppInstance.getParserInstance().parseAndExecuteCommand(
-                        mTextField.getText());
+                Logic.getInstance().executeCommand(mTextField.getText());
             }
             mTextField.setText(null);
             break;
@@ -270,6 +240,62 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
 
     public void keyReleased(KeyEvent e) {
         // Empty function
+    }
+
+    /**
+     * Initialize and show the UI Elements. The UI consists a JTextPane which
+     * displays styled text to the user, a JLabel which displays styled text
+     * feedback from executing user commands, and a JTextField which accepts
+     * user input
+     */
+    private void createUI() {
+        // Create and set up window
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+
+        Container contentPane = this.getContentPane();
+        contentPane.setLayout(new GridBagLayout());
+        contentPane.setPreferredSize(PREFERRED_SIZE);
+
+        // Will be reused for each UI element
+        GridBagConstraints constraints = null;
+
+        mTextPane = new JTextPane();
+        mTextPane.setEditable(false);
+        mTextPane.setFont(FONT);
+        mTextPane.setBackground(Color.BLACK);
+        mTextPane.setForeground(Color.WHITE);
+        JScrollPane scrollPane = new JScrollPane(mTextPane);
+        constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weighty = 1.0;
+        constraints.weightx = 1.0;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        contentPane.add(scrollPane, constraints);
+
+        mLabel = new JLabel();
+        mLabel.setFont(FONT);
+        constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        contentPane.add(mLabel, constraints);
+
+        mTextField = new JTextField();
+        mTextField.addKeyListener(this);
+        mTextField.setFont(FONT);
+        constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        contentPane.add(mTextField, constraints);
+
+        // Display the window
+        this.setLocation(100, 100);
+        this.pack();
+        this.setVisible(true);
+        mTextField.requestFocusInWindow();
     }
 
     private void writeHeader() {

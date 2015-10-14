@@ -6,48 +6,54 @@ import java.util.Arrays;
 import javafx.util.Pair;
 
 //@@author A0121410H
+
 public class Parser implements ParserInterface {
 	public enum Token {
 		RESERVED, DATE, DATE_INVALID, FLAG, FLAG_INVALID, ID, ID_INVALID, NAME, WHITESPACE, ALPHA_NUM;
 	}
+	
+	private enum State {
+        GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
+    }
 
 	public static final String[] RESERVED = 
 	    { "add", "delete", "edit", "list", "sort", "search", "archive", "retrieve" };
-
 	public static final String FLAG_END = "e";
 	public static final String FLAG_START = "s";
 	public static final String[] FLAGS = { FLAG_END, FLAG_START };
-
-	private enum State {
-		GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
-	}
-
-	private FunDUE mAppInstance;
+	
+	private static Parser sInstance;
 	private State mState;
 	private String mCommand;
 	private int mParserPos;
 	private ArrayList<Pair<Token, String>> mTokens = new ArrayList<Pair<Token, String>>();
 
-	public Parser(FunDUE appInstance) {
-		mAppInstance = appInstance;
+	/**
+	 * Protected constructor
+	 */
+	protected Parser() {
+		// Do nothing
+	}
+	
+	/**
+     * Retrieves the singleton instance of the Parser component
+     * 
+     * @return Parser component
+     */
+	public static Parser getInstance() {
+	    if(sInstance == null) {
+	        sInstance = new Parser();
+	    }
+	    return sInstance;
 	}
 
-	public void parseCommand(String command) {
+	public ArrayList<Pair<Token, String>> parseCommand(String command) {
 		mState = State.GENERAL;
 		mParserPos = 0;
 		mTokens.clear();
 		mCommand = command;
 		startParserLoop();
-	}
-
-	public void executeCommand() {
-		mAppInstance.getLogicInstance().executeCommand(mTokens);
-	}
-
-	public void parseAndExecuteCommand(String command) {
-		parseCommand(command);
-		System.out.println("[Parser] Parsed tokens: " + getParsedTokens());
-		executeCommand();
+		return new ArrayList<Pair<Token, String>>(mTokens);
 	}
 
 	public String getParsedTokens() {
