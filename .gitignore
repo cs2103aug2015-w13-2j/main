@@ -1,6 +1,2 @@
-# Eclipse
-.classpath
-
-# Java
 *.class
 /bin/
