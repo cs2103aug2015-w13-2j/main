@@ -12,6 +12,8 @@ import java.util.Random;
 
 import javax.swing.Timer;
 
+import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
+
 //@author A0121410H
 /**
  * Text-based snake game that runs within a JTextPane context and using

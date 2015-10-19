@@ -1,4 +1,4 @@
-package sg.edu.cs2103aug2015_w13_2j;
+package sg.edu.cs2103aug2015_w13_2j.ui;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -14,6 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import sg.edu.cs2103aug2015_w13_2j.Logic;
+import sg.edu.cs2103aug2015_w13_2j.SnakeTXT;
+import sg.edu.cs2103aug2015_w13_2j.Task;
 
 //@@author A0121410H
 

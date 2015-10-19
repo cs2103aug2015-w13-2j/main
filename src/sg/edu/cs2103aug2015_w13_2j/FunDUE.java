@@ -1,5 +1,10 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
+import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
+
 //@@author A0121410H
 
 public class FunDUE {
@@ -9,6 +14,10 @@ public class FunDUE {
      * getInstance method to retrieve a handle to the component
      */
     public FunDUE() {
+        Logic.getInstance().registerCommandHandler(new AddHandler());
+        Logic.getInstance().registerCommandHandler(new EditHandler());
+        Logic.getInstance().registerCommandHandler(new DeleteHandler());
+        
         TextUI.getInstance();
     }
 

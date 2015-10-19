@@ -1,4 +1,4 @@
-package sg.edu.cs2103aug2015_w13_2j;
+package sg.edu.cs2103aug2015_w13_2j.ui;
 
 import java.awt.Color;
 import java.text.SimpleDateFormat;
@@ -12,6 +12,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
+
+import sg.edu.cs2103aug2015_w13_2j.Task;
 
 //@@author A0121410H
 

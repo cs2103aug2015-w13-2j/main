@@ -1,7 +1,9 @@
-package sg.edu.cs2103aug2015_w13_2j;
+package sg.edu.cs2103aug2015_w13_2j.ui;
 
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+
+import sg.edu.cs2103aug2015_w13_2j.Task;
 
 //@@author A0121410H
 
