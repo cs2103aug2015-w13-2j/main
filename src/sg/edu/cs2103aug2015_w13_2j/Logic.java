@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
@@ -15,6 +16,8 @@ import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
 
 public class Logic {
     private static Logic sInstance;
+    private static final Logger LOGGER = Logger
+            .getLogger(Logic.class.getName());
     private HashMap<String, CommandHandler> mCommandHandlers = new HashMap<String, CommandHandler>();
     private ArrayList<Task> mTasks = new ArrayList<Task>();
 
@@ -56,7 +59,6 @@ public class Logic {
     public void executeCommand(String command) {
         ArrayList<Pair<Token, String>> tokens = Parser.getInstance()
                 .parseCommand(command);
-        System.out.println(Parser.getInstance().getParsedTokens());
         FeedbackMessage feedback = new FeedbackMessage(
                 "Command not recognized.", FeedbackType.ERROR);
         for (Pair<Token, String> pair : tokens) {

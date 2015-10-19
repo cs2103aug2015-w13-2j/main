@@ -9,6 +9,8 @@ import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,7 +25,9 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 
 public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private static final long serialVersionUID = 7758912303888211773L;
-    
+    private static final Logger LOGGER = Logger.getLogger(TextUI.class
+            .getName());
+
     // Font constant used by all UI elements
     private static final Font FONT = new Font("consolas", Font.BOLD, 16);
 
@@ -81,13 +85,8 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
         case KeyEvent.VK_ENTER:
-            // Hijack the snake command
-            if (mTextField.getText().equalsIgnoreCase("snake")) {
-                new SnakeTXT(this);
-            } else {
-                System.out.println("[TextUI] Command: " + mTextField.getText());
-                Logic.getInstance().executeCommand(mTextField.getText());
-            }
+            LOGGER.log(Level.INFO, "Command: " + mTextField.getText());
+            Logic.getInstance().executeCommand(mTextField.getText());
             mTextField.setText(null);
             break;
         case KeyEvent.VK_UP:
@@ -162,5 +161,5 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         this.pack();
         this.setVisible(true);
         mTextField.requestFocusInWindow();
-    }    
+    }
 }

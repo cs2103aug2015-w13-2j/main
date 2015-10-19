@@ -2,12 +2,17 @@ package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.util.Pair;
 
 //@@author A0121410H
 
 public class Parser implements ParserInterface {
+    private static final Logger LOGGER = Logger.getLogger(Parser.class
+            .getName());
+
     public enum Token {
         RESERVED, DATE, DATE_INVALID, FLAG, FLAG_INVALID, ID, ID_INVALID, NAME, WHITESPACE, ALPHA_NUM;
     }
@@ -51,6 +56,7 @@ public class Parser implements ParserInterface {
         mTokens.clear();
         mCommand = command;
         startParserLoop();
+        LOGGER.log(Level.INFO, getParsedTokens());
         return new ArrayList<Pair<Token, String>>(mTokens);
     }
 
