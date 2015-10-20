@@ -27,8 +27,12 @@ public abstract class Filter {
     }
 
     public Task removeTask(Task task) {
-        int index = mTasks.indexOf(task);
-        return mTasks.remove(index);
+        try {
+            int index = mTasks.indexOf(task);
+            return mTasks.remove(index);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     public String getFilterName() {
