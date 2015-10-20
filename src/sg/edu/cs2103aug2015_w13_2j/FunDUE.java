@@ -5,6 +5,7 @@ import sg.edu.cs2103aug2015_w13_2j.commands.ArchiveHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.RetrieveHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
 
 //@@author A0121410H
@@ -21,6 +22,7 @@ public class FunDUE {
         Logic.getInstance().registerCommandHandler(new DeleteHandler());
         Logic.getInstance().registerCommandHandler(new ArchiveHandler());
         Logic.getInstance().registerCommandHandler(new RetrieveHandler());
+        Logic.getInstance().registerCommandHandler(new MarkImportantHandler());
         
         TextUI.getInstance();
     }
