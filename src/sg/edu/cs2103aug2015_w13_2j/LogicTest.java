@@ -8,157 +8,78 @@ import java.util.Date;
 
 import org.junit.Test;
 
+import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
+import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 
-/**Test cases for the Logic Component and Parser Component
+
+/**Test cases for the Logic Component
  * 
  * @author Nguyen Tuong Van
  *
  */
 
-public class LogicTest extends Logic{
-	FunDUE funDue = new FunDUE();
-	public LogicTest(){
-		super(new FunDUE());
+public class LogicTest{
+	private Logic logicTest = Logic.getInstance();	
+	private String response = "";
+	@Test
+	public void testAdd(){
+		Task first = new Task("Do 2101 reflection"); 
+		first.setEnd(new Date((long)(1254554769)));
+		logicTest.addTask(first);
+		try {
+			assertEquals(logicTest.getTask(0).getName(), "Do 2101 reflection");
+		} catch (TaskNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
+	
+	
+	/**
+	 * Tests the boundary cases of indices 
+	 * using equivalence testing
+	 * @param 
+	 *         The index to test
+	 * @throws TaskNotFoundException
+	 */
+	
+
+	public void testGetIndex(int index) throws TaskNotFoundException{
+		  try {
+			    response = logicTest.getTask(index).getName();
+		    } catch (TaskNotFoundException e) {
+			    response = index + " is out of bound!";
+		    }
+	}
+	
+    @Test
+    public void testIndex() throws TaskNotFoundException{
+        logicTest.executeCommand("add 'Go to CS2103T tutorial -s 21/10T13:00 -e 21/10T14:00'");//event. Index 2
+	    logicTest.executeCommand("add 'Do 2101 reflection -e 21/10T23:59'");//deadline, on top. Index 0
+	    logicTest.executeCommand("add 'Revise for 2010'");//this is a float task, it's at the bottom of the above 2. Index 3
+	    logicTest.executeCommand("add 'Study for CS2105'");//also float, index 4
+	    logicTest.executeCommand("add 'Clean room' -e 23/10");//deadline, below Do 2101 reflection.Index 1
+	    
+	    testGetIndex(0);
+	    assertEquals(response, "Do 2101 reflection");//boundary value analysis for the valid range
+	    
+	    testGetIndex(-1);
+	    assertEquals(response, "-1 is out of bound!");//testing using boundary value analysis for equivalence partition
+                                                               //below the valid range
+	    testGetIndex(5);
+	    assertEquals(response, "5 is out of bound!");//testing using boundary value analysis for equivalence partition
+                                                             //above the valid range
+	//    assertTrue(logicTest.getTask(1) != null);
+	//    assertTrue(logicTest.getTask(4) != null);
+	//    assertEquals(logicTest.getTask(4).getName(), "Study for CS2105");
+    }
     
-    private Logic logic = funDue.getLogicInstance();
-    LogicTest logicTest = new LogicTest();
-    private Parser parser = funDue.getParserInstance();
-   
-
-	public void testAdd() {
-		parser.parseAndExecuteCommand("add 'Do CS2103T -e 13/10'"); //correct?
-		assertTrue(logic.getTaskIndexByName("Do CS2103T") == 0);
-	}
-
-	public void testDelete(){
-		System.out.println("TESTING DELETE BY INDEX");
-		//logicComponent.addTask(new Task("first test task"));
-		//logicComponent.addTask(new Task("second test task"));
-		//logicComponent.deleteTask(0);
-		//assertEquals(logicComponent.getAllTasks().get(0).getName(), "second test task");
-	}
-	
-
-	public void testDetermineType(){
-		Task newTask = new Task("first test task");
-		//logicComponent.determineType(newTask);
-		assertTrue(newTask.getEnd() == null);
-		assertEquals(newTask.getType(), "FLOAT");
-		newTask.setEnd(new Date());
-		///logicComponent.determineType(newTask);
-		assertEquals(newTask.getType(), "DEADLINE");
-		newTask.setStart(new Date());
-		//logicComponent.determineType(newTask);
-		assertEquals(newTask.getType(), "EVENT");
-	}
-	
-
-	public void testEdit(){
-		Task original = new Task("first test task");
-		assertEquals(original.getCompleted(), "FALSE");
-		assertEquals(original.getArchived(), "FALSE");
-		assertEquals(original.getImportant(), "FALSE");
-		//logicComponent.addTask(original);
-		assertEquals(original.getType(), "FLOAT");
-		Task newTask = new Task("first test task");
-		newTask.setEnd(new Date());
-	//	logicComponent.determineType(newTask);
-		//logicComponent.editTask(original, newTask);
-		assertEquals(original.getType(), "DEADLINE");
-		newTask.setStart(new Date());
-		//logicComponent.determineType(newTask);
-	//	logicComponent.editTask(original, newTask);
-		assertEquals(original.getType(), "EVENT");
-		newTask.setName("I have changed");
-		//logicComponent.editTask(original, newTask);
-		assertEquals(original.getName(), newTask.getName());
-	}
-	
-
-	public void testStatus(){
-		Task original = new Task("second test task");
-		//logicComponent.addTask(original);
-		assertEquals(original.getCompleted(), "FALSE");
-		original.setCompleted("TRUE");
-		assertEquals(original.getCompleted(), "TRUE");
-		//ArrayList<Task> all = logicComponent.getAllTasks();
-	//	assertTrue(all.size() == 1);
-		//assertTrue(logicComponent.viewCompleted().size() == 1);
-		//logicComponent.deleteTask(all.indexOf(original));
-		//assertEquals(original.getStatus(), "DELETED");
-	//	assertTrue(all.isEmpty());
-		//assertTrue(logicComponent.viewCompleted().isEmpty());
-	}
-	
-
-	public void testSortByDeadline(){
-		Task one = new Task("ONE");
-	//	logicComponent.addTask(one);
-		Task two = new Task("TWO");
-	//	logicComponent.addTask(two);
-		Task seven = new Task("SEVEN");
-	//	logicComponent.addTask(seven);
-		System.out.println("Sorting all floats by name");
-		/*
-		ArrayList<Task> list = logic.sortByDeadline();
-		for(int i = 0; i< list.size(); i++){
-			System.out.println(list.get(i).getName() + " " + list.get(i).getType());
-		}
-		System.out.println("Seven becomes deadline");
-		seven.setEnd(new Date());
-		assertTrue(seven.getStart() == null && seven.getEnd() != null);
-		System.out.println("Seven's deadline = " + seven.getEnd());
-		/*
-		logicComponent.determineType(seven);
-		//logicComponent.editTask("SEVEN", seven);
-		//seven.setTypeDeadline();
-		System.out.println("Seven's type = " + seven.getType());
-		list = logicComponent.sortByDeadline();
-		for(int i = 0; i< list.size(); i++){
-			System.out.println(list.get(i).getName() +" " + list.get(i).getType());
-		}
-		
-		System.out.println("Even more Seven ");
-		Task newSeven = new Task("SEVEN SEVEN");
-		newSeven.setEnd(new Date());
-		newSeven.setStart(new Date());
-		logicComponent.editTask(seven, newSeven);
-		list = logicComponent.sortByDeadline();
-		for(int i = 0; i< list.size(); i++){
-			System.out.println(list.get(i).getName() +" " +  list.get(i).getType());
-		}
-		
-		System.out.println("TWO's gonna get in front!");
-		Task newTwo = new Task("I AM THE NEW TWO");
-		newTwo.setEnd(new Date());
-		newTwo.setStart(new Date());
-		logicComponent.editTask(two, newTwo);
-		
-		Task five = new Task("FIVE");
-		logicComponent.addTask(five);
-		Task six = new Task("SIX");
-		six.setEnd(new Date());
-		logicComponent.addTask(six);
-		
-		list = logicComponent.sortByDeadline();
-		for(int i = 0; i< list.size(); i++){
-			System.out.println(list.get(i).getName() + " " +list.get(i).getType());
-		}
-		*/
-	}
-	
-
-	public void testOverdue(){
-		Task one = new Task("ONE");
-	//	logicComponent.addTask(one);
-		Task two = new Task("TWO");
-	//	logicComponent.addTask(two);
-		one.setEnd(new Date(new Long("324567898")));
-	//	ArrayList<Task> list = logicComponent.list();
-		System.out.println("Testing list now");
-	//	for(int i = 0; i< list.size(); i++){
-	//		System.out.println(list.get(i).getName() + " " +list.get(i).getType() + " " + list.get(i).getCompleted() + " " + list.get(i).getArchived() + " " + list.get(i).getImportant());
-	//	}
+	@Test
+	public void testDelete() throws TaskNotFoundException{
+		Task newTask = new Task();
+		newTask.setName("test task");
+		logicTest.addTask(newTask);
+	//	logicTest.removeTask(0);
+		testGetIndex(0);
+	//	assertEquals(response, "0 is out of bound!");
 	}
 }
