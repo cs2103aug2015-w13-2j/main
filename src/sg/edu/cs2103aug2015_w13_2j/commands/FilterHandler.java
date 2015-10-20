@@ -9,8 +9,8 @@ import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.filters.ActiveFilter;
 import sg.edu.cs2103aug2015_w13_2j.filters.ArchivedFilter;
-import sg.edu.cs2103aug2015_w13_2j.filters.IdentityFilter;
 import sg.edu.cs2103aug2015_w13_2j.filters.ImportantFilter;
+import sg.edu.cs2103aug2015_w13_2j.filters.SearchFilter;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
@@ -33,7 +33,15 @@ public class FilterHandler extends CommandHandler {
                     Logic.getInstance().pushFilter(new ImportantFilter());
                     break;
                 default:
-                    return FeedbackMessage.getInvalidFilterError();
+                    String filterString = pair.getValue();
+                    if (filterString.indexOf("search:") == 0) {
+                        String needle = filterString.substring(7,
+                                filterString.length());
+                        Logic.getInstance()
+                                .pushFilter(new SearchFilter(needle));
+                    } else {
+                        return FeedbackMessage.getInvalidFilterError();
+                    }
                 }
                 return new FeedbackMessage(FILTER_SUCCESS, FeedbackType.INFO);
             }
