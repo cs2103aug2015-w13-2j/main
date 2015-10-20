@@ -13,6 +13,16 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
+/**
+ * Archives a Task specified by the user. 
+ * 
+ * This class includes an execution method that sets the "ARCHIVED" label 
+ * of the Task to true. A user feedback message will subsequently be 
+ * returned upon setting the label. If the Task index specified is 
+ * out of range, or does not exist, a user error message will be returned.
+ * 
+ * @author Natasha Koh Sze Sze
+ */
 public class ArchiveHandler extends CommandHandler {
     private static final Logger LOGGER = Logger.getLogger(ArchiveHandler.class
             .getName());

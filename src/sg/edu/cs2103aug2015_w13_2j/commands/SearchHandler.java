@@ -12,6 +12,20 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
+/**
+ * This class handles the user's query to search for specific 
+ * Tasks that contain a particular substring. 
+ * 
+ * It includes an execution method that searches for a substring 
+ * contained in a Task object's name and returns the list of Tasks
+ * that have that substring.
+ * 
+ * A user feedback message will subsequently be returned upon a 
+ * successful or unsuccessful search, or return a user error message 
+ * for invalid search terms entered.
+ * 
+ * @author Natasha Koh Sze Sze
+ */
 public class SearchHandler extends CommandHandler {
     private static final Logger LOGGER = Logger
             .getLogger(SearchHandler.class.getName());

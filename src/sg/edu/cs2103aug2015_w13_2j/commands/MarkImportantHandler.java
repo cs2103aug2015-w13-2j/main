@@ -13,6 +13,15 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
+/**
+ * Toggles a Task specified by the user as "Important" or "Unimportant".
+ * 
+ * A user feedback message will subsequently be returned upon marking 
+ * the task as "Important" or "Unimportant". If the Task index specified is 
+ * out of range, or does not exist, a user error message will be returned.
+ * 
+ * @author Natasha Koh Sze Sze
+ */
 public class MarkImportantHandler extends CommandHandler {
     private static final Logger LOGGER = Logger
             .getLogger(MarkImportantHandler.class.getName());

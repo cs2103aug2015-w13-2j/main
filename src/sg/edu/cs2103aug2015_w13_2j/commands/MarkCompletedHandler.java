@@ -16,8 +16,13 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 // @@author A0130894B
 
 /**
- * Marks a Task indicated by the user as "Completed". It archives the task
- * marked as "Completed" and unarchives any task marked as "Uncompleted".
+ * Marks a Task indicated by the user as "Completed" and archives it. 
+ * For a Task that has been marked as "Completed", it will be marked as 
+ * "Uncompleted" and be unarchived.
+ * 
+ * A user feedback message will subsequently be returned upon marking 
+ * the task as "Completed" or "Uncompleted". If the Task index specified is 
+ * out of range, or does not exist, a user error message will be returned.
  * 
  * @author Natasha Koh Sze Sze
  */
