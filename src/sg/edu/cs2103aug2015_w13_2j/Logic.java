@@ -128,6 +128,24 @@ public class Logic {
      * according to start time and floats to be added last, sorted by their
      * names
      * 
+     */
+    public ArrayList<Task> search(String keyword) {
+        ArrayList<Task> tasksWithKeyword = new ArrayList<Task>();
+        for (int i = 0; i < mTasks.size(); i++) {
+            if (mTasks.get(i).getName().toLowerCase()
+                    .contains(keyword.toLowerCase())) {
+                tasksWithKeyword.add(mTasks.get(i));
+            }
+        }
+
+        return tasksWithKeyword;
+    }
+    
+    /**
+     * This method sorts a list of tasks according to their deadlines(if any)
+     * The tasks with deadlines takes priority, followed by events sorted
+     * according to start time and floats to be added last, sorted by their
+     * names
      * 
      * @@author A0133387B
      * 
@@ -155,23 +173,4 @@ public class Logic {
         return mTasks;
     }
     
-    /**
-     * This method sorts a list of tasks according to their deadlines(if any)
-     * The tasks with deadlines takes priority, followed by events sorted
-     * according to start time and floats to be added last, sorted by their
-     * names
-     * 
-     */
-    
-    private ArrayList<Task> search(String keyword) {
-        ArrayList<Task> tasksWithKeyword = new ArrayList<Task>();
-        for (int i = 0; i < mTasks.size(); i++) {
-            if (mTasks.get(i).getName().toLowerCase()
-                    .contains(keyword.toLowerCase())) {
-            	tasksWithKeyword.add(mTasks.get(i));
-            }
-        }
-
-        return tasksWithKeyword;
-    }
 }
