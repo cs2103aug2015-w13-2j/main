@@ -44,12 +44,22 @@ public class Storage implements StorageInterface {
 	    return sInstance;
 	}
 	
-	public List<Task> readTasksFromDataFile() throws Exception {
-        return readTasksFromFile(_datafilepath);
+	public List<Task> readTasksFromDataFile() {
+        try {
+			return readTasksFromFile(_datafilepath);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Error("File is corrupted.");
+		}
     }
     
-    public void writeTasksToDataFile(List<Task> tasks) throws IOException {
-    	writeTasksToFile(tasks, _datafilepath);
+    public void writeTasksToDataFile(List<Task> tasks) {
+    	try {
+			writeTasksToFile(tasks, _datafilepath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 	
     /**

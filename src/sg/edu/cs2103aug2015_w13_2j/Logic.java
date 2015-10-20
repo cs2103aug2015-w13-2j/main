@@ -28,6 +28,7 @@ public class Logic {
      */
     protected Logic() {
         // Do nothing
+    	mTasks = (ArrayList<Task>)Storage.getInstance().readTasksFromDataFile();
         TextUI.getInstance().display(mTasks);
     }
 
@@ -73,6 +74,7 @@ public class Logic {
             }
         }
         sortByDeadline();
+        Storage.getInstance().writeTasksToDataFile(mTasks);
         TextUI.getInstance().feedback(feedback);
         TextUI.getInstance().display(mTasks);
     }
