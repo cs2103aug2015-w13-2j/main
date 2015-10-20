@@ -13,7 +13,17 @@ public class ParserTest {
     // Use the same Parser object across all test cases
     private Parser mParser = Parser.getInstance();
 
+    /**
+     * Compares this command to the specified expected format of 
+     * parsed tokens.
+     * 
+     * @param command
+     *          User command to test
+     * @param expected
+     *          Expected parsed tokens format for the command input
+     */
     private void testParser(String command, String expected) {
+        new FunDUE();
         System.out.println("Parsing: " + command);
         mParser.parseCommand(command);
         System.out.println("Parsed Tokens: " + mParser.getParsedTokens());
@@ -27,10 +37,9 @@ public class ParserTest {
         Calendar date1 = new GregorianCalendar(2015, 9 - 1, 23);
 
         String command = "add -s 23/09 -e 4pm *@(*#(!&@! 'Task name'";
-        String expected = "[RESERVED=add][WHITESPACE][FLAG=s][WHITESPACE]"
-                + "[DATE=" + date1.getTimeInMillis()
-                + "][WHITESPACE][FLAG=e][WHITESPACE][DATE_INVALID=4pm]"
-                + "[WHITESPACE][ALPHA_NUM=*@(*#(!&@!][WHITESPACE]"
+        String expected = "[RESERVED=add][FLAG=s][DATE=" 
+                + date1.getTimeInMillis() + "]"
+                + "[FLAG=e][DATE_INVALID=4pm][ALPHA_NUM=*@(*#(!&@!]"
                 + "[NAME=Task name]";
 
         testParser(command, expected);
@@ -49,19 +58,24 @@ public class ParserTest {
      *****************************************************************/
     @Test
     public void parseCommandTest() {
-        // Test cases for valid command formats
-        String correctCommand = "add **(#!(*@&#!(@&";
-        String correctCommandExpected = "[RESERVED=add][WHITESPACE]"
-                + "[ALPHA_NUM=**(#!(*@&#!(@&]";
+        // Equivalence partition for case of 'Valid command Token'
+        // These are cases where a valid command is recognized: 
+        // 1.) Valid first token and random symbols
+        // 2.) Single token that is, itself, a valid keyword
+        String correctCommand = "add **(#!(ab*@&#!(@&";
+        String correctCommandExpected = "[RESERVED=add][ALPHA_NUM=**(#!(ab*@&#!(@&]";
         String singleTokenCommand = "add";
         String singleTokenCommandExpected = "[RESERVED=add]";
 
         testParser(correctCommand, correctCommandExpected);
         testParser(singleTokenCommand, singleTokenCommandExpected);
 
-        // Test cases for invalid command formats or incorrect number of tokens
+        // Equivalence partitions for cases of 'Invalid command Token'
+        // These are cases where an invalid command is found: 
+        // 1.) Invalid command spelling
+        // 2.) Incorrect number of tokens
         String incorrectKeywordCommand = "addd *(&(!*&@*!*(@&(";
-        String incorrectKeywordCommandExpected = "[ALPHA_NUM=addd][WHITESPACE]"
+        String incorrectKeywordCommandExpected = "[ALPHA_NUM=addd]"
                 + "[ALPHA_NUM=*(&(!*&@*!*(@&(]";
         String singleTokenIncorrectKeywordCommand = "adzzd";
         String singleTokenIncorrectKeywordCommandExpected = "[ALPHA_NUM=adzzd]";
@@ -79,30 +93,42 @@ public class ParserTest {
      *****************************************************************/
     @Test
     public void parseTaskNameTest() {
-        // Test cases for a task name with enclosing wrappers
+        // Equivalence partition for a 'Valid task name'
+        // These are test cases for a valid task name recognized: 
+        // 1.) Test with enclosing wrappers single quote ' and double quote "
+        // 2.) Test with task names that are integers with enclosing wrappers
+        // 3.) Test with no closing wrapper single quote ' or double quote "
         String validTaskName = "'Eat Lunch'";
         String validTaskNameExpected = "[NAME=Eat Lunch]";
         String validTaskNameAlternative = "\"Eat Lunch\"";
         String validTaskNameAlternativeExpected = "[NAME=Eat Lunch]";
-
-        testParser(validTaskName, validTaskNameExpected);
-        testParser(validTaskNameAlternative, validTaskNameAlternativeExpected);
-
-        // Test cases for a task name with incomplete wrappers
-        // NOTE: No closing quote will result in rest of command being assumed
-        // as being part of the task name
-        String noWrappers = "Eat Lunch";
-        String noWrappersExpected = "[ALPHA_NUM=Eat][WHITESPACE]"
-                + "[ALPHA_NUM=Lunch]";
-        String noOpeningWrapper = "Eat Lunch'";
-        String noOpeningWrapperExpected = "[ALPHA_NUM=Eat][WHITESPACE]"
-                + "[ALPHA_NUM=Lunch']";
+        String validNumericTaskName = "'12345'";
+        String validNumericTaskNameExpected = "[NAME=12345]";
         String noClosingWrapper = "'Eat Lunch";
         String noClosingWrapperExpected = "[NAME=Eat Lunch]";
 
-        testParser(noWrappers, noWrappersExpected);
-        testParser(noOpeningWrapper, noOpeningWrapperExpected);
+        testParser(validTaskName, validTaskNameExpected);
+        testParser(validTaskNameAlternative, validTaskNameAlternativeExpected);
+        testParser(validNumericTaskName, validNumericTaskNameExpected);
         testParser(noClosingWrapper, noClosingWrapperExpected);
+        
+        // Equivalence partition for an 'Invalid task name'
+        // These are test cases for a task name with incomplete/unaccepted wrappers:
+        // 1.) Test with an absence of both opening and closing wrappers with 
+        //     letters as names
+        // 2.) Test with an absence of both opening and closing wrappers with 
+        //     integers as names
+        // 3.) Test with an absence of opening wrapper 
+        String noWrappers = "Eat Lunch";
+        String noWrappersExpected = "[ALPHA_NUM=Eat][ALPHA_NUM=Lunch]";
+        String numericTaskName = "12345";
+        String numericTaskNameExpected = "[ID=12345]";
+        String noOpeningWrapper = "Eat Lunch'";
+        String noOpeningWrapperExpected = "[ALPHA_NUM=Eat][ALPHA_NUM=Lunch']";
+        
+        testParser(noWrappers, noWrappersExpected);
+        testParser(numericTaskName, numericTaskNameExpected);
+        testParser(noOpeningWrapper, noOpeningWrapperExpected);
     }
 
     /*****************************************************************
@@ -110,56 +136,67 @@ public class ParserTest {
      *****************************************************************/
     @Test
     public void parseAllOptionsTest() {
+        // Initialize dates used for this test case
         Calendar date1 = new GregorianCalendar(2015, 9 - 1, 23);
         Calendar date2 = new GregorianCalendar(2015, 9 - 1, 24);
         Calendar date3 = new GregorianCalendar(2015, 9 - 1, 25);
-        // Test cases for valid options
-        String validOptions = "-s 23/09 -e 24/09";
-        String validOptionsExpected = "[FLAG=s][WHITESPACE][DATE="
-                + date1.getTimeInMillis() + "]"
-                + "[WHITESPACE][FLAG=e][WHITESPACE][DATE="
-                + date2.getTimeInMillis() + "]";
+        
+        // Equivalence partition for an 'Valid option(s)'
+        // These are test cases for valid flag-date pairs recognized:
+        // 1.) Test with single valid option 
+        // 2.) Test with multiple valid options
+        // 3.) Test with empty option field
         String singleValidOption = "-s 23/09";
-        String singleValidOptionExpected = "[FLAG=s][WHITESPACE][DATE="
+        String singleValidOptionExpected = "[FLAG=s][DATE=" 
                 + date1.getTimeInMillis() + "]";
+        String validOptions = "-s 23/09 -e 24/09";
+        String validOptionsExpected = "[FLAG=s][DATE=" 
+                + date1.getTimeInMillis() + "][FLAG=e][DATE=" 
+                + date2.getTimeInMillis() + "]";
         String emptyToken = "";
         String emptyTokenExpected = "";
 
-        testParser(validOptions, validOptionsExpected);
         testParser(singleValidOption, singleValidOptionExpected);
+        testParser(validOptions, validOptionsExpected);
         testParser(emptyToken, emptyTokenExpected);
 
-        // Test cases for invalid number of options
+        // Equivalence partition for 'Invalid option(s)'
+        // These are test cases for invalid flag-date pairs recognized:
+        // 1.) Test with flag but no specified date
+        // 2.) Test with a date that is not attached to any flag/option
+        // 3.) Test with a single valid flag-date pair, followed by 
+        //     a flag with no specified date
         String singleToken = "-s";
         String singleTokenExpected = "[FLAG=s]";
         String invalidSecondOption = "-s 23/09 24/09 -e 25/09";
-        String invalidSecondOptionExpected = "[FLAG=s][WHITESPACE][DATE="
-                + date1.getTimeInMillis() + "]"
-                + "[WHITESPACE][ID_INVALID=24/09][WHITESPACE][FLAG=e]"
-                + "[WHITESPACE][DATE=" + date3.getTimeInMillis() + "]";
+        String invalidSecondOptionExpected = "[FLAG=s][DATE="
+                + date1.getTimeInMillis() + "][ID_INVALID=24/09][FLAG=e]"
+                + "[DATE=" + date3.getTimeInMillis() + "]";
         String invalidSecondOptionField = "-s 23/09 -e";
-        String invalidSecondOptionFieldExpected = "[FLAG=s][WHITESPACE]"
-                + "[DATE=" + date1.getTimeInMillis() + "][WHITESPACE][FLAG=e]";
+        String invalidSecondOptionFieldExpected = "[FLAG=s]"
+                + "[DATE=" + date1.getTimeInMillis() + "][FLAG=e]";
 
         testParser(singleToken, singleTokenExpected);
         testParser(invalidSecondOption, invalidSecondOptionExpected);
         testParser(invalidSecondOptionField, invalidSecondOptionFieldExpected);
 
-        // Test cases for having an invalid option
+        // Equivalence partition for 'Invalid flag(s)'
+        // These are test cases for invalid flags recognized
+        // 1.) Test with flag with wrong spelling
+        // 2.) Test with flag with wrong spelling, followed by a date
+        // 3.) Test with flag followed by a task name instead of a valid date
         String singleInvalidToken = "-ss";
         String singleInvalidTokenExpected = "[FLAG_INVALID=ss]";
         String invalidOptionWithField = "-ss 23/09";
-        String invalidOptionWithFieldExpected = "[FLAG_INVALID=ss][WHITESPACE]"
+        String invalidOptionWithFieldExpected = "[FLAG_INVALID=ss]"
                 + "[ID_INVALID=23/09]";
+        String invalidFlagThenTaskName = "add -s 'Do Homework'";
+        String invalidFlagThenTaskNameExpected = "[RESERVED=add]"
+                + "[FLAG=s][DATE_INVALID='Do]"
+                + "[ALPHA_NUM=Homework']";
 
         testParser(singleInvalidToken, singleInvalidTokenExpected);
         testParser(invalidOptionWithField, invalidOptionWithFieldExpected);
-
-        // Test cases for having an invalid flag followed by task name
-        String invalidFlagThenTaskName = "add -s 'Do Homework'";
-        String invalidFlagThenTaskNameExpected = "[RESERVED=add][WHITESPACE]"
-                + "[FLAG=s][WHITESPACE][DATE_INVALID='Do][WHITESPACE]"
-                + "[ALPHA_NUM=Homework']";
         testParser(invalidFlagThenTaskName, invalidFlagThenTaskNameExpected);
     }
 
