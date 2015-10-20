@@ -12,12 +12,12 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
-public class MarkImportantHandler extends CommandHandler {
-    private static final String[] RESERVED = { "important", "impt", "!" };
-    private static final String SET_IMPORTANT_SUCCESS = 
-            "Task has been set as important.";
-    private static final String SET_UNIMPORTANT_SUCCESS = 
-            "Task has been set as unimportant.";
+public class MarkCompletedHandler extends CommandHandler {
+    private static final String[] RESERVED = { "mark", "done", "tick" };
+    private static final String SET_COMPLETED_SUCCESS = 
+            "Completed task!";
+    private static final String SET_UNCOMPLETED_SUCCESS = 
+            "Task has been set as uncompleted.";
     
     @Override
     public FeedbackMessage execute(ArrayList<Pair<Token, String>> tokens) {
@@ -26,17 +26,17 @@ public class MarkImportantHandler extends CommandHandler {
                 try {
                     Task task = Logic.getInstance().getTask(
                             Integer.parseInt(pair.getValue()));
-                    String isImportantTaskIndicator = task.getImportant();
+                    String isCompletedTaskIndicator = task.getCompleted();
 
-                    switch (isImportantTaskIndicator) {
+                    switch (isCompletedTaskIndicator) {
                     case "TRUE":
-                        task.setImportant("FALSE");
+                        task.setCompleted("FALSE");
                         return new FeedbackMessage(
-                                SET_UNIMPORTANT_SUCCESS, FeedbackType.INFO);
+                                SET_UNCOMPLETED_SUCCESS, FeedbackType.INFO);
                     case "FALSE":
-                        task.setImportant("TRUE");
+                        task.setCompleted("TRUE");
                         return new FeedbackMessage(
-                                SET_IMPORTANT_SUCCESS, FeedbackType.INFO);
+                                SET_COMPLETED_SUCCESS, FeedbackType.INFO);
                     default:
                         // Do nothing
                         break;
