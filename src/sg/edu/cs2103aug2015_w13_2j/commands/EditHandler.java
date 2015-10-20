@@ -16,6 +16,8 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 public class EditHandler extends CommandHandler {
     private static String[] RESERVED = { "edit", "e" };
     private static String EDIT_SUCCESS = "Task edited successfully.";
+    private static String EDIT_FAILURE = 
+            "Option not recognized. Did you enter the flag correctly?";
 
     @Override
     public FeedbackMessage execute(ArrayList<Pair<Token, String>> tokens) {
@@ -31,6 +33,8 @@ public class EditHandler extends CommandHandler {
                 } catch (InvalidTaskException e) {
                     return FeedbackMessage.getInvalidTaskError();
                 }
+            } else if (pair.getKey() == Token.ID_INVALID) {
+                return new FeedbackMessage(EDIT_FAILURE, FeedbackType.ERROR);
             }
         }
         return FeedbackMessage.getTaskNotFoundError();
