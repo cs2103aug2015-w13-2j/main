@@ -16,7 +16,7 @@ public class Task implements TaskInterface {
     public enum Type {
         DEADLINE, EVENT, FLOATING
     }
-    
+
     private static final String TRUE_VALUE = "TRUE";
     private static final String FALSE_VALUE = "FALSE";
 
@@ -74,7 +74,7 @@ public class Task implements TaskInterface {
     public void setStart(Date start) {
         setLabel(LABEL_START, dateToString(start));
     }
-    
+
     public void setStart(String startString) {
         setLabel(LABEL_START, startString);
     }
@@ -86,7 +86,7 @@ public class Task implements TaskInterface {
     public void setEnd(Date end) {
         setLabel(LABEL_END, dateToString(end));
     }
-    
+
     public void setEnd(String endString) {
         setLabel(LABEL_END, endString);
     }
@@ -94,7 +94,7 @@ public class Task implements TaskInterface {
     public Date getEnd() {
         return stringToDate(getLabel(LABEL_END));
     }
-    
+
     public void setType(Type type) {
         setLabel(LABEL_TYPE, type.toString());
     }
@@ -106,7 +106,7 @@ public class Task implements TaskInterface {
     public boolean isCompleted() {
         return getBooleanValue(LABEL_COMPLETED);
     }
-    
+
     public void setArchived(boolean archived) {
         setBooleanValue(LABEL_ARCHIVED, archived);
     }
@@ -144,8 +144,42 @@ public class Task implements TaskInterface {
         }
     }
 
+    /**
+     * Checks if two Task objects are equal to each other. Specifically it is
+     * assumed that each Task object is created at a different point in time and
+     * their CREATED labels are compared for equality
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Task) {
+            String c1 = ((Task) o).getLabel(LABEL_CREATED);
+            String c2 = this.getLabel(LABEL_CREATED);
+            if (c1.equals(c2)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * The hash code for the Task object is the hash code returned by the long
+     * value of the {@link #LABEL_CREATED} label
+     */
+    @Override
+    public int hashCode() {
+        try {
+            Long created = Long.parseLong(getLabel(LABEL_CREATED));
+            return created.hashCode();
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
     // @@author A0124007X
-    
+
     /**
      * Converts the Task object into string format for storage
      * 
@@ -162,9 +196,9 @@ public class Task implements TaskInterface {
         }
         return sb.toString();
     }
-    
+
     // @@author A0121410H
-    
+
     /**
      * Utility method to convert a String millisecond epoch to a Date object
      * 
@@ -201,7 +235,7 @@ public class Task implements TaskInterface {
             return String.valueOf(date.getTime());
         }
     }
-    
+
     /**
      * Returns the boolean value of a particular label. The value of the label
      * is assumed to be equal to either {@link Task#TRUE_VALUE} or
