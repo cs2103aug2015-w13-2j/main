@@ -97,5 +97,34 @@ public abstract class CommandHandler {
             }
         }
         task.isValid();
-    }   
+        determineType(task);
+    }
+    
+    /**
+     * Determine the type of a task based on its start (if any) and end (if any)
+     * times
+     * 
+     * @param task
+     *            the new task to be categorized
+     */
+    private void determineType(Task task) {
+    	assert(task != null);
+    	
+        if (task.getEnd() == null) {
+            // if end == null, float
+            task.setType("FLOAT");
+         //   LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
+            
+        } else {
+            if (task.getStart() != null) {
+                // if end != null and start != null, event
+                task.setType("EVENT"); 
+            //    LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
+            } else {
+                // if end != null but start == null, deadline
+                task.setType("DEADLINE");   
+           //     LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
+            }
+        }
+    }    
 }

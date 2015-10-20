@@ -1,6 +1,8 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -70,6 +72,7 @@ public class Logic {
                 break;
             }
         }
+        sortByDeadline();
         TextUI.getInstance().feedback(feedback);
         TextUI.getInstance().display(mTasks);
     }
@@ -115,5 +118,35 @@ public class Logic {
         } else {
             throw new TaskNotFoundException();
         }
+    }
+    
+    /**
+     * This method sorts a list of tasks according to their deadlines(if any)
+     * The tasks with deadlines takes priority, followed by events sorted
+     * according to start time and floats to be added last, sorted by their
+     * names
+     * 
+     */
+    private ArrayList<Task> sortByDeadline() {
+        Collections.sort(mTasks, new Comparator<Task>() {
+            public int compare(Task task1, Task task2) {
+            	//Each task always has a type before invoking this method 
+            	assert(task1.getType() != null && task1.getType() != null);
+            	
+                if (task1.getType().equals(task2.getType())) {
+                    if (task1.getType().equals("DEADLINE")) {
+                        return task1.getEnd().compareTo(task2.getEnd());
+                    } else if (task1.getType().equals("EVENT")) {
+                        return task1.getStart().compareTo(task2.getStart());
+                    } else {
+                        return task1.getName().compareTo(task2.getName());
+                    }
+                } else {
+                    return task1.getType().compareTo(task2.getType());
+                }
+            }
+        });
+
+        return mTasks;
     }
 }
