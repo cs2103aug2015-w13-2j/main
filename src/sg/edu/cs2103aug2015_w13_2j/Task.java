@@ -98,6 +98,10 @@ public class Task implements TaskInterface {
     public void setType(Type type) {
         setLabel(LABEL_TYPE, type.toString());
     }
+    
+    public String getType() {
+        return getLabel(LABEL_TYPE);
+    }
 
     public void setCompleted(boolean completed) {
         setBooleanValue(LABEL_COMPLETED, completed);
