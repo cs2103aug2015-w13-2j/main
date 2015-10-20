@@ -14,11 +14,11 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
 public class ArchiveHandler extends CommandHandler {
-    private static final Logger LOGGER = Logger
-            .getLogger(SearchHandler.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ArchiveHandler.class
+            .getName());
     private static final String[] RESERVED = { "archive", "ar" };
     private static final String ARCHIVE_SUCCESS = "Task archived successfully.";
-    
+
     @Override
     public FeedbackMessage execute(ArrayList<Pair<Token, String>> tokens) {
         for (Pair<Token, String> pair : tokens) {
@@ -26,9 +26,10 @@ public class ArchiveHandler extends CommandHandler {
                 try {
                     Task task = Logic.getInstance().getTask(
                             Integer.parseInt(pair.getValue()));
-                    task.setArchived("TRUE");
+                    task.setArchived(true);
                     logArchivedTask(task);
-                    return new FeedbackMessage(ARCHIVE_SUCCESS, FeedbackType.INFO);
+                    return new FeedbackMessage(ARCHIVE_SUCCESS,
+                            FeedbackType.INFO);
                 } catch (TaskNotFoundException e) {
                     return FeedbackMessage.getTaskNotFoundError();
                 }
@@ -36,16 +37,15 @@ public class ArchiveHandler extends CommandHandler {
         }
         return FeedbackMessage.getTaskNotFoundError();
     }
-    
+
     @Override
     public List<String> getReservedKeywords() {
         return Arrays.asList(RESERVED);
     }
-    
+
     private void logArchivedTask(Task archivedTask) {
         String nameOfArchivedTask = archivedTask.getName();
-        
-        LOGGER.info("[CommandHandler][ArchiveHandler] '" + nameOfArchivedTask 
-                    + "' archived status is: " + archivedTask.getArchived());
+        LOGGER.info("[CommandHandler][ArchiveHandler] '" + nameOfArchivedTask
+                + "' archived status is: " + archivedTask.isArchived());
     }
 }

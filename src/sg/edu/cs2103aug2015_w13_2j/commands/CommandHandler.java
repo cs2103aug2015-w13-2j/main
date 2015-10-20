@@ -8,6 +8,7 @@ import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.Parser;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.Task;
+import sg.edu.cs2103aug2015_w13_2j.Task.Type;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 
@@ -113,17 +114,17 @@ public abstract class CommandHandler {
     	
         if (task.getEnd() == null) {
             // if end == null, float
-            task.setType("FLOAT");
+            task.setType(Type.FLOATING);
          //   LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
             
         } else {
             if (task.getStart() != null) {
                 // if end != null and start != null, event
-                task.setType("EVENT"); 
+                task.setType(Type.EVENT); 
             //    LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
             } else {
                 // if end != null but start == null, deadline
-                task.setType("DEADLINE");   
+                task.setType(Type.DEADLINE);   
            //     LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
             }
         }

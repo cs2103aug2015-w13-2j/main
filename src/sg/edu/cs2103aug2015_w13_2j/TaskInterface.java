@@ -2,12 +2,18 @@ package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.Date;
 
-//@@author A0121410H
+import sg.edu.cs2103aug2015_w13_2j.Task.Type;
+
+// @@author A0121410H
 
 public interface TaskInterface {
-    /*******************************************************
-     * LABEL ACCESSORS
-     *******************************************************/
+    public class InvalidTaskException extends Exception {
+        private static final long serialVersionUID = 4591179171294898925L;
+    }
+
+    public class TaskNotFoundException extends Exception {
+        private static final long serialVersionUID = 1619684577187818793L;
+    }
 
     /**
      * Sets a label-value pair of the Task object
@@ -26,10 +32,6 @@ public interface TaskInterface {
      */
     public String getLabel(String label);
 
-    /*******************************************************
-     * (ACCESSORS) NAME: string
-     *******************************************************/
-
     /**
      * Sets the name of this Task object as a label-value pair
      * 
@@ -44,19 +46,6 @@ public interface TaskInterface {
      * @return The name of the Task object or null if not set
      */
     public String getName();
-
-    /*******************************************************
-     * (ACCESSORS) CREATED, START, END: date
-     *******************************************************/
-
-    /**
-     * Sets the date and time the Task object was created. Used only in
-     * parseTask()
-     * 
-     * @param createdString
-     *            String representing the millisecond epoch
-     */
-    public void setCreated(String createdString);
 
     /**
      * Convenience method to retrieve the date and time this Task object was
@@ -112,26 +101,14 @@ public interface TaskInterface {
      */
     public Date getEnd();
 
-    /*******************************************************
-     * (ACCESSORS) TYPE: EVENT / DEADLINE / FLOAT
-     *******************************************************/
-
     /**
-     * Categorizes a task into one of the 3 types: an Event, Deadline, or
+     * Sets the type of the task as one of 3 types: an Event, Deadline, or
      * Floating Task
      * 
-     * @param typeString
-     *            one of 3 types of tasks: Event / Deadline / Float
-     * @@author A0133387B
-     * 
+     * @param type
+     *            Enum of the type of tasks
      */
-    public void setType(String typeString);
-
-    public String getType();
-
-    /*******************************************************
-     * (ACCESSORS) COMPLETED, ARCHIVED, IMPORTANT: TRUE / FALSE
-     *******************************************************/
+    public void setType(Type type);
 
     /**
      * Sets true or false for a property of the task
@@ -143,40 +120,24 @@ public interface TaskInterface {
      * @return String representing true or false for a property of the task
      */
 
-    // COMPLETED
-    public void setCompleted(String completedString);
+    public void setCompleted(boolean completed);
 
-    public String getCompleted();
+    public boolean isCompleted();
 
-    // ARCHIVED
-    public void setArchived(String archivedString);
+    public void setArchived(boolean archived);
 
-    public String getArchived();
+    public boolean isArchived();
 
-    // IMPORTANT
-    public void setImportant(String importantString);
+    public void setImportant(boolean important);
 
-    public String getImportant();
-
-    /*******************************************************
-     * MISCELLANEOUS
-     *******************************************************/
-
-    // @@author A0121410H
-    public class InvalidTaskException extends Exception {
-        private static final long serialVersionUID = 4591179171294898925L;
-    }
-
-    public class TaskNotFoundException extends Exception {
-        private static final long serialVersionUID = 1619684577187818793L;
-    }
+    public boolean isImportant();
 
     /**
      * Checks if this Task object is overdue. The internal label END of the task
      * is compared with the current date time
      * 
      * @return True if the END label is set and is before the current date time,
-     *         false if otherwise or END is null
+     *         false if otherwise or END is not set
      */
     public boolean isOverdue();
 

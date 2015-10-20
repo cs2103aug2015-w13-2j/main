@@ -14,11 +14,9 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
 public class MarkImportantHandler extends CommandHandler {
     private static final String[] RESERVED = { "important", "impt", "!" };
-    private static final String SET_IMPORTANT_SUCCESS = 
-            "Task has been set as important.";
-    private static final String SET_UNIMPORTANT_SUCCESS = 
-            "Task has been set as unimportant.";
-    
+    private static final String SET_IMPORTANT_SUCCESS = "Task has been set as important.";
+    private static final String SET_UNIMPORTANT_SUCCESS = "Task has been set as unimportant.";
+
     @Override
     public FeedbackMessage execute(ArrayList<Pair<Token, String>> tokens) {
         for (Pair<Token, String> pair : tokens) {
@@ -26,20 +24,14 @@ public class MarkImportantHandler extends CommandHandler {
                 try {
                     Task task = Logic.getInstance().getTask(
                             Integer.parseInt(pair.getValue()));
-                    String isImportantTaskIndicator = task.getImportant();
-
-                    switch (isImportantTaskIndicator) {
-                    case "TRUE":
-                        task.setImportant("FALSE");
-                        return new FeedbackMessage(
-                                SET_UNIMPORTANT_SUCCESS, FeedbackType.INFO);
-                    case "FALSE":
-                        task.setImportant("TRUE");
-                        return new FeedbackMessage(
-                                SET_IMPORTANT_SUCCESS, FeedbackType.INFO);
-                    default:
-                        // Do nothing
-                        break;
+                    if (task.isImportant()) {
+                        task.setImportant(false);
+                        return new FeedbackMessage(SET_UNIMPORTANT_SUCCESS,
+                                FeedbackType.INFO);
+                    } else {
+                        task.setImportant(true);
+                        return new FeedbackMessage(SET_IMPORTANT_SUCCESS,
+                                FeedbackType.INFO);
                     }
                 } catch (TaskNotFoundException e) {
                     return FeedbackMessage.getTaskNotFoundError();
@@ -48,7 +40,7 @@ public class MarkImportantHandler extends CommandHandler {
         }
         return FeedbackMessage.getTaskNotFoundError();
     }
-    
+
     @Override
     public List<String> getReservedKeywords() {
         return Arrays.asList(RESERVED);

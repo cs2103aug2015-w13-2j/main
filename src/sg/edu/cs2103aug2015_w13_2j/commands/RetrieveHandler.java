@@ -26,7 +26,7 @@ public class RetrieveHandler extends CommandHandler {
                 try {
                     Task task = Logic.getInstance().getTask(
                             Integer.parseInt(pair.getValue()));
-                    task.setArchived("FALSE");
+                    task.setArchived(false);
                     logRetrievedTask(task);
                     return new FeedbackMessage(RETRIEVE_SUCCESS, FeedbackType.INFO);
                 } catch (TaskNotFoundException e) {
@@ -46,6 +46,6 @@ public class RetrieveHandler extends CommandHandler {
         String nameOfArchivedTask = retrievedTask.getName();
         
         LOGGER.info("[CommandHandler][RetrieveHandler] '" + nameOfArchivedTask 
-                    + "' archived status is: " + retrievedTask.getArchived());
+                    + "' archived status is: " + retrievedTask.isArchived());
     }
 }
