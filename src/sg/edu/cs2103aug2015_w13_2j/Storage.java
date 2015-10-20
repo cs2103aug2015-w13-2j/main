@@ -44,7 +44,7 @@ public class Storage implements StorageInterface {
 	    return sInstance;
 	}
 	
-	public List<Task> readTasksFromDataFile() {
+	public ArrayList<Task> readTasksFromDataFile() {
         try {
 			return readTasksFromFile(_datafilepath);
 		} catch (Exception e) {
@@ -53,7 +53,7 @@ public class Storage implements StorageInterface {
 		}
     }
     
-    public void writeTasksToDataFile(List<Task> tasks) {
+    public void writeTasksToDataFile(ArrayList<Task> tasks) {
     	try {
 			writeTasksToFile(tasks, _datafilepath);
 		} catch (IOException e) {
@@ -99,11 +99,11 @@ public class Storage implements StorageInterface {
      * @return The list of tasks stored in the specified file
      * @throws Exception
      */
-    private List<Task> readTasksFromFile(String filepath) throws Exception {
+    private ArrayList<Task> readTasksFromFile(String filepath) throws Exception {
     	String content = readStringFromFile(filepath);
     	String[] taskArray = content.split("\r\r|\n\n");
     	
-    	List<Task> tasks = new ArrayList<Task>();
+    	ArrayList<Task> tasks = new ArrayList<Task>();
     	for(String taskString : taskArray) {
     		if(taskString.isEmpty() || taskString.equals("\r") || taskString.equals("\n")) {
     			continue;
@@ -123,7 +123,7 @@ public class Storage implements StorageInterface {
      *            The path of the file
      * @throws IOException
      */
-    private void writeTasksToFile(List<Task> tasks, String filepath) throws IOException {
+    private void writeTasksToFile(ArrayList<Task> tasks, String filepath) throws IOException {
     	String content = "";
     	for(Task task : tasks) {
     		content += task.toString() + "\n";

@@ -18,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import sg.edu.cs2103aug2015_w13_2j.Logic;
-import sg.edu.cs2103aug2015_w13_2j.SnakeTXT;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
 //@@author A0121410H
@@ -40,7 +39,8 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     // UI Components
     private JTextField mTextField;
     private TextPane mTextPane;
-    private JLabel mLabel;
+    private JLabel mFilterLabel;
+    private JLabel mFeedbackLabel;
 
     /**
      * Protected constructor
@@ -61,13 +61,17 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         return sInstance;
     }
 
+    public void setFilter(String s) {
+        mFilterLabel.setText(s);
+    }
+    
     public void display(ArrayList<Task> tasks) {
         mTextPane.display(tasks);
     }
 
     public void feedback(FeedbackMessage m) {
-        mLabel.setForeground(m.getType().getColor());
-        mLabel.setText(m.getMessage());
+        mFeedbackLabel.setForeground(m.getType().getColor());
+        mFeedbackLabel.setText(m.getMessage());
     }
 
     public void addTextFieldKeyListener(KeyListener listener) {
@@ -125,6 +129,14 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         // Will be reused for each UI element
         GridBagConstraints constraints = null;
 
+        mFilterLabel = new JLabel();
+        mFilterLabel.setFont(FONT);
+        constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        contentPane.add(mFilterLabel, constraints);
+        
         mTextPane = new TextPane();
         mTextPane.setEditable(false);
         mTextPane.setFont(FONT);
@@ -136,16 +148,16 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         constraints.weighty = 1.0;
         constraints.weightx = 1.0;
         constraints.gridx = 0;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         contentPane.add(scrollPane, constraints);
 
-        mLabel = new JLabel();
-        mLabel.setFont(FONT);
+        mFeedbackLabel = new JLabel();
+        mFeedbackLabel.setFont(FONT);
         constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
-        constraints.gridy = 1;
-        contentPane.add(mLabel, constraints);
+        constraints.gridy = 2;
+        contentPane.add(mFeedbackLabel, constraints);
 
         mTextField = new JTextField();
         mTextField.addKeyListener(this);
@@ -153,7 +165,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         contentPane.add(mTextField, constraints);
 
         // Display the window

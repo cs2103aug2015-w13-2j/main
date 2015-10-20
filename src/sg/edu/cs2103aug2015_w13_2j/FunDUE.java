@@ -4,9 +4,11 @@ import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.ArchiveHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
-import sg.edu.cs2103aug2015_w13_2j.commands.RetrieveHandler;
-import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.FilterHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkCompletedHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.RetrieveHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.SearchHandler;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
 
@@ -27,6 +29,8 @@ public class FunDUE {
         Logic.getInstance().registerCommandHandler(new MarkImportantHandler());
         Logic.getInstance().registerCommandHandler(new MarkCompletedHandler());
         Logic.getInstance().registerCommandHandler(new SearchHandler());
+        Logic.getInstance().registerCommandHandler(new FilterHandler());
+        Logic.getInstance().registerCommandHandler(new PopHandler());
         
         TextUI.getInstance();
     }

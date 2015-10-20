@@ -46,6 +46,12 @@ public class FeedbackMessage {
                 FeedbackType.ERROR);
     }
 
+    public static FeedbackMessage getInvalidFilterError() {
+        return new FeedbackMessage(
+                "The filter that you have specified is not valid. Did you type the filter name correctly?",
+                FeedbackType.ERROR);
+    }
+
     public FeedbackMessage(String message, FeedbackType type) {
         mMessage = message;
         mType = type;

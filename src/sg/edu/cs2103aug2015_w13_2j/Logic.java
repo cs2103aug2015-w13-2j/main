@@ -1,17 +1,18 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
+import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
+import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
@@ -21,15 +22,16 @@ public class Logic {
     private static final Logger LOGGER = Logger
             .getLogger(Logic.class.getName());
     private HashMap<String, CommandHandler> mCommandHandlers = new HashMap<String, CommandHandler>();
-    private ArrayList<Task> mTasks = new ArrayList<Task>();
+    private FilterChain mFilterChain;
 
     /**
      * Protected constructor
      */
     protected Logic() {
-        // Do nothing
-    	mTasks = (ArrayList<Task>)Storage.getInstance().readTasksFromDataFile();
-        TextUI.getInstance().display(mTasks);
+        mFilterChain = new FilterChain(Storage.getInstance()
+                .readTasksFromDataFile());
+        TextUI.getInstance().display(mFilterChain.getTasksForDisplay());
+        TextUI.getInstance().setFilter(mFilterChain.getFilterChain());
     }
 
     /**
@@ -69,18 +71,19 @@ public class Logic {
                 CommandHandler handler = mCommandHandlers.get(pair.getValue());
                 if (handler != null) {
                     feedback = handler.execute(tokens);
+                    mFilterChain.updateFilters();
                 }
                 break;
             }
         }
-        sortByDeadline();
-        Storage.getInstance().writeTasksToDataFile(mTasks);
+        Storage.getInstance().writeTasksToDataFile(mFilterChain.getTasks());
         TextUI.getInstance().feedback(feedback);
-        TextUI.getInstance().display(mTasks);
+        TextUI.getInstance().display(mFilterChain.getTasksForDisplay());
+        TextUI.getInstance().setFilter(mFilterChain.getFilterChain());
     }
 
     public void addTask(Task task) {
-        mTasks.add(task);
+        mFilterChain.addTask(task);
     }
 
     /**
@@ -96,10 +99,11 @@ public class Logic {
      *             Thrown when the index specified is out of bounds
      */
     public Task getTask(int index) throws TaskNotFoundException {
-        if (index >= 0 && index < mTasks.size()) {
-            return mTasks.get(index);
-        } else {
+        Task task = mFilterChain.getTask(index);
+        if (task == null) {
             throw new TaskNotFoundException();
+        } else {
+            return task;
         }
     }
 
@@ -115,62 +119,25 @@ public class Logic {
      *             Thrown when the index specified is out of bounds
      */
     public Task removeTask(int index) throws TaskNotFoundException {
-        if (index >= 0 && index < mTasks.size()) {
-            return mTasks.remove(index);
-        } else {
+        Task task = mFilterChain.removeTask(index);
+        if (task == null) {
             throw new TaskNotFoundException();
+        } else {
+            return task;
         }
     }
-    
-    /**
-     * This method sorts a list of tasks according to their deadlines(if any)
-     * The tasks with deadlines takes priority, followed by events sorted
-     * according to start time and floats to be added last, sorted by their
-     * names
-     * 
-     */
-    public ArrayList<Task> search(String keyword) {
-        ArrayList<Task> tasksWithKeyword = new ArrayList<Task>();
-        for (int i = 0; i < mTasks.size(); i++) {
-            if (mTasks.get(i).getName().toLowerCase()
-                    .contains(keyword.toLowerCase())) {
-                tasksWithKeyword.add(mTasks.get(i));
-            }
+
+    public void pushFilter(Filter filter) {
+        mFilterChain.pushFilter(filter);
+        LOGGER.log(Level.INFO, "Pushed filter: " + filter.getFilterName());
+    }
+
+    public void popFilter() {
+        Filter filter = mFilterChain.popFilter();
+        if(filter == null) {
+            LOGGER.log(Level.WARNING, "Cannot pop root identity filter");
+        } else {
+            LOGGER.log(Level.INFO, "Popped filter: " + filter.getFilterName());
         }
-
-        return tasksWithKeyword;
     }
-    
-    /**
-     * This method sorts a list of tasks according to their deadlines(if any)
-     * The tasks with deadlines takes priority, followed by events sorted
-     * according to start time and floats to be added last, sorted by their
-     * names
-     * 
-     * @@author A0133387B
-     * 
-     */
-    private ArrayList<Task> sortByDeadline() {
-        Collections.sort(mTasks, new Comparator<Task>() {
-            public int compare(Task task1, Task task2) {
-            	//Each task always has a type before invoking this method 
-            	assert(task1.getType() != null && task1.getType() != null);
-            	
-                if (task1.getType().equals(task2.getType())) {
-                    if (task1.getType().equals("DEADLINE")) {
-                        return task1.getEnd().compareTo(task2.getEnd());
-                    } else if (task1.getType().equals("EVENT")) {
-                        return task1.getStart().compareTo(task2.getStart());
-                    } else {
-                        return task1.getName().compareTo(task2.getName());
-                    }
-                } else {
-                    return task1.getType().compareTo(task2.getType());
-                }
-            }
-        });
-
-        return mTasks;
-    }
-    
 }
