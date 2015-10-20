@@ -36,7 +36,7 @@ public class FeedbackMessage {
 
     public static FeedbackMessage getInvalidTaskError() {
         return new FeedbackMessage(
-                "Task not found. Did you enter the index correctly?",
+                "Invalid task entered. Please provide a name!",
                 FeedbackType.ERROR);
     }
 

@@ -106,6 +106,7 @@ public abstract class CommandHandler {
      * 
      * @param task
      *            the new task to be categorized
+     * @@author A0133387B
      */
     private void determineType(Task task) {
     	assert(task != null);
