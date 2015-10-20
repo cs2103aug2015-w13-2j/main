@@ -68,5 +68,4 @@ public class MarkCompletedHandler extends CommandHandler {
                 + "' completed status is: " + task.isCompleted()
                 + " archived status is: " + task.isArchived());
     }
-
 }
