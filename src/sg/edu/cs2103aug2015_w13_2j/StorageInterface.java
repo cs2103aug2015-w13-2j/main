@@ -11,7 +11,7 @@ public interface StorageInterface {
      * @return The list of tasks stored in the data file
      * @throws Exception
      */
-    public ArrayList<Task> readTasksFromDataFile() throws Exception;
+    public ArrayList<Task> readTasksFromDataFile();
     
     /**
      * Writes the provided list of tasks to the data file
@@ -22,5 +22,5 @@ public interface StorageInterface {
      *            The path of the data file
      * @throws IOException
      */
-    public void writeTasksToDataFile(ArrayList<Task> tasks) throws IOException;
+    public void writeTasksToDataFile(ArrayList<Task> tasks);
 }

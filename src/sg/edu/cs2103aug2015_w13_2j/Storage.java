@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.List;
 
 //@@author A0124007X
 
@@ -15,17 +14,16 @@ import java.util.List;
 * @author Lu Yang Kenneth
 */
 public class Storage implements StorageInterface {
-	protected final String FILE_THAT_STORES_FILEPATH = "DATA_FILE_PATH";
+	protected final String FILE_THAT_STORES_DATAFILEPATH = "DATA_FILE_PATH";
 	protected final String DEFAULT_DATAFILEPATH = "./FunDUE_DATA_FILE.txt";
 	
 	private static Storage sInstance;
-	private String _datafilepath;
 	
 	/**
 	 * Protected constructor
 	 */
 	protected Storage() {
-		loadDataFilePath();
+		// Do nothing
 	}
 	
 	/**
@@ -40,49 +38,57 @@ public class Storage implements StorageInterface {
 	    return sInstance;
 	}
 	
+	/*****************************************************************
+     * Read/Write list of tasks from the data file
+     *****************************************************************/
 	public ArrayList<Task> readTasksFromDataFile() {
+		String dataFilePath = getDataFilePath();
+		
         try {
-			return readTasksFromFile(_datafilepath);
+			return readTasksFromFile(dataFilePath);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Error("File is corrupted.");
+			// MISSING / UNREADABLE DATA FILE: reset data file path to default value
+			setDataFilePath(DEFAULT_DATAFILEPATH);
+			
+			// Try again
+			return readTasksFromDataFile();
 		}
     }
     
     public void writeTasksToDataFile(ArrayList<Task> tasks) {
+    	String dataFilePath = getDataFilePath();
+    	
     	try {
-			writeTasksToFile(tasks, _datafilepath);
+			writeTasksToFile(tasks, dataFilePath);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
 	
+    /*****************************************************************
+     * Read from / Write to the file that stores the path of the data file
+     *****************************************************************/
     /**
      * Reads the contents of the file
      * that stores the path of the data file
      * 
      * @return A string containing the data file path
      */
-	protected String getDataFilePath() throws Exception {
-		return _datafilepath;
-	}
-	
-    /**
-     * Reads the contents of the file
-     * that stores the path of the data file
-     * and loads it into a variable for easy access
-     */
-	private void loadDataFilePath() {
+	protected String getDataFilePath() {
+		String dataFilePath = "";
+		
 		try {
-			_datafilepath = readStringFromFile(FILE_THAT_STORES_FILEPATH);
+			dataFilePath = readStringFromFile(FILE_THAT_STORES_DATAFILEPATH);
 		} catch (Exception e) {
-			try {
-				setDataFilePath(DEFAULT_DATAFILEPATH);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
+			// MISSING FILE THAT STORES THE PATH OF THE DATA FILE: reset to default
+			setDataFilePath(DEFAULT_DATAFILEPATH);
+			
+			// Default value
+			dataFilePath = DEFAULT_DATAFILEPATH;
 		}
+		
+		return dataFilePath;
 	}
 	
 	/**
@@ -91,13 +97,22 @@ public class Storage implements StorageInterface {
      * 
      * @param filepath
      *            The path of the data file
-     * @throws IOException
      */
-	protected void setDataFilePath(String filepath) throws IOException {
-		_datafilepath = filepath;
-		writeStringToFile(_datafilepath, FILE_THAT_STORES_FILEPATH);
+	protected void setDataFilePath(String filepath) {
+		try {
+			// Record path of the data file
+			writeStringToFile(filepath, FILE_THAT_STORES_DATAFILEPATH);
+			
+			// Create the file at the new path
+			writeStringToFile("", filepath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
+	/*****************************************************************
+     * Read/Write list of tasks from any file
+     *****************************************************************/
 	/**
      * Reads the list of tasks from the specified file
      * 
@@ -136,6 +151,9 @@ public class Storage implements StorageInterface {
     	writeStringToFile(content, filepath);
     }
     
+    /*****************************************************************
+     * Read/Write string from any file
+     *****************************************************************/
 	/**
      * Reads the contents of the specified text file
      * 
