@@ -42,6 +42,7 @@ public class FilterHandler extends CommandHandler {
                             String needle = filter[1];
                             Logic.getInstance().pushFilter(
                                     new SearchFilter(needle));
+                            break;
                         case "sort":
                             String sortBy = filter[1];
                             try {

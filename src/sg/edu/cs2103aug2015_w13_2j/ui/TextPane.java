@@ -25,8 +25,6 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
  * @see JTextPane
  */
 public class TextPane extends JTextPane {
-    public static final String NEWLINE = System.getProperty("line.separator");
-
     private static final long serialVersionUID = -2906035118426407209L;
 
     private static final int WIDTH_ID = 4;
@@ -34,6 +32,8 @@ public class TextPane extends JTextPane {
     private static final int WIDTH_DATE = 16;
     private static final int WIDTH_TOTAL = WIDTH_ID + 1 + WIDTH_NAME + 1
             + WIDTH_DATE + 1 + WIDTH_DATE;
+
+    public static final String NEWLINE = System.getProperty("line.separator");
     private static final String HEADER_ID = "ID";
     private static final String HEADER_NAME = "TASK NAME";
     private static final String HEADER_START = "START";
@@ -44,7 +44,12 @@ public class TextPane extends JTextPane {
     private static final String SEPARATOR_HORIZONTAL = "-";
     private static final String SEPARATOR_CROSS = "+";
     private static final String SEPARATOR_BLANK = " ";
-    private static final Color COLOR_OVERDUE = Color.RED;
+
+    private static final Color COLOR_NORMAL = Color.BLACK;
+    private static final Color COLOR_HIGHLIGHT = Color.RED;
+
+    private static final AttributeSet STYLE_DEFAULT = getStyle(COLOR_NORMAL);
+    private static final AttributeSet STYLE_HIGHLIGHT = getStyle(COLOR_HIGHLIGHT);
 
     /**
      * SimpleDateFormatter object which formats date objects using
@@ -119,28 +124,28 @@ public class TextPane extends JTextPane {
     }
 
     private void writeTask(Task t, int id) {
-        StyledDocument document = getStyledDocument();
-
         print(SEPARATOR_VERTICAL);
-        int startLoc = document.getLength();
         writeID(id);
         print(SEPARATOR_VERTICAL);
-        writeTruncate(t.getName(), WIDTH_NAME);
+        print(SEPARATOR_BLANK);
+        writeStatus(t);
+        print(SEPARATOR_BLANK);
+        writeTruncate(t.getName(), WIDTH_NAME - 5);
         print(SEPARATOR_VERTICAL);
-        writeDate(t.getStart());
-        print(SEPARATOR_VERTICAL);
-        writeDate(t.getEnd());
-        int endLoc = document.getLength();
+        writeDates(t);
         print(SEPARATOR_VERTICAL);
         print(NEWLINE);
-
-        if (t.isOverdue()) {
-            StyleContext styleContext = StyleContext.getDefaultStyleContext();
-            AttributeSet attributeSet = styleContext.addAttribute(
-                    SimpleAttributeSet.EMPTY, StyleConstants.Background,
-                    COLOR_OVERDUE);
-            document.setCharacterAttributes(startLoc, endLoc - startLoc,
-                    attributeSet, false);
+    }
+    
+    private void writeStatus(Task t) {
+        if(t.isArchived()) {
+            print("[A]", STYLE_HIGHLIGHT);
+        } else if(t.isCompleted()) {
+            print("[D]");
+        } else if(t.isImportant()) {
+            print("[!]", STYLE_HIGHLIGHT);
+        } else {
+            print("---");
         }
     }
 
@@ -200,11 +205,25 @@ public class TextPane extends JTextPane {
      * @param date
      *            The date to be written
      */
-    private void writeDate(Date date) {
-        if (date == null) {
+    private void writeDates(Task t) {
+        Date start = t.getStart();
+        Date end = t.getEnd();
+        if (start == null) {
             writeCentered("---", WIDTH_DATE);
         } else {
-            writeCentered(FORMAT_DATE.format(date), WIDTH_DATE);
+            writeCentered(FORMAT_DATE.format(start), WIDTH_DATE);
+        }
+        print(SEPARATOR_VERTICAL);
+        if (end == null) {
+            writeCentered("---", WIDTH_DATE);
+        } else {
+            print(SEPARATOR_BLANK);
+            if(t.isOverdue()) {
+                print(FORMAT_DATE.format(end), STYLE_HIGHLIGHT);
+            } else {
+                print(FORMAT_DATE.format(end));
+            }
+            print(SEPARATOR_BLANK);
         }
     }
 
@@ -224,7 +243,7 @@ public class TextPane extends JTextPane {
     }
 
     private void print(String s) {
-        print(s, 0);
+        print(s, STYLE_DEFAULT);
     }
 
     /**
@@ -238,14 +257,10 @@ public class TextPane extends JTextPane {
      * @param offset
      *            Positive integer representing offset from end of document
      */
-    private void print(String s, int offset) {
+    private void print(String s, AttributeSet a) {
         StyledDocument document = getStyledDocument();
         try {
-            // Remove string of length offset from end of document
-            if (offset > 0) {
-                document.remove(document.getLength() - offset, offset);
-            }
-            document.insertString(document.getLength(), s, null);
+            document.insertString(document.getLength(), s, a);
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
@@ -261,5 +276,11 @@ public class TextPane extends JTextPane {
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
+    }
+
+    private static AttributeSet getStyle(Color c) {
+        StyleContext styleContext = StyleContext.getDefaultStyleContext();
+        return styleContext.addAttribute(SimpleAttributeSet.EMPTY,
+                StyleConstants.Background, c);
     }
 }

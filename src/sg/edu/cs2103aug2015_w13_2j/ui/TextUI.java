@@ -31,7 +31,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private static final Font FONT = new Font("consolas", Font.BOLD, 16);
 
     // The (fixed) size of the window
-    private static final Dimension PREFERRED_SIZE = new Dimension(800, 600);
+    private static final Dimension PREFERRED_SIZE = new Dimension(796, 600);
 
     // Self instance
     private static TextUI sInstance;
