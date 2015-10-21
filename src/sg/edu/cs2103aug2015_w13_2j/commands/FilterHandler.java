@@ -11,6 +11,8 @@ import sg.edu.cs2103aug2015_w13_2j.filters.ActiveFilter;
 import sg.edu.cs2103aug2015_w13_2j.filters.ArchivedFilter;
 import sg.edu.cs2103aug2015_w13_2j.filters.ImportantFilter;
 import sg.edu.cs2103aug2015_w13_2j.filters.SearchFilter;
+import sg.edu.cs2103aug2015_w13_2j.filters.SortFilter;
+import sg.edu.cs2103aug2015_w13_2j.filters.SortFilter.InvalidSortFilterException;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
@@ -33,12 +35,25 @@ public class FilterHandler extends CommandHandler {
                     Logic.getInstance().pushFilter(new ImportantFilter());
                     break;
                 default:
-                    String filterString = pair.getValue();
-                    if (filterString.indexOf("search:") == 0) {
-                        String needle = filterString.substring(7,
-                                filterString.length());
-                        Logic.getInstance()
-                                .pushFilter(new SearchFilter(needle));
+                    String[] filter = pair.getValue().split(":", 2);
+                    if (filter.length == 2) {
+                        switch (filter[0]) {
+                        case "search":
+                            String needle = filter[1];
+                            Logic.getInstance().pushFilter(
+                                    new SearchFilter(needle));
+                        case "sort":
+                            String sortBy = filter[1];
+                            try {
+                                Logic.getInstance().pushFilter(
+                                        new SortFilter(sortBy));
+                                break;
+                            } catch (InvalidSortFilterException e) {
+                               // Do nothing, fall through to default case
+                            }
+                        default:
+                            return FeedbackMessage.getInvalidFilterError();
+                        }
                     } else {
                         return FeedbackMessage.getInvalidFilterError();
                     }
