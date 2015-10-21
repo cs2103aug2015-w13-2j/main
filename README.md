@@ -1,3 +1,12 @@
+# FunDUE
+
+The best to-do list manager yet.
+
+More details to come soon.
+
+## License
+
+~~~
 The MIT License (MIT)
 
 Copyright (c) 2015 Natasha Koh Sze Sze, Nguyen Tuong Van, Lu Yang Kenneth,
@@ -20,3 +29,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+~~~
