@@ -50,7 +50,7 @@ public class TaskTest {
     
     @Test
     public void conversionTest() {
-    	String taskString = "NAME:test task name\nCREATED:1443886630393\nDEADLINE:1443886630410\n";
+    	String taskString = "CREATED:1443886630393\nDEADLINE:1443886630410\nNAME:test task name\n";
     	task = TaskInterface.parseTask(taskString);
     	
     	assertEquals(taskString, task.toString());

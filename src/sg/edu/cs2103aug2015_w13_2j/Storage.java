@@ -15,8 +15,8 @@ import java.util.List;
 * @author Lu Yang Kenneth
 */
 public class Storage implements StorageInterface {
-	private final String FILE_THAT_STORES_FILEPATH = "DATA_FILE_PATH";
-	private final String DEFAULT_DATAFILEPATH = "./FunDUE_DATA_FILE.txt";
+	protected final String FILE_THAT_STORES_FILEPATH = "DATA_FILE_PATH";
+	protected final String DEFAULT_DATAFILEPATH = "./FunDUE_DATA_FILE.txt";
 	
 	private static Storage sInstance;
 	private String _datafilepath;
@@ -25,11 +25,7 @@ public class Storage implements StorageInterface {
 	 * Protected constructor
 	 */
 	protected Storage() {
-		try {
-			getDataFilePath();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		loadDataFilePath();
 	}
 	
 	/**
@@ -66,9 +62,18 @@ public class Storage implements StorageInterface {
      * Reads the contents of the file
      * that stores the path of the data file
      * 
-     * @throws Exception
+     * @return A string containing the data file path
      */
-	private void getDataFilePath() throws Exception {
+	protected String getDataFilePath() throws Exception {
+		return _datafilepath;
+	}
+	
+    /**
+     * Reads the contents of the file
+     * that stores the path of the data file
+     * and loads it into a variable for easy access
+     */
+	private void loadDataFilePath() {
 		try {
 			_datafilepath = readStringFromFile(FILE_THAT_STORES_FILEPATH);
 		} catch (Exception e) {
@@ -88,7 +93,7 @@ public class Storage implements StorageInterface {
      *            The path of the data file
      * @throws IOException
      */
-	private void setDataFilePath(String filepath) throws IOException {
+	protected void setDataFilePath(String filepath) throws IOException {
 		_datafilepath = filepath;
 		writeStringToFile(_datafilepath, FILE_THAT_STORES_FILEPATH);
 	}
@@ -99,7 +104,7 @@ public class Storage implements StorageInterface {
      * @return The list of tasks stored in the specified file
      * @throws Exception
      */
-    private ArrayList<Task> readTasksFromFile(String filepath) throws Exception {
+    protected ArrayList<Task> readTasksFromFile(String filepath) throws Exception {
     	String content = readStringFromFile(filepath);
     	String[] taskArray = content.split("\r\r|\n\n");
     	
@@ -123,7 +128,7 @@ public class Storage implements StorageInterface {
      *            The path of the file
      * @throws IOException
      */
-    private void writeTasksToFile(ArrayList<Task> tasks, String filepath) throws IOException {
+    protected void writeTasksToFile(ArrayList<Task> tasks, String filepath) throws IOException {
     	String content = "";
     	for(Task task : tasks) {
     		content += task.toString() + "\n";
@@ -139,7 +144,7 @@ public class Storage implements StorageInterface {
      * @return The contents of the file
      * @throws Exception
      */
-	private String readStringFromFile(String filepath) throws Exception {
+	protected String readStringFromFile(String filepath) throws Exception {
     	// Files.readAllBytes() uses UTF-8 character encoding
     	// and ensures that the file is closed after all bytes are read
 		String content = new String(Files.readAllBytes(Paths.get(filepath)));
@@ -155,7 +160,7 @@ public class Storage implements StorageInterface {
      *            The path of the file to write to
      * @throws IOException
      */
-	private void writeStringToFile(String content, String filepath) throws IOException {
+	protected void writeStringToFile(String content, String filepath) throws IOException {
     	Files.write(Paths.get(filepath), content.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 }
