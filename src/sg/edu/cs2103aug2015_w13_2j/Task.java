@@ -100,7 +100,15 @@ public class Task implements TaskInterface {
     }
     
     public String getType() {
-        return getLabel(LABEL_TYPE);
+    	if(this.getEnd() == null){
+    		return "FLOAT";
+    	} else {
+            if(this.getStart() != null){
+        	    return "EVENT";
+            } else {
+            	return "DEADLINE";
+            }
+    	}
     }
 
     public void setCompleted(boolean completed) {
@@ -277,4 +285,5 @@ public class Task implements TaskInterface {
             setLabel(label, FALSE_VALUE);
         }
     }
+
 }
