@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane
+	prefHeight="800"
+	prefWidth="700"
+	xmlns:fx="http://javafx.com/fxml"
+	fx:controller="sg.edu.cs2103aug2015_w13_2j.ui.GUIController">
+	
+	<top>
+		<Text text="data file path" />
+	</top>
+	
+	<center>
+		<!-- Scrollpane -->
+		<Text text="display area" />
+	</center>
+	
+	<bottom>
+		<VBox>
+			<!-- Allow for vertical growth -->
+			<Text text="feedback bar" />
+			
+			<Text text="command bar" />
+		</VBox>
+	</bottom>
+	
+</BorderPane>
