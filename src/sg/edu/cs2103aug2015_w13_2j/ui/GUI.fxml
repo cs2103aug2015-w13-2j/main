@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -16,13 +16,15 @@
 	</top>
 	
 	<center>
-		<!-- Scrollpane -->
-		<Text text="display area" />
+		<ScrollPane fx:id="scrollpane" fitToWidth="true">
+			<!-- TODO: wrap text -->
+			<Text text="display area the quick brown fox jumps over the lazy dog the quick brown fox jumps over the lazy dog the quick brown fox jumps over the lazy dog" />
+		</ScrollPane>
 	</center>
 	
 	<bottom>
 		<VBox>
-			<!-- Allow for vertical growth -->
+			<!-- TODO: allow for vertical growth -->
 			<Text text="feedback bar" />
 			
 			<Text text="command bar" />
