@@ -47,11 +47,15 @@ public class Storage implements StorageInterface {
         try {
 			return readTasksFromFile(dataFilePath);
 		} catch (Exception e) {
-			// MISSING / UNREADABLE DATA FILE: reset data file path to default value
-			setDataFilePath(DEFAULT_DATAFILEPATH);
+			// MISSING DATA FILE: create new file at the path
+			try {
+				writeStringToFile("", dataFilePath);
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
 			
-			// Try again
-			return readTasksFromDataFile();
+			// Return empty ArrayList
+			return new ArrayList<Task>();
 		}
     }
     
@@ -81,7 +85,7 @@ public class Storage implements StorageInterface {
 		try {
 			dataFilePath = readStringFromFile(FILE_THAT_STORES_DATAFILEPATH);
 		} catch (Exception e) {
-			// MISSING FILE THAT STORES THE PATH OF THE DATA FILE: reset to default
+			// MISSING FILE THAT STORES THE PATH OF THE DATA FILE: reset everything to default
 			setDataFilePath(DEFAULT_DATAFILEPATH);
 			
 			// Default value
@@ -100,11 +104,7 @@ public class Storage implements StorageInterface {
      */
 	protected void setDataFilePath(String filepath) {
 		try {
-			// Record path of the data file
 			writeStringToFile(filepath, FILE_THAT_STORES_DATAFILEPATH);
-			
-			// Create the file at the new path
-			writeStringToFile("", filepath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
