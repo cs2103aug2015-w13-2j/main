@@ -1,6 +1,5 @@
 package sg.edu.cs2103aug2015_w13_2j.ui;
 
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
@@ -14,7 +13,7 @@ public interface TextUIInterface {
      * @param tasks
      *            The list of Task objects to be displayed
      */
-    public ArrayList<Task> display(ArrayList<Task> tasks);
+    public void display(ArrayList<Task> tasks);
 
     /**
      * Displays feedback to the user whenever a command entered has side
@@ -26,21 +25,4 @@ public interface TextUIInterface {
      * @see TextUI.Message
      */
     public void feedback(FeedbackMessage m);
-
-    /**
-     * Registers the object as a KeyListener for the JTextField component to
-     * receive key events
-     * 
-     * @param listener
-     *            The object implementing the KeyListener interface
-     */
-    public void addTextFieldKeyListener(KeyListener listener);
-
-    /**
-     * Deregisters the object as a KeyListener
-     * 
-     * @param listener
-     *            The object to be deregistered
-     */
-    public void removeTextFieldKeyListener(KeyListener listener);
 }
