@@ -65,8 +65,11 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         mFilterLabel.setText(s);
     }
     
-    public void display(ArrayList<Task> tasks) {
+    //Take note: changed the return type to facilitate testing
+    
+    public ArrayList<Task> display(ArrayList<Task> tasks) {
         mTextPane.display(tasks);
+        return tasks;
     }
 
     public void feedback(FeedbackMessage m) {

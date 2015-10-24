@@ -24,8 +24,10 @@ public class Storage implements StorageInterface {
 	 */
 	protected Storage() {
 		// Do nothing
+		this.setDataFilePath(DEFAULT_DATAFILEPATH);
+		System.out.println("Source file: " + this.getDataFilePath());
 	}
-	
+
 	/**
      * Retrieves the singleton instance of the Storage component
      * 

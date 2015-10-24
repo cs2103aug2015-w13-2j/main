@@ -27,13 +27,16 @@ public class Logic {
     /**
      * Protected constructor
      */
-    protected Logic() {
-        mFilterChain = new FilterChain(Storage.getInstance()
+    protected Logic(Storage storage) {
+        mFilterChain = new FilterChain(storage.getInstance()
                 .readTasksFromDataFile());
         TextUI.getInstance().display(mFilterChain.getTasksForDisplay());
         TextUI.getInstance().setFilter(mFilterChain.getFilterChain());
     }
 
+    protected Logic(){
+    	this(Storage.getInstance());
+    }
     /**
      * Retrieves the singleton instance of the Logic component
      * 

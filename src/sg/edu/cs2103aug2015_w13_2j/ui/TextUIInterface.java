@@ -14,7 +14,7 @@ public interface TextUIInterface {
      * @param tasks
      *            The list of Task objects to be displayed
      */
-    public void display(ArrayList<Task> tasks);
+    public ArrayList<Task> display(ArrayList<Task> tasks);
 
     /**
      * Displays feedback to the user whenever a command entered has side
