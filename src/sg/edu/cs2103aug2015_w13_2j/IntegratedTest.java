@@ -14,10 +14,11 @@ public class IntegratedTest {
 		TextUIStub uiStub = new TextUIStub();
 		StorageStub storageStub = new StorageStub();
 		LogicStub logicStub = new LogicStub();//do not change this method or use getInstance()
+		//Testing if the stubs are indeed separate from the main classes
 		assertEquals(uiStub.equals(TextUI.getInstance()), false);
 		assertEquals(storageStub.equals(Storage.getInstance()), false);
+		assertEquals(logicStub.equals(Logic.getInstance()), false);
 		System.out.println("Test file: " + storageStub.getDataFilePath());
-		//storageStub.eraseFileContent();
 		logicStub.executeCommand("add 'My first integration test!'", uiStub, storageStub);
 		ArrayList<Task> storageTaskArray = storageStub.readTasksFromDataFile();
 		System.out.println("Test storage: size = " + storageTaskArray.size());

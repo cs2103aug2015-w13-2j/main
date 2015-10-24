@@ -3,7 +3,6 @@ package sg.edu.cs2103aug2015_w13_2j;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 public class StorageStub extends Storage{
@@ -28,15 +27,27 @@ public class StorageStub extends Storage{
 		}
     }
     
-    public String getDataFilePath(){
-    	return TEST_FILE_NAME;
-    }
+    protected String getDataFilePath() {
+		String dataFilePath = "";
+		
+		try {
+			dataFilePath = readStringFromFile(TEST_FILE_PATH);
+		} catch (Exception e) {
+			// MISSING FILE THAT STORES THE PATH OF THE DATA FILE: reset everything to default
+			setDataFilePath(TEST_FILE_NAME);
+			
+			// Default value
+			dataFilePath = TEST_FILE_NAME;
+		}
+		
+		return dataFilePath;
+	}
     
     public void writeTasksToDataFile(ArrayList<Task> tasks) {
     	String dataFilePath = getDataFilePath();
     	
     	try {
-			writeTasksToFile(tasks, TEST_FILE_NAME);
+			writeTasksToFile(tasks, dataFilePath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
