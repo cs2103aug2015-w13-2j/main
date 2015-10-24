@@ -23,9 +23,7 @@ public class Storage implements StorageInterface {
 	 * Protected constructor
 	 */
 	protected Storage() {
-		// Do nothing
-		this.setDataFilePath(DEFAULT_DATAFILEPATH);
-		System.out.println("Source file: " + this.getDataFilePath());
+		
 	}
 
 	/**

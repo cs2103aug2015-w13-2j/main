@@ -23,19 +23,20 @@ public class Logic {
             .getLogger(Logic.class.getName());
     private HashMap<String, CommandHandler> mCommandHandlers = new HashMap<String, CommandHandler>();
     private FilterChain mFilterChain;
-
+    
     /**
      * Protected constructor
+     * NOTE: modified method signature to facilitate testing
      */
-    protected Logic(Storage storage) {
-        mFilterChain = new FilterChain(storage.getInstance()
+    protected Logic(Storage storage, TextUI textUI) {
+        mFilterChain = new FilterChain(storage
                 .readTasksFromDataFile());
-        TextUI.getInstance().display(mFilterChain.getTasksForDisplay());
-        TextUI.getInstance().setFilter(mFilterChain.getFilterChain());
+        textUI.display(mFilterChain.getTasksForDisplay());
+        textUI.setFilter(mFilterChain.getFilterChain());
     }
 
     protected Logic(){
-    	this(Storage.getInstance());
+    	this(Storage.getInstance(), TextUI.getInstance());
     }
     /**
      * Retrieves the singleton instance of the Logic component
@@ -64,7 +65,7 @@ public class Logic {
         }
     }
 
-    public void executeCommand(String command) {
+    public void executeCommand(String command, TextUI textUI, Storage storage) {
         ArrayList<Pair<Token, String>> tokens = Parser.getInstance()
                 .parseCommand(command);
         FeedbackMessage feedback = new FeedbackMessage(
@@ -79,12 +80,16 @@ public class Logic {
                 break;
             }
         }
-        Storage.getInstance().writeTasksToDataFile(mFilterChain.getTasks());
-        TextUI.getInstance().feedback(feedback);
-        TextUI.getInstance().display(mFilterChain.getTasksForDisplay());
-        TextUI.getInstance().setFilter(mFilterChain.getFilterChain());
+        storage.writeTasksToDataFile(mFilterChain.getTasks());
+        textUI.feedback(feedback);
+        textUI.display(mFilterChain.getTasksForDisplay());
+        textUI.setFilter(mFilterChain.getFilterChain());
     }
 
+    public void executeCommand(String command){
+    	executeCommand(command, TextUI.getInstance(), Storage.getInstance());
+    }
+    
     public void addTask(Task task) {
         mFilterChain.addTask(task);
     }
