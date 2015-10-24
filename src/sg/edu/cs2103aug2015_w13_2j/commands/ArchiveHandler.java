@@ -14,28 +14,29 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
 /**
- * Archives a Task specified by the user. 
+ * Archives a Task specified by the user.
  * 
- * This class includes an execution method that sets the "ARCHIVED" label 
- * of the Task to true. A user feedback message will subsequently be 
- * returned upon setting the label. If the Task index specified is 
- * out of range, or does not exist, a user error message will be returned.
+ * This class includes an execution method that sets the "ARCHIVED" label of the
+ * Task to true. A user feedback message will subsequently be returned upon
+ * setting the label. If the Task index specified is out of range, or does not
+ * exist, a user error message will be returned.
  * 
  * @author Natasha Koh Sze Sze
  */
 public class ArchiveHandler extends CommandHandler {
-    private static final Logger LOGGER = Logger.getLogger(ArchiveHandler.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(ArchiveHandler.class.getName());
     private static final String[] RESERVED = { "archive", "ar" };
     private static final String ARCHIVE_SUCCESS = "Task archived successfully.";
 
     @Override
-    public FeedbackMessage execute(ArrayList<Pair<Token, String>> tokens) {
+    public FeedbackMessage execute(Logic logic,
+            ArrayList<Pair<Token, String>> tokens) {
         for (Pair<Token, String> pair : tokens) {
             if (pair.getKey() == Token.ID) {
                 try {
-                    Task task = Logic.getInstance().getTask(
-                            Integer.parseInt(pair.getValue()));
+                    Task task = logic
+                            .getTask(Integer.parseInt(pair.getValue()));
                     task.setArchived(true);
                     logArchivedTask(task);
                     return new FeedbackMessage(ARCHIVE_SUCCESS,

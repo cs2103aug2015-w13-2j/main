@@ -2,16 +2,17 @@ package sg.edu.cs2103aug2015_w13_2j;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.util.Pair;
 
-//@@author A0121410H
+// @@author A0121410H
 
 public class Parser implements ParserInterface {
-    private static final Logger LOGGER = Logger.getLogger(Parser.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(Parser.class.getName());
 
     public enum Token {
         RESERVED, DATE, DATE_INVALID, FLAG, FLAG_INVALID, ID, ID_INVALID, NAME, WHITESPACE, ALPHA_NUM;
@@ -26,6 +27,7 @@ public class Parser implements ParserInterface {
     public static final String[] FLAGS = { FLAG_END, FLAG_START };
 
     private static Parser sInstance;
+    private Set<String> mReserved;
     private State mState;
     private String mCommand;
     private int mParserPos;
@@ -50,7 +52,9 @@ public class Parser implements ParserInterface {
         return sInstance;
     }
 
-    public ArrayList<Pair<Token, String>> parseCommand(String command) {
+    public ArrayList<Pair<Token, String>> parseCommand(Logic logic,
+            String command) {
+        mReserved = logic.getReservedKeywords();
         mState = State.GENERAL;
         mParserPos = 0;
         mTokens.clear();
@@ -237,8 +241,7 @@ public class Parser implements ParserInterface {
      * @return True if token is a reserved keyword, false otherwise
      */
     private boolean isReserved(String s) {
-        return Logic.getInstance().getReservedKeywords()
-                .contains(s.toLowerCase());
+        return mReserved.contains(s.toLowerCase());
     }
 
     /**

@@ -15,8 +15,9 @@ public class PopHandler extends CommandHandler {
     private static final String POP_SUCCESS = "Last filter removed.";
 
     @Override
-    public FeedbackMessage execute(ArrayList<Pair<Token, String>> tokens) {
-        Logic.getInstance().popFilter();
+    public FeedbackMessage execute(Logic logic,
+            ArrayList<Pair<Token, String>> tokens) {
+        logic.popFilter();
         return new FeedbackMessage(POP_SUCCESS, FeedbackType.INFO);
     }
 

@@ -15,9 +15,9 @@ import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
 
 public class FunDUE {
     /**
-     * Initializes all the components via dependency chaining. Each component
-     * which has a dependency on another component will call the corresponding
-     * getInstance method to retrieve a handle to the component
+     * Initialization of components. Components are <b>not</b> allowed to
+     * reference other components during initialization. Additional
+     * initialization should be called from the {@link #run()} method instead
      */
     public FunDUE() {
         Logic.getInstance().registerCommandHandler(new AddHandler());
@@ -29,8 +29,12 @@ public class FunDUE {
         Logic.getInstance().registerCommandHandler(new MarkCompletedHandler());
         Logic.getInstance().registerCommandHandler(new FilterHandler());
         Logic.getInstance().registerCommandHandler(new PopHandler());
-        
+    }
+
+    public void run() {
         TextUI.getInstance();
+        Logic.getInstance().readTasks();
+        Logic.getInstance().display();
     }
 
     public static void main(String[] args) {

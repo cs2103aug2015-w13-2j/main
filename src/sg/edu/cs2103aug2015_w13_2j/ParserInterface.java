@@ -7,7 +7,7 @@ import java.util.GregorianCalendar;
 import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 
-//@@author A0121410H
+// @@author A0121410H
 
 public interface ParserInterface {
     /**
@@ -15,10 +15,14 @@ public interface ParserInterface {
      * example are case <b>insensitive</b>. Will mark extraneous or invalid
      * tokens with _INVALID after the token type
      * 
+     * @param logic
+     *            Dependency injection of the Logic component which is used by
+     *            the Parser component to determine which are reserved keywords
      * @param command
      *            The command string entered by the user
      */
-    public ArrayList<Pair<Token, String>> parseCommand(String command);
+    public ArrayList<Pair<Token, String>> parseCommand(Logic logic,
+            String command);
 
     /**
      * Retrieves a string in the format of [token1=value][token2=value]...

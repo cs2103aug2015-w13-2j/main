@@ -16,16 +16,16 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 public class EditHandler extends CommandHandler {
     private static String[] RESERVED = { "edit", "e" };
     private static String EDIT_SUCCESS = "Task edited successfully.";
-    private static String EDIT_FAILURE = 
-            "Option not recognized. Did you enter the flag correctly?";
+    private static String EDIT_FAILURE = "Option not recognized. Did you enter the flag correctly?";
 
     @Override
-    public FeedbackMessage execute(ArrayList<Pair<Token, String>> tokens) {
+    public FeedbackMessage execute(Logic logic,
+            ArrayList<Pair<Token, String>> tokens) {
         for (Pair<Token, String> pair : tokens) {
             if (pair.getKey() == Token.ID) {
                 try {
-                    Task task = Logic.getInstance().getTask(
-                            Integer.parseInt(pair.getValue()));
+                    Task task = logic
+                            .getTask(Integer.parseInt(pair.getValue()));
                     updateTask(tokens, task);
                     return new FeedbackMessage(EDIT_SUCCESS, FeedbackType.INFO);
                 } catch (TaskNotFoundException e) {

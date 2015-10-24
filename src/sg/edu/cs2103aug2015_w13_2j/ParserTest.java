@@ -5,27 +5,34 @@ import static org.junit.Assert.assertEquals;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sg.edu.cs2103aug2015_w13_2j.ParserInterface.IllegalDateFormatException;
+import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 
 public class ParserTest {
     // Use the same Parser object across all test cases
     private Parser mParser = Parser.getInstance();
+    private Logic mLogic = Logic.getInstance();
+
+    @BeforeClass
+    public static void setup() {
+        Logic.getInstance().registerCommandHandler(new AddHandler());
+    }
 
     /**
-     * Compares this command to the specified expected format of 
-     * parsed tokens.
+     * Compares this command to the specified expected format of parsed tokens.
      * 
      * @param command
-     *          User command to test
+     *            User command to test
      * @param expected
-     *          Expected parsed tokens format for the command input
+     *            Expected parsed tokens format for the command input
      */
     private void testParser(String command, String expected) {
         new FunDUE();
         System.out.println("Parsing: " + command);
-        mParser.parseCommand(command);
+        mParser.parseCommand(mLogic, command);
         System.out.println("Parsed Tokens: " + mParser.getParsedTokens());
         System.out.println("Expected: " + expected);
 
@@ -37,7 +44,7 @@ public class ParserTest {
         Calendar date1 = new GregorianCalendar(2015, 9 - 1, 23);
 
         String command = "add -s 23/09 -e 4pm *@(*#(!&@! 'Task name'";
-        String expected = "[RESERVED=add][FLAG=s][DATE=" 
+        String expected = "[RESERVED=add][FLAG=s][DATE="
                 + date1.getTimeInMillis() + "]"
                 + "[FLAG=e][DATE_INVALID=4pm][ALPHA_NUM=*@(*#(!&@!]"
                 + "[NAME=Task name]";
@@ -59,7 +66,7 @@ public class ParserTest {
     @Test
     public void parseCommandTest() {
         // Equivalence partition for case of 'Valid command Token'
-        // These are cases where a valid command is recognized: 
+        // These are cases where a valid command is recognized:
         // 1.) Valid first token and random symbols
         // 2.) Single token that is, itself, a valid keyword
         String correctCommand = "add **(#!(ab*@&#!(@&";
@@ -71,7 +78,7 @@ public class ParserTest {
         testParser(singleTokenCommand, singleTokenCommandExpected);
 
         // Equivalence partitions for cases of 'Invalid command Token'
-        // These are cases where an invalid command is found: 
+        // These are cases where an invalid command is found:
         // 1.) Invalid command spelling
         // 2.) Incorrect number of tokens
         String incorrectKeywordCommand = "addd *(&(!*&@*!*(@&(";
@@ -94,7 +101,7 @@ public class ParserTest {
     @Test
     public void parseTaskNameTest() {
         // Equivalence partition for a 'Valid task name'
-        // These are test cases for a valid task name recognized: 
+        // These are test cases for a valid task name recognized:
         // 1.) Test with enclosing wrappers single quote ' and double quote "
         // 2.) Test with task names that are integers with enclosing wrappers
         // 3.) Test with no closing wrapper single quote ' or double quote "
@@ -111,21 +118,22 @@ public class ParserTest {
         testParser(validTaskNameAlternative, validTaskNameAlternativeExpected);
         testParser(validNumericTaskName, validNumericTaskNameExpected);
         testParser(noClosingWrapper, noClosingWrapperExpected);
-        
+
         // Equivalence partition for an 'Invalid task name'
-        // These are test cases for a task name with incomplete/unaccepted wrappers:
-        // 1.) Test with an absence of both opening and closing wrappers with 
-        //     letters as names
-        // 2.) Test with an absence of both opening and closing wrappers with 
-        //     integers as names
-        // 3.) Test with an absence of opening wrapper 
+        // These are test cases for a task name with incomplete/unaccepted
+        // wrappers:
+        // 1.) Test with an absence of both opening and closing wrappers with
+        // letters as names
+        // 2.) Test with an absence of both opening and closing wrappers with
+        // integers as names
+        // 3.) Test with an absence of opening wrapper
         String noWrappers = "Eat Lunch";
         String noWrappersExpected = "[ALPHA_NUM=Eat][ALPHA_NUM=Lunch]";
         String numericTaskName = "12345";
         String numericTaskNameExpected = "[ID=12345]";
         String noOpeningWrapper = "Eat Lunch'";
         String noOpeningWrapperExpected = "[ALPHA_NUM=Eat][ALPHA_NUM=Lunch']";
-        
+
         testParser(noWrappers, noWrappersExpected);
         testParser(numericTaskName, numericTaskNameExpected);
         testParser(noOpeningWrapper, noOpeningWrapperExpected);
@@ -140,19 +148,18 @@ public class ParserTest {
         Calendar date1 = new GregorianCalendar(2015, 9 - 1, 23);
         Calendar date2 = new GregorianCalendar(2015, 9 - 1, 24);
         Calendar date3 = new GregorianCalendar(2015, 9 - 1, 25);
-        
+
         // Equivalence partition for an 'Valid option(s)'
         // These are test cases for valid flag-date pairs recognized:
-        // 1.) Test with single valid option 
+        // 1.) Test with single valid option
         // 2.) Test with multiple valid options
         // 3.) Test with empty option field
         String singleValidOption = "-s 23/09";
-        String singleValidOptionExpected = "[FLAG=s][DATE=" 
+        String singleValidOptionExpected = "[FLAG=s][DATE="
                 + date1.getTimeInMillis() + "]";
         String validOptions = "-s 23/09 -e 24/09";
-        String validOptionsExpected = "[FLAG=s][DATE=" 
-                + date1.getTimeInMillis() + "][FLAG=e][DATE=" 
-                + date2.getTimeInMillis() + "]";
+        String validOptionsExpected = "[FLAG=s][DATE=" + date1.getTimeInMillis()
+                + "][FLAG=e][DATE=" + date2.getTimeInMillis() + "]";
         String emptyToken = "";
         String emptyTokenExpected = "";
 
@@ -164,8 +171,8 @@ public class ParserTest {
         // These are test cases for invalid flag-date pairs recognized:
         // 1.) Test with flag but no specified date
         // 2.) Test with a date that is not attached to any flag/option
-        // 3.) Test with a single valid flag-date pair, followed by 
-        //     a flag with no specified date
+        // 3.) Test with a single valid flag-date pair, followed by
+        // a flag with no specified date
         String singleToken = "-s";
         String singleTokenExpected = "[FLAG=s]";
         String invalidSecondOption = "-s 23/09 24/09 -e 25/09";
@@ -173,8 +180,8 @@ public class ParserTest {
                 + date1.getTimeInMillis() + "][ID_INVALID=24/09][FLAG=e]"
                 + "[DATE=" + date3.getTimeInMillis() + "]";
         String invalidSecondOptionField = "-s 23/09 -e";
-        String invalidSecondOptionFieldExpected = "[FLAG=s]"
-                + "[DATE=" + date1.getTimeInMillis() + "][FLAG=e]";
+        String invalidSecondOptionFieldExpected = "[FLAG=s]" + "[DATE="
+                + date1.getTimeInMillis() + "][FLAG=e]";
 
         testParser(singleToken, singleTokenExpected);
         testParser(invalidSecondOption, invalidSecondOptionExpected);
@@ -192,8 +199,7 @@ public class ParserTest {
                 + "[ID_INVALID=23/09]";
         String invalidFlagThenTaskName = "add -s 'Do Homework'";
         String invalidFlagThenTaskNameExpected = "[RESERVED=add]"
-                + "[FLAG=s][DATE_INVALID='Do]"
-                + "[ALPHA_NUM=Homework']";
+                + "[FLAG=s][DATE_INVALID='Do]" + "[ALPHA_NUM=Homework']";
 
         testParser(singleInvalidToken, singleInvalidTokenExpected);
         testParser(invalidOptionWithField, invalidOptionWithFieldExpected);

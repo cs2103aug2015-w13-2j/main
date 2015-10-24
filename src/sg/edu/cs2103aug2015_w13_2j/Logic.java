@@ -22,22 +22,17 @@ public class Logic {
     private static final Logger LOGGER = Logger
             .getLogger(Logic.class.getName());
     private HashMap<String, CommandHandler> mCommandHandlers = new HashMap<String, CommandHandler>();
-    private FilterChain mFilterChain;
-    
+    protected FilterChain mFilterChain = new FilterChain();
+    protected FeedbackMessage mFeedback = new FeedbackMessage("",
+            FeedbackType.INFO);
+
     /**
      * Protected constructor
-     * NOTE: modified method signature to facilitate testing
      */
-    protected Logic(Storage storage, TextUI textUI) {
-        mFilterChain = new FilterChain(storage
-                .readTasksFromDataFile());
-        textUI.display(mFilterChain.getTasksForDisplay());
-        textUI.setFilter(mFilterChain.getFilterChain());
+    protected Logic() {
+        // Do nothing
     }
 
-    protected Logic(){
-    	this(Storage.getInstance(), TextUI.getInstance());
-    }
     /**
      * Retrieves the singleton instance of the Logic component
      * 
@@ -65,31 +60,25 @@ public class Logic {
         }
     }
 
-    public void executeCommand(String command, TextUI textUI, Storage storage) {
+    public void executeCommand(String command) {
         ArrayList<Pair<Token, String>> tokens = Parser.getInstance()
-                .parseCommand(command);
-        FeedbackMessage feedback = new FeedbackMessage(
-                "Command not recognized.", FeedbackType.ERROR);
+                .parseCommand(this, command);
+        mFeedback = new FeedbackMessage("Command not recognized.",
+                FeedbackType.ERROR);
         for (Pair<Token, String> pair : tokens) {
             if (pair.getKey() == Token.RESERVED) {
                 CommandHandler handler = mCommandHandlers.get(pair.getValue());
                 if (handler != null) {
-                    feedback = handler.execute(tokens);
+                    mFeedback = handler.execute(this, tokens);
                     mFilterChain.updateFilters();
                 }
                 break;
             }
         }
-        storage.writeTasksToDataFile(mFilterChain.getTasks());
-        textUI.feedback(feedback);
-        textUI.display(mFilterChain.getTasksForDisplay());
-        textUI.setFilter(mFilterChain.getFilterChain());
+        writeTasks();
+        display();
     }
 
-    public void executeCommand(String command){
-    	executeCommand(command, TextUI.getInstance(), Storage.getInstance());
-    }
-    
     public void addTask(Task task) {
         mFilterChain.addTask(task);
     }
@@ -142,10 +131,25 @@ public class Logic {
 
     public void popFilter() {
         Filter filter = mFilterChain.popFilter();
-        if(filter == null) {
+        if (filter == null) {
             LOGGER.log(Level.WARNING, "Cannot pop root identity filter");
         } else {
             LOGGER.log(Level.INFO, "Popped filter: " + filter.getFilterName());
         }
+    }
+
+    protected void readTasks() {
+        mFilterChain = new FilterChain(
+                Storage.getInstance().readTasksFromDataFile());
+    }
+
+    protected void writeTasks() {
+        Storage.getInstance().writeTasksToDataFile(mFilterChain.getTasks());
+    }
+
+    protected void display() {
+        TextUI.getInstance().feedback(mFeedback);
+        TextUI.getInstance().display(mFilterChain.getTasksForDisplay());
+        TextUI.getInstance().setFilter(mFilterChain.getFilterChain());
     }
 }

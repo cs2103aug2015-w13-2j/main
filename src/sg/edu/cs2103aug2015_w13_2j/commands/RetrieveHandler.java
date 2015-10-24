@@ -24,18 +24,19 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
  * @author Natasha Koh Sze Sze
  */
 public class RetrieveHandler extends CommandHandler {
-    private static final Logger LOGGER = Logger.getLogger(RetrieveHandler.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(RetrieveHandler.class.getName());
     private static final String[] RESERVED = { "retrieve", "ret" };
     private static final String RETRIEVE_SUCCESS = "Task retrieved successfully.";
 
     @Override
-    public FeedbackMessage execute(ArrayList<Pair<Token, String>> tokens) {
+    public FeedbackMessage execute(Logic logic,
+            ArrayList<Pair<Token, String>> tokens) {
         for (Pair<Token, String> pair : tokens) {
             if (pair.getKey() == Token.ID) {
                 try {
-                    Task task = Logic.getInstance().getTask(
-                            Integer.parseInt(pair.getValue()));
+                    Task task = logic
+                            .getTask(Integer.parseInt(pair.getValue()));
                     task.setArchived(false);
                     logRetrievedTask(task);
                     return new FeedbackMessage(RETRIEVE_SUCCESS,

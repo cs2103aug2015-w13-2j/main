@@ -21,18 +21,19 @@ public class FilterHandler extends CommandHandler {
     private static final String FILTER_SUCCESS = "Tasks filtered.";
 
     @Override
-    public FeedbackMessage execute(ArrayList<Pair<Token, String>> tokens) {
+    public FeedbackMessage execute(Logic logic,
+            ArrayList<Pair<Token, String>> tokens) {
         for (Pair<Token, String> pair : tokens) {
             if (pair.getKey() == Token.ALPHA_NUM) {
                 switch (pair.getValue()) {
                 case "active":
-                    Logic.getInstance().pushFilter(new ActiveFilter());
+                    logic.pushFilter(new ActiveFilter());
                     break;
                 case "is:archived":
-                    Logic.getInstance().pushFilter(new ArchivedFilter());
+                    logic.pushFilter(new ArchivedFilter());
                     break;
                 case "is:important":
-                    Logic.getInstance().pushFilter(new ImportantFilter());
+                    logic.pushFilter(new ImportantFilter());
                     break;
                 default:
                     String[] filter = pair.getValue().split(":", 2);
@@ -40,17 +41,15 @@ public class FilterHandler extends CommandHandler {
                         switch (filter[0]) {
                         case "search":
                             String needle = filter[1];
-                            Logic.getInstance().pushFilter(
-                                    new SearchFilter(needle));
+                            logic.pushFilter(new SearchFilter(needle));
                             break;
                         case "sort":
                             String sortBy = filter[1];
                             try {
-                                Logic.getInstance().pushFilter(
-                                        new SortFilter(sortBy));
+                                logic.pushFilter(new SortFilter(sortBy));
                                 break;
                             } catch (InvalidSortFilterException e) {
-                               // Do nothing, fall through to default case
+                                // Do nothing, fall through to default case
                             }
                         default:
                             return FeedbackMessage.getInvalidFilterError();

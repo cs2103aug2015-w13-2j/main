@@ -8,6 +8,10 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 public class FilterChain {
     private Stack<Filter> mFilters =  new Stack<Filter>();
     
+    public FilterChain() {
+        this(new ArrayList<Task>());
+    }
+    
     public FilterChain(ArrayList<Task> tasks) {
         Filter root = new IdentityFilter();
         root.applyFilter(tasks);

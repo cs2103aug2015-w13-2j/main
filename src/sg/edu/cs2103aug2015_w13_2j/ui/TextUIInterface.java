@@ -25,4 +25,12 @@ public interface TextUIInterface {
      * @see TextUI.Message
      */
     public void feedback(FeedbackMessage m);
+
+    /**
+     * Displays the currently active chain of filters in the UI
+     * 
+     * @param s
+     *            The string representing the currently active filter chain
+     */
+    public void setFilter(String s);
 }

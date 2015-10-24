@@ -16,13 +16,13 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 // @@author A0130894B
 
 /**
- * Marks a Task indicated by the user as "Completed" and archives it. 
- * For a Task that has been marked as "Completed", it will be marked as 
- * "Uncompleted" and be unarchived.
+ * Marks a Task indicated by the user as "Completed" and archives it. For a Task
+ * that has been marked as "Completed", it will be marked as "Uncompleted" and
+ * be unarchived.
  * 
- * A user feedback message will subsequently be returned upon marking 
- * the task as "Completed" or "Uncompleted". If the Task index specified is 
- * out of range, or does not exist, a user error message will be returned.
+ * A user feedback message will subsequently be returned upon marking the task
+ * as "Completed" or "Uncompleted". If the Task index specified is out of range,
+ * or does not exist, a user error message will be returned.
  * 
  * @author Natasha Koh Sze Sze
  */
@@ -34,12 +34,13 @@ public class MarkCompletedHandler extends CommandHandler {
     private static final String SET_UNCOMPLETED_SUCCESS = "Task has been set as uncompleted.";
 
     @Override
-    public FeedbackMessage execute(ArrayList<Pair<Token, String>> tokens) {
+    public FeedbackMessage execute(Logic logic,
+            ArrayList<Pair<Token, String>> tokens) {
         for (Pair<Token, String> pair : tokens) {
             if (pair.getKey() == Token.ID) {
                 try {
-                    Task task = Logic.getInstance().getTask(
-                            Integer.parseInt(pair.getValue()));
+                    Task task = logic
+                            .getTask(Integer.parseInt(pair.getValue()));
                     if (task.isCompleted()) {
                         task.setCompleted(false);
                         task.setArchived(false);

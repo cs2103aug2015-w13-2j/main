@@ -7,15 +7,15 @@ import java.util.ArrayList;
  * write to disk, instead stores Task objects in-memory
  */
 public class StorageStub implements StorageInterface {
-	private ArrayList<Task> mStorage = new ArrayList<Task>();
+    private ArrayList<Task> mStorage = new ArrayList<Task>();
 
-	@Override
-	public ArrayList<Task> readTasksFromDataFile() {
-		return mStorage;
-	}
+    @Override
+    public ArrayList<Task> readTasksFromDataFile() {
+        return mStorage;
+    }
 
-	@Override
-	public void writeTasksToDataFile(ArrayList<Task> tasks) {
-		mStorage = new ArrayList<Task>(tasks);
-	}
+    @Override
+    public void writeTasksToDataFile(ArrayList<Task> tasks) {
+        mStorage = new ArrayList<Task>(tasks);
+    }
 }

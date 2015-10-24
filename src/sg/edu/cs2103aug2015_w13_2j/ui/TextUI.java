@@ -24,8 +24,8 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 
 public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private static final long serialVersionUID = 7758912303888211773L;
-    private static final Logger LOGGER = Logger.getLogger(TextUI.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(TextUI.class.getName());
 
     // Font constant used by all UI elements
     private static final Font FONT = new Font("consolas", Font.BOLD, 16);
@@ -64,7 +64,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     public void setFilter(String s) {
         mFilterLabel.setText(s);
     }
-    
+
     public void display(ArrayList<Task> tasks) {
         mTextPane.display(tasks);
     }
@@ -128,7 +128,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         constraints.gridx = 0;
         constraints.gridy = 0;
         contentPane.add(mFilterLabel, constraints);
-        
+
         mTextPane = new TextPane();
         mTextPane.setEditable(false);
         mTextPane.setFont(FONT);

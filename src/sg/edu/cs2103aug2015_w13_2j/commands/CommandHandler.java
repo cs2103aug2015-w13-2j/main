@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javafx.util.Pair;
+import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.Parser;
 import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.Task;
@@ -12,10 +13,10 @@ import sg.edu.cs2103aug2015_w13_2j.Task.Type;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 
-//@@author A0121410H
+// @@author A0121410H
 
 /**
- * Abstract command class which is inherited by all commands
+ * Abstract command handler class which is inherited by all commands
  * 
  * @author Zhu Chunqi
  */
@@ -24,15 +25,19 @@ public abstract class CommandHandler {
      * Executes the command with additional parameters passed in as parsed
      * tokens
      * 
+     * @param logic
+     *            Dependency injection of the Logic component for the command
+     *            handler to act upon
+     * @param tokens
+     *            The command as parsed tokens
      * @param tasks
      *            Reference to master list of tasks. Note that any modification
      *            to this reference <b>will</b> affect the master list
-     * @param tokens
-     *            The command as parsed tokens
+     * 
      * @return FeebackMessage object containing the relevant feedback to the
      *         user
      */
-    public abstract FeedbackMessage execute(
+    public abstract FeedbackMessage execute(Logic logic,
             ArrayList<Pair<Token, String>> tokens);
 
     /**
@@ -74,8 +79,8 @@ public abstract class CommandHandler {
                     System.out.println("[Logic] Flag encountered: " + flag);
                     if (iter.hasNext()) {
                         Pair<Token, String> nextPair = iter.next();
-                        assert (nextPair.getKey() == Token.DATE || nextPair
-                                .getKey() == Token.DATE_INVALID);
+                        assert(nextPair.getKey() == Token.DATE
+                                || nextPair.getKey() == Token.DATE_INVALID);
                         // Only set valid dates
                         System.out.println(nextPair.getValue());
                         if (nextPair.getKey() == Token.DATE) {
@@ -100,7 +105,7 @@ public abstract class CommandHandler {
         task.isValid();
         determineType(task);
     }
-    
+
     /**
      * Determine the type of a task based on its start (if any) and end (if any)
      * times
@@ -110,23 +115,26 @@ public abstract class CommandHandler {
      * @@author A0133387B
      */
     private void determineType(Task task) {
-    	assert(task != null);
-    	
+        assert(task != null);
+
         if (task.getEnd() == null) {
             // if end == null, float
             task.setType(Type.FLOATING);
-         //   LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
-            
+            // LOGGER.info("Set type of task " + task.getName() + " to " +
+            // task.getType());
+
         } else {
             if (task.getStart() != null) {
                 // if end != null and start != null, event
-                task.setType(Type.EVENT); 
-            //    LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
+                task.setType(Type.EVENT);
+                // LOGGER.info("Set type of task " + task.getName() + " to " +
+                // task.getType());
             } else {
                 // if end != null but start == null, deadline
-                task.setType(Type.DEADLINE);   
-           //     LOGGER.info("Set type of task " + task.getName() + " to " + task.getType());
+                task.setType(Type.DEADLINE);
+                // LOGGER.info("Set type of task " + task.getName() + " to " +
+                // task.getType());
             }
         }
-    }    
+    }
 }
