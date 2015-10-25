@@ -28,9 +28,17 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 public class MarkCompletedHandler extends CommandHandler {
     private static final Logger LOGGER = Logger
             .getLogger(MarkCompletedHandler.class.getName());
+    private static final String NAME = "Mark Completed";
+    private static final String SYNTAX = "<TASK_ID>";
+    private static final String[] FLAGS = {};
+    private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "mark", "done", "tick" };
     private static final String SET_COMPLETED_SUCCESS = "Completed task!";
     private static final String SET_UNCOMPLETED_SUCCESS = "Task has been set as uncompleted.";
+    
+    public MarkCompletedHandler() {
+        super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
+    }
 
     @Override
     public FeedbackMessage execute(Logic logic, Command command) {

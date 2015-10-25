@@ -24,9 +24,17 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 public class MarkImportantHandler extends CommandHandler {
     private static final Logger LOGGER = Logger
             .getLogger(MarkImportantHandler.class.getName());
+    private static final String NAME = "Mark Important";
+    private static final String SYNTAX = "<TASK_ID>";
+    private static final String[] FLAGS = {};
+    private static final String[] OPTIONS = { OPTION_TASK_ID };
     private static final String[] RESERVED = { "important", "impt", "!" };
     private static final String SET_IMPORTANT_SUCCESS = "Task has been set as important.";
     private static final String SET_UNIMPORTANT_SUCCESS = "Task has been set as unimportant.";
+
+    public MarkImportantHandler() {
+        super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
+    }
 
     @Override
     public FeedbackMessage execute(Logic logic, Command command) {

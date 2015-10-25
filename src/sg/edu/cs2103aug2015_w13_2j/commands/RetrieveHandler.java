@@ -23,10 +23,18 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
  * @author Natasha Koh Sze Sze
  */
 public class RetrieveHandler extends CommandHandler {
-    private static final Logger LOGGER = Logger
-            .getLogger(RetrieveHandler.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(RetrieveHandler.class
+            .getName());
+    private static final String NAME = "Retrieve Archived Task";
+    private static final String SYNTAX = "<TASK_ID>";
+    private static final String[] FLAGS = {};
+    private static final String[] OPTIONS = { OPTION_TASK_ID };
     private static final String[] RESERVED = { "retrieve", "ret" };
     private static final String RETRIEVE_SUCCESS = "Task retrieved successfully.";
+    
+    public RetrieveHandler() {
+        super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
+    }
 
     @Override
     public FeedbackMessage execute(Logic logic, Command command) {

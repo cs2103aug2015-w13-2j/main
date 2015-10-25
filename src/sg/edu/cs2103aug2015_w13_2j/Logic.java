@@ -48,6 +48,10 @@ public class Logic {
     public Set<String> getReservedKeywords() {
         return mCommandHandlers.keySet();
     }
+    
+    public HashMap<String, CommandHandler> getCommandHandlers() {
+        return mCommandHandlers;
+    }
 
     public void registerCommandHandler(CommandHandler handler) {
         List<String> reserved = handler.getReservedKeywords();
@@ -76,7 +80,7 @@ public class Logic {
             }
         }
         writeTasks();
-        display();
+        //display();
     }
 
     public void feedback(FeedbackMessage m) {
@@ -154,5 +158,9 @@ public class Logic {
     protected void display() {
         TextUI.getInstance().display(mFilterChain.getTasksForDisplay());
         TextUI.getInstance().setFilter(mFilterChain.getFilterChain());
+    }
+    
+    public void display(String s) {
+        TextUI.getInstance().display(s);
     }
 }

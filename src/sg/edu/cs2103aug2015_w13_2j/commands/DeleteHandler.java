@@ -11,8 +11,16 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
 public class DeleteHandler extends CommandHandler {
-    private static String[] RESERVED = { "delete", "del", "remove", "rm" };
-    private static String DELETE_SUCCESS = "Task deleted successfully.";
+    private static final String NAME = "Delete Task";
+    private static final String SYNTAX = "<TASK_ID>";
+    private static final String[] FLAGS = {};
+    private static final String[] OPTIONS = { "TASK_ID: Index of the Task to be deleted as displayed in the ID column" };
+    private static final String[] RESERVED = { "delete", "del", "remove", "rm" };
+    private static final String DELETE_SUCCESS = "Task deleted successfully.";
+
+    public DeleteHandler() {
+        super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
+    }
 
     @Override
     public FeedbackMessage execute(Logic logic, Command command) {

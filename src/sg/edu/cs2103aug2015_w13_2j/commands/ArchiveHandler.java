@@ -23,10 +23,18 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
  * @author Natasha Koh Sze Sze
  */
 public class ArchiveHandler extends CommandHandler {
-    private static final Logger LOGGER = Logger
-            .getLogger(ArchiveHandler.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ArchiveHandler.class
+            .getName());
+    private static final String NAME = "Archive Task";
+    private static final String SYNTAX = "";
+    private static final String[] FLAGS = {};
+    private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "archive", "ar" };
     private static final String ARCHIVE_SUCCESS = "Task archived successfully.";
+
+    public ArchiveHandler() {
+        super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
+    }
 
     @Override
     public FeedbackMessage execute(Logic logic, Command command) {

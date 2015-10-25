@@ -1,5 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,6 +22,30 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
  * @author Zhu Chunqi
  */
 public abstract class CommandHandler {
+    protected static final String FLAG_START = "-s: Specifies the start date/time of the Task";
+    protected static final String FLAG_END = "-e: Specifies the end date/time of the Task";
+
+    protected static final String OPTION_TASK_ID = "TASK_ID: The index of the Task as shown in the ID column.";
+    protected static final String OPTION_TASK_NAME = "TASK_NAME: Any short phrase to identify this particular Task. Must be surrounded by either single or double quotes.";
+    protected static final String OPTION_DATETIME = "DATETIME: Any valid combination of the supported date and time formats.";
+    protected static final String OPTION_FILTER_NAME = "FILTER_NAME: A valid filter name and argument if and argumer is required.";
+    protected static final String OPTION_COMMAND_NAME = "COMMAND_NAME: A valid command name.";
+
+    private String mName;
+    private String mSyntax;
+    private String[] mFlags;
+    private String[] mOptions;
+    private String[] mReserved;
+
+    public CommandHandler(String name, String syntax, String[] flags,
+            String[] options, String[] reserved) {
+        mName = name;
+        mSyntax = syntax;
+        mFlags = flags;
+        mOptions = options;
+        mReserved = reserved;
+    }
+
     /**
      * Executes the command with additional parameters passed in as parsed
      * tokens
@@ -39,15 +65,54 @@ public abstract class CommandHandler {
     public abstract FeedbackMessage execute(Logic logic, Command command);
 
     /**
-     * Retrieves a list of reserved keywords which are handled by this command.
-     * They can include simple aliases or completely different functionality.
-     * Note that no more than a single command handler may be attached to a
-     * single keyword, the later registrant will be ignored and an exception
-     * will be thrown
+     * Retrieves the name of this CommandHandler
      * 
-     * @return A list of keywords handled by this command handler
+     * @return Name of this CommandHandler
      */
-    public abstract List<String> getReservedKeywords();
+    public String getName() {
+        return mName;
+    }
+
+    /**
+     * Retrieves the syntax required by this CommandHandler
+     * 
+     * @return Syntax required by this CommandHandler
+     */
+    public String getSyntax() {
+        return mSyntax;
+    }
+
+    /**
+     * Retrieves the list of flags with their descriptions that are supported by
+     * this CommandHandler
+     * 
+     * @return List of flags and their descriptions
+     */
+    public List<String> getFlags() {
+        return getSortedList(mFlags);
+    }
+
+    /**
+     * Retrieves the list of options with their descriptions that are supported
+     * by this CommandHandler
+     * 
+     * @return List of options and their descriptions
+     */
+    public List<String> getOptions() {
+        return getSortedList(mOptions);
+    }
+
+    /**
+     * Retrieves the list of reserved keywords recognized by this
+     * CommandHandler. The list may include simple aliases or keywords with
+     * completely different functionality. Note that only one CommandHandler may
+     * be attached to a single keyword
+     * 
+     * @return A list of keywords recognized by this CommandHandler
+     */
+    public List<String> getReservedKeywords() {
+        return getSortedList(mReserved);
+    }
 
     /**
      * Updates the passed in Task object based on the parsed tokens
@@ -106,7 +171,7 @@ public abstract class CommandHandler {
      * @@author A0133387B
      */
     private void determineType(Task task) {
-        assert(task != null);
+        assert (task != null);
 
         if (task.getEnd() == null) {
             // if end == null, float
@@ -127,5 +192,11 @@ public abstract class CommandHandler {
                 // task.getType());
             }
         }
+    }
+
+    private List<String> getSortedList(String[] array) {
+        List<String> list = Arrays.asList(array);
+        Collections.sort(list);
+        return list;
     }
 }

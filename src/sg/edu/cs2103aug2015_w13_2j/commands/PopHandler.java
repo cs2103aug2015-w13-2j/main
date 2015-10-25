@@ -9,8 +9,16 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
 public class PopHandler extends CommandHandler {
+    private static final String NAME = "Pop Filter";
+    private static final String SYNTAX = "";
+    private static final String[] FLAGS = {};
+    private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "pop" };
     private static final String POP_SUCCESS = "Last filter removed.";
+    
+    public PopHandler() {
+        super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
+    }
 
     @Override
     public FeedbackMessage execute(Logic logic, Command command) {

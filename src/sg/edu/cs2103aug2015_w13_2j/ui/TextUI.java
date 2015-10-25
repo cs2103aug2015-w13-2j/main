@@ -9,13 +9,12 @@ import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.text.DefaultCaret;
 
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.Task;
@@ -24,8 +23,6 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 
 public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private static final long serialVersionUID = 7758912303888211773L;
-    private static final Logger LOGGER = Logger
-            .getLogger(TextUI.class.getName());
 
     // Font constant used by all UI elements
     private static final Font FONT = new Font("consolas", Font.BOLD, 16);
@@ -68,7 +65,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     public void display(ArrayList<Task> tasks) {
         mTextPane.display(tasks);
     }
-    
+
     public void display(String s) {
         mTextPane.clear();
         mTextPane.print(s);
@@ -133,6 +130,8 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         contentPane.add(mFilterLabel, constraints);
 
         mTextPane = new TextPane();
+        DefaultCaret caret = (DefaultCaret) mTextPane.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         mTextPane.setPreferredSize(PREFERRED_SIZE);
         mTextPane.setEditable(false);
         mTextPane.setFont(FONT);

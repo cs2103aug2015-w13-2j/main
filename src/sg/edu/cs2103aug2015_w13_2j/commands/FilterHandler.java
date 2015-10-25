@@ -16,8 +16,16 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
 public class FilterHandler extends CommandHandler {
+    private static final String NAME = "Add Filter";
+    private static final String SYNTAX = "<FILTER_NAME>";
+    private static final String[] FLAGS = {};
+    private static final String[] OPTIONS = { OPTION_FILTER_NAME };
     private static final String[] RESERVED = { "filter" };
     private static final String FILTER_SUCCESS = "Tasks filtered.";
+
+    public FilterHandler() {
+        super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
+    }
 
     @Override
     public FeedbackMessage execute(Logic logic, Command command) {
