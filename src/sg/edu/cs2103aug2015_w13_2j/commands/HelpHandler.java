@@ -54,6 +54,6 @@ public class HelpHandler extends CommandHandler {
     
     @Override
     public boolean shouldDisplay() {
-        return true;
+        return false;
     }
 }
