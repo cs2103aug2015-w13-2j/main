@@ -23,13 +23,14 @@ public class DeleteHandler extends CommandHandler {
     }
 
     @Override
-    public FeedbackMessage execute(Logic logic, Command command) {
+    public void execute(Logic logic, Command command) {
         Token id = command.getIdToken();
         try {
             logic.removeTask(Integer.parseInt(id.value));
-            return new FeedbackMessage(DELETE_SUCCESS, FeedbackType.INFO);
+            logic.feedback(new FeedbackMessage(DELETE_SUCCESS,
+                    FeedbackType.INFO));
         } catch (TaskNotFoundException e) {
-            return FeedbackMessage.ERROR_TASK_NOT_FOUND;
+            logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
         }
     }
 

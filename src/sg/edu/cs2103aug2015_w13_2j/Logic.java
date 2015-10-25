@@ -14,17 +14,18 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.parser.Parser;
 import sg.edu.cs2103aug2015_w13_2j.parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
-import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
-import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
+import sg.edu.cs2103aug2015_w13_2j.ui.TextUIInterface;
 
-public class Logic {
-    private static Logic sInstance;
+public class Logic implements LogicInterface {
     private static final Logger LOGGER = Logger
             .getLogger(Logic.class.getName());
+
+    private static Logic sInstance;
+
+    private TextUIInterface mTextUI;
+    private StorageInterface mStorage;
     private HashMap<String, CommandHandler> mCommandHandlers = new HashMap<String, CommandHandler>();
-    protected FilterChain mFilterChain = new FilterChain();
-    protected FeedbackMessage mFeedback = new FeedbackMessage("",
-            FeedbackType.INFO);
+    private FilterChain mFilterChain = new FilterChain();
 
     /**
      * Protected constructor
@@ -45,10 +46,14 @@ public class Logic {
         return sInstance;
     }
 
+    public void injectDependency(TextUIInterface textUI) {
+        mTextUI = textUI;
+    }
+
     public Set<String> getReservedKeywords() {
         return mCommandHandlers.keySet();
     }
-    
+
     public HashMap<String, CommandHandler> getCommandHandlers() {
         return mCommandHandlers;
     }
@@ -65,26 +70,42 @@ public class Logic {
     }
 
     public void executeCommand(String commandString) {
-        Command command = Parser.getInstance().parseCommand(this,
-                commandString);
+        Command command = Parser.getInstance()
+                .parseCommand(this, commandString);
         Token reserved = command.getReservedToken();
         if (commandString.isEmpty()) {
             feedback(FeedbackMessage.CLEAR);
+            display();
         } else if (reserved == null) {
             feedback(FeedbackMessage.ERROR_UNRECOGNIZED_COMMAND);
         } else {
             CommandHandler handler = mCommandHandlers.get(reserved.value);
             if (handler != null) {
-                feedback(handler.execute(this, command));
+                handler.execute(this, command);
                 mFilterChain.updateFilters();
+                if (handler.shouldDisplay()) {
+                    display();
+                }
             }
         }
         writeTasks();
-        //display();
+    }
+
+    public void display() {
+        mTextUI.display(mFilterChain.getTasksForDisplay());
+        mTextUI.setFilter(mFilterChain.getFilterChain());
+    }
+
+    public void display(String s) {
+        mTextUI.display(s);
     }
 
     public void feedback(FeedbackMessage m) {
-        TextUI.getInstance().feedback(m);
+        mTextUI.feedback(m);
+    }
+
+    public void setFilter(String s) {
+        mTextUI.setFilter(s);
     }
 
     public void addTask(Task task) {
@@ -92,10 +113,8 @@ public class Logic {
     }
 
     /**
-     * Convenience method to retrieve a task with an index specified by
-     * non-sanitized user input or to be chained with the return value of
-     * {@link Logic#getTaskIndexByName(String)}. Throws an exception if the
-     * index is out of bounds
+     * Retrieves the task with the index specified by user input. Throws an
+     * exception if the index is out of bounds
      * 
      * @param index
      *            The index of the Task object to retrieve
@@ -146,21 +165,12 @@ public class Logic {
         }
     }
 
-    protected void readTasks() {
-        mFilterChain = new FilterChain(
-                Storage.getInstance().readTasksFromDataFile());
+    public void readTasks(StorageInterface storage) {
+        mStorage = storage;
+        mFilterChain = new FilterChain(storage.readTasksFromDataFile());
     }
 
-    protected void writeTasks() {
-        Storage.getInstance().writeTasksToDataFile(mFilterChain.getTasks());
-    }
-
-    protected void display() {
-        TextUI.getInstance().display(mFilterChain.getTasksForDisplay());
-        TextUI.getInstance().setFilter(mFilterChain.getFilterChain());
-    }
-    
-    public void display(String s) {
-        TextUI.getInstance().display(s);
+    private void writeTasks() {
+        mStorage.writeTasksToDataFile(mFilterChain.getTasks());
     }
 }

@@ -12,7 +12,6 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.parser.Parser;
 import sg.edu.cs2103aug2015_w13_2j.parser.Token;
-import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 
 // @@author A0121410H
 
@@ -58,11 +57,8 @@ public abstract class CommandHandler {
      * @param tasks
      *            Reference to master list of tasks. Note that any modification
      *            to this reference <b>will</b> affect the master list
-     * 
-     * @return FeebackMessage object containing the relevant feedback to the
-     *         user
      */
-    public abstract FeedbackMessage execute(Logic logic, Command command);
+    public abstract void execute(Logic logic, Command command);
 
     /**
      * Retrieves the name of this CommandHandler
@@ -112,6 +108,20 @@ public abstract class CommandHandler {
      */
     public List<String> getReservedKeywords() {
         return getSortedList(mReserved);
+    }
+
+    /**
+     * Checks if this CommandHandler requires a display refresh after execution.
+     * Defaults to true for all CommandHandlers unless {@link #shouldDisplay()}
+     * is explicitly overridden and returning false. CommandHandlers which
+     * display directly to the TextPane with the {@link Logic#display(String)}
+     * method should override and return false
+     * 
+     * @return True if this CommandHandler requires a display refresh after
+     *         execution, false otherwise
+     */
+    public boolean shouldDisplay() {
+        return true;
     }
 
     /**

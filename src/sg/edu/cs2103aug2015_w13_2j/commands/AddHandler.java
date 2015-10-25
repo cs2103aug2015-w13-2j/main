@@ -23,16 +23,15 @@ public class AddHandler extends CommandHandler {
     }
 
     @Override
-    public FeedbackMessage execute(Logic logic, Command command) {
+    public void execute(Logic logic, Command command) {
         Task task = new Task();
         try {
             updateTask(command, task);
         } catch (InvalidTaskException e) {
-            return FeedbackMessage.ERROR_INVALID_TASK;
+            logic.feedback(FeedbackMessage.ERROR_INVALID_TASK);
         }
         logic.addTask(task);
-
-        return new FeedbackMessage(ADD_SUCCESS, FeedbackType.INFO);
+        logic.feedback(new FeedbackMessage(ADD_SUCCESS, FeedbackType.INFO));
     }
 
     @Override

@@ -24,7 +24,7 @@ public class HelpHandler extends CommandHandler {
     }
 
     @Override
-    public FeedbackMessage execute(Logic logic, Command command) {
+    public void execute(Logic logic, Command command) {
         HashMap<String, CommandHandler> map = logic.getCommandHandlers();
         HashSet<CommandHandler> handlers = new HashSet<CommandHandler>(
                 map.values());
@@ -44,11 +44,16 @@ public class HelpHandler extends CommandHandler {
             sb.append(TextPane.NEWLINE);
         }
         logic.display(sb.toString());
-        return new FeedbackMessage(HELP_SUCCESS, FeedbackType.INFO);
+        logic.feedback(new FeedbackMessage(HELP_SUCCESS, FeedbackType.INFO));
     }
 
     @Override
     public List<String> getReservedKeywords() {
         return Arrays.asList(RESERVED);
+    }
+    
+    @Override
+    public boolean shouldDisplay() {
+        return true;
     }
 }

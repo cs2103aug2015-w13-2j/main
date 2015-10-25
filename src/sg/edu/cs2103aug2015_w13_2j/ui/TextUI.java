@@ -16,24 +16,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.text.DefaultCaret;
 
-import sg.edu.cs2103aug2015_w13_2j.Logic;
+import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
-//@@author A0121410H
+// @@author A0121410H
 
 public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private static final long serialVersionUID = 7758912303888211773L;
-
-    // Font constant used by all UI elements
     private static final Font FONT = new Font("consolas", Font.BOLD, 16);
-
-    // The (fixed) size of the window
     private static final Dimension PREFERRED_SIZE = new Dimension(800, 600);
 
-    // Self instance
     private static TextUI sInstance;
 
-    // UI Components
+    private LogicInterface mLogic;
     private JTextField mTextField;
     private TextPane mTextPane;
     private JLabel mFilterLabel;
@@ -49,7 +44,10 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     /**
      * Retrieves the singleton instance of the TextUI component
      * 
-     * @return TextUI component
+     * @param logic
+     *            Dependency injection of the Logic component depended upon by
+     *            the TextUI component
+     * @return TextUI component singleton instance
      */
     public static TextUI getInstance() {
         if (sInstance == null) {
@@ -58,8 +56,8 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         return sInstance;
     }
 
-    public void setFilter(String s) {
-        mFilterLabel.setText(s);
+    public void injectDependency(LogicInterface logic) {
+        mLogic = logic;
     }
 
     public void display(ArrayList<Task> tasks) {
@@ -76,6 +74,10 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         mFeedbackLabel.setText(m.getMessage());
     }
 
+    public void setFilter(String s) {
+        mFilterLabel.setText(s);
+    }
+
     public void keyTyped(KeyEvent e) {
         // Empty function
     }
@@ -83,7 +85,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
         case KeyEvent.VK_ENTER:
-            Logic.getInstance().executeCommand(mTextField.getText());
+            mLogic.executeCommand(mTextField.getText());
             mTextField.setText(null);
             break;
         case KeyEvent.VK_UP:
@@ -105,10 +107,10 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     }
 
     /**
-     * Initializes and shows the UI Elements. The UI consists a JTextPane which
-     * displays styled text to the user, a JLabel which displays styled text
-     * feedback from executing user commands, and a JTextField which accepts
-     * user input
+     * Initializes and shows the UI Elements. The UI consists a JLabel which
+     * displays the currently active filter chain, a JTextPane which displays
+     * the tasks to the user, another JLabel which displays text feedback from
+     * executing user commands, and a JTextField from which to accept user input
      */
     private void createUI() {
         // Create and set up window

@@ -20,22 +20,22 @@ public class EditHandler extends CommandHandler {
             OPTION_DATETIME };
     private static final String[] RESERVED = { "edit", "e" };
     private static final String EDIT_SUCCESS = "Task edited successfully.";
-    
+
     public EditHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
-    public FeedbackMessage execute(Logic logic, Command command) {
+    public void execute(Logic logic, Command command) {
         Token id = command.getIdToken();
         try {
             Task task = logic.getTask(Integer.parseInt(id.value));
             updateTask(command, task);
-            return new FeedbackMessage(EDIT_SUCCESS, FeedbackType.INFO);
+            logic.feedback(new FeedbackMessage(EDIT_SUCCESS, FeedbackType.INFO));
         } catch (TaskNotFoundException e) {
-            return FeedbackMessage.ERROR_TASK_NOT_FOUND;
+            logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
         } catch (InvalidTaskException e) {
-            return FeedbackMessage.ERROR_INVALID_TASK;
+            logic.feedback(FeedbackMessage.ERROR_INVALID_TASK);
         }
     }
 

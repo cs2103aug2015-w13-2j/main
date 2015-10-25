@@ -5,34 +5,43 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
+import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
+import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
 
 /**
  * Test cases for the Logic Component
  * 
  * @author Nguyen Tuong Van
- *
  */
 
 public class LogicTest {
-    private Logic logicTest = Logic.getInstance();
+    private static StorageStub sStorage = new StorageStub();
+    private static TextUIStub sTextUI = new TextUIStub();
+    private static Logic sLogic = Logic.getInstance();
     private String response = "";
+
+    @BeforeClass
+    public static void setup() {
+        sLogic.registerCommandHandler(new AddHandler());
+        sLogic.readTasks(sStorage);
+        sLogic.injectDependency(sTextUI);
+    }
 
     @Test
     public void testAdd() throws TaskNotFoundException {
-        new FunDUE();
-        Task first = new Task("Do 2101 reflection");
-        first.setEnd(new Date((long) (1254554769)));
-        logicTest.addTask(first);
+        Task task = new Task("Do 2101 reflection");
+        task.setEnd(new Date(1254554769));
+        sLogic.addTask(task);
         try {
-            assertEquals(logicTest.getTask(0).getName(), "Do 2101 reflection");
+            assertEquals(sLogic.getTask(0).getName(), "Do 2101 reflection");
         } catch (TaskNotFoundException e) {
             e.printStackTrace();
         }
-
-        logicTest.removeTask(0);
+        sLogic.removeTask(0);
     }
 
     /**
@@ -42,59 +51,56 @@ public class LogicTest {
      *            index to test
      * @throws TaskNotFoundException
      */
-
     public void testGetIndex(int index) throws TaskNotFoundException {
         try {
-            response = logicTest.getTask(index).getName();
-            System.out.println(logicTest.getTask(index).getName());
+            response = sLogic.getTask(index).getName();
+            System.out.println(sLogic.getTask(index).getName());
         } catch (TaskNotFoundException e) {
-            response = index + " is out of bound!";
+            response = index + " is out of bounds!";
         }
     }
 
     @Test
     public void testIndex() throws TaskNotFoundException {
-        logicTest.executeCommand(
-                "add 'Go to CS2103T tutorial' -s 21/10T13:00 -e 21/10T14:00");
-        logicTest.executeCommand("add 'Do 2101 reflection' -e 21/10T23:59");
-        logicTest.executeCommand("add 'Revise for 2010'");
-        logicTest.executeCommand("add 'Study for CS2105'");
-        logicTest.executeCommand("add 'Clean room' -e 23/10");
+        sLogic.executeCommand("add 'Go to CS2103T tutorial' -s 21/10T13:00 -e 21/10T14:00");
+        sLogic.executeCommand("add 'Do 2101 reflection' -e 21/10T23:59");
+        sLogic.executeCommand("add 'Revise for 2010'");
+        sLogic.executeCommand("add 'Study for CS2105'");
+        sLogic.executeCommand("add 'Clean room' -e 23/10");
 
         testGetIndex(0);
-        assertEquals(response, "Go to CS2103T tutorial");// boundary value
-                                                         // analysis for the
-                                                         // valid range
+        assertEquals(response, "Go to CS2103T tutorial");
+        // boundary value analysis for valid range
 
         testGetIndex(-1);
-        assertEquals(response, "-1 is out of bound!");// testing using boundary
-                                                      // value analysis for
-                                                      // equivalence partition
-                                                      // below the valid range
+        assertEquals(response, "-1 is out of bounds!");
+        // testing using boundary value analysis for equivalence partition below
+        // the valid range
+
         testGetIndex(5);
-        assertEquals(response, "5 is out of bound!");// testing using boundary
-                                                     // value analysis for
-                                                     // equivalence partition
-                                                     // above the valid range
-        assertTrue(logicTest.getTask(1) != null);
-        assertTrue(logicTest.getTask(4) != null);
-        assertEquals(logicTest.getTask(4).getName(), "Clean room");
+        assertEquals(response, "5 is out of bounds!");
+        // testing using boundary value analysis for equivalence partition above
+        // the valid range
+
+        assertTrue(sLogic.getTask(1) != null);
+        assertTrue(sLogic.getTask(4) != null);
+        assertEquals(sLogic.getTask(4).getName(), "Clean room");
     }
 
     @Test
     public void testDelete() throws TaskNotFoundException {
-        logicTest.removeTask(0); // change this to executeCommand for
-                                 // integration test
-        logicTest.removeTask(0);
-        logicTest.removeTask(0);
-        logicTest.removeTask(0);
-        logicTest.removeTask(0);
+        // change this to executeCommand for integration test
+        sLogic.removeTask(0);
+        sLogic.removeTask(0);
+        sLogic.removeTask(0);
+        sLogic.removeTask(0);
+        sLogic.removeTask(0);
 
-        Task newTask = new Task();
-        newTask.setName("test task");
-        logicTest.addTask(newTask);
-        logicTest.removeTask(0);
+        Task task = new Task();
+        task.setName("test task");
+        sLogic.addTask(task);
+        sLogic.removeTask(0);
         testGetIndex(0);
-        assertEquals(response, "0 is out of bound!");
+        assertEquals(response, "0 is out of bounds!");
     }
 }

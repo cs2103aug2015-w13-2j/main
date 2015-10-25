@@ -31,21 +31,22 @@ public class RetrieveHandler extends CommandHandler {
     private static final String[] OPTIONS = { OPTION_TASK_ID };
     private static final String[] RESERVED = { "retrieve", "ret" };
     private static final String RETRIEVE_SUCCESS = "Task retrieved successfully.";
-    
+
     public RetrieveHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
-    public FeedbackMessage execute(Logic logic, Command command) {
+    public void execute(Logic logic, Command command) {
         Token id = command.getIdToken();
         try {
             Task task = logic.getTask(Integer.parseInt(id.value));
             task.setArchived(false);
             logRetrievedTask(task);
-            return new FeedbackMessage(RETRIEVE_SUCCESS, FeedbackType.INFO);
+            logic.feedback(new FeedbackMessage(RETRIEVE_SUCCESS,
+                    FeedbackType.INFO));
         } catch (TaskNotFoundException e) {
-            return FeedbackMessage.ERROR_TASK_NOT_FOUND;
+            logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
         }
     }
 

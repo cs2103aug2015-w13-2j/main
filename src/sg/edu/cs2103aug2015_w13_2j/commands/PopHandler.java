@@ -21,9 +21,9 @@ public class PopHandler extends CommandHandler {
     }
 
     @Override
-    public FeedbackMessage execute(Logic logic, Command command) {
+    public void execute(Logic logic, Command command) {
         logic.popFilter();
-        return new FeedbackMessage(POP_SUCCESS, FeedbackType.INFO);
+        logic.feedback(new FeedbackMessage(POP_SUCCESS, FeedbackType.INFO));
     }
 
     @Override

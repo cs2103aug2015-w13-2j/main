@@ -28,7 +28,7 @@ public class FilterHandler extends CommandHandler {
     }
 
     @Override
-    public FeedbackMessage execute(Logic logic, Command command) {
+    public void execute(Logic logic, Command command) {
         Token alpha = command.getAlphaToken();
         switch (alpha.value) {
         case "active":
@@ -57,13 +57,13 @@ public class FilterHandler extends CommandHandler {
                         // Do nothing, fall through to default case
                     }
                 default:
-                    return FeedbackMessage.ERROR_INVALID_FILTER;
+                    logic.feedback(FeedbackMessage.ERROR_INVALID_FILTER);
                 }
             } else {
-                return FeedbackMessage.ERROR_INVALID_FILTER;
+                logic.feedback(FeedbackMessage.ERROR_INVALID_FILTER);
             }
         }
-        return new FeedbackMessage(FILTER_SUCCESS, FeedbackType.INFO);
+        logic.feedback(new FeedbackMessage(FILTER_SUCCESS, FeedbackType.INFO));
     }
 
     @Override

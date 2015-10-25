@@ -35,13 +35,13 @@ public class MarkCompletedHandler extends CommandHandler {
     private static final String[] RESERVED = { "mark", "done", "tick" };
     private static final String SET_COMPLETED_SUCCESS = "Completed task!";
     private static final String SET_UNCOMPLETED_SUCCESS = "Task has been set as uncompleted.";
-    
+
     public MarkCompletedHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
-    public FeedbackMessage execute(Logic logic, Command command) {
+    public void execute(Logic logic, Command command) {
         Token id = command.getIdToken();
         try {
             Task task = logic.getTask(Integer.parseInt(id.value));
@@ -49,17 +49,17 @@ public class MarkCompletedHandler extends CommandHandler {
                 task.setCompleted(false);
                 task.setArchived(false);
                 logCompletedArchivedTask(task);
-                return new FeedbackMessage(SET_UNCOMPLETED_SUCCESS,
-                        FeedbackType.INFO);
+                logic.feedback(new FeedbackMessage(SET_UNCOMPLETED_SUCCESS,
+                        FeedbackType.INFO));
             } else {
                 task.setCompleted(true);
                 task.setArchived(true);
                 logCompletedArchivedTask(task);
-                return new FeedbackMessage(SET_COMPLETED_SUCCESS,
-                        FeedbackType.INFO);
+                logic.feedback(new FeedbackMessage(SET_COMPLETED_SUCCESS,
+                        FeedbackType.INFO));
             }
         } catch (TaskNotFoundException e) {
-            return FeedbackMessage.ERROR_TASK_NOT_FOUND;
+            logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
         }
     }
 
