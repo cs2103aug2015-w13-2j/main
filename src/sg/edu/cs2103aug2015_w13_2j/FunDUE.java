@@ -38,6 +38,6 @@ public class FunDUE {
     }
 
     public static void main(String[] args) {
-        new FunDUE();
+        new FunDUE().run();
     }
 }
