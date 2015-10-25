@@ -1,15 +1,14 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.Logic;
-import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
+import sg.edu.cs2103aug2015_w13_2j.parser.Command;
+import sg.edu.cs2103aug2015_w13_2j.parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
@@ -30,30 +29,24 @@ public class MarkImportantHandler extends CommandHandler {
     private static final String SET_UNIMPORTANT_SUCCESS = "Task has been set as unimportant.";
 
     @Override
-    public FeedbackMessage execute(Logic logic,
-            ArrayList<Pair<Token, String>> tokens) {
-        for (Pair<Token, String> pair : tokens) {
-            if (pair.getKey() == Token.ID) {
-                try {
-                    Task task = logic
-                            .getTask(Integer.parseInt(pair.getValue()));
-                    if (task.isImportant()) {
-                        task.setImportant(false);
-                        logImportantTask(task);
-                        return new FeedbackMessage(SET_UNIMPORTANT_SUCCESS,
-                                FeedbackType.INFO);
-                    } else {
-                        task.setImportant(true);
-                        logImportantTask(task);
-                        return new FeedbackMessage(SET_IMPORTANT_SUCCESS,
-                                FeedbackType.INFO);
-                    }
-                } catch (TaskNotFoundException e) {
-                    return FeedbackMessage.getTaskNotFoundError();
-                }
+    public FeedbackMessage execute(Logic logic, Command command) {
+        Token id = command.getIdToken();
+        try {
+            Task task = logic.getTask(Integer.parseInt(id.value));
+            if (task.isImportant()) {
+                task.setImportant(false);
+                logImportantTask(task);
+                return new FeedbackMessage(SET_UNIMPORTANT_SUCCESS,
+                        FeedbackType.INFO);
+            } else {
+                task.setImportant(true);
+                logImportantTask(task);
+                return new FeedbackMessage(SET_IMPORTANT_SUCCESS,
+                        FeedbackType.INFO);
             }
+        } catch (TaskNotFoundException e) {
+            return FeedbackMessage.ERROR_TASK_NOT_FOUND;
         }
-        return FeedbackMessage.getTaskNotFoundError();
     }
 
     @Override
@@ -63,7 +56,6 @@ public class MarkImportantHandler extends CommandHandler {
 
     private void logImportantTask(Task task) {
         String nameOfTask = task.getName();
-
         LOGGER.info("[CommandHandler][MarkImportantHandler] '" + nameOfTask
                 + "' importance status is: " + task.isImportant());
     }

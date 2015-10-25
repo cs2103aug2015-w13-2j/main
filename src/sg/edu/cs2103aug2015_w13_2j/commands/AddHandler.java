@@ -1,14 +1,12 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.Logic;
-import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
+import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
@@ -17,13 +15,12 @@ public class AddHandler extends CommandHandler {
     private static final String ADD_SUCCESS = "Task added successfully.";
 
     @Override
-    public FeedbackMessage execute(Logic logic,
-            ArrayList<Pair<Token, String>> tokens) {
+    public FeedbackMessage execute(Logic logic, Command command) {
         Task task = new Task();
         try {
-            updateTask(tokens, task);
+            updateTask(command, task);
         } catch (InvalidTaskException e) {
-            return FeedbackMessage.getInvalidTaskError();
+            return FeedbackMessage.ERROR_INVALID_TASK;
         }
         logic.addTask(task);
 

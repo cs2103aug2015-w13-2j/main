@@ -1,18 +1,18 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javafx.util.Pair;
-import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
+import sg.edu.cs2103aug2015_w13_2j.parser.Command;
+import sg.edu.cs2103aug2015_w13_2j.parser.Parser;
+import sg.edu.cs2103aug2015_w13_2j.parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
@@ -60,23 +60,27 @@ public class Logic {
         }
     }
 
-    public void executeCommand(String command) {
-        ArrayList<Pair<Token, String>> tokens = Parser.getInstance()
-                .parseCommand(this, command);
-        mFeedback = new FeedbackMessage("Command not recognized.",
-                FeedbackType.ERROR);
-        for (Pair<Token, String> pair : tokens) {
-            if (pair.getKey() == Token.RESERVED) {
-                CommandHandler handler = mCommandHandlers.get(pair.getValue());
-                if (handler != null) {
-                    mFeedback = handler.execute(this, tokens);
-                    mFilterChain.updateFilters();
-                }
-                break;
+    public void executeCommand(String commandString) {
+        Command command = Parser.getInstance().parseCommand(this,
+                commandString);
+        Token reserved = command.getReservedToken();
+        if (commandString.isEmpty()) {
+            feedback(FeedbackMessage.CLEAR);
+        } else if (reserved == null) {
+            feedback(FeedbackMessage.ERROR_UNRECOGNIZED_COMMAND);
+        } else {
+            CommandHandler handler = mCommandHandlers.get(reserved.value);
+            if (handler != null) {
+                feedback(handler.execute(this, command));
+                mFilterChain.updateFilters();
             }
         }
         writeTasks();
         display();
+    }
+
+    public void feedback(FeedbackMessage m) {
+        TextUI.getInstance().feedback(m);
     }
 
     public void addTask(Task task) {
@@ -148,7 +152,6 @@ public class Logic {
     }
 
     protected void display() {
-        TextUI.getInstance().feedback(mFeedback);
         TextUI.getInstance().display(mFilterChain.getTasksForDisplay());
         TextUI.getInstance().setFilter(mFilterChain.getFilterChain());
     }

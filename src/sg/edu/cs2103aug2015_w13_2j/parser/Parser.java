@@ -1,22 +1,17 @@
-package sg.edu.cs2103aug2015_w13_2j;
+package sg.edu.cs2103aug2015_w13_2j.parser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javafx.util.Pair;
+import sg.edu.cs2103aug2015_w13_2j.Logic;
 
 // @@author A0121410H
 
 public class Parser implements ParserInterface {
     private static final Logger LOGGER = Logger
             .getLogger(Parser.class.getName());
-
-    public enum Token {
-        RESERVED, DATE, DATE_INVALID, FLAG, FLAG_INVALID, ID, ID_INVALID, NAME, WHITESPACE, ALPHA_NUM;
-    }
 
     private enum State {
         GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
@@ -29,9 +24,9 @@ public class Parser implements ParserInterface {
     private static Parser sInstance;
     private Set<String> mReserved;
     private State mState;
-    private String mCommand;
+    private String mCommandString;
+    private Command mCommand;
     private int mParserPos;
-    private ArrayList<Pair<Token, String>> mTokens = new ArrayList<Pair<Token, String>>();
 
     /**
      * Protected constructor
@@ -52,26 +47,25 @@ public class Parser implements ParserInterface {
         return sInstance;
     }
 
-    public ArrayList<Pair<Token, String>> parseCommand(Logic logic,
-            String command) {
+    public Command parseCommand(Logic logic, String command) {
         mReserved = logic.getReservedKeywords();
         mState = State.GENERAL;
         mParserPos = 0;
-        mTokens.clear();
-        mCommand = command;
+        mCommand = new Command();
+        mCommandString = command;
         startParserLoop();
         LOGGER.log(Level.INFO, getParsedTokens());
-        return new ArrayList<Pair<Token, String>>(mTokens);
+        return mCommand;
     }
 
     public String getParsedTokens() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < mTokens.size(); i++) {
+        for(Token token : mCommand) {
             sb.append('[');
-            sb.append(mTokens.get(i).getKey());
-            if (mTokens.get(i).getValue() != null) {
+            sb.append(token.type);
+            if(token.value != null) {
                 sb.append('=');
-                sb.append(mTokens.get(i).getValue());
+                sb.append(token.value);
             }
             sb.append(']');
         }
@@ -91,9 +85,9 @@ public class Parser implements ParserInterface {
             case ALPHA_NUM:
                 s = nextDelimiter(' ');
                 if (isReserved(s)) {
-                    addToken(Token.RESERVED, s);
+                    mCommand.addToken(Token.Type.RESERVED, s);
                 } else {
-                    addToken(Token.ALPHA_NUM, s);
+                    mCommand.addToken(Token.Type.ALPHA_NUM, s);
                 }
                 mState = State.GENERAL;
                 break;
@@ -101,9 +95,9 @@ public class Parser implements ParserInterface {
                 s = nextDelimiter(' ');
                 try {
                     String dateString = ParserInterface.parseDate(s);
-                    addToken(Token.DATE, dateString);
+                    mCommand.addToken(Token.Type.DATE, dateString);
                 } catch (IllegalDateFormatException e) {
-                    addToken(Token.DATE_INVALID, s);
+                    mCommand.addToken(Token.Type.DATE_INVALID, s);
                 }
                 mState = State.GENERAL;
                 break;
@@ -114,11 +108,11 @@ public class Parser implements ParserInterface {
 
                 // Check if flag is valid and add token
                 if (isValidFlag(s)) {
-                    addToken(Token.FLAG, s);
+                    mCommand.addToken(Token.Type.FLAG, s);
                     // TODO: May not always transition to date state
                     mState = State.DATE;
                 } else {
-                    addToken(Token.FLAG_INVALID, s);
+                    mCommand.addToken(Token.Type.FLAG_INVALID, s);
                     mState = State.GENERAL;
                 }
                 break;
@@ -138,16 +132,16 @@ public class Parser implements ParserInterface {
                 s = nextDelimiter(' ');
                 try {
                     Integer.parseInt(s);
-                    addToken(Token.ID, s);
+                    mCommand.addToken(Token.Type.ID, s);
                 } catch (NumberFormatException e) {
                     // e.printStackTrace();
-                    addToken(Token.ID_INVALID, s);
+                    mCommand.addToken(Token.Type.ID_INVALID, s);
                 }
                 mState = State.GENERAL;
                 break;
             case NAME:
                 s = nextDelimiter(openingQuote);
-                addToken(Token.NAME, s);
+                mCommand.addToken(Token.Type.NAME, s);
                 // Consume closing quote if not end of command
                 if (hasNext()) {
                     next();
@@ -166,7 +160,7 @@ public class Parser implements ParserInterface {
      * @return True if there is more characters to be read, false otherwise
      */
     private boolean hasNext() {
-        return mParserPos < mCommand.length();
+        return mParserPos < mCommandString.length();
     }
 
     /**
@@ -176,7 +170,7 @@ public class Parser implements ParserInterface {
      * @return The next character of the command
      */
     private char peek() {
-        return mCommand.charAt(mParserPos);
+        return mCommandString.charAt(mParserPos);
     }
 
     /**
@@ -186,7 +180,7 @@ public class Parser implements ParserInterface {
      * @return The next character of the command
      */
     private char next() {
-        return mCommand.charAt(mParserPos++);
+        return mCommandString.charAt(mParserPos++);
     }
 
     /**
@@ -196,7 +190,7 @@ public class Parser implements ParserInterface {
      */
     private void trim() {
         if (hasNext() && peek() == ' ') {
-            // addToken(Token.WHITESPACE, null);
+            // mCommand.addToken(Token.Type.WHITESPACE, null);
             while (hasNext() && peek() == ' ') {
                 next();
             }
@@ -218,18 +212,6 @@ public class Parser implements ParserInterface {
             sb.append(next());
         }
         return sb.toString();
-    }
-
-    /**
-     * Convenience method to add a token to the list of parsed tokens
-     * 
-     * @param token
-     *            The enumerated token
-     * @param value
-     *            The value of the token parsed
-     */
-    private void addToken(Token token, String value) {
-        mTokens.add(new Pair<Token, String>(token, value));
     }
 
     /**

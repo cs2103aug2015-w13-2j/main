@@ -1,28 +1,26 @@
-package sg.edu.cs2103aug2015_w13_2j;
+package sg.edu.cs2103aug2015_w13_2j.parser;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import javafx.util.Pair;
-import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
+import sg.edu.cs2103aug2015_w13_2j.Logic;
 
 // @@author A0121410H
 
 public interface ParserInterface {
     /**
      * Parses the command into tokens. Keywords such as add, edit or delete for
-     * example are case <b>insensitive</b>. Will mark extraneous or invalid
-     * tokens with _INVALID after the token type
+     * example are case <b>insensitive</b>. Invalid tokens are marked with
+     * _INVALID after the token type
      * 
      * @param logic
      *            Dependency injection of the Logic component which is used by
      *            the Parser component to determine which are reserved keywords
      * @param command
      *            The command string entered by the user
+     * @return Iterable Command object containing all parsed Tokens
      */
-    public ArrayList<Pair<Token, String>> parseCommand(Logic logic,
-            String command);
+    public Command parseCommand(Logic logic, String command);
 
     /**
      * Retrieves a string in the format of [token1=value][token2=value]...
@@ -35,7 +33,7 @@ public interface ParserInterface {
     /**
      * Attempts to parse the given date string into a string representation of
      * the millisecond epoch. The valid formats are any combination of date and
-     * time formats including ommission of either as listed below:
+     * time formats including omission of either as listed below:
      * <ul>
      * <li>dd/mm/yyyy</li>
      * <li>dd/mm</li>

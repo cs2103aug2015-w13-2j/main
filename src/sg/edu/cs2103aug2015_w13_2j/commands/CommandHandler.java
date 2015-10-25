@@ -1,16 +1,15 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javafx.util.Pair;
 import sg.edu.cs2103aug2015_w13_2j.Logic;
-import sg.edu.cs2103aug2015_w13_2j.Parser;
-import sg.edu.cs2103aug2015_w13_2j.Parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.Task.Type;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
+import sg.edu.cs2103aug2015_w13_2j.parser.Command;
+import sg.edu.cs2103aug2015_w13_2j.parser.Parser;
+import sg.edu.cs2103aug2015_w13_2j.parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 
 // @@author A0121410H
@@ -28,8 +27,8 @@ public abstract class CommandHandler {
      * @param logic
      *            Dependency injection of the Logic component for the command
      *            handler to act upon
-     * @param tokens
-     *            The command as parsed tokens
+     * @param command
+     *            Command object containing parsed Tokens of the command
      * @param tasks
      *            Reference to master list of tasks. Note that any modification
      *            to this reference <b>will</b> affect the master list
@@ -37,8 +36,7 @@ public abstract class CommandHandler {
      * @return FeebackMessage object containing the relevant feedback to the
      *         user
      */
-    public abstract FeedbackMessage execute(Logic logic,
-            ArrayList<Pair<Token, String>> tokens);
+    public abstract FeedbackMessage execute(Logic logic, Command command);
 
     /**
      * Retrieves a list of reserved keywords which are handled by this command.
@@ -54,40 +52,33 @@ public abstract class CommandHandler {
     /**
      * Updates the passed in Task object based on the parsed tokens
      * 
-     * @param tokens
-     *            The tokens parsed from the command <b>including</b> the
-     *            command token itself but <b>excluding</b> any previously used
-     *            identifiers
+     * @param command
+     *            Command object containing parsed Tokens of the command
      * @param task
      *            The Task object to be updated
      * @throws InvalidTaskException
      *             Thrown when the Task constructed from the parsed tokens is
      *             invalid
      */
-    public void updateTask(ArrayList<Pair<Token, String>> tokens, Task task)
+    public void updateTask(Command command, Task task)
             throws InvalidTaskException {
-        Iterator<Pair<Token, String>> iter = tokens.iterator();
+        Iterator<Token> iter = command.iterator();
         while (iter.hasNext()) {
-            Pair<Token, String> pair = iter.next();
-            switch (pair.getKey()) {
+            Token token = iter.next();
+            switch (token.type) {
             case FLAG:
-                String flag = pair.getValue();
+                String flag = token.value;
                 switch (flag) {
                 // Flags which expect the next token to be a date
                 case Parser.FLAG_END:
                 case Parser.FLAG_START:
-                    System.out.println("[Logic] Flag encountered: " + flag);
                     if (iter.hasNext()) {
-                        Pair<Token, String> nextPair = iter.next();
-                        assert(nextPair.getKey() == Token.DATE
-                                || nextPair.getKey() == Token.DATE_INVALID);
-                        // Only set valid dates
-                        System.out.println(nextPair.getValue());
-                        if (nextPair.getKey() == Token.DATE) {
+                        Token nextToken = iter.next();
+                        if (nextToken.type == Token.Type.DATE) {
                             if (flag.compareTo(Parser.FLAG_END) == 0) {
-                                task.setEnd(nextPair.getValue());
+                                task.setEnd(nextToken.value);
                             } else if (flag.compareTo(Parser.FLAG_START) == 0) {
-                                task.setStart(nextPair.getValue());
+                                task.setStart(nextToken.value);
                             }
                         }
                     }
@@ -95,7 +86,7 @@ public abstract class CommandHandler {
                 }
                 break;
             case NAME:
-                task.setName(pair.getValue());
+                task.setName(token.value);
                 break;
             default:
                 // Do nothing

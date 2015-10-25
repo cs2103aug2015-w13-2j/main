@@ -242,7 +242,7 @@ public class TextPane extends JTextPane {
         }
     }
 
-    private void print(String s) {
+    public void print(String s) {
         print(s, STYLE_DEFAULT);
     }
 

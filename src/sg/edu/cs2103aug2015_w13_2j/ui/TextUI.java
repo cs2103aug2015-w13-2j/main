@@ -68,6 +68,11 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     public void display(ArrayList<Task> tasks) {
         mTextPane.display(tasks);
     }
+    
+    public void display(String s) {
+        mTextPane.clear();
+        mTextPane.print(s);
+    }
 
     public void feedback(FeedbackMessage m) {
         mFeedbackLabel.setForeground(m.getType().getColor());
@@ -81,7 +86,6 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
         case KeyEvent.VK_ENTER:
-            LOGGER.log(Level.INFO, "Command: " + mTextField.getText());
             Logic.getInstance().executeCommand(mTextField.getText());
             mTextField.setText(null);
             break;

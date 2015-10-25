@@ -1,4 +1,4 @@
-package sg.edu.cs2103aug2015_w13_2j;
+package sg.edu.cs2103aug2015_w13_2j.parser;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,8 +8,10 @@ import java.util.GregorianCalendar;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import sg.edu.cs2103aug2015_w13_2j.ParserInterface.IllegalDateFormatException;
+import sg.edu.cs2103aug2015_w13_2j.FunDUE;
+import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
+import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface.IllegalDateFormatException;
 
 public class ParserTest {
     // Use the same Parser object across all test cases
