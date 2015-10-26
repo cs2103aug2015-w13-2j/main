@@ -21,4 +21,8 @@ public class Token {
         this.type = type;
         this.value = value;
     }
+    
+    public boolean isEmptyToken() {
+        return this.type.equals(Token.Type.EMPTY);
+    }
 }

@@ -1,6 +1,8 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -38,11 +40,13 @@ public class ArchiveHandler extends CommandHandler {
 
     @Override
     public void execute(Logic logic, Command command) {
-        Token id = command.getIdToken();
         try {
-            Task task = logic.getTask(Integer.parseInt(id.value));
-            task.setArchived(true);
-            logArchivedTask(task);
+            ArrayList<Integer> archiveIndexes = command.getAllIdTokenValues();
+            for (Integer index : archiveIndexes) {
+                Task task = logic.getTask(index);
+                task.setArchived(true);
+                logArchivedTask(task);
+            }
             logic.feedback(new FeedbackMessage(ARCHIVE_SUCCESS,
                     FeedbackType.INFO));
         } catch (TaskNotFoundException e) {

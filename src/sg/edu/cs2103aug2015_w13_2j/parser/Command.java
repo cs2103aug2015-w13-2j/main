@@ -59,6 +59,23 @@ public class Command implements Iterable<Token> {
         }
         return Token.EMPTY_TOKEN;
     }
+    
+    /**
+     * Convenience method to retrieves a list of all values of ID 
+     * tokens in this command
+     * 
+     * @return List of all values of objects of type ID or an empty list 
+     *         if command contains none
+     */
+    public ArrayList<Integer> getAllIdTokenValues() {
+        ArrayList<Integer> idTokens = new ArrayList<Integer>();
+        for (Token token : this) {
+            if (token.type == Type.ID) {
+                idTokens.add(Integer.parseInt(token.value));
+            }
+        }
+        return idTokens;
+    }
 
     /**
      * Retrieves the first RESERVED token of this command

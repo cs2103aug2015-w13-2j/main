@@ -1,5 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -42,21 +43,23 @@ public class MarkCompletedHandler extends CommandHandler {
 
     @Override
     public void execute(Logic logic, Command command) {
-        Token id = command.getIdToken();
         try {
-            Task task = logic.getTask(Integer.parseInt(id.value));
-            if (task.isCompleted()) {
-                task.setCompleted(false);
-                task.setArchived(false);
-                logCompletedArchivedTask(task);
-                logic.feedback(new FeedbackMessage(SET_UNCOMPLETED_SUCCESS,
-                        FeedbackType.INFO));
-            } else {
-                task.setCompleted(true);
-                task.setArchived(true);
-                logCompletedArchivedTask(task);
-                logic.feedback(new FeedbackMessage(SET_COMPLETED_SUCCESS,
-                        FeedbackType.INFO));
+            ArrayList<Integer> markIndexes = command.getAllIdTokenValues();
+            for (Integer index : markIndexes) {
+                Task task = logic.getTask(index);
+                if (task.isCompleted()) {
+                    task.setCompleted(false);
+                    task.setArchived(false);
+                    logCompletedArchivedTask(task);
+                    logic.feedback(new FeedbackMessage(SET_UNCOMPLETED_SUCCESS,
+                            FeedbackType.INFO));
+                } else {
+                    task.setCompleted(true);
+                    task.setArchived(true);
+                    logCompletedArchivedTask(task);
+                    logic.feedback(new FeedbackMessage(SET_COMPLETED_SUCCESS,
+                            FeedbackType.INFO));
+                }
             }
         } catch (TaskNotFoundException e) {
             logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);

@@ -1,5 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -30,7 +31,7 @@ public class UnarchiveHandler extends CommandHandler {
     private static final String[] FLAGS = {};
     private static final String[] OPTIONS = { OPTION_TASK_ID };
     private static final String[] RESERVED = { "unarchive", "unar" };
-    private static final String RETRIEVE_SUCCESS = "Task retrieved successfully.";
+    private static final String RETRIEVE_SUCCESS = "Task unarchived successfully.";
 
     public UnarchiveHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
@@ -38,11 +39,13 @@ public class UnarchiveHandler extends CommandHandler {
 
     @Override
     public void execute(Logic logic, Command command) {
-        Token id = command.getIdToken();
         try {
-            Task task = logic.getTask(Integer.parseInt(id.value));
-            task.setArchived(false);
-            logRetrievedTask(task);
+            ArrayList<Integer> unarchiveIndexes = command.getAllIdTokenValues();
+            for (Integer index : unarchiveIndexes) {
+                Task task = logic.getTask(index);
+                task.setArchived(false);
+                logUnarchivedTask(task);
+            }
             logic.feedback(new FeedbackMessage(RETRIEVE_SUCCESS,
                     FeedbackType.INFO));
         } catch (TaskNotFoundException e) {
@@ -55,7 +58,7 @@ public class UnarchiveHandler extends CommandHandler {
         return Arrays.asList(RESERVED);
     }
 
-    private void logRetrievedTask(Task retrievedTask) {
+    private void logUnarchivedTask(Task retrievedTask) {
         String nameOfArchivedTask = retrievedTask.getName();
         LOGGER.info("[CommandHandler][RetrieveHandler] '" + nameOfArchivedTask
                 + "' archived status is: " + retrievedTask.isArchived());

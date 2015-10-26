@@ -1,6 +1,9 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import sg.edu.cs2103aug2015_w13_2j.Logic;
@@ -24,9 +27,13 @@ public class DeleteHandler extends CommandHandler {
 
     @Override
     public void execute(Logic logic, Command command) {
-        Token id = command.getIdToken();
         try {
-            logic.removeTask(Integer.parseInt(id.value));
+            ArrayList<Integer> markIndexes = command.getAllIdTokenValues();
+            // Orders in descending order so task removal is independent of each other
+            Collections.sort(markIndexes, Collections.reverseOrder());
+            for (Integer index : markIndexes) {
+                logic.removeTask(index);
+            }
             logic.feedback(new FeedbackMessage(DELETE_SUCCESS,
                     FeedbackType.INFO));
         } catch (TaskNotFoundException e) {
