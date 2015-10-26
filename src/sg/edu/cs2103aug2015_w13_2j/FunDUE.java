@@ -9,7 +9,7 @@ import sg.edu.cs2103aug2015_w13_2j.commands.HelpHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkCompletedHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
-import sg.edu.cs2103aug2015_w13_2j.commands.RetrieveHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.UnarchiveHandler;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
 
 // @@author A0121410H
@@ -29,7 +29,7 @@ public class FunDUE {
         mLogic.registerCommandHandler(new EditHandler());
         mLogic.registerCommandHandler(new DeleteHandler());
         mLogic.registerCommandHandler(new ArchiveHandler());
-        mLogic.registerCommandHandler(new RetrieveHandler());
+        mLogic.registerCommandHandler(new UnarchiveHandler());
         mLogic.registerCommandHandler(new MarkImportantHandler());
         mLogic.registerCommandHandler(new MarkCompletedHandler());
         mLogic.registerCommandHandler(new FilterHandler());
