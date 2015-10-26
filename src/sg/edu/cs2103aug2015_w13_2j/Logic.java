@@ -1,5 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;

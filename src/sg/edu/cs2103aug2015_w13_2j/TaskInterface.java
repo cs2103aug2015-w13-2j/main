@@ -6,7 +6,7 @@ import sg.edu.cs2103aug2015_w13_2j.Task.Type;
 
 // @@author A0121410H
 
-public interface TaskInterface {
+public interface TaskInterface extends Comparable<Task> {
     public class InvalidTaskException extends Exception {
         private static final long serialVersionUID = 4591179171294898925L;
     }
@@ -176,4 +176,6 @@ public interface TaskInterface {
         }
         return task;
     }
+    
+    public int compareTo(Task task);
 }

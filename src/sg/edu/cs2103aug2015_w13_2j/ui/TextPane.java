@@ -14,6 +14,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
+import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 
 //@@author A0121410H
 
@@ -76,7 +77,14 @@ public class TextPane extends JTextPane {
         writeSeparator();
         if (tasks.size() > 0) {
             for (int i = 0; i < tasks.size(); i++) {
-                writeTask(tasks.get(i), i);
+				try {
+					if(tasks.get(i).isValid()){
+						writeTask(tasks.get(i), i);
+					}
+				} catch (InvalidTaskException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         } else {
             print(SEPARATOR_VERTICAL);

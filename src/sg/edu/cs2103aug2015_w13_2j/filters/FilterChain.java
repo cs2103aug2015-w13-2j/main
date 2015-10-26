@@ -1,9 +1,11 @@
 package sg.edu.cs2103aug2015_w13_2j.filters;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Stack;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
+import sg.edu.cs2103aug2015_w13_2j.filters.SortFilter.InvalidSortFilterException;
 
 public class FilterChain {
     private Stack<Filter> mFilters =  new Stack<Filter>();
@@ -19,6 +21,11 @@ public class FilterChain {
     }
     
     public ArrayList<Task> getTasksForDisplay() {
+    	//for debugging
+    	 for (int i = 0; i < mFilters.peek().getTasks().size(); i++) {
+             System.out.println("task " + mFilters.peek().getTasks().get(i));
+    	 }
+    	Collections.sort(mFilters.peek().getTasks());
         return mFilters.peek().getTasks();
     }
     
@@ -37,11 +44,13 @@ public class FilterChain {
     
     public Task removeTask(int index) {
         Task task = mFilters.peek().getTask(index);
+        Collections.sort(mFilters.elementAt(0).getTasks());
         return mFilters.elementAt(0).removeTask(task);
     }
     
     public void updateFilters() {
         ArrayList<Task> tasks = mFilters.elementAt(0).getTasks();
+        Collections.sort(tasks);
         for(Filter filter : mFilters) {
             filter.applyFilter(tasks);
             tasks = filter.getTasks();

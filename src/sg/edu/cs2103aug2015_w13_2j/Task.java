@@ -13,6 +13,7 @@ import java.util.Map.Entry;
  * @author Zhu Chunqi
  */
 public class Task implements TaskInterface {
+	
     public enum Type {
         DEADLINE, EVENT, FLOATING
     }
@@ -35,8 +36,9 @@ public class Task implements TaskInterface {
      * Zero parameter constructor that creates and initializes a new Task object
      * and records the time of creation
      */
+    
     public Task() {
-        setLabel(LABEL_CREATED, String.valueOf(System.currentTimeMillis()));
+
     }
 
     /**
@@ -48,7 +50,8 @@ public class Task implements TaskInterface {
      */
     public Task(String name) {
         this();
-        setName(name);
+        setLabel(LABEL_CREATED, String.valueOf(System.currentTimeMillis()));
+            setName(name);
     }
 
     public void setLabel(String label, String value) {
@@ -155,6 +158,7 @@ public class Task implements TaskInterface {
             return true;
         }
     }
+
 
     /**
      * Checks if two Task objects are equal to each other. Specifically it is
@@ -286,4 +290,42 @@ public class Task implements TaskInterface {
         }
     }
 
+    // @@author A0133387B
+	@Override
+	
+	public int compareTo(Task task) {
+        if (this.getType().equals(task.getType())) {
+		     if (this.getType().equals("DEADLINE")) {
+		    	 if(!this.getEnd().equals(task.getEnd())){
+		             return this.getEnd().compareTo(task.getEnd());
+		    	 } else {
+		    		 return this.getName().compareTo(task.getName());
+		    	 }
+		     } else if (this.getType().equals("EVENT")) {
+		       	 if(!this.getStart().equals(task.getStart())){
+		             return this.getStart().compareTo(task.getStart());
+		    	 } else if(!this.getEnd().equals(task.getEnd())){
+			            return this.getEnd().compareTo(task.getEnd());
+		    	 } else {
+		    		 return this.getName().compareTo(task.getName());
+		    	 }
+		     } else {//FLOAT
+		    	 if(this.getStart() == null && task.getStart() == null){
+                     return this.getName().compareTo(task.getName());
+		    	 } else if (this.getStart() != null && task.getStart() == null){
+		    		 return -1;
+		    	 } else if (this.getStart() == null && task.getStart() != null){
+		    		 return 1;
+		    	 } else {//if both tasks have start
+		    		 if(!this.getStart().equals(task.getStart())){
+		    		     return this.getStart().compareTo(task.getStart());
+		    		 } else {
+		    			 return this.getName().compareTo(task.getName());
+		    		 }
+		    	 }
+		     }
+		} else {
+		     return this.getType().compareTo(task.getType());
+		}
+	}
 }

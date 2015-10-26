@@ -45,6 +45,8 @@ public class Storage implements StorageInterface {
 		String dataFilePath = getDataFilePath();
 		
         try {
+        	ArrayList<Task> tasks = readTasksFromFile(dataFilePath);
+        	System.out.println("From Storage: size when reading = " + tasks.size());
 			return readTasksFromFile(dataFilePath);
 		} catch (Exception e) {
 			// MISSING DATA FILE: create new file at the path
