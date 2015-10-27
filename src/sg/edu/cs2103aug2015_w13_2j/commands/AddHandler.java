@@ -25,6 +25,7 @@ public class AddHandler extends CommandHandler {
         try {
             updateTask(command, task);
             logic.addTask(task);
+            logic.storeCommandInHistory();
             logic.feedback(new FeedbackMessage(ADD_SUCCESS, FeedbackType.INFO));
         } catch (InvalidTaskException e) {
             logic.feedback(FeedbackMessage.ERROR_INVALID_TASK);

@@ -1,8 +1,10 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +28,7 @@ public class Logic implements LogicInterface {
     private StorageInterface mStorage;
     private HashMap<String, CommandHandler> mCommandHandlers = new HashMap<String, CommandHandler>();
     private FilterChain mFilterChain = new FilterChain();
+    private Stack<ArrayList<Task>> mHistoryTasks;
 
     /**
      * Protected constructor
@@ -166,8 +169,27 @@ public class Logic implements LogicInterface {
         }
     }
 
+    public void storeCommandInHistory() {
+        ArrayList<Task> rootTaskList = mFilterChain.getRootTasks();
+        mHistoryTasks.push(rootTaskList);
+    }
+    
+    public ArrayList<Task> restoreCommandFromHistory() {
+        boolean rootHistoryReached = mHistoryTasks.size() == 1;
+        if (rootHistoryReached) {
+            return null;
+        } else {
+            mHistoryTasks.pop();
+            mFilterChain.setRootTasks(mHistoryTasks.peek());
+            return mFilterChain.getRootTasks();
+        }
+    }
+    
     public void readTasks() {
-        mFilterChain = new FilterChain(mStorage.readTasksFromDataFile());
+        ArrayList<Task> tasksFromDataFile = mStorage.readTasksFromDataFile();
+        mFilterChain = new FilterChain(tasksFromDataFile);
+        mHistoryTasks = new Stack<ArrayList<Task>>();
+        mHistoryTasks.push(tasksFromDataFile);
     }
 
     private void writeTasks() {

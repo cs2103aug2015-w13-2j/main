@@ -10,6 +10,10 @@ public abstract class Filter {
 
     public abstract void applyFilter(ArrayList<Task> tasks);
 
+    public void setAllTasks(ArrayList<Task> newTaskList) {
+        mTasks = newTaskList;
+    }
+    
     public ArrayList<Task> getTasks() {
         return mTasks;
     }

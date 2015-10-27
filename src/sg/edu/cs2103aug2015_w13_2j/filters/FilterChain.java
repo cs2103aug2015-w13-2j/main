@@ -28,6 +28,14 @@ public class FilterChain {
         return mFilters.elementAt(0).getTasks();
     }
     
+    public ArrayList<Task> getRootTasks() {
+        return mFilters.lastElement().getTasks();
+    }
+    
+    public void setRootTasks(ArrayList<Task> newTaskList) {
+        mFilters.lastElement().setAllTasks(newTaskList);
+    }
+    
     public void addTask(Task task) {
         mFilters.elementAt(0).addTask(task);
         updateFilters();
