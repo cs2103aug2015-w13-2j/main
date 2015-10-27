@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.ArchiveHandler;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
 
 public class IntegrationTests {
@@ -19,6 +20,7 @@ public class IntegrationTests {
     @BeforeClass
     public static void setup() {
         sLogic.registerCommandHandler(new AddHandler());
+        sLogic.registerCommandHandler(new ArchiveHandler());
         sLogic.injectDependency(sTextUI);
         sLogic.readTasks(sStorage);
     }
@@ -32,7 +34,7 @@ public class IntegrationTests {
         ArrayList<Task> storageTasks = sStorage.readTasksFromDataFile();
         assertEquals(1, storageTasks.size());
         assertEquals(taskName, storageTasks.get(0).getName());
-
+     
         // Task should also reside in FilterChain within Logic component
         Task logicTaskZero = sLogic.getTask(0);
         assertEquals(taskName, logicTaskZero.getName());
@@ -44,6 +46,10 @@ public class IntegrationTests {
 
         // FilterChain should still be /all/
         assertEquals("/all/", sTextUI.getFilterChain());
+        
+        assertEquals(sLogic.getTask(0).isArchived(), false);
+        int indexToArchive = 0;
+        sLogic.executeCommand("archive " + indexToArchive);
+        assertEquals(sStorage.readTasksFromDataFile().get(0).isArchived(), true); 
     }
-
 }
