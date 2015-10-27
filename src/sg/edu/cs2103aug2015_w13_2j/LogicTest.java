@@ -27,8 +27,8 @@ public class LogicTest {
     @BeforeClass
     public static void setup() {
         sLogic.registerCommandHandler(new AddHandler());
-        sLogic.readTasks(sStorage);
-        sLogic.injectDependency(sTextUI);
+        sLogic.injectDependencies(sStorage, sTextUI);
+        sLogic.readTasks();
     }
 
     @Test

@@ -64,12 +64,14 @@ public interface TaskInterface extends Comparable<Task> {
     public void setStart(Date start);
 
     /**
-     * Sets the start date of the Task object
+     * Sets or updates the start date of the Task object based on the provided
+     * format string
      * 
-     * @param startString
-     *            String representing the millisecond epoch
+     * @param format
+     *            String of the format dd_MM_yyyy_HH_mm as produced by
+     *            {@link #parseDate(String)}
      */
-    public void setStart(String startString);
+    public void setStart(String format);
 
     /**
      * Retrieves the start date of the Task object
@@ -87,12 +89,14 @@ public interface TaskInterface extends Comparable<Task> {
     public void setEnd(Date end);
 
     /**
-     * Sets the end date of the Task object
+     * Sets or updates the end date of the Task object based on the provided
+     * format string
      * 
-     * @param endString
-     *            String representing the millisecond epoch
+     * @param format
+     *            String of the format dd_MM_yyyy_HH_mm as produced by
+     *            {@link #parseDate(String)}
      */
-    public void setEnd(String endString);
+    public void setEnd(String format);
 
     /**
      * Retrieves the end date of the Task object
@@ -176,6 +180,6 @@ public interface TaskInterface extends Comparable<Task> {
         }
         return task;
     }
-    
+
     public int compareTo(Task task);
 }

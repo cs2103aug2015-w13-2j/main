@@ -18,7 +18,7 @@ public class FunDUE {
     private TextUI mTextUI;
     private Storage mStorage = Storage.getInstance();
     private Logic mLogic = Logic.getInstance();
-    
+
     /**
      * Initialization of components. Components are <b>not</b> allowed to
      * reference other components during initialization. Additional
@@ -40,8 +40,8 @@ public class FunDUE {
     public void run() {
         mTextUI = TextUI.getInstance();
         mTextUI.injectDependency(mLogic);
-        mLogic.injectDependency(mTextUI);
-        mLogic.readTasks(mStorage);
+        mLogic.injectDependencies(mStorage, mTextUI);
+        mLogic.readTasks();
         mLogic.display();
     }
 

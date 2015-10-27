@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import sg.edu.cs2103aug2015_w13_2j.FunDUE;
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface.IllegalDateFormatException;
@@ -27,20 +26,29 @@ public class ParserTest {
     }
 
     /**
-     * Compares this command to the specified expected format of parsed tokens.
+     * Compares the expected string of parsed tokens from parsing the provided
+     * command string to the actual string of parsed tokens
      * 
      * @param command
-     *            User command to test
+     *            Command string to parse
      * @param expected
-     *            Expected parsed tokens format for the command input
+     *            Expected string of parsed tokens
      */
-    private void testParser(String command, String expected) {
-        new FunDUE();
+    private void testCommandParser(String command, String expected) {
         LOGGER.log(Level.INFO, "Parsing: " + command);
         mParser.parseCommand(mLogic, command);
         LOGGER.log(Level.INFO, "Parsed Tokens: " + mParser.getParsedTokens());
         LOGGER.log(Level.INFO, "Expected: " + expected);
         assertEquals(expected, mParser.getParsedTokens());
+    }
+
+    private void testDatetimeParser(String datetime, String expected)
+            throws IllegalDateFormatException {
+        LOGGER.log(Level.INFO, "Parsing: " + datetime);
+        String actual = ParserInterface.parseDate(datetime);
+        LOGGER.log(Level.INFO, "Parsed datetime: " + actual);
+        LOGGER.log(Level.INFO, "Expected: " + expected);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -53,20 +61,22 @@ public class ParserTest {
                 + "[FLAG=e][DATE_INVALID=4pm][ALPHA_NUM=*@(*#(!&@!]"
                 + "[NAME=Task name]";
 
-        testParser(command, expected);
+        testCommandParser(command, expected);
     }
 
     @Test
-    public void parserDateParserTest() throws IllegalDateFormatException {
-        // Normal date with all relevant information
-        assertEquals("1442937600000", ParserInterface.parseDate("23/09/2015"));
-
-        assertEquals("1442937600000", ParserInterface.parseDate("23/09"));
+    public void parserDateTimeFormatsTest() throws IllegalDateFormatException {
+        testDatetimeParser("23/09/2015T10:11", "23_9_2015_10_11");
+        testDatetimeParser("23/09/2015T10", "23_9_2015_10_mm");
+        testDatetimeParser("23/09/2015", "23_9_2015_HH_mm");
+        testDatetimeParser("23/09T10:11", "23_9_yyyy_10_11");
+        testDatetimeParser("23/09T10", "23_9_yyyy_10_mm");
+        testDatetimeParser("23/09", "23_9_yyyy_HH_mm");
+        testDatetimeParser("23T10:11", "23_MM_yyyy_10_11");
+        testDatetimeParser("23T10", "23_MM_yyyy_10_mm");
+        testDatetimeParser("23", "23_MM_yyyy_HH_mm");
     }
 
-    /*****************************************************************
-     * TESTING PARSE COMMAND METHODS
-     *****************************************************************/
     @Test
     public void parseCommandTest() {
         // Equivalence partition for case of 'Valid command Token'
@@ -78,8 +88,8 @@ public class ParserTest {
         String singleTokenCommand = "add";
         String singleTokenCommandExpected = "[RESERVED=add]";
 
-        testParser(correctCommand, correctCommandExpected);
-        testParser(singleTokenCommand, singleTokenCommandExpected);
+        testCommandParser(correctCommand, correctCommandExpected);
+        testCommandParser(singleTokenCommand, singleTokenCommandExpected);
 
         // Equivalence partitions for cases of 'Invalid command Token'
         // These are cases where an invalid command is found:
@@ -93,10 +103,11 @@ public class ParserTest {
         String emptyCommand = "";
         String emptyCommandExpected = "";
 
-        testParser(incorrectKeywordCommand, incorrectKeywordCommandExpected);
-        testParser(singleTokenIncorrectKeywordCommand,
+        testCommandParser(incorrectKeywordCommand,
+                incorrectKeywordCommandExpected);
+        testCommandParser(singleTokenIncorrectKeywordCommand,
                 singleTokenIncorrectKeywordCommandExpected);
-        testParser(emptyCommand, emptyCommandExpected);
+        testCommandParser(emptyCommand, emptyCommandExpected);
     }
 
     /*****************************************************************
@@ -118,10 +129,11 @@ public class ParserTest {
         String noClosingWrapper = "'Eat Lunch";
         String noClosingWrapperExpected = "[NAME=Eat Lunch]";
 
-        testParser(validTaskName, validTaskNameExpected);
-        testParser(validTaskNameAlternative, validTaskNameAlternativeExpected);
-        testParser(validNumericTaskName, validNumericTaskNameExpected);
-        testParser(noClosingWrapper, noClosingWrapperExpected);
+        testCommandParser(validTaskName, validTaskNameExpected);
+        testCommandParser(validTaskNameAlternative,
+                validTaskNameAlternativeExpected);
+        testCommandParser(validNumericTaskName, validNumericTaskNameExpected);
+        testCommandParser(noClosingWrapper, noClosingWrapperExpected);
 
         // Equivalence partition for an 'Invalid task name'
         // These are test cases for a task name with incomplete/unaccepted
@@ -138,9 +150,9 @@ public class ParserTest {
         String noOpeningWrapper = "Eat Lunch'";
         String noOpeningWrapperExpected = "[ALPHA_NUM=Eat][ALPHA_NUM=Lunch']";
 
-        testParser(noWrappers, noWrappersExpected);
-        testParser(numericTaskName, numericTaskNameExpected);
-        testParser(noOpeningWrapper, noOpeningWrapperExpected);
+        testCommandParser(noWrappers, noWrappersExpected);
+        testCommandParser(numericTaskName, numericTaskNameExpected);
+        testCommandParser(noOpeningWrapper, noOpeningWrapperExpected);
     }
 
     /*****************************************************************
@@ -168,9 +180,9 @@ public class ParserTest {
         String emptyToken = "";
         String emptyTokenExpected = "";
 
-        testParser(singleValidOption, singleValidOptionExpected);
-        testParser(validOptions, validOptionsExpected);
-        testParser(emptyToken, emptyTokenExpected);
+        testCommandParser(singleValidOption, singleValidOptionExpected);
+        testCommandParser(validOptions, validOptionsExpected);
+        testCommandParser(emptyToken, emptyTokenExpected);
 
         // Equivalence partition for 'Invalid option(s)'
         // These are test cases for invalid flag-date pairs recognized:
@@ -188,9 +200,10 @@ public class ParserTest {
         String invalidSecondOptionFieldExpected = "[FLAG=s]" + "[DATE="
                 + date1.getTimeInMillis() + "][FLAG=e]";
 
-        testParser(singleToken, singleTokenExpected);
-        testParser(invalidSecondOption, invalidSecondOptionExpected);
-        testParser(invalidSecondOptionField, invalidSecondOptionFieldExpected);
+        testCommandParser(singleToken, singleTokenExpected);
+        testCommandParser(invalidSecondOption, invalidSecondOptionExpected);
+        testCommandParser(invalidSecondOptionField,
+                invalidSecondOptionFieldExpected);
 
         // Equivalence partition for 'Invalid flag(s)'
         // These are test cases for invalid flags recognized
@@ -206,22 +219,24 @@ public class ParserTest {
         String invalidFlagThenTaskNameExpected = "[RESERVED=add]"
                 + "[FLAG=s][DATE_INVALID='Do]" + "[ALPHA_NUM=Homework']";
 
-        testParser(singleInvalidToken, singleInvalidTokenExpected);
-        testParser(invalidOptionWithField, invalidOptionWithFieldExpected);
-        testParser(invalidFlagThenTaskName, invalidFlagThenTaskNameExpected);
+        testCommandParser(singleInvalidToken, singleInvalidTokenExpected);
+        testCommandParser(invalidOptionWithField,
+                invalidOptionWithFieldExpected);
+        testCommandParser(invalidFlagThenTaskName,
+                invalidFlagThenTaskNameExpected);
     }
 
     @Test
     public void parserRegression119Test() {
         String command = "a 'lunch with someone' -s ''";
         String commandExpected = "[RESERVED=a][NAME=lunch with someone][FLAG=s][DATE_INVALID='']";
-        testParser(command, commandExpected);
+        testCommandParser(command, commandExpected);
     }
 
     @Test
     public void parserRegression126Test() {
         String command = "add  ";
         String commandExpected = "[RESERVED=add]";
-        testParser(command, commandExpected);
+        testCommandParser(command, commandExpected);
     }
 }

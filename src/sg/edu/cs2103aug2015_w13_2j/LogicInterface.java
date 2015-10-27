@@ -16,16 +16,22 @@ import sg.edu.cs2103aug2015_w13_2j.ui.TextUIInterface;
  */
 public interface LogicInterface {
     /**
-     * Injects the dependency on an object implementing the
-     * {@link TextUIInterface} into this Logic component
+     * Injects the dependency on components implementing the
+     * {@link StorageInterface} and {@link TextUIInterface} into this Logic
+     * component
      * 
+     * @param storage
+     *            A Storage component implementing the {@link StorageInterface}.
+     *            A handle to this component will be retained for subsequent
+     *            calls to {@link Logic#readTasks()} and writeTasks()
      * @param textUI
      *            An object implementing the {@link TextUIInterface}. A handle
      *            to this object will be retained to be accessed when a
      *            CommandHandler provides data to be displayed, provides
      *            feedback or updates the filter chain
      */
-    public void injectDependency(TextUIInterface textUI);
+    public void injectDependencies(StorageInterface storage,
+            TextUIInterface textUI);
 
     /**
      * Retrieves the set of reserved keywords registered by CommandHandlers

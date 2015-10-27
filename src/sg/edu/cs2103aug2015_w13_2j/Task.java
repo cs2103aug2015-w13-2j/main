@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface;
+
 // @@author A0121410H
 
 /**
@@ -12,8 +14,8 @@ import java.util.Map.Entry;
  * 
  * @author Zhu Chunqi
  */
-public class Task implements TaskInterface {
-	
+public class Task implements TaskInterface, Comparable<Task> {
+
     public enum Type {
         DEADLINE, EVENT, FLOATING
     }
@@ -36,9 +38,9 @@ public class Task implements TaskInterface {
      * Zero parameter constructor that creates and initializes a new Task object
      * and records the time of creation
      */
-    
+
     public Task() {
-    	 setLabel(LABEL_CREATED, String.valueOf(System.currentTimeMillis()));
+        setLabel(LABEL_CREATED, String.valueOf(System.currentTimeMillis()));
     }
 
     /**
@@ -77,8 +79,10 @@ public class Task implements TaskInterface {
         setLabel(LABEL_START, dateToString(start));
     }
 
-    public void setStart(String startString) {
-        setLabel(LABEL_START, startString);
+    public void setStart(String format) {
+        Date startDate = getStart();
+        startDate = updateDate(format, startDate);
+        setStart(startDate);
     }
 
     public Date getStart() {
@@ -89,8 +93,10 @@ public class Task implements TaskInterface {
         setLabel(LABEL_END, dateToString(end));
     }
 
-    public void setEnd(String endString) {
-        setLabel(LABEL_END, endString);
+    public void setEnd(String format) {
+        Date endDate = getEnd();
+        endDate = updateDate(format, endDate);
+        setEnd(endDate);
     }
 
     public Date getEnd() {
@@ -100,17 +106,17 @@ public class Task implements TaskInterface {
     public void setType(Type type) {
         setLabel(LABEL_TYPE, type.toString());
     }
-    
+
     public String getType() {
-    	if(this.getEnd() == null){
-    		return "FLOAT";
-    	} else {
-            if(this.getStart() != null){
-        	    return "EVENT";
+        if (this.getEnd() == null) {
+            return "FLOAT";
+        } else {
+            if (this.getStart() != null) {
+                return "EVENT";
             } else {
-            	return "DEADLINE";
+                return "DEADLINE";
             }
-    	}
+        }
     }
 
     public void setCompleted(boolean completed) {
@@ -158,7 +164,6 @@ public class Task implements TaskInterface {
         }
     }
 
-
     /**
      * Checks if two Task objects are equal to each other. Specifically it is
      * assumed that each Task object is created at a different point in time and
@@ -181,7 +186,7 @@ public class Task implements TaskInterface {
 
     /**
      * The hash code for the Task object is the hash code returned by the long
-     * value of the {@link #LABEL_CREATED} label
+     * value of the CREATED label
      */
     @Override
     public int hashCode() {
@@ -210,6 +215,45 @@ public class Task implements TaskInterface {
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    // @@author A0133387B
+
+    @Override
+    public int compareTo(Task task) {
+        if (this.getType().equals(task.getType())) {
+            if (this.getType().equals("DEADLINE")) {
+                if (!this.getEnd().equals(task.getEnd())) {
+                    return this.getEnd().compareTo(task.getEnd());
+                } else {
+                    return this.getName().compareTo(task.getName());
+                }
+            } else if (this.getType().equals("EVENT")) {
+                if (!this.getStart().equals(task.getStart())) {
+                    return this.getStart().compareTo(task.getStart());
+                } else if (!this.getEnd().equals(task.getEnd())) {
+                    return this.getEnd().compareTo(task.getEnd());
+                } else {
+                    return this.getName().compareTo(task.getName());
+                }
+            } else {// FLOAT
+                if (this.getStart() == null && task.getStart() == null) {
+                    return this.getName().compareTo(task.getName());
+                } else if (this.getStart() != null && task.getStart() == null) {
+                    return -1;
+                } else if (this.getStart() == null && task.getStart() != null) {
+                    return 1;
+                } else {// if both tasks have start
+                    if (!this.getStart().equals(task.getStart())) {
+                        return this.getStart().compareTo(task.getStart());
+                    } else {
+                        return this.getName().compareTo(task.getName());
+                    }
+                }
+            }
+        } else {
+            return this.getType().compareTo(task.getType());
+        }
     }
 
     // @@author A0121410H
@@ -289,42 +333,20 @@ public class Task implements TaskInterface {
         }
     }
 
-    // @@author A0133387B
-	@Override
-	
-	public int compareTo(Task task) {
-        if (this.getType().equals(task.getType())) {
-		     if (this.getType().equals("DEADLINE")) {
-		    	 if(!this.getEnd().equals(task.getEnd())){
-		             return this.getEnd().compareTo(task.getEnd());
-		    	 } else {
-		    		 return this.getName().compareTo(task.getName());
-		    	 }
-		     } else if (this.getType().equals("EVENT")) {
-		       	 if(!this.getStart().equals(task.getStart())){
-		             return this.getStart().compareTo(task.getStart());
-		    	 } else if(!this.getEnd().equals(task.getEnd())){
-			            return this.getEnd().compareTo(task.getEnd());
-		    	 } else {
-		    		 return this.getName().compareTo(task.getName());
-		    	 }
-		     } else {//FLOAT
-		    	 if(this.getStart() == null && task.getStart() == null){
-                     return this.getName().compareTo(task.getName());
-		    	 } else if (this.getStart() != null && task.getStart() == null){
-		    		 return -1;
-		    	 } else if (this.getStart() == null && task.getStart() != null){
-		    		 return 1;
-		    	 } else {//if both tasks have start
-		    		 if(!this.getStart().equals(task.getStart())){
-		    		     return this.getStart().compareTo(task.getStart());
-		    		 } else {
-		    			 return this.getName().compareTo(task.getName());
-		    		 }
-		    	 }
-		     }
-		} else {
-		     return this.getType().compareTo(task.getType());
-		}
-	}
+    /**
+     * Utility method to update the Date object provided based on the format
+     * string by calling {@link ParserInterface#updateDate(String, Date)}
+     * 
+     * @param format
+     *            String format as produced by {@link #parseDate(String)}
+     * @param date
+     *            Date object to be updated
+     * @return Updated Date object
+     */
+    private Date updateDate(String format, Date date) {
+        if (date == null) {
+            date = new Date();
+        }
+        return ParserInterface.updateDate(format, date);
+    }
 }

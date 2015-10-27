@@ -1,6 +1,5 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -47,7 +46,8 @@ public class Logic implements LogicInterface {
         return sInstance;
     }
 
-    public void injectDependency(TextUIInterface textUI) {
+    public void injectDependencies(StorageInterface storage, TextUIInterface textUI) {
+        mStorage = storage;
         mTextUI = textUI;
     }
 
@@ -166,9 +166,8 @@ public class Logic implements LogicInterface {
         }
     }
 
-    public void readTasks(StorageInterface storage) {
-        mStorage = storage;
-        mFilterChain = new FilterChain(storage.readTasksFromDataFile());
+    public void readTasks() {
+        mFilterChain = new FilterChain(mStorage.readTasksFromDataFile());
     }
 
     private void writeTasks() {

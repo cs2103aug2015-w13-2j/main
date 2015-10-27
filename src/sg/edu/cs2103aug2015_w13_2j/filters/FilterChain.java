@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Stack;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
-import sg.edu.cs2103aug2015_w13_2j.filters.SortFilter.InvalidSortFilterException;
 
 public class FilterChain {
     private Stack<Filter> mFilters =  new Stack<Filter>();
@@ -21,10 +20,6 @@ public class FilterChain {
     }
     
     public ArrayList<Task> getTasksForDisplay() {
-    	//for debugging
-    	 for (int i = 0; i < mFilters.peek().getTasks().size(); i++) {
-             System.out.println("task " + mFilters.peek().getTasks().get(i));
-    	 }
     	Collections.sort(mFilters.peek().getTasks());
         return mFilters.peek().getTasks();
     }

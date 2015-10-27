@@ -21,8 +21,8 @@ public class IntegrationTests {
     public static void setup() {
         sLogic.registerCommandHandler(new AddHandler());
         sLogic.registerCommandHandler(new ArchiveHandler());
-        sLogic.injectDependency(sTextUI);
-        sLogic.readTasks(sStorage);
+        sLogic.injectDependencies(sStorage, sTextUI);
+        sLogic.readTasks();
     }
 
     @Test
