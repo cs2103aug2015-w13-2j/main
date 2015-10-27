@@ -1,8 +1,5 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
-import java.util.Arrays;
-import java.util.List;
-
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
@@ -32,10 +29,5 @@ public class AddHandler extends CommandHandler {
         } catch (InvalidTaskException e) {
             logic.feedback(FeedbackMessage.ERROR_INVALID_TASK);
         }
-    }
-
-    @Override
-    public List<String> getReservedKeywords() {
-        return Arrays.asList(RESERVED);
     }
 }

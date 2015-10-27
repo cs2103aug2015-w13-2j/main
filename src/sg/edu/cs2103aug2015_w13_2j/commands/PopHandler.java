@@ -1,8 +1,5 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
-import java.util.Arrays;
-import java.util.List;
-
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
@@ -15,7 +12,7 @@ public class PopHandler extends CommandHandler {
     private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "pop" };
     private static final String POP_SUCCESS = "Last filter removed.";
-    
+
     public PopHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
@@ -24,10 +21,5 @@ public class PopHandler extends CommandHandler {
     public void execute(Logic logic, Command command) {
         logic.popFilter();
         logic.feedback(new FeedbackMessage(POP_SUCCESS, FeedbackType.INFO));
-    }
-
-    @Override
-    public List<String> getReservedKeywords() {
-        return Arrays.asList(RESERVED);
     }
 }

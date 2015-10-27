@@ -1,15 +1,13 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
-import sg.edu.cs2103aug2015_w13_2j.ui.TextPane;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
+import sg.edu.cs2103aug2015_w13_2j.ui.TextPane;
 
 public class HelpHandler extends CommandHandler {
     private static final String NAME = "Help";
@@ -34,11 +32,11 @@ public class HelpHandler extends CommandHandler {
             sb.append("Usage: " + handler.getReservedKeywords() + " ");
             sb.append(handler.getSyntax() + TextPane.NEWLINE);
             sb.append("Flags: " + TextPane.NEWLINE);
-            for(String flag : handler.getFlags()) {
+            for (String flag : handler.getFlags()) {
                 sb.append("\t" + flag + TextPane.NEWLINE);
             }
             sb.append("Options: " + TextPane.NEWLINE);
-            for(String option : handler.getOptions()) {
+            for (String option : handler.getOptions()) {
                 sb.append("\t" + option + TextPane.NEWLINE);
             }
             sb.append(TextPane.NEWLINE);
@@ -47,11 +45,6 @@ public class HelpHandler extends CommandHandler {
         logic.feedback(new FeedbackMessage(HELP_SUCCESS, FeedbackType.INFO));
     }
 
-    @Override
-    public List<String> getReservedKeywords() {
-        return Arrays.asList(RESERVED);
-    }
-    
     @Override
     public boolean shouldDisplay() {
         return false;

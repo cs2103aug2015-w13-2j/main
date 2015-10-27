@@ -1,15 +1,12 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Logger;
 
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
-import sg.edu.cs2103aug2015_w13_2j.parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
@@ -24,8 +21,8 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
  * @author Natasha Koh Sze Sze
  */
 public class UnarchiveHandler extends CommandHandler {
-    private static final Logger LOGGER = Logger.getLogger(UnarchiveHandler.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(UnarchiveHandler.class.getName());
     private static final String NAME = "Retrieve Archived Task";
     private static final String SYNTAX = "<TASK_ID>";
     private static final String[] FLAGS = {};
@@ -51,11 +48,6 @@ public class UnarchiveHandler extends CommandHandler {
         } catch (TaskNotFoundException e) {
             logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
         }
-    }
-
-    @Override
-    public List<String> getReservedKeywords() {
-        return Arrays.asList(RESERVED);
     }
 
     private void logUnarchivedTask(Task retrievedTask) {

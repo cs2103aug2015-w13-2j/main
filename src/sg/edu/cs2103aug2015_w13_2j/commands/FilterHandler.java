@@ -1,8 +1,5 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
-import java.util.Arrays;
-import java.util.List;
-
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.filters.ActiveFilter;
 import sg.edu.cs2103aug2015_w13_2j.filters.ArchivedFilter;
@@ -64,10 +61,5 @@ public class FilterHandler extends CommandHandler {
             }
         }
         logic.feedback(new FeedbackMessage(FILTER_SUCCESS, FeedbackType.INFO));
-    }
-
-    @Override
-    public List<String> getReservedKeywords() {
-        return Arrays.asList(RESERVED);
     }
 }

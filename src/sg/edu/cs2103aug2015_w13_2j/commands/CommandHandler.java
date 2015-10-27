@@ -36,6 +36,25 @@ public abstract class CommandHandler {
     private String[] mOptions;
     private String[] mReserved;
 
+    /**
+     * Constructor for all CommandHandlers. Stores the name of the
+     * CommandHandler, the syntax, the flags supported and their descriptions,
+     * the options supported and their descriptions, and the keywords recognized
+     * by the CommandHandler. Each CommandHandler <b>must</b> provide valid
+     * parameters to the constructor as no empty constructor is provided and the
+     * values are <b>not</b> initialized by default
+     * 
+     * @param name
+     *            Name of the CommandHandler
+     * @param syntax
+     *            Syntax required by the CommandHandler
+     * @param flags
+     *            Array of flags supported and their descriptions
+     * @param options
+     *            Array of options supported and their descriptions
+     * @param reserved
+     *            Array of reserved keywords recognized by the CommandHandler
+     */
     public CommandHandler(String name, String syntax, String[] flags,
             String[] options, String[] reserved) {
         mName = name;
@@ -46,17 +65,14 @@ public abstract class CommandHandler {
     }
 
     /**
-     * Executes the command with additional parameters passed in as parsed
-     * tokens
+     * Executes the provided Command object
      * 
      * @param logic
-     *            Dependency injection of the Logic component for the command
-     *            handler to act upon
+     *            Dependency injection of the Logic component for the
+     *            CommandHandler to act upon
      * @param command
-     *            Command object containing parsed Tokens of the command
-     * @param tasks
-     *            Reference to master list of tasks. Note that any modification
-     *            to this reference <b>will</b> affect the master list
+     *            Command object containing parsed {@link Token}s of the command
+     *            string
      */
     public abstract void execute(Logic logic, Command command);
 
@@ -79,7 +95,7 @@ public abstract class CommandHandler {
     }
 
     /**
-     * Retrieves the list of flags with their descriptions that are supported by
+     * Retrieves a list of flags and their descriptions that are supported by
      * this CommandHandler
      * 
      * @return List of flags and their descriptions
@@ -89,8 +105,8 @@ public abstract class CommandHandler {
     }
 
     /**
-     * Retrieves the list of options with their descriptions that are supported
-     * by this CommandHandler
+     * Retrieves a list of options and their descriptions that are supported by
+     * this CommandHandler
      * 
      * @return List of options and their descriptions
      */
@@ -99,10 +115,9 @@ public abstract class CommandHandler {
     }
 
     /**
-     * Retrieves the list of reserved keywords recognized by this
-     * CommandHandler. The list may include simple aliases or keywords with
-     * completely different functionality. Note that only one CommandHandler may
-     * be attached to a single keyword
+     * Retrieves a list of reserved keywords recognized by this CommandHandler.
+     * The list may include simple aliases or keywords with completely different
+     * functionality
      * 
      * @return A list of keywords recognized by this CommandHandler
      */
@@ -113,9 +128,9 @@ public abstract class CommandHandler {
     /**
      * Checks if this CommandHandler requires a display refresh after execution.
      * Defaults to true for all CommandHandlers unless {@link #shouldDisplay()}
-     * is explicitly overridden and returning false. CommandHandlers which
-     * display directly to the TextPane with the {@link Logic#display(String)}
-     * method should override and return false
+     * is explicitly overridden and returns false. CommandHandlers which display
+     * directly to the TextPane via the {@link Logic#display(String)} method
+     * should override this method to return false
      * 
      * @return True if this CommandHandler requires a display refresh after
      *         execution, false otherwise
@@ -125,15 +140,17 @@ public abstract class CommandHandler {
     }
 
     /**
-     * Updates the passed in Task object based on the parsed tokens
+     * Updates the provided Task object based on {@link Token}s within the
+     * provided Command object
      * 
      * @param command
-     *            Command object containing parsed Tokens of the command
+     *            Command object containing parsed {@link Token}s of the command
+     *            string
      * @param task
-     *            The Task object to be updated
+     *            Task object to be updated
      * @throws InvalidTaskException
-     *             Thrown when the Task constructed from the parsed tokens is
-     *             invalid
+     *             Thrown when the Task object constructed from the parsed
+     *             tokens is invalid
      */
     public void updateTask(Command command, Task task)
             throws InvalidTaskException {
@@ -204,6 +221,16 @@ public abstract class CommandHandler {
         }
     }
 
+    // @@author A0121410H
+    
+    /**
+     * Utility method that converts an array of strings into a sorted list of
+     * strings
+     * 
+     * @param array
+     *            Array of strings to be sorted
+     * @return Sorted list of strings
+     */
     private List<String> getSortedList(String[] array) {
         List<String> list = Arrays.asList(array);
         Collections.sort(list);

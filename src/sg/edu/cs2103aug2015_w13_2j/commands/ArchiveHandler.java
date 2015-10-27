@@ -1,16 +1,12 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.logging.Logger;
 
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
-import sg.edu.cs2103aug2015_w13_2j.parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
@@ -52,11 +48,6 @@ public class ArchiveHandler extends CommandHandler {
         } catch (TaskNotFoundException e) {
             logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
         }
-    }
-
-    @Override
-    public List<String> getReservedKeywords() {
-        return Arrays.asList(RESERVED);
     }
 
     private void logArchivedTask(Task archivedTask) {
