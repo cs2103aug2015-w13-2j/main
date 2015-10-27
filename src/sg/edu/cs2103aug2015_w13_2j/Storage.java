@@ -127,7 +127,7 @@ public class Storage implements StorageInterface {
     	
     	ArrayList<Task> tasks = new ArrayList<Task>();
     	for(String taskString : taskArray) {
-    		if(taskString.isEmpty() || taskString.equals("\r") || taskString.equals("\n")) {
+    		if(taskString.isEmpty() || taskString.matches("\r+") || taskString.matches("\n+") || taskString.matches(" +")) {
     			continue;
     		} else {
     			tasks.add(TaskInterface.parseTask(taskString));
