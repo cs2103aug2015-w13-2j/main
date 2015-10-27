@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,7 +16,8 @@ import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface.IllegalDateFormatException;
 
 public class ParserTest {
-    // Use the same Parser object across all test cases
+    private static final Logger LOGGER = Logger.getLogger(ParserTest.class
+            .getName());
     private Parser mParser = Parser.getInstance();
     private Logic mLogic = Logic.getInstance();
 
@@ -33,11 +36,10 @@ public class ParserTest {
      */
     private void testParser(String command, String expected) {
         new FunDUE();
-        System.out.println("Parsing: " + command);
+        LOGGER.log(Level.INFO, "Parsing: " + command);
         mParser.parseCommand(mLogic, command);
-        System.out.println("Parsed Tokens: " + mParser.getParsedTokens());
-        System.out.println("Expected: " + expected);
-
+        LOGGER.log(Level.INFO, "Parsed Tokens: " + mParser.getParsedTokens());
+        LOGGER.log(Level.INFO, "Expected: " + expected);
         assertEquals(expected, mParser.getParsedTokens());
     }
 
@@ -160,8 +162,9 @@ public class ParserTest {
         String singleValidOptionExpected = "[FLAG=s][DATE="
                 + date1.getTimeInMillis() + "]";
         String validOptions = "-s 23/09 -e 24/09";
-        String validOptionsExpected = "[FLAG=s][DATE=" + date1.getTimeInMillis()
-                + "][FLAG=e][DATE=" + date2.getTimeInMillis() + "]";
+        String validOptionsExpected = "[FLAG=s][DATE="
+                + date1.getTimeInMillis() + "][FLAG=e][DATE="
+                + date2.getTimeInMillis() + "]";
         String emptyToken = "";
         String emptyTokenExpected = "";
 
@@ -208,4 +211,10 @@ public class ParserTest {
         testParser(invalidFlagThenTaskName, invalidFlagThenTaskNameExpected);
     }
 
+    @Test
+    public void parserRegression119Test() {
+        String command = "a 'lunch with someone' -s ''";
+        String commandExpected = "[RESERVED=a][NAME=lunch with someone][FLAG=s][DATE_INVALID='']";
+        testParser(command, commandExpected);
+    }
 }
