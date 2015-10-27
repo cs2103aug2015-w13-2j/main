@@ -78,9 +78,6 @@ public class Parser implements ParserInterface {
         char openingQuote = '"';
 
         while (hasNext()) {
-            // Call trim to remove any whitespace between tokens
-            trim();
-
             switch (mState) {
             case ALPHA_NUM:
                 s = nextDelimiter(' ');
@@ -117,7 +114,12 @@ public class Parser implements ParserInterface {
                 }
                 break;
             case GENERAL:
-                if (peek() == '"' || peek() == '\'') {
+                if(peek() == ' ') {
+                    // Skip over all intervening whitespaces
+                    while (hasNext() && peek() == ' ') {
+                        next();
+                    }
+                } else if (peek() == '"' || peek() == '\'') {
                     openingQuote = next();
                     mState = State.NAME;
                 } else if (peek() == '-') {
@@ -181,20 +183,6 @@ public class Parser implements ParserInterface {
      */
     private char next() {
         return mCommandString.charAt(mParserPos++);
-    }
-
-    /**
-     * Trims the command of whitespace from the current parser position to the
-     * next non-whitespace character. Adds a whitespace token to the list of
-     * parsed tokens
-     */
-    private void trim() {
-        if (hasNext() && peek() == ' ') {
-            // mCommand.addToken(Token.Type.WHITESPACE, null);
-            while (hasNext() && peek() == ' ') {
-                next();
-            }
-        }
     }
 
     /**

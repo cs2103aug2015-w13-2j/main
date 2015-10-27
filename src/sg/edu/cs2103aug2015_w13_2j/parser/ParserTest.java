@@ -217,4 +217,11 @@ public class ParserTest {
         String commandExpected = "[RESERVED=a][NAME=lunch with someone][FLAG=s][DATE_INVALID='']";
         testParser(command, commandExpected);
     }
+
+    @Test
+    public void parserRegression126Test() {
+        String command = "add  ";
+        String commandExpected = "[RESERVED=add]";
+        testParser(command, commandExpected);
+    }
 }

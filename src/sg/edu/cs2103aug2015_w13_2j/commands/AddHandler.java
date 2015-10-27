@@ -27,11 +27,11 @@ public class AddHandler extends CommandHandler {
         Task task = new Task();
         try {
             updateTask(command, task);
+            logic.addTask(task);
+            logic.feedback(new FeedbackMessage(ADD_SUCCESS, FeedbackType.INFO));
         } catch (InvalidTaskException e) {
             logic.feedback(FeedbackMessage.ERROR_INVALID_TASK);
         }
-        logic.addTask(task);
-        logic.feedback(new FeedbackMessage(ADD_SUCCESS, FeedbackType.INFO));
     }
 
     @Override
