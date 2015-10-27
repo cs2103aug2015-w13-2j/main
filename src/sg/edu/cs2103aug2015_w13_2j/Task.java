@@ -38,7 +38,7 @@ public class Task implements TaskInterface {
      */
     
     public Task() {
-
+    	 setLabel(LABEL_CREATED, String.valueOf(System.currentTimeMillis()));
     }
 
     /**
@@ -50,8 +50,7 @@ public class Task implements TaskInterface {
      */
     public Task(String name) {
         this();
-        setLabel(LABEL_CREATED, String.valueOf(System.currentTimeMillis()));
-            setName(name);
+        setName(name);
     }
 
     public void setLabel(String label, String value) {
