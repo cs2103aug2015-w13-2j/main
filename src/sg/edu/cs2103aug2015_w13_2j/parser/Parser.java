@@ -10,8 +10,8 @@ import sg.edu.cs2103aug2015_w13_2j.Logic;
 // @@author A0121410H
 
 public class Parser implements ParserInterface {
-    private static final Logger LOGGER = Logger
-            .getLogger(Parser.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Parser.class
+            .getName());
 
     private enum State {
         GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
@@ -60,10 +60,10 @@ public class Parser implements ParserInterface {
 
     public String getParsedTokens() {
         StringBuilder sb = new StringBuilder();
-        for(Token token : mCommand) {
+        for (Token token : mCommand) {
             sb.append('[');
             sb.append(token.type);
-            if(token.value != null) {
+            if (token.value != null) {
                 sb.append('=');
                 sb.append(token.value);
             }
@@ -78,6 +78,10 @@ public class Parser implements ParserInterface {
         char openingQuote = '"';
 
         while (hasNext()) {
+            if (!trim()) {
+                break;
+            }
+
             switch (mState) {
             case ALPHA_NUM:
                 s = nextDelimiter(' ');
@@ -114,8 +118,8 @@ public class Parser implements ParserInterface {
                 }
                 break;
             case GENERAL:
-                if(peek() == ' ') {
-                    // Skip over all intervening whitespaces
+                if (peek() == ' ') {
+                    // Skip over all intervening whitespace
                     while (hasNext() && peek() == ' ') {
                         next();
                     }
@@ -157,42 +161,43 @@ public class Parser implements ParserInterface {
     }
 
     /**
-     * Check if the end of the command has been reached
+     * Checks if the end of the command string has been reached
      * 
-     * @return True if there is more characters to be read, false otherwise
+     * @return True if there are more characters to read, false otherwise
      */
     private boolean hasNext() {
         return mParserPos < mCommandString.length();
     }
 
     /**
-     * Retrieves the next character of the command without advancing the parser
-     * position
+     * Retrieves the next character of the command string without advancing the
+     * parser position
      * 
-     * @return The next character of the command
+     * @return Next character of the command string
      */
     private char peek() {
         return mCommandString.charAt(mParserPos);
     }
 
     /**
-     * Retrieves the next character of the command and advances the parser
-     * position forward
+     * Retrieves the next character of the command and advances the parser one
+     * position forwards
      * 
-     * @return The next character of the command
+     * @return Next character of the command string
      */
     private char next() {
         return mCommandString.charAt(mParserPos++);
     }
 
     /**
-     * Utility method to read the command until the delimiter is reached and
-     * returns the characters read as a string
+     * Reads the command string character by character until the provided
+     * delimiter or end of the command string is encountered. Returns the
+     * characters read as a string
      * 
      * @param delimiter
-     *            The character delimiter to stop at
-     * @return The string read from the current parser position until the
-     *         delimiter is reached
+     *            Character delimiter to stop reading when encountered
+     * @return String read from the current parser position until the delimiter
+     *         or end of the command string is encountered
      */
     private String nextDelimiter(char delimiter) {
         StringBuilder sb = new StringBuilder();
@@ -203,23 +208,41 @@ public class Parser implements ParserInterface {
     }
 
     /**
-     * Checks if the provided token is a reserved keyword in a case
-     * <b>sensitive</b> manner
+     * Advances the parser position to the next non-whitespace character and
+     * returns the value of {@link #hasNext()}
+     * 
+     * @return Value of {@link #hasNext()}
+     */
+    private boolean trim() {
+        if (hasNext() && peek() == ' ') {
+            while (hasNext() && peek() == ' ') {
+                next();
+            }
+        }
+        return hasNext();
+    }
+
+    /**
+     * Checks if the provided string is a reserved keyword in a case
+     * <b>insensitive</b> manner. The provided string is first converted to all
+     * lower case before the comparison is carried out
      * 
      * @param s
-     *            The string token to be checked
-     * @return True if token is a reserved keyword, false otherwise
+     *            String to be checked
+     * @return True if the string is a reserved keyword, false otherwise
      */
     private boolean isReserved(String s) {
         return mReserved.contains(s.toLowerCase());
     }
 
     /**
-     * Checks if the provided flag is valid in a case <b>insensitive</b> manner
+     * Checks if the provided string is a valid flag in a case
+     * <b>insensitive</b> manner The provided string is first converted to all
+     * lower case before the comparison is carried out
      * 
-     * @param flag
-     *            The flag to be checked
-     * @return True if flag is valid, false otherwise
+     * @param s
+     *            String to be checked
+     * @return True if the string is a valid flag, false otherwise
      */
     private boolean isValidFlag(String flag) {
         return Arrays.asList(FLAGS).contains(flag.toLowerCase());
