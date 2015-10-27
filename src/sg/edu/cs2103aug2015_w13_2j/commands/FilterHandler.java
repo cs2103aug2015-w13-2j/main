@@ -55,9 +55,11 @@ public class FilterHandler extends CommandHandler {
                     }
                 default:
                     logic.feedback(FeedbackMessage.ERROR_INVALID_FILTER);
+                    return;
                 }
             } else {
                 logic.feedback(FeedbackMessage.ERROR_INVALID_FILTER);
+                return;
             }
         }
         logic.feedback(new FeedbackMessage(FILTER_SUCCESS, FeedbackType.INFO));
