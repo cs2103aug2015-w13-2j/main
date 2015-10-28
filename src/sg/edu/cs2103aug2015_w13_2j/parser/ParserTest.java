@@ -67,14 +67,14 @@ public class ParserTest {
     @Test
     public void parserDateTimeFormatsTest() throws IllegalDateFormatException {
         testDatetimeParser("23/09/2015T10:11", "23_9_2015_10_11");
-        testDatetimeParser("23/09/2015T10", "23_9_2015_10_mm");
-        testDatetimeParser("23/09/2015", "23_9_2015_HH_mm");
+        testDatetimeParser("23/09/2015T10", "23_9_2015_10_0");
+        testDatetimeParser("23/09/2015", "23_9_2015_0_0");
         testDatetimeParser("23/09T10:11", "23_9_yyyy_10_11");
-        testDatetimeParser("23/09T10", "23_9_yyyy_10_mm");
-        testDatetimeParser("23/09", "23_9_yyyy_HH_mm");
+        testDatetimeParser("23/09T10", "23_9_yyyy_10_0");
+        testDatetimeParser("23/09", "23_9_yyyy_0_0");
         testDatetimeParser("23T10:11", "23_MM_yyyy_10_11");
-        testDatetimeParser("23T10", "23_MM_yyyy_10_mm");
-        testDatetimeParser("23", "23_MM_yyyy_HH_mm");
+        testDatetimeParser("23T10", "23_MM_yyyy_10_0");
+        testDatetimeParser("23", "23_MM_yyyy_0_0");
     }
 
     @Test

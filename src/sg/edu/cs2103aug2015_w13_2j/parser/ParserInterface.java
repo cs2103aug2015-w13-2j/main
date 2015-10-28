@@ -20,7 +20,7 @@ public interface ParserInterface {
     }
 
     public static final String[] DATETIME_FORMAT_PARTS = { "dd", "MM", "yyyy",
-            "HH", "mm" };
+            "0", "0" };
     public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat(
             "dd_MM_yyyy_HH_mm");
 
