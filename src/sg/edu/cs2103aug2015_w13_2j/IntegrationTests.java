@@ -14,7 +14,9 @@ import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.FilterHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.UnarchiveHandler;
+import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
 
 public class IntegrationTests {
@@ -29,6 +31,7 @@ public class IntegrationTests {
         sLogic.registerCommandHandler(new UnarchiveHandler());
         sLogic.registerCommandHandler(new EditHandler());
         sLogic.registerCommandHandler(new FilterHandler());
+        sLogic.registerCommandHandler(new PopHandler());
         sLogic.registerCommandHandler(new DeleteHandler());
         sLogic.registerCommandHandler(new MarkImportantHandler());
         sLogic.injectDependencies(sStorage, sTextUI);
@@ -83,10 +86,32 @@ public class IntegrationTests {
     
     @Test
     public void testFilter(){
-    	sLogic.executeCommand("add '" + "first task" + "'");
+    	sLogic.executeCommand("add 'first task'");
     	sLogic.executeCommand("! 0");
     	sLogic.executeCommand("filter is:important");
         assertEquals(sTextUI.getFilterChain(), "/all/is:important/");
-        assertEquals(sStorage.readTasksFromDataFile().get(0).isImportant(), true); 
+        assertEquals(sStorage.readTasksFromDataFile().get(0).isImportant(), true);
+        
+        sLogic.executeCommand("ar 0");
+        sLogic.executeCommand("filter is:archived");
+        assertEquals(sTextUI.getFilterChain(), "/all/is:important/is:archived/");
+        assertEquals(sStorage.readTasksFromDataFile().get(0).isArchived(), true);
+        
+        sLogic.executeCommand("pop");
+        sLogic.executeCommand("pop");
+        sLogic.executeCommand("add 'second task'");
+        sLogic.executeCommand("add 'third'");
+        sLogic.executeCommand("filter search:task");
+        assertEquals(sTextUI.getFilterChain(), "/all/search:task/");
+        assertEquals(sTextUI.getTasksForDisplay().size(), 2);
+        assertEquals(sTextUI.getTasksForDisplay().get(0).getName(), "first task");
+        assertEquals(sTextUI.getTasksForDisplay().get(1).getName(), "second task");
+        
+        // Tests for invalid filters
+        sLogic.executeCommand("pop");
+        sLogic.executeCommand("filter is:asdf");
+        assertEquals(sTextUI.getFeedbackMessage(), FeedbackMessage.ERROR_INVALID_FILTER);
+        sLogic.executeCommand("filter searc:task");
+        assertEquals(sTextUI.getFeedbackMessage(), FeedbackMessage.ERROR_INVALID_FILTER);
     }
 }
