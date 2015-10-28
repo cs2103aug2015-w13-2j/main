@@ -60,6 +60,28 @@ public class IntegrationTests {
         // FilterChain should still be /all/
         assertEquals("/all/", sTextUI.getFilterChain());
     }
+    
+    @Test
+    public void testDeleteTask() {
+        String taskName = "Buy milk from store";
+        sLogic.executeCommand("delete 0");
+        sLogic.executeCommand("add '" + taskName + "'");
+        // Deleting the first task added. 
+        // 'Buy milk from store' should be preserved.
+        sLogic.executeCommand("delete 0");
+        
+        
+        // Task should not be found in Storage component to be saved
+        ArrayList<Task> storageTasks = sStorage.readTasksFromDataFile();
+        assertEquals(storageTasks.size(), 0);
+     
+        // Task should be sent to TextUI for display
+        ArrayList<Task> tasksForDisplay = sTextUI.getTasksForDisplay();
+        assertEquals(tasksForDisplay.size(), 0);
+
+        // FilterChain should still be /all/
+        assertEquals("/all/", sTextUI.getFilterChain());
+    }
 
     @Test
     public void testTaskModification() throws TaskNotFoundException {
