@@ -54,7 +54,7 @@ public class IntegrationTests {
 
         // Task should be sent to TextUI for display
         ArrayList<Task> tasksForDisplay = sTextUI.getTasksForDisplay();
-        assertEquals(1, tasksForDisplay.size());
+        assertEquals(tasksForDisplay.size(), 1);
         assertEquals(taskName, tasksForDisplay.get(0).getName());
 
         // FilterChain should still be /all/
@@ -70,23 +70,29 @@ public class IntegrationTests {
         assertEquals(sLogic.getTask(0).isArchived(), false);
         int indexToArchive = 0;
         sLogic.executeCommand("archive " + indexToArchive);
-        // Task should have been modified in Storage component
-        assertEquals(sStorage.readTasksFromDataFile().get(0).isArchived(), true); 
+        // Task modification reflected in Storage component
+        assertEquals(sStorage.readTasksFromDataFile().get(0).isArchived(), true);
+        // Task modification reflected in TextUI component
+        assertEquals(sTextUI.getTasksForDisplay().get(0).isArchived(), true);
         
         sLogic.executeCommand("unarchive " + indexToArchive);
         assertEquals(sStorage.readTasksFromDataFile().get(0).isArchived(), false); 
+        assertEquals(sTextUI.getTasksForDisplay().get(0).isArchived(), false);
         
         sLogic.executeCommand("edit " + indexToArchive + " -e 27/10");
+        String taskType = "DEADLINE";
         assertEquals(sStorage.readTasksFromDataFile().get(0).isOverdue(), true); 
-        assertEquals(sStorage.readTasksFromDataFile().get(0).getType(), "DEADLINE"); 
+        assertEquals(sStorage.readTasksFromDataFile().get(0).getType(), taskType); 
+        assertEquals(sTextUI.getTasksForDisplay().get(0).isOverdue(), true);
+        assertEquals(sTextUI.getTasksForDisplay().get(0).getType(), taskType);
         
         sLogic.executeCommand("! " + indexToArchive);
         assertEquals(sStorage.readTasksFromDataFile().get(0).isImportant(), true);
+        assertEquals(sTextUI.getTasksForDisplay().get(0).isImportant(), true);
         
         sLogic.executeCommand("del " + indexToArchive);
         assertEquals(sStorage.readTasksFromDataFile().size(), 0);
-        //Test again to make sure Logic works well with TextUI
-        assertEquals(0, sTextUI.getTasksForDisplay().size());
+        assertEquals(sTextUI.getTasksForDisplay().size(), 0);
     }
     
     @Test
