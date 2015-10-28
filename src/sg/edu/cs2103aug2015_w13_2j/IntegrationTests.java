@@ -59,6 +59,14 @@ public class IntegrationTests {
 
         // FilterChain should still be /all/
         assertEquals("/all/", sTextUI.getFilterChain());
+        
+        //Test for invalid commands
+        sLogic.executeCommand("add");
+        assertEquals(sTextUI.getFeedbackMessage(), FeedbackMessage.ERROR_INVALID_TASK);
+        sLogic.executeCommand("add ");
+        assertEquals(sTextUI.getFeedbackMessage(), FeedbackMessage.ERROR_INVALID_TASK);
+        sLogic.executeCommand("ad '" + taskName + "'");
+        assertEquals(sTextUI.getFeedbackMessage(), FeedbackMessage.ERROR_INVALID_TASK);
     }
     
     @Test
@@ -81,6 +89,10 @@ public class IntegrationTests {
 
         // FilterChain should still be /all/
         assertEquals("/all/", sTextUI.getFilterChain());
+        
+      //Test for invalid commands
+        sLogic.executeCommand("delete 10");
+        assertEquals(sTextUI.getFeedbackMessage(), FeedbackMessage.ERROR_TASK_NOT_FOUND);
     }
 
     @Test
@@ -95,8 +107,7 @@ public class IntegrationTests {
         // Task modification reflected in Storage component
         assertEquals(sStorage.readTasksFromDataFile().get(0).isArchived(), true);
         // Task modification reflected in TextUI component
-        assertEquals(sTextUI.getTasksForDisplay().get(0).isArchived(), true);
-        
+        assertEquals(sTextUI.getTasksForDisplay().get(0).isArchived(), true);        
         sLogic.executeCommand("unarchive " + indexToArchive);
         assertEquals(sStorage.readTasksFromDataFile().get(0).isArchived(), false); 
         assertEquals(sTextUI.getTasksForDisplay().get(0).isArchived(), false);
