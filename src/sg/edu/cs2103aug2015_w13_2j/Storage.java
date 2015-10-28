@@ -19,8 +19,8 @@ public class Storage implements StorageInterface {
     private static final Logger LOGGER = Logger.getLogger(Storage.class
             .getName());
 
-    protected final String FILE_THAT_STORES_DATAFILEPATH = "DATA_FILE_PATH";
-    protected final String DEFAULT_DATAFILEPATH = "./FunDUE_DATA_FILE.txt";
+    protected static final String FILE_THAT_STORES_DATAFILEPATH = "DATA_FILE_PATH";
+    protected static final String DEFAULT_DATAFILEPATH = "./FunDUE_DATA_FILE.txt";
 
     private static Storage sInstance;
 
@@ -28,7 +28,7 @@ public class Storage implements StorageInterface {
      * Protected constructor
      */
     protected Storage() {
-
+        // Do nothing
     }
 
     /**
@@ -46,6 +46,7 @@ public class Storage implements StorageInterface {
     /*****************************************************************
      * Read/Write list of tasks from the data file
      *****************************************************************/
+    
     public ArrayList<Task> readTasksFromDataFile() {
         String dataFilePath = getDataFilePath();
 
@@ -80,19 +81,15 @@ public class Storage implements StorageInterface {
     /*****************************************************************
      * Read from / Write to the file that stores the path of the data file
      *****************************************************************/
-    /**
-     * Reads the contents of the file that stores the path of the data file
-     * 
-     * @return A string containing the data file path
-     */
-    protected String getDataFilePath() {
+    
+    public String getDataFilePath() {
         String dataFilePath = "";
 
         try {
             dataFilePath = readStringFromFile(FILE_THAT_STORES_DATAFILEPATH);
         } catch (Exception e) {
-            // MISSING FILE THAT STORES THE PATH OF THE DATA FILE: reset
-            // everything to default
+            // MISSING FILE THAT STORES THE PATH OF THE DATA FILE:
+        	// reset everything to default
             setDataFilePath(DEFAULT_DATAFILEPATH);
 
             // Default value
@@ -102,13 +99,7 @@ public class Storage implements StorageInterface {
         return dataFilePath;
     }
 
-    /**
-     * Writes the contents of the file that stores the path of the data file
-     * 
-     * @param filepath
-     *            The path of the data file
-     */
-    protected void setDataFilePath(String filepath) {
+    public void setDataFilePath(String filepath) {
         try {
             writeStringToFile(filepath, FILE_THAT_STORES_DATAFILEPATH);
         } catch (IOException e) {
@@ -119,6 +110,7 @@ public class Storage implements StorageInterface {
     /*****************************************************************
      * Read/Write list of tasks from any file
      *****************************************************************/
+    
     /**
      * Reads the list of tasks from the specified file
      * 
@@ -163,6 +155,7 @@ public class Storage implements StorageInterface {
     /*****************************************************************
      * Read/Write string from any file
      *****************************************************************/
+    
     /**
      * Reads the contents of the specified text file
      * 

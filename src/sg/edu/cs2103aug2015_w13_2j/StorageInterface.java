@@ -23,4 +23,19 @@ public interface StorageInterface {
      * @throws IOException
      */
     public void writeTasksToDataFile(ArrayList<Task> tasks);
+    
+    /**
+     * Reads the contents of the file that stores the path of the data file
+     * 
+     * @return A string containing the path of the data file
+     */
+    public String getDataFilePath();
+    
+    /**
+     * Writes the contents of the file that stores the path of the data file
+     * 
+     * @param filepath
+     *            The path of the data file
+     */
+    public void setDataFilePath(String filepath);
 }
