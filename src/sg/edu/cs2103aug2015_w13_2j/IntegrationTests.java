@@ -39,7 +39,7 @@ public class IntegrationTests {
     }
 
     @Test
-    public void testLogicComponent() throws TaskNotFoundException {
+    public void testAddFirstTask() throws TaskNotFoundException {
         String taskName = "My first integration test!";
         sLogic.executeCommand("add '" + taskName + "'");
 
@@ -59,6 +59,12 @@ public class IntegrationTests {
 
         // FilterChain should still be /all/
         assertEquals("/all/", sTextUI.getFilterChain());
+    }
+
+    @Test
+    public void testTaskModification() throws TaskNotFoundException {
+        String taskName = "My first integration test!";
+        sLogic.executeCommand("add '" + taskName + "'");
         
         //Testing various methods that modify the task to ensure Logic works well with Storage
         assertEquals(sLogic.getTask(0).isArchived(), false);
@@ -81,7 +87,6 @@ public class IntegrationTests {
         assertEquals(sStorage.readTasksFromDataFile().size(), 0);
         //Test again to make sure Logic works well with TextUI
         assertEquals(0, sTextUI.getTasksForDisplay().size());
-        
     }
     
     @Test
