@@ -1,33 +1,15 @@
-#scrollpane {
-	-fx-hbar-policy: never;
-	-fx-vbar-policy: as-needed;
-	
-	/* TODO: fix focus color properly */
-	-fx-focus-color: transparent;
+#datafilepath {
+	background-color: red;
 }
 
-#scrollpane .scroll-bar .increment-arrow,
-#scrollpane .scroll-bar .decrement-arrow {
-	-fx-shape: " ";
-	-fx-padding: 0;
+#view {
+	background-color: green;
 }
 
-#scrollpane .scroll-bar .thumb {
-    -fx-background-color: derive(black, 90%);
-	-fx-background-insets: 2, 0, 0;
-	-fx-background-radius: 2em;
+#feedback {
+	background-color: blue;
 }
 
-#scrollpane .scroll-bar:horizontal .increment-button,
-#scrollpane .scroll-bar:horizontal .decrement-button {
-    -fx-background-color: transparent;
-	-fx-background-radius: 0em;
-	-fx-padding: 0 0 10 0;
-}
-
-#scrollpane .scroll-bar:vertical .increment-button,
-#scrollpane .scroll-bar:vertical .decrement-button {
-    -fx-background-color: transparent;
-	-fx-background-radius: 0em;
-	-fx-padding: 0 10 0 0;
+#command {
+	background-color: yellow;
 }
