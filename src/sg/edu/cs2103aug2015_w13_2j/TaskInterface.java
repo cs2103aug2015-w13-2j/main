@@ -168,9 +168,12 @@ public interface TaskInterface extends Comparable<Task> {
         Task task = new Task();
         String[] attributes = taskString.split("\r|\n");
         for (String pair : attributes) {
+            // Line cannot be empty
             if (!pair.isEmpty()) {
                 // Only splits by the first colon
                 String[] pairTokens = pair.split(":", 2);
+                
+                // Colon must exist
                 if (pairTokens.length == 2) {
                     String label = pairTokens[0].toUpperCase();
                     String value = pairTokens[1];
