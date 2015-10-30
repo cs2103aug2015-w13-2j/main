@@ -1,10 +1,12 @@
-package sg.edu.cs2103aug2015_w13_2j;
+package sg.edu.cs2103aug2015_w13_2j.storage;
 
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
 import org.junit.Test;
+
+import sg.edu.cs2103aug2015_w13_2j.Task;
 
 public class StorageTest extends Storage {
     private static final String PREFKEY_TESTFILE_PATH = "FUNDUE_TESTFILE_PATH";

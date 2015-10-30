@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
+import sg.edu.cs2103aug2015_w13_2j.storage.StorageStub;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
 
 /**

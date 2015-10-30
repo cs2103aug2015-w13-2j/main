@@ -16,6 +16,7 @@ import sg.edu.cs2103aug2015_w13_2j.commands.FilterHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.UnarchiveHandler;
+import sg.edu.cs2103aug2015_w13_2j.storage.StorageStub;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
 

@@ -1,10 +1,11 @@
-package sg.edu.cs2103aug2015_w13_2j;
+package sg.edu.cs2103aug2015_w13_2j.storage;
 
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 
 import javafx.stage.FileChooser;
+import sg.edu.cs2103aug2015_w13_2j.Task;
 
 // @@author A0124007X
 

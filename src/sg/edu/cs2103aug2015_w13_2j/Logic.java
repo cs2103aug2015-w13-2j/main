@@ -15,6 +15,7 @@ import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.parser.Parser;
 import sg.edu.cs2103aug2015_w13_2j.parser.Token;
+import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUIInterface;
 

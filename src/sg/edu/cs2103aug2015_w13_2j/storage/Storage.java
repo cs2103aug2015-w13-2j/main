@@ -1,4 +1,4 @@
-package sg.edu.cs2103aug2015_w13_2j;
+package sg.edu.cs2103aug2015_w13_2j.storage;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,10 @@ import java.util.prefs.Preferences;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import sg.edu.cs2103aug2015_w13_2j.Task;
+import sg.edu.cs2103aug2015_w13_2j.TaskInterface;
+import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 
 // @@author A0124007X
 
