@@ -10,6 +10,11 @@ public class StorageStub implements StorageInterface {
     private ArrayList<Task> mStorage = new ArrayList<Task>();
 
     @Override
+    public void showChangeDataFilePathDialog() {
+        // Do nothing
+    }
+
+    @Override
     public ArrayList<Task> readTasksFromDataFile() {
         return mStorage;
     }

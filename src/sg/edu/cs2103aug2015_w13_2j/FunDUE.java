@@ -7,6 +7,7 @@ import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.ExitHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.FilterHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.HelpHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.LoadHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkCompletedHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
@@ -39,6 +40,7 @@ public class FunDUE {
         mLogic.registerCommandHandler(new PopHandler());
         mLogic.registerCommandHandler(new HelpHandler());
         mLogic.registerCommandHandler(new ExitHandler());
+        mLogic.registerCommandHandler(new LoadHandler());
     }
 
     public void run() {

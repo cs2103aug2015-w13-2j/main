@@ -185,6 +185,10 @@ public class Logic implements LogicInterface {
         }
     }
     
+    public void showChangeDataFilePathDialog() {
+        mStorage.showChangeDataFilePathDialog();
+    }
+    
     public void readTasks() {
         ArrayList<Task> tasksFromDataFile = mStorage.readTasksFromDataFile();
         mFilterChain = new FilterChain(tasksFromDataFile);

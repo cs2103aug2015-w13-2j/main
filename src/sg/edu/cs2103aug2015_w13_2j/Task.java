@@ -1,5 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -10,19 +11,18 @@ import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface;
 
 /**
  * Task class that encapsulates all the data that represents a task for e.g. the
- * name, deadline etc. Also provides methods to manipulate the data
+ * name, deadline etc. Also provides getter and setter methods to manipulate the
+ * attributes
  * 
  * @author Zhu Chunqi
  */
 public class Task implements TaskInterface, Comparable<Task> {
-
     public enum Type {
         DEADLINE, EVENT, FLOATING
     }
 
     private static final String TRUE_VALUE = "TRUE";
     private static final String FALSE_VALUE = "FALSE";
-
     private static final String LABEL_ARCHIVED = "ARCHIVED";
     private static final String LABEL_COMPLETED = "COMPLETED";
     private static final String LABEL_CREATED = "CREATED";
@@ -38,17 +38,17 @@ public class Task implements TaskInterface, Comparable<Task> {
      * Zero parameter constructor that creates and initializes a new Task object
      * and records the time of creation
      */
-
     public Task() {
         setLabel(LABEL_CREATED, String.valueOf(System.currentTimeMillis()));
     }
 
     /**
-     * Constructor to create a task with the name as provided. Internally
-     * creates a new Task object and calls {@link Task#setName(String)}
+     * Constructor to create a new Task object and set the task name to the
+     * string provided. Internally creates a new Task object and calls
+     * {@link Task#setName(String)}
      * 
      * @param name
-     *            The name to be given to the newly created task
+     *            String to set the name of the new Task object to
      */
     public Task(String name) {
         this();
@@ -201,7 +201,7 @@ public class Task implements TaskInterface, Comparable<Task> {
     // @@author A0124007X
 
     /**
-     * Converts the Task object into string format for storage
+     * Converts the provided Task object into its string representation
      * 
      * @return String representing the Task object
      */
@@ -212,7 +212,26 @@ public class Task implements TaskInterface, Comparable<Task> {
             sb.append(entry.getKey());
             sb.append(":");
             sb.append(entry.getValue());
-            sb.append("\n");
+            sb.append("\r\n");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Converts the provided list of Task objects into their string
+     * representation, concatenates all of them with blank lines as separators
+     * and returns the result as a string
+     * 
+     * @param tasks
+     *            List of Task objects to convert
+     * @return String representation of the provided list of Task objects
+     *         concatenated together with blank lines as separators
+     */
+    public static String toString(ArrayList<Task> tasks) {
+        StringBuilder sb = new StringBuilder();
+        for (Task task : tasks) {
+            sb.append(task.toString());
+            sb.append("\r\n");
         }
         return sb.toString();
     }

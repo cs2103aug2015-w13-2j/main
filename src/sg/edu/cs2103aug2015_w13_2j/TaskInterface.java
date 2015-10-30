@@ -1,5 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import sg.edu.cs2103aug2015_w13_2j.Task.Type;
@@ -172,7 +173,7 @@ public interface TaskInterface extends Comparable<Task> {
             if (!pair.isEmpty()) {
                 // Only splits by the first colon
                 String[] pairTokens = pair.split(":", 2);
-                
+
                 // Colon must exist
                 if (pairTokens.length == 2) {
                     String label = pairTokens[0].toUpperCase();
@@ -184,5 +185,20 @@ public interface TaskInterface extends Comparable<Task> {
         return task;
     }
 
-    public int compareTo(Task task);
+    public static ArrayList<Task> parseTasks(String s)
+            throws InvalidTaskException {
+        ArrayList<Task> tasks = new ArrayList<Task>();
+        String[] taskStrings = s.split("\r\n\r\n");
+        for (String taskString : taskStrings) {
+            // Check that the task string is not empty nor just whitespace
+            // Note: refer to issue #124
+            if (!taskString.isEmpty() && !taskString.matches("\\s+")) {
+                Task task = TaskInterface.parseTask(taskString);
+                if (task.isValid()) {
+                    tasks.add(task);
+                }
+            }
+        }
+        return tasks;
+    }
 }

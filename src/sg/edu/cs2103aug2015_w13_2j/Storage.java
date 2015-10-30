@@ -1,34 +1,48 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
-//@@author A0124007X
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+// @@author A0124007X
 
 /**
- * Storage class that provides methods for file I/O
+ * Storage component which provides methods to store and retrieve a list of Task
+ * objects to and from disk. Stores the user's preference for location of data
+ * file and provides file picker dialog to change the preferred location
  * 
  * @author Lu Yang Kenneth
  */
 public class Storage implements StorageInterface {
-    private static final Logger LOGGER = Logger.getLogger(Storage.class
-            .getName());
-
-    protected static final String FILE_THAT_STORES_DATAFILEPATH = "DATA_FILE_PATH";
-    protected static final String DEFAULT_DATAFILEPATH = "./FunDUE_DATA_FILE.txt";
+    public static final String DEFAULT_DATAFILE_PATH = "./FunDUE.txt";
+    private static final Logger LOGGER = Logger
+            .getLogger(Storage.class.getName());
+    private static final Preferences PREFERENCES = Preferences
+            .userNodeForPackage(Storage.class);
+    private static final String PREFKEY_DATAFILE_PATH = "FUNDUE_DATAFILE_PATH";
 
     private static Storage sInstance;
+    private static File mDataFile;
+
+    protected static String sPrefKey = PREFKEY_DATAFILE_PATH;
+    protected static String sDefaultPath = DEFAULT_DATAFILE_PATH;
 
     /**
      * Protected constructor
      */
     protected Storage() {
-        // Do nothing
+        LOGGER.log(Level.WARNING,
+                "Warning for preferences initialization on Windows machines is"
+                        + " alright and does not have any ill effects,"
+                        + " preferences are still stored");
+        loadDataFile();
     }
 
     /**
@@ -43,148 +57,93 @@ public class Storage implements StorageInterface {
         return sInstance;
     }
 
-    /*****************************************************************
-     * Read/Write list of tasks from the data file
-     *****************************************************************/
-    
+    @Override
     public ArrayList<Task> readTasksFromDataFile() {
-        String dataFilePath = getDataFilePath();
-
         try {
-            ArrayList<Task> tasks = readTasksFromFile(dataFilePath);
+            String data = readDataFileContents();
+            ArrayList<Task> tasks = TaskInterface.parseTasks(data);
             LOGGER.log(Level.INFO, "Number of Tasks read: " + tasks.size());
-            return readTasksFromFile(dataFilePath);
-        } catch (Exception e) {
-            // MISSING DATA FILE: create new file at the path
-            try {
-                writeStringToFile("", dataFilePath);
-            } catch (IOException e2) {
-                e2.printStackTrace();
-            }
-
-            // Return empty ArrayList
-            return new ArrayList<Task>();
+            return tasks;
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Failed to read tasks from data file", e);
+        } catch (InvalidTaskException e) {
+            LOGGER.log(Level.WARNING, "Invalid task encountered", e);
         }
+        return new ArrayList<Task>();
     }
 
+    @Override
     public void writeTasksToDataFile(ArrayList<Task> tasks) {
-        String dataFilePath = getDataFilePath();
-
+        String data = Task.toString(tasks);
         try {
-            writeTasksToFile(tasks, dataFilePath);
+            writeDateFileContents(data);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, "Failed to write tasks to data file", e);
         }
     }
 
-    /*****************************************************************
-     * Read from / Write to the file that stores the path of the data file
-     *****************************************************************/
-    
-    public String getDataFilePath() {
-        String dataFilePath = "";
-
-        try {
-            dataFilePath = readStringFromFile(FILE_THAT_STORES_DATAFILEPATH);
-        } catch (Exception e) {
-            // MISSING FILE THAT STORES THE PATH OF THE DATA FILE:
-        	// reset everything to default
-            setDataFilePath(DEFAULT_DATAFILEPATH);
-
-            // Default value
-            dataFilePath = DEFAULT_DATAFILEPATH;
-        }
-
-        return dataFilePath;
-    }
-
-    public void setDataFilePath(String filepath) {
-        try {
-            writeStringToFile(filepath, FILE_THAT_STORES_DATAFILEPATH);
-        } catch (IOException e) {
-            e.printStackTrace();
+    @Override
+    public void showChangeDataFilePathDialog() {
+        final JFileChooser fc = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "FunDue Data File (.txt)", "txt");
+        fc.setDialogTitle("Select FunDue Data File");
+        fc.setFileFilter(filter);
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fc.setSelectedFile(mDataFile);
+        int returnValue = fc.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            mDataFile = fc.getSelectedFile();
+            PREFERENCES.put(sPrefKey, fc.getSelectedFile().getAbsolutePath());
         }
     }
 
-    /*****************************************************************
-     * Read/Write list of tasks from any file
-     *****************************************************************/
-    
     /**
-     * Reads the list of tasks from the specified file
-     * 
-     * @return The list of tasks stored in the specified file
-     * @throws Exception
+     * Loads the file specified as per user preference to be used as the data
+     * file. If the user had not specified a preferred file path, the default
+     * path of {@value #DEFAULT_DATAFILE_PATH} will be used instead. The data
+     * file will be created if it does not exist
      */
-    protected ArrayList<Task> readTasksFromFile(String filepath)
-            throws Exception {
-        String content = readStringFromFile(filepath);
-        String[] taskArray = content.split("\r\r|\n\n");
-
-        ArrayList<Task> tasks = new ArrayList<Task>();
-        for (String taskString : taskArray) {
-            if (taskString.isEmpty() || taskString.matches("\\s+")) {
-                continue;
-            } else {
-                Task newTask = TaskInterface.parseTask(taskString);
-                if (newTask.isValid()) { 
-                    tasks.add(newTask);
-                }
+    protected void loadDataFile() {
+        String path = PREFERENCES.get(sPrefKey, sDefaultPath);
+        LOGGER.log(Level.INFO, "Loading data file: " + path);
+        mDataFile = new File(path);
+        if (!mDataFile.exists()) {
+            try {
+                mDataFile.createNewFile();
+            } catch (IOException e) {
+                LOGGER.log(Level.WARNING, "Unable to create data file at <"
+                        + path + ">, possibly lacking premissions");
             }
         }
-        return tasks;
     }
 
+    // @@author A0124007X
+
     /**
-     * Writes the provided list of tasks to the specified file
+     * Reads the contents of the data file
      * 
-     * @param tasks
-     *            The list of tasks to be written to the specified file
-     * @param filepath
-     *            The path of the file
+     * @return String of the data file contents
      * @throws IOException
+     *             Thrown when an I/O error occurs when reading from the data
+     *             file
      */
-    protected void writeTasksToFile(ArrayList<Task> tasks, String filepath)
-            throws IOException {
-        String content = "";
-        for (Task task : tasks) {
-            content += task.toString() + "\n";
-        }
-        writeStringToFile(content, filepath);
-    }
-
-    /*****************************************************************
-     * Read/Write string from any file
-     *****************************************************************/
-    
-    /**
-     * Reads the contents of the specified text file
-     * 
-     * @param filepath
-     *            The path of the file to be read from
-     * @return The contents of the file
-     * @throws Exception
-     */
-    protected String readStringFromFile(String filepath) throws Exception {
-        // Files.readAllBytes() uses UTF-8 character encoding
-        // and ensures that the file is closed after all bytes are read
-        String content = new String(Files.readAllBytes(Paths.get(filepath)));
+    private String readDataFileContents() throws IOException {
+        // Files.readAllBytes() uses UTF-8 character encoding and ensures that
+        // the file is closed after all bytes are read
+        String content = new String(Files.readAllBytes(mDataFile.toPath()));
         return content;
     }
 
     /**
-     * Writes a string to the specified text file
+     * Writes the provided string contents to the data file
      * 
-     * @param content
-     *            The contents to be written to the file
-     * @param filepath
-     *            The path of the file to write to
+     * @param contents
+     *            String contents to be written to the data file
      * @throws IOException
+     *             Thrown when an I/O error occurs when writing to the data file
      */
-    protected void writeStringToFile(String content, String filepath)
-            throws IOException {
-        Files.write(Paths.get(filepath), content.getBytes(),
-                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+    private void writeDateFileContents(String content) throws IOException {
+        Files.write(mDataFile.toPath(), content.getBytes());
     }
 }
