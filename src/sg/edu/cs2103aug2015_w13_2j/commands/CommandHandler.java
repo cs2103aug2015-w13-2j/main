@@ -24,11 +24,12 @@ public abstract class CommandHandler {
     protected static final String FLAG_START = "-s: Specifies the start date/time of the Task";
     protected static final String FLAG_END = "-e: Specifies the end date/time of the Task";
 
-    protected static final String OPTION_TASK_ID = "TASK_ID: The index of the Task as shown in the ID column.";
-    protected static final String OPTION_TASK_NAME = "TASK_NAME: Any short phrase to identify this particular Task. Must be surrounded by either single or double quotes.";
+    protected static final String OPTION_COMMAND_NAME = "COMMAND_NAME: A valid command name.";
     protected static final String OPTION_DATETIME = "DATETIME: Any valid combination of the supported date and time formats.";
     protected static final String OPTION_FILTER_NAME = "FILTER_NAME: A valid filter name and argument if and argumer is required.";
-    protected static final String OPTION_COMMAND_NAME = "COMMAND_NAME: A valid command name.";
+    protected static final String OPTION_TASK_ID = "TASK_ID: The index of the Task as shown in the ID column.";
+    protected static final String OPTION_TASK_NAME = "TASK_NAME: Any short phrase to identify this particular Task. Must be surrounded by either single or double quotes.";
+    protected static final String OPTION_SEARCH_TERM = "SEARCH_TERM: Any word or quoted phrase that you want to search for.";
 
     private String mName;
     private String mSyntax;
