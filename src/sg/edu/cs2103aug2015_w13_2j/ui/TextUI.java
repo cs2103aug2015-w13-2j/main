@@ -18,10 +18,12 @@ import javax.swing.text.DefaultCaret;
 
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
+import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
+import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 
 // @@author A0121410H
 
-public class TextUI extends JFrame implements TextUIInterface, KeyListener {
+public class TextUI extends JFrame implements UIInterface, KeyListener {
     private static final long serialVersionUID = 7758912303888211773L;
     private static final Font FONT = new Font("consolas", Font.BOLD, 16);
     private static final Dimension PREFERRED_SIZE = new Dimension(800, 600);
@@ -33,6 +35,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     private TextPane mTextPane;
     private JLabel mFilterLabel;
     private JLabel mFeedbackLabel;
+    private ArrayList<Task> mTasks;
 
     /**
      * Protected constructor
@@ -61,6 +64,7 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
     }
 
     public void display(ArrayList<Task> tasks) {
+        mTasks = tasks;
         mTextPane.display(tasks);
     }
 
@@ -68,9 +72,17 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         mTextPane.clear();
         mTextPane.print(s);
     }
+    
+    public Task getTask(int index) throws TaskNotFoundException {
+        try {
+            return mTasks.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            throw new TaskNotFoundException();
+        }
+    }
 
     public void feedback(FeedbackMessage m) {
-        mFeedbackLabel.setForeground(m.getType().getColor());
+        mFeedbackLabel.setForeground(m.getType().getAWTColor());
         mFeedbackLabel.setText(m.getMessage());
     }
 
@@ -170,5 +182,23 @@ public class TextUI extends JFrame implements TextUIInterface, KeyListener {
         this.pack();
         this.setVisible(true);
         mTextField.requestFocusInWindow();
+    }
+
+    @Override
+    public void pushFilter(Filter filter) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Filter popFilter() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void updateFilters(ArrayList<Task> tasks) {
+        // TODO Auto-generated method stub
+        
     }
 }

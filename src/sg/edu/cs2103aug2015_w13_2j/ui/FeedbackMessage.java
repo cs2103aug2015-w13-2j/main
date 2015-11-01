@@ -19,7 +19,7 @@ public class FeedbackMessage {
     /**
      * Enumeration of the styling for the different types of user feedback
      * messages. The color of font to be used for each feedback type can be
-     * retrieved via {@link FeedbackType#getColor()}
+     * retrieved via {@link FeedbackType#getAWTColor()} or {@link #getFXColor()}
      * 
      * @author Zhu Chunqi
      *
@@ -37,10 +37,21 @@ public class FeedbackMessage {
          * Retrieves the color that should be used to style this type of
          * feedback
          * 
-         * @return Color object to be used for this type of feedback
+         * @return AWT Color object to be used for this type of feedback
          */
-        public Color getColor() {
+        public Color getAWTColor() {
             return mColor;
+        }
+
+        /**
+         * Retrieves the color that should be used to style this type of
+         * feedback
+         * 
+         * @return JavaFX Color object to be used for this type of feedback
+         */
+        public javafx.scene.paint.Color getFXColor() {
+            return javafx.scene.paint.Color.rgb(mColor.getRed(),
+                    mColor.getGreen(), mColor.getBlue());
         }
     }
 

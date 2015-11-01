@@ -7,7 +7,7 @@ import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
 import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
-import sg.edu.cs2103aug2015_w13_2j.ui.TextUIInterface;
+import sg.edu.cs2103aug2015_w13_2j.ui.UIInterface;
 
 //@@author A0121410H
 
@@ -18,7 +18,7 @@ import sg.edu.cs2103aug2015_w13_2j.ui.TextUIInterface;
 public interface LogicInterface {
     /**
      * Injects the dependency on components implementing the
-     * {@link StorageInterface} and {@link TextUIInterface} into this Logic
+     * {@link StorageInterface} and {@link UIInterface} into this Logic
      * component
      * 
      * @param storage
@@ -26,13 +26,13 @@ public interface LogicInterface {
      *            A handle to this component will be retained for subsequent
      *            calls to {@link Logic#readTasks()} and writeTasks()
      * @param textUI
-     *            An object implementing the {@link TextUIInterface}. A handle
-     *            to this object will be retained to be accessed when a
+     *            An object implementing the {@link UIInterface}. A handle to
+     *            this object will be retained to be accessed when a
      *            CommandHandler provides data to be displayed, provides
      *            feedback or updates the filter chain
      */
     public void injectDependencies(StorageInterface storage,
-            TextUIInterface textUI);
+            UIInterface textUI);
 
     /**
      * Retrieves the set of reserved keywords registered by CommandHandlers
@@ -72,13 +72,13 @@ public interface LogicInterface {
     /**
      * Displays the list of Task objects after being filtered by the filter
      * chain via the {@link FilterChain#getTasksForDisplay()} method in the UI
-     * via the {@link TextUIInterface#display(java.util.ArrayList)} method
+     * via the {@link UIInterface#display(java.util.ArrayList)} method
      */
     public void display();
 
     /**
      * Passes on the provided string to be displayed in the UI via the
-     * {@link TextUIInterface#display(String)} method
+     * {@link UIInterface#display(String)} method
      * 
      * @param s
      *            String to be displayed
@@ -87,20 +87,10 @@ public interface LogicInterface {
 
     /**
      * Passes on the provided FeedbackMessage object to be displayed in the UI
-     * via the {@link TextUIInterface#feedback(FeedbackMessage)} method
+     * via the {@link UIInterface#feedback(FeedbackMessage)} method
      * 
      * @param f
      *            FeedbackMessage object to be displayed
      */
     public void feedback(FeedbackMessage f);
-
-    /**
-     * Passes on the string representing the currently active filter chain to be
-     * displayed in the UI via the {@link TextUIInterface#display(String)}
-     * method
-     * 
-     * @param s
-     *            String representing the currently active filter chain
-     */
-    public void setFilter(String s);
 }

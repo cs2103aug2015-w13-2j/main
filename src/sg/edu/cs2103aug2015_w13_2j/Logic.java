@@ -5,19 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
-import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.parser.Parser;
 import sg.edu.cs2103aug2015_w13_2j.parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
-import sg.edu.cs2103aug2015_w13_2j.ui.TextUIInterface;
+import sg.edu.cs2103aug2015_w13_2j.ui.UIInterface;
 
 public class Logic implements LogicInterface {
     private static final Logger LOGGER = Logger
@@ -25,69 +23,78 @@ public class Logic implements LogicInterface {
 
     private static Logic sInstance;
 
-    private TextUIInterface mTextUI;
+    private final HashMap<String, CommandHandler> mCommandHandlers;
+    private final Stack<ArrayList<Task>> mHistoryStack;
+    private final ArrayList<Task> mTasks;
+
+    private UIInterface mUI;
     private StorageInterface mStorage;
-    private HashMap<String, CommandHandler> mCommandHandlers = new HashMap<String, CommandHandler>();
-    private FilterChain mFilterChain = new FilterChain();
-    private Stack<ArrayList<Task>> mHistoryTasks;
 
     /**
-     * Protected constructor
+     * Private constructor
      */
-    protected Logic() {
-        // Do nothing
+    private Logic() {
+        mCommandHandlers = new HashMap<String, CommandHandler>();
+        mHistoryStack = new Stack<ArrayList<Task>>();
+        mTasks = new ArrayList<Task>();
     }
 
     /**
-     * Retrieves the singleton instance of the Logic component
+     * Retrieves the singleton instance of the {@link LogicInterface} component
      * 
-     * @return Logic component
+     * @return {@link LogicInterface} component
      */
-    public static Logic getInstance() {
+    public synchronized static Logic getInstance() {
         if (sInstance == null) {
             sInstance = new Logic();
         }
         return sInstance;
     }
 
-    public void injectDependencies(StorageInterface storage, TextUIInterface textUI) {
+    @Override
+    public void injectDependencies(StorageInterface storage,
+            UIInterface textUI) {
         mStorage = storage;
-        mTextUI = textUI;
+        mUI = textUI;
     }
 
+    @Override
     public Set<String> getReservedKeywords() {
         return mCommandHandlers.keySet();
     }
 
+    @Override
     public HashMap<String, CommandHandler> getCommandHandlers() {
         return mCommandHandlers;
     }
 
+    @Override
     public void registerCommandHandler(CommandHandler handler) {
         List<String> reserved = handler.getReservedKeywords();
         for (String keyword : reserved) {
             if (mCommandHandlers.containsKey(keyword)) {
-                // TODO: Throw exception
+                throw new Error("Conflicting command handlers for: " + keyword);
             } else {
                 mCommandHandlers.put(keyword, handler);
             }
         }
     }
 
+    @Override
     public void executeCommand(String commandString) {
-        Command command = Parser.getInstance()
-                .parseCommand(this, commandString);
+        Command command = Parser.getInstance().parseCommand(this,
+                commandString);
         Token reserved = command.getReservedToken();
         if (commandString.isEmpty()) {
             feedback(FeedbackMessage.CLEAR);
             display();
-        } else if (reserved == null) {
+        } else if (reserved.isEmptyToken()) {
             feedback(FeedbackMessage.ERROR_UNRECOGNIZED_COMMAND);
         } else {
             CommandHandler handler = mCommandHandlers.get(reserved.value);
             if (handler != null) {
                 handler.execute(this, command);
-                mFilterChain.updateFilters();
+                mUI.updateFilters(mTasks);
                 if (handler.shouldDisplay()) {
                     display();
                 }
@@ -97,107 +104,80 @@ public class Logic implements LogicInterface {
     }
 
     public void display() {
-        mTextUI.display(mFilterChain.getTasksForDisplay());
-        mTextUI.setFilter(mFilterChain.getFilterChain());
+        mUI.display(mTasks);
     }
 
     public void display(String s) {
-        mTextUI.display(s);
+        mUI.display(s);
     }
 
     public void feedback(FeedbackMessage m) {
-        mTextUI.feedback(m);
-    }
-
-    public void setFilter(String s) {
-        mTextUI.setFilter(s);
+        mUI.feedback(m);
     }
 
     public void addTask(Task task) {
-        mFilterChain.addTask(task);
+        mTasks.add(task);
+        mUI.updateFilters(mTasks);
     }
 
-    /**
-     * Retrieves the task with the index specified by user input. Throws an
-     * exception if the index is out of bounds
-     * 
-     * @param index
-     *            The index of the Task object to retrieve
-     * @return The Task object with the specified index
-     * @throws TaskNotFoundException
-     *             Thrown when the index specified is out of bounds
-     */
     public Task getTask(int index) throws TaskNotFoundException {
-        Task task = mFilterChain.getTask(index);
-        if (task == null) {
+        try {
+            return mTasks.get(mTasks.indexOf(mUI.getTask(index)));
+        } catch (IndexOutOfBoundsException e) {
             throw new TaskNotFoundException();
-        } else {
-            return task;
         }
     }
 
-    /**
-     * Convenience method to remove a task with an index specified by
-     * non-sanitized user input. Throws an exception if the index is out of
-     * bounds
-     * 
-     * @param index
-     *            The index of the Task object to be removed
-     * @return The Task object that was removed
-     * @throws TaskNotFoundException
-     *             Thrown when the index specified is out of bounds
-     */
     public Task removeTask(int index) throws TaskNotFoundException {
-        Task task = mFilterChain.removeTask(index);
-        if (task == null) {
-            throw new TaskNotFoundException();
-        } else {
+        Task task = mUI.getTask(index);
+        if (mTasks.remove(task)) {
             return task;
+        } else {
+            throw new TaskNotFoundException();
         }
     }
 
     public void pushFilter(Filter filter) {
-        mFilterChain.pushFilter(filter);
-        LOGGER.log(Level.INFO, "Pushed filter: " + filter.getFilterName());
+        mUI.pushFilter(filter);
     }
 
-    public void popFilter() {
-        Filter filter = mFilterChain.popFilter();
-        if (filter == null) {
-            LOGGER.log(Level.WARNING, "Cannot pop root identity filter");
-        } else {
-            LOGGER.log(Level.INFO, "Popped filter: " + filter.getFilterName());
-        }
+    public Filter popFilter() {
+        return mUI.popFilter();
     }
 
     public void storeCommandInHistory() {
-        ArrayList<Task> rootTaskList = mFilterChain.getRootTasks();
-        mHistoryTasks.push(rootTaskList);
+        ArrayList<Task> rootTaskList = mTasks;
+        mHistoryStack.push(rootTaskList);
     }
-    
+
     public ArrayList<Task> restoreCommandFromHistory() {
-        boolean rootHistoryReached = mHistoryTasks.size() == 1;
+        boolean rootHistoryReached = mHistoryStack.size() == 1;
         if (rootHistoryReached) {
             return null;
         } else {
-            mHistoryTasks.pop();
-            mFilterChain.setRootTasks(mHistoryTasks.peek());
-            return mFilterChain.getRootTasks();
+            mHistoryStack.pop();
+            mTasks.clear();
+            mTasks.addAll(mHistoryStack.peek());
+            mUI.updateFilters(mTasks);
+            return mTasks;
         }
     }
-    
+
     public void showChangeDataFilePathDialog() {
         mStorage.showChangeDataFilePathDialog();
     }
-    
+
     public void readTasks() {
-        ArrayList<Task> tasksFromDataFile = mStorage.readTasksFromDataFile();
-        mFilterChain = new FilterChain(tasksFromDataFile);
-        mHistoryTasks = new Stack<ArrayList<Task>>();
-        mHistoryTasks.push(tasksFromDataFile);
+        mTasks.clear();
+        mTasks.addAll(mStorage.readTasksFromDataFile());
+        mUI.updateFilters(mTasks);
+        mHistoryStack.push(mTasks);
     }
 
+    /**
+     * Writes the master list of Task objects to the data file
+     */
     private void writeTasks() {
-        mStorage.writeTasksToDataFile(mFilterChain.getTasks());
+        mStorage.writeTasksToDataFile(mTasks);
     }
 }
