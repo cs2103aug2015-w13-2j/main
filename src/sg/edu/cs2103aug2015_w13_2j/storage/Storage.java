@@ -80,7 +80,7 @@ public class Storage implements StorageInterface {
     public void writeTasksToDataFile(ArrayList<Task> tasks) {
         String data = Task.toString(tasks);
         try {
-            writeDataFileContents(data);
+            writeDateFileContents(data);
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Failed to write tasks to data file", e);
         }
@@ -135,7 +135,8 @@ public class Storage implements StorageInterface {
     private String readDataFileContents() throws IOException {
         // Files.readAllBytes() uses UTF-8 character encoding and ensures that
         // the file is closed after all bytes are read
-        return new String(Files.readAllBytes(mDataFile.toPath()));
+        String content = new String(Files.readAllBytes(mDataFile.toPath()));
+        return content;
     }
 
     /**
@@ -146,7 +147,7 @@ public class Storage implements StorageInterface {
      * @throws IOException
      *             Thrown when an I/O error occurs when writing to the data file
      */
-    private void writeDataFileContents(String content) throws IOException {
+    private void writeDateFileContents(String content) throws IOException {
         Files.write(mDataFile.toPath(), content.getBytes());
     }
 }
