@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -15,8 +16,9 @@ public class GUI extends Application {
 	private WebView browser;
 	private WebEngine webEngine;
 	
-	public void exit() {
-		Platform.exit();
+	public void executeCommand(String x) {
+	    // TODO
+	    System.out.println(x);
 	}
 	
 	private void initializeGUI() {
@@ -24,8 +26,7 @@ public class GUI extends Application {
 		JSObject window = (JSObject) js("window");
 		window.setMember("GUI", new GUI());
 		
-		js("document.getElementById('view').innerHTML = 'testing'");
-		js("document.getElementById('view').setAttribute('onclick', 'GUI.exit()')");
+		js("document.getElementById('commandForm').setAttribute('onsubmit', 'GUI.executeCommand(this.command.value)')");
 	}
 	
 	// Convenience method to run Javascript commands
@@ -37,7 +38,6 @@ public class GUI extends Application {
 	public void start(Stage stage) {
 		try {
 			browser = new WebView();
-			Scene scene = new Scene(browser);
 			webEngine = browser.getEngine();
 			webEngine.load(getClass().getResource("GUI.html").toExternalForm());
 			
@@ -51,13 +51,16 @@ public class GUI extends Application {
 				}
 			);
 			
-			// TODO: app icons in window and in taskbar
-			stage.setTitle("FunDUE");
-			stage.setHeight(800);
-			stage.setWidth(700);
-			stage.setResizable(false);
-			stage.setScene(scene);
-			stage.show();
+			// TODO: app icon and title in taskbar
+		    browser.setContextMenuEnabled(false);
+		    Scene scene = new Scene(browser);
+		    stage.setTitle("FunDUE");
+		    stage.getIcons().add(new Image("file:FunDUE Logo.png"));
+		    stage.setHeight(800);
+		    stage.setWidth(700);
+		    stage.setResizable(false);
+		    stage.setScene(scene);
+		    stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

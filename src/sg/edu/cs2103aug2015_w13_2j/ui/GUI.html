@@ -1,18 +1,36 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
-	<div id="main">
-		<div id="datafilepath">1</div>
+    <table id="main">
+        <tr>
+            <td id="filters">
+                filters
+            </td>
+        </tr>
+        
+        <tr>
+            <td id="viewContainer">
+                <div id="view">view</div>
+            </td>
+        </tr>
 		
-		<div id="view">2</div>
-		
-		<div id="feedback">3</div>
-		
-		<div id="command">4</div>
-	</div>
+        <tr>
+            <td id="feedbackContainer">
+                feedback
+            </td>
+        </tr>
+
+        <tr>
+            <td id="commandContainer">
+                <form id="commandForm">
+                    <input type="text" id="command" autofocus>
+                </form>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
