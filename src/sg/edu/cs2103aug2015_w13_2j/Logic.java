@@ -149,48 +149,6 @@ public class Logic implements LogicInterface {
         return mUI.popFilter();
     }
 
-    public void storeCommandInHistory() {
-        ArrayList<Task> rootTaskList = new ArrayList<Task>();
-        
-        // Creates a deep copy of all tasks in the master task 
-        // list so that the same reference to the Task object will 
-        // not be replicated in the mHistoryStack.
-        for (Task task : mTasks) {
-            Task taskCopy = task.newInstance();
-            rootTaskList.add(taskCopy);
-        }
-        
-        mHistoryUndoStack.push(rootTaskList);
-    }
-
-    public ArrayList<Task> restoreCommandFromHistory() {
-        boolean rootHistoryReached = mHistoryUndoStack.size() == 1;
-        if (rootHistoryReached) {
-            return null;
-        } else {
-            ArrayList<Task> tasksToUndo = mHistoryUndoStack.pop();
-            mHistoryRedoStack.push(tasksToUndo);
-            mTasks.clear();
-            mTasks.addAll(mHistoryUndoStack.peek());
-            mUI.updateFilters(mTasks);
-            return mTasks;
-        }
-    }
-    
-    public ArrayList<Task> restoreCommandsFromRedoHistory() {
-        boolean rootRedoHistoryReached = mHistoryRedoStack.isEmpty();
-        if (rootRedoHistoryReached) {
-            return null;
-        } else {
-            ArrayList<Task> tasksToRedo = mHistoryRedoStack.pop();
-            mHistoryUndoStack.push(tasksToRedo);
-            mTasks.clear();
-            mTasks.addAll(mHistoryUndoStack.peek());
-            mUI.updateFilters(mTasks);
-            return mTasks;
-        }
-    }
-
     public void showChangeDataFilePathDialog() {
         mStorage.showChangeDataFilePathDialog();
     }
@@ -207,5 +165,78 @@ public class Logic implements LogicInterface {
      */
     private void writeTasks() {
         mStorage.writeTasksToDataFile(mTasks);
+    }
+    
+    public static ArrayList<Task> copyTaskList(ArrayList<Task> taskListToCopy) {
+        ArrayList<Task> taskListCopy = new ArrayList<Task>();
+        
+        // Creates a deep copy of all tasks in the master task 
+        // list so that the same reference to the Task object will 
+        // not be replicated in mHistoryStack.
+        for (Task task : taskListToCopy) {
+            Task taskCopy = task.newInstance();
+            taskListCopy.add(taskCopy);
+        }
+        return taskListCopy;
+    }
+
+    /**
+     * Stores a deep copy of the master task list into the undo stack.
+     */
+    public void storeCommandInHistory() {
+        ArrayList<Task> rootTaskList = copyTaskList(mTasks);
+        mHistoryUndoStack.push(rootTaskList);
+    }
+    
+    /**
+     * Clears the redo stack.
+     */
+    public void clearRedoHistory() {
+        mHistoryRedoStack.clear();
+    }
+
+    /**
+     * Obtains the last command the user input, if any.
+     * The undo stack initializes with the user's saved master task list and
+     * will only be restored until that particular instance.
+     * 
+     * @return  An ArrayList of Tasks that will be displayed to the user 
+     *          after restoring from the undo stack.
+     */
+    public ArrayList<Task> restoreCommandFromHistory() {
+        boolean rootHistoryReached = mHistoryUndoStack.size() == 1;
+        if (rootHistoryReached) {
+            return null;
+        } else {
+            ArrayList<Task> tasksToUndo = mHistoryUndoStack.pop();
+            ArrayList<Task> latestTaskListUndone = mHistoryUndoStack.peek();
+            mHistoryRedoStack.push(copyTaskList(tasksToUndo));
+            mTasks.clear();
+            mTasks.addAll(copyTaskList(latestTaskListUndone));
+            mUI.updateFilters(mTasks);
+            return mTasks;
+        }
+    }
+    
+    /**
+     * Obtains the last command the user undid, if any.
+     * The redo stack initializes with no task list and will only be 
+     * restored until that particular empty instance.
+     * 
+     * @return  An ArrayList of Tasks that will be displayed to the user 
+     *          after restoring from the redo stack.
+     */
+    public ArrayList<Task> restoreCommandFromRedoHistory() {
+        boolean rootRedoHistoryReached = mHistoryRedoStack.isEmpty();
+        if (rootRedoHistoryReached) {
+            return null;
+        } else {
+            ArrayList<Task> tasksToRedo = mHistoryRedoStack.pop();
+            mHistoryUndoStack.push(copyTaskList(tasksToRedo));
+            mTasks.clear();
+            mTasks.addAll(copyTaskList(tasksToRedo));
+            mUI.updateFilters(mTasks);
+            return mTasks;
+        }
     }
 }

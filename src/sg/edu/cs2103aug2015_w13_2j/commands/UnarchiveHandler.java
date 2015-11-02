@@ -41,6 +41,7 @@ public class UnarchiveHandler extends CommandHandler {
             for (Integer index : unarchiveIndexes) {
                 Task task = logic.getTask(index);
                 task.setArchived(false);
+                logic.clearRedoHistory();
                 logic.storeCommandInHistory();
                 logUnarchivedTask(task);
             }

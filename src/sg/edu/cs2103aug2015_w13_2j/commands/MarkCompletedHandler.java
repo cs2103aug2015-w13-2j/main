@@ -58,6 +58,7 @@ public class MarkCompletedHandler extends CommandHandler {
                             FeedbackType.INFO));
                 }
             }
+            logic.clearRedoHistory();
             logic.storeCommandInHistory();
         } catch (TaskNotFoundException e) {
             logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);

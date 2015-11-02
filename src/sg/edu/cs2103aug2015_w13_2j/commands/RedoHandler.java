@@ -24,7 +24,7 @@ public class RedoHandler extends CommandHandler {
     
     @Override
     public void execute(Logic logic, Command command) {
-        ArrayList<Task> restoredTaskList = logic.restoreCommandsFromRedoHistory();
+        ArrayList<Task> restoredTaskList = logic.restoreCommandFromRedoHistory();
         
         if (restoredTaskList == null) {
             logic.feedback(new FeedbackMessage(REDO_FAILURE, FeedbackType.INFO));

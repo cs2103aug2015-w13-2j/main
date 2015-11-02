@@ -32,6 +32,7 @@ public class DeleteHandler extends CommandHandler {
             for (Integer index : markIndexes) {
                 logic.removeTask(index);
             }
+            logic.clearRedoHistory();
             logic.storeCommandInHistory();
             logic.feedback(new FeedbackMessage(DELETE_SUCCESS,
                     FeedbackType.INFO));
