@@ -3,6 +3,7 @@ package sg.edu.cs2103aug2015_w13_2j;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface;
@@ -53,6 +54,29 @@ public class Task implements TaskInterface, Comparable<Task> {
     public Task(String name) {
         this();
         setName(name);
+    }
+    
+    /**
+     * Copy method to create a deep copy of the task object 
+     * 
+     * @param taskToCopy
+     * 
+     * @return
+     */
+    public Task newInstance() {
+        System.out.println("Old task copied: " + this.toString());
+        Task newTask = new Task(this.getName());
+        Map<String, String> mLabelsMap = this.mLabels;
+        for (Map.Entry<String, String> label : mLabelsMap.entrySet()) {
+            String labelName = label.getKey();
+            String labelValue = label.getValue();
+            
+            newTask.setLabel(labelName, labelValue);
+        }
+        System.out.println("New task created: " + newTask.toString());
+        System.out.println("Are they the same? " + (this == newTask));
+        System.out.println("-----------END COPY-----------");
+        return newTask;
     }
 
     public void setLabel(String label, String value) {

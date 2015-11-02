@@ -41,6 +41,7 @@ public class ArchiveHandler extends CommandHandler {
             for (Integer index : archiveIndexes) {
                 Task task = logic.getTask(index);
                 task.setArchived(true);
+                logic.storeCommandInHistory();
                 logArchivedTask(task);
             }
             logic.feedback(new FeedbackMessage(ARCHIVE_SUCCESS,

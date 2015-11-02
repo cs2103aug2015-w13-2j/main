@@ -28,6 +28,7 @@ public class EditHandler extends CommandHandler {
         try {
             Task task = logic.getTask(Integer.parseInt(id.value));
             updateTask(command, task);
+            logic.storeCommandInHistory();
             logic.feedback(new FeedbackMessage(EDIT_SUCCESS, FeedbackType.INFO));
         } catch (TaskNotFoundException e) {
             logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);

@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
@@ -146,7 +148,16 @@ public class Logic implements LogicInterface {
     }
 
     public void storeCommandInHistory() {
-        ArrayList<Task> rootTaskList = mTasks;
+        ArrayList<Task> rootTaskList = new ArrayList<Task>();
+        
+        // Creates a deep copy of all tasks in the master task 
+        // list so that the same reference to the Task object will 
+        // not be replicated in the mHistoryStack.
+        for (Task task : mTasks) {
+            Task taskCopy = task.newInstance();
+            rootTaskList.add(taskCopy);
+        }
+        
         mHistoryStack.push(rootTaskList);
     }
 
@@ -171,7 +182,7 @@ public class Logic implements LogicInterface {
         mTasks.clear();
         mTasks.addAll(mStorage.readTasksFromDataFile());
         mUI.updateFilters(mTasks);
-        mHistoryStack.push(mTasks);
+        storeCommandInHistory();
     }
 
     /**
