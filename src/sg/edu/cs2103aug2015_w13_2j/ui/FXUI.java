@@ -38,6 +38,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public static final Insets PADDING_LR = new Insets(0, 3, 0, 3);
     public static final Insets PADDING_FEEDBACK = new Insets(5, 10, 5, 10);
     public static final Font FONT = new Font(18);
+    public static final Font FONT_FEEDBACK = new Font(14);
     public static final double ID_MIN_WIDTH = 45;
 
     private static final int START_WIDTH = 700;
@@ -64,7 +65,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     private FXUI() {
         mFeedbackLabel = new Label("Welcome to FunDUE!");
         mFeedbackLabel.setPadding(PADDING_FEEDBACK);
-        mFeedbackLabel.setFont(FONT);
+        mFeedbackLabel.setFont(FONT_FEEDBACK);
         mTextField = new TextField();
         mTextField.setFont(FONT);
         mTextField.setOnKeyPressed(this);

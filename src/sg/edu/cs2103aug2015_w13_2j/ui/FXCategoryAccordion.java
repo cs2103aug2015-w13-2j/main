@@ -56,12 +56,22 @@ public class FXCategoryAccordion extends Accordion {
             idLabel.setPadding(FXUI.PADDING_LR);
             idLabel.setFont(FXUI.FONT);
             idLabel.setMinWidth(FXUI.ID_MIN_WIDTH);
+            row.getChildren().add(idLabel);
+            
+            Label importanceLabel = new Label("!");
+            importanceLabel.setPadding(FXUI.PADDING_LR);
+            importanceLabel.setFont(FXUI.FONT);
+            importanceLabel.setMinWidth(2);
+            importanceLabel.setTextFill(Color.RED);
+            if (task.isImportant()) {
+                row.getChildren().add(importanceLabel);
+            }
             
             Label nameLabel = new Label(task.getName());
             nameLabel.setPadding(FXUI.PADDING_LR);
             nameLabel.setFont(FXUI.FONT);
             HBox.setHgrow(nameLabel, Priority.ALWAYS);
-            row.getChildren().addAll(idLabel, nameLabel);
+            row.getChildren().add(nameLabel);
             
             Label timeLabel;
             if (task.getStart() != null && task.getEnd() != null) { // EVENT
