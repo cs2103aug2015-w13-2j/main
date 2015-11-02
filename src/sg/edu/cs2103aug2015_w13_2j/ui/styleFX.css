@@ -1,0 +1,53 @@
+.completed .text {
+    -fx-strikethrough: true;
+}
+
+#container {
+    -fx-border-width: 0;
+}
+
+#mCenterVBox {
+    -fx-background-color: white;
+    -fx-border-width: 0;
+}
+
+.accordion {
+    -fx-border-width: 10;
+}
+
+.accordion .titled-pane > *.content /*, .title*/ {
+    -fx-background-color: white;
+    -fx-border-width: 0;
+}
+
+.scrollpane {
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: as-needed;
+    -fx-focus-color: transparent;
+}
+
+.scrollpane .scroll-bar .increment-arrow,
+.scrollpane .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+.scrollpane .scroll-bar .thumb {
+    -fx-background-color: derive(black, 90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}
+
+.scrollpane .scroll-bar:horizontal .increment-button,
+.scrollpane .scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 0 10 0;
+}
+
+.scrollpane .scroll-bar:vertical .increment-button,
+.scrollpane .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 10 0 0;
+}

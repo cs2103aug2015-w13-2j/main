@@ -13,7 +13,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -36,13 +35,15 @@ import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
  */
 public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public static final PrettyTime PRETTY_TIME = new PrettyTime();
-    public static final Insets PADDING_LR_10 = new Insets(0, 10, 0, 10);
-    public static final Font FONT = new Font(24);
+    public static final Insets PADDING_LR = new Insets(0, 3, 0, 3);
+    public static final Insets PADDING_FEEDBACK = new Insets(5, 10, 5, 10);
+    public static final Font FONT = new Font(18);
+    public static final double ID_MIN_WIDTH = 45;
 
-    private static final int START_WIDTH = 800;
+    private static final int START_WIDTH = 700;
     private static final int START_HEIGHT = 600;
-    private static final int MIN_WIDTH = 500;
-    private static final int MIN_HEIGHT = 600;
+    private static final int MIN_WIDTH = 550;
+    private static final int MIN_HEIGHT = 500;
 
     private static FXUI sInstance;
 
@@ -62,7 +63,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
      */
     private FXUI() {
         mFeedbackLabel = new Label("Welcome to FunDUE!");
-        mFeedbackLabel.setPadding(PADDING_LR_10);
+        mFeedbackLabel.setPadding(PADDING_FEEDBACK);
         mFeedbackLabel.setFont(FONT);
         mTextField = new TextField();
         mTextField.setFont(FONT);
@@ -78,6 +79,9 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         //mAllCategory = new FXCategoryAccordion("All Tasks");
         mCenterVBox = new VBox(mFilteredCategory, mFloatingCategory,
                 mUpcomingCategory);
+        
+        mFeedbackLabel.setId("mFeedbackLabel");
+        mCenterVBox.setId("mCenterVBox");
     }
 
     /**
@@ -174,18 +178,26 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     }
 
     public void createUI(Stage primaryStage) {
-        ScrollPane displayScrollPane = new ScrollPane(mCenterVBox);
+        ScrollPane displayScrollPane = new ScrollPane(mCenterVBox) {
+            @Override
+            public void requestFocus() {
+                // Do nothing
+            }
+        };
         displayScrollPane.setFitToWidth(true);
         displayScrollPane.setFitToHeight(true);
-        displayScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+        displayScrollPane.getStyleClass().add("scrollpane");
 
         VBox bottomVBox = new VBox(mFeedbackLabel, mTextField);
+        bottomVBox.setId("bottomVBox");
 
         BorderPane container = new BorderPane();
+        container.setId("container");
         container.setCenter(displayScrollPane);
         container.setBottom(bottomVBox);
 
         Scene scene = new Scene(container, START_WIDTH, START_HEIGHT);
+        scene.getStylesheets().add(getClass().getResource("styleFX.css").toExternalForm());
 
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);

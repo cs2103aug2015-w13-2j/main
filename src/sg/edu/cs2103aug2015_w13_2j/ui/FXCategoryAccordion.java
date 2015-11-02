@@ -50,81 +50,55 @@ public class FXCategoryAccordion extends Accordion {
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             HBox row = new HBox();
+            mContainer.getChildren().add(row);
             
             Label idLabel = new Label((int) (i + offset + 1) + ".");
-            idLabel.setPadding(FXUI.PADDING_LR_10);
+            idLabel.setPadding(FXUI.PADDING_LR);
             idLabel.setFont(FXUI.FONT);
-            idLabel.setMinWidth(Control.USE_PREF_SIZE);
+            idLabel.setMinWidth(FXUI.ID_MIN_WIDTH);
             
             Label nameLabel = new Label(task.getName());
-            nameLabel.setPadding(FXUI.PADDING_LR_10);
+            nameLabel.setPadding(FXUI.PADDING_LR);
             nameLabel.setFont(FXUI.FONT);
+            HBox.setHgrow(nameLabel, Priority.ALWAYS);
             row.getChildren().addAll(idLabel, nameLabel);
             
+            Label timeLabel;
             if (task.getStart() != null && task.getEnd() != null) { // EVENT
-                Label durationLabel = new Label(
+                timeLabel = new Label(
                         "(from " + FXUI.PRETTY_TIME.format(task.getStart()) + " to "
                                 + FXUI.PRETTY_TIME.format(task.getEnd()) + ")");
-                durationLabel.setPadding(FXUI.PADDING_LR_10);
-                durationLabel.setFont(FXUI.FONT);
-                durationLabel.setMinWidth(Control.USE_PREF_SIZE);
-                
-                // Overdue style is entire row red, otherwise end date is orange
-                if (task.isCompleted()) {
-                    idLabel.setTextFill(Color.GREY);
-                    nameLabel.setTextFill(Color.GREY);
-                    durationLabel.setTextFill(Color.GREY);
-                } else if (task.isOverdue()) {
-                    idLabel.setTextFill(Color.RED);
-                    nameLabel.setTextFill(Color.RED);
-                    durationLabel.setTextFill(Color.RED);
-                } else {
-                    durationLabel.setTextFill(Color.ORANGE);
-                }
-                
-                row.getChildren().add(durationLabel);
+                row.getChildren().add(timeLabel);
             } else if (task.getEnd() != null) { // DEADLINE
-                Label endLabel = new Label(
+                timeLabel = new Label(
                         "(due " + FXUI.PRETTY_TIME.format(task.getEnd()) + ")");
-                endLabel.setPadding(FXUI.PADDING_LR_10);
-                endLabel.setFont(FXUI.FONT);
-                endLabel.setMinWidth(Control.USE_PREF_SIZE);
-                
-                // Overdue style is entire row red, otherwise end date is orange
-                if (task.isCompleted()) {
-                    idLabel.setTextFill(Color.GREY);
-                    nameLabel.setTextFill(Color.GREY);
-                    endLabel.setTextFill(Color.GREY);
-                } else if (task.isOverdue()) {
-                    idLabel.setTextFill(Color.RED);
-                    nameLabel.setTextFill(Color.RED);
-                    endLabel.setTextFill(Color.RED);
-                } else {
-                    endLabel.setTextFill(Color.ORANGE);
-                }
-                
-                row.getChildren().add(endLabel);
+                row.getChildren().add(timeLabel);
             } else if (task.getStart() != null) { // FLOAT with start date
-                Label startLabel = new Label(
+                timeLabel = new Label(
                         "(starts/started " + FXUI.PRETTY_TIME.format(task.getStart()) + ")");
-                startLabel.setPadding(FXUI.PADDING_LR_10);
-                startLabel.setFont(FXUI.FONT);
-                startLabel.setMinWidth(Control.USE_PREF_SIZE);
-                
-                if (task.isCompleted()) {
-                    idLabel.setTextFill(Color.GREY);
-                    nameLabel.setTextFill(Color.GREY);
-                    startLabel.setTextFill(Color.GREY);
-                }
-
-                row.getChildren().add(startLabel);
-            } else if (task.isCompleted()) { // FLOAT without anything
+                row.getChildren().add(timeLabel);
+            } else {
+                timeLabel = new Label();
+            }
+            timeLabel.setPadding(FXUI.PADDING_LR);
+            timeLabel.setFont(FXUI.FONT);
+            timeLabel.setMinWidth(Control.USE_PREF_SIZE);
+            
+            // Completed all grey, overdue all red, otherwise time is orange
+            if (task.isCompleted()) {
                 idLabel.setTextFill(Color.GREY);
                 nameLabel.setTextFill(Color.GREY);
+                timeLabel.setTextFill(Color.GREY);
+                //idLabel.getStyleClass().add("completed");
+                nameLabel.getStyleClass().add("completed");
+                //timeLabel.getStyleClass().add("completed");
+            } else if (task.isOverdue()) {
+                idLabel.setTextFill(Color.RED);
+                nameLabel.setTextFill(Color.RED);
+                timeLabel.setTextFill(Color.RED);
+            } else {
+                timeLabel.setTextFill(Color.ORANGE);
             }
-            
-            HBox.setHgrow(nameLabel, Priority.ALWAYS);
-            mContainer.getChildren().add(row);
         }
     }
 
