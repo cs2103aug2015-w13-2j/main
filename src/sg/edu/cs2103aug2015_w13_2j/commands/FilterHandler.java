@@ -28,10 +28,10 @@ public class FilterHandler extends CommandHandler {
         case "active":
             logic.pushFilter(new ActiveFilter());
             break;
-        case "is:archived":
+        case "archived":
             logic.pushFilter(new ArchivedFilter());
             break;
-        case "is:important":
+        case "important":
             logic.pushFilter(new ImportantFilter());
             break;
         default:

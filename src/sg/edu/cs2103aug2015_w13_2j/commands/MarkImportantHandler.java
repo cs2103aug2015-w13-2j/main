@@ -26,7 +26,7 @@ public class MarkImportantHandler extends CommandHandler {
     private static final String SYNTAX = "<TASK_ID>";
     private static final String[] FLAGS = {};
     private static final String[] OPTIONS = { OPTION_TASK_ID };
-    private static final String[] RESERVED = { "important", "impt", "!" };
+    private static final String[] RESERVED = { "i", "impt", "!" };
     private static final String SET_IMPORTANT_SUCCESS = "Task has been set as important.";
     private static final String SET_UNIMPORTANT_SUCCESS = "Task has been set as unimportant.";
 
