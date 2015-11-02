@@ -26,7 +26,8 @@ public class Logic implements LogicInterface {
     private static Logic sInstance;
 
     private final HashMap<String, CommandHandler> mCommandHandlers;
-    private final Stack<ArrayList<Task>> mHistoryStack;
+    private final Stack<ArrayList<Task>> mHistoryUndoStack;
+    private final Stack<ArrayList<Task>> mHistoryRedoStack;
     private final ArrayList<Task> mTasks;
 
     private UIInterface mUI;
@@ -37,7 +38,8 @@ public class Logic implements LogicInterface {
      */
     private Logic() {
         mCommandHandlers = new HashMap<String, CommandHandler>();
-        mHistoryStack = new Stack<ArrayList<Task>>();
+        mHistoryUndoStack = new Stack<ArrayList<Task>>();
+        mHistoryRedoStack = new Stack<ArrayList<Task>>();
         mTasks = new ArrayList<Task>();
     }
 
@@ -158,17 +160,32 @@ public class Logic implements LogicInterface {
             rootTaskList.add(taskCopy);
         }
         
-        mHistoryStack.push(rootTaskList);
+        mHistoryUndoStack.push(rootTaskList);
     }
 
     public ArrayList<Task> restoreCommandFromHistory() {
-        boolean rootHistoryReached = mHistoryStack.size() == 1;
+        boolean rootHistoryReached = mHistoryUndoStack.size() == 1;
         if (rootHistoryReached) {
             return null;
         } else {
-            mHistoryStack.pop();
+            ArrayList<Task> tasksToUndo = mHistoryUndoStack.pop();
+            mHistoryRedoStack.push(tasksToUndo);
             mTasks.clear();
-            mTasks.addAll(mHistoryStack.peek());
+            mTasks.addAll(mHistoryUndoStack.peek());
+            mUI.updateFilters(mTasks);
+            return mTasks;
+        }
+    }
+    
+    public ArrayList<Task> restoreCommandsFromRedoHistory() {
+        boolean rootRedoHistoryReached = mHistoryRedoStack.isEmpty();
+        if (rootRedoHistoryReached) {
+            return null;
+        } else {
+            ArrayList<Task> tasksToRedo = mHistoryRedoStack.pop();
+            mHistoryUndoStack.push(tasksToRedo);
+            mTasks.clear();
+            mTasks.addAll(mHistoryUndoStack.peek());
             mUI.updateFilters(mTasks);
             return mTasks;
         }
