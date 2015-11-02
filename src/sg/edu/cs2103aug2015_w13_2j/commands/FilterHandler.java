@@ -2,7 +2,7 @@ package sg.edu.cs2103aug2015_w13_2j.commands;
 
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.filters.ActiveFilter;
-import sg.edu.cs2103aug2015_w13_2j.filters.ArchivedFilter;
+//import sg.edu.cs2103aug2015_w13_2j.filters.ArchivedFilter;
 import sg.edu.cs2103aug2015_w13_2j.filters.ImportantFilter;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.parser.Token;
@@ -28,9 +28,11 @@ public class FilterHandler extends CommandHandler {
         case "active":
             logic.pushFilter(new ActiveFilter());
             break;
+        /*
         case "archived":
             logic.pushFilter(new ArchivedFilter());
             break;
+        */
         case "important":
             logic.pushFilter(new ImportantFilter());
             break;

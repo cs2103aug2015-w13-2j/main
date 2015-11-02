@@ -85,6 +85,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         borderGlow.setWidth(15);
         borderGlow.setHeight(15);
         mTextField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @SuppressWarnings("rawtypes")
             @Override
             public void changed(ObservableValue ov, Boolean oldPropertyValue,
                     Boolean newPropertyValue) {
