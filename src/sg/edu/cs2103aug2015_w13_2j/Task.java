@@ -264,38 +264,24 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public int compareTo(Task task) {
-        if (this.getType().equals(task.getType())) {
-            if (this.getType().equals("DEADLINE")) {
-                if (!this.getEnd().equals(task.getEnd())) {
-                    return this.getEnd().compareTo(task.getEnd());
-                } else {
-                    return this.getName().compareTo(task.getName());
-                }
-            } else if (this.getType().equals("EVENT")) {
-                if (!this.getStart().equals(task.getStart())) {
-                    return this.getStart().compareTo(task.getStart());
-                } else if (!this.getEnd().equals(task.getEnd())) {
-                    return this.getEnd().compareTo(task.getEnd());
-                } else {
-                    return this.getName().compareTo(task.getName());
-                }
-            } else {// FLOAT
-                if (this.getStart() == null && task.getStart() == null) {
-                    return this.getName().compareTo(task.getName());
-                } else if (this.getStart() != null && task.getStart() == null) {
-                    return -1;
-                } else if (this.getStart() == null && task.getStart() != null) {
-                    return 1;
-                } else {// if both tasks have start
-                    if (!this.getStart().equals(task.getStart())) {
-                        return this.getStart().compareTo(task.getStart());
-                    } else {
-                        return this.getName().compareTo(task.getName());
-                    }
-                }
+        if (this.getEnd() == null && task.getEnd() == null){ // BOTH FLOAT
+            if (this.getStart() == null && task.getStart() == null) {
+                return this.getName().compareTo(task.getName());
+            } else if (this.getStart() != null && task.getStart() == null) {
+                return -1;
+            } else if (this.getStart() == null && task.getStart() != null) {
+                return 1;
+            } else { // if both tasks have start
+                return this.getStart().compareTo(task.getStart());
             }
+        } else if (this.getStart() != null && task.getStart() != null
+                && !this.getStart().equals(task.getStart())) {
+            return this.getStart().compareTo(task.getStart());
+        } else if (this.getEnd() != null && task.getEnd() != null
+                && !this.getEnd().equals(task.getEnd())) {
+            return this.getEnd().compareTo(task.getEnd());
         } else {
-            return this.getType().compareTo(task.getType());
+            return this.getName().compareTo(task.getName());
         }
     }
 

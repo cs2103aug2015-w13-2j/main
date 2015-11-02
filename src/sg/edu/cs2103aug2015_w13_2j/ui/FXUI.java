@@ -1,6 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,9 +52,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     private final FilterChain mFilterChain;
     private final FXCategoryAccordion mFilteredCategory;
     private final FXCategoryAccordion mUpcomingCategory;
-    private final FXCategoryAccordion mOverdueCategory;
     private final FXCategoryAccordion mFloatingCategory;
-    private final FXCategoryAccordion mAllCategory;
     private final VBox mCenterVBox;
 
     private LogicInterface mLogic;
@@ -74,12 +73,11 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         mFilteredCategory = new FXCategoryAccordion("");
         mFilteredCategory.managedProperty()
                 .bind(mFilteredCategory.visibleProperty());
-        mUpcomingCategory = new FXCategoryAccordion("Upcoming");
-        mOverdueCategory = new FXCategoryAccordion("Overdue");
         mFloatingCategory = new FXCategoryAccordion("Someday");
-        mAllCategory = new FXCategoryAccordion("All Tasks");
-        mCenterVBox = new VBox(mFilteredCategory, mUpcomingCategory,
-                mOverdueCategory, mFloatingCategory, mAllCategory);
+        mUpcomingCategory = new FXCategoryAccordion("Upcoming");
+        //mAllCategory = new FXCategoryAccordion("All Tasks");
+        mCenterVBox = new VBox(mFilteredCategory, mFloatingCategory,
+                mUpcomingCategory);
     }
 
     /**
@@ -103,39 +101,40 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public void display(ArrayList<Task> tasks) {
         // Clear the ordered task list and the container VBox
         mOrderedTasks.clear();
+        Collections.sort(tasks);
 
         if (mFilterChain.size() > 1) {
-            mFilteredCategory.setVisible(true);
             List<Task> filteredTasks = mFilterChain.getTasksForDisplay();
+            Collections.sort(filteredTasks);
             mFilteredCategory.setName(mFilterChain.getFilterChain());
             mFilteredCategory.update(filteredTasks, mOrderedTasks.size());
             mOrderedTasks.addAll(filteredTasks);
+
+            mFilteredCategory.setVisible(true);
+            mFloatingCategory.setVisible(false);
+            mUpcomingCategory.setVisible(false);
         } else {
             mFilteredCategory.setVisible(false);
+            mFloatingCategory.setVisible(true);
+            mUpcomingCategory.setVisible(true);
         }
 
+        // Someday
+        List<Task> floatingTasks = tasks.stream()
+                .filter((Task t) -> t.getEnd() == null)
+                .collect(Collectors.toList());
+        mFloatingCategory.update(floatingTasks, mOrderedTasks.size());
+        mOrderedTasks.addAll(floatingTasks);
+        
+        // Upcoming
         List<Task> upcomingTasks = tasks.stream()
-                .filter((Task t) -> t.getEnd() != null
-                        && t.isCompleted() == false && t.isOverdue() == false)
+                .filter((Task t) -> t.getEnd() != null)
                 .collect(Collectors.toList());
         mUpcomingCategory.update(upcomingTasks, mOrderedTasks.size());
         mOrderedTasks.addAll(upcomingTasks);
 
-        List<Task> overdueTasks = tasks.stream()
-                .filter((Task t) -> t.isOverdue() == true
-                        && t.isCompleted() == false)
-                .collect(Collectors.toList());
-        mOverdueCategory.update(overdueTasks, mOrderedTasks.size());
-        mOrderedTasks.addAll(overdueTasks);
-
-        List<Task> floatingTasks = tasks.stream()
-                .filter((Task t) -> t.getStart() == null && t.getEnd() == null)
-                .collect(Collectors.toList());
-        mFloatingCategory.update(floatingTasks, mOrderedTasks.size());
-        mOrderedTasks.addAll(floatingTasks);
-
-        mAllCategory.update(tasks, mOrderedTasks.size());
-        mOrderedTasks.addAll(tasks);
+        //mAllCategory.update(tasks, mOrderedTasks.size());
+        //mOrderedTasks.addAll(tasks);
     }
 
     @Override
