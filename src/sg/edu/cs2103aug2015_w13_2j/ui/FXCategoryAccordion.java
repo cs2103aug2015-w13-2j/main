@@ -45,8 +45,8 @@ public class FXCategoryAccordion extends Accordion {
         mContainer.getChildren().clear();
 
         // Display Task objects in category
-        // Note: ID and end date labels will always take up their required
-        // space, name label can grow horizontally to fill in available space
+        // Note: ID, importance and time labels will always take up their required
+        // space, while name label will grow horizontally to fill in available space
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             HBox row = new HBox();
@@ -61,7 +61,7 @@ public class FXCategoryAccordion extends Accordion {
             Label importanceLabel = new Label("!");
             importanceLabel.setPadding(FXUI.PADDING_LR);
             importanceLabel.setFont(FXUI.FONT);
-            importanceLabel.setMinWidth(2);
+            importanceLabel.setMinWidth(Control.USE_PREF_SIZE);
             importanceLabel.setTextFill(Color.RED);
             if (task.isImportant()) {
                 row.getChildren().add(importanceLabel);
@@ -72,6 +72,7 @@ public class FXCategoryAccordion extends Accordion {
             nameLabel.setFont(FXUI.FONT);
             HBox.setHgrow(nameLabel, Priority.ALWAYS);
             row.getChildren().add(nameLabel);
+            nameLabel.getStyleClass().add("task");
             
             Label timeLabel;
             if (task.getStart() != null && task.getEnd() != null) { // EVENT
@@ -94,14 +95,17 @@ public class FXCategoryAccordion extends Accordion {
             timeLabel.setFont(FXUI.FONT);
             timeLabel.setMinWidth(Control.USE_PREF_SIZE);
             
-            // Completed all grey, overdue all red, otherwise time is orange
+            // Completed and overdue events all grey, overdue all red, otherwise orange
             if (task.isCompleted()) {
                 idLabel.setTextFill(Color.GREY);
                 nameLabel.setTextFill(Color.GREY);
                 timeLabel.setTextFill(Color.GREY);
-                //idLabel.getStyleClass().add("completed");
                 nameLabel.getStyleClass().add("completed");
-                //timeLabel.getStyleClass().add("completed");
+            } else if (task.isOverdue() && task.getStart() != null
+                    && task.getEnd() != null) {
+                idLabel.setTextFill(Color.GREY);
+                nameLabel.setTextFill(Color.GREY);
+                timeLabel.setTextFill(Color.GREY);
             } else if (task.isOverdue()) {
                 idLabel.setTextFill(Color.RED);
                 nameLabel.setTextFill(Color.RED);

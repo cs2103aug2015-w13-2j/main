@@ -2,6 +2,10 @@
     -fx-strikethrough: true;
 }
 
+.task {
+    -fx-padding: 0 0 5 0;
+}
+
 #container {
     -fx-border-width: 0;
 }
@@ -9,6 +13,21 @@
 #mCenterVBox {
     -fx-background-color: white;
     -fx-border-width: 0;
+}
+
+#mTextField {
+    -fx-border-width: 2px;
+    -fx-focus-color: transparent;
+}
+
+#bottomVBox {
+    -fx-padding: 1 2 2 2;
+}
+
+#mTextField:focused {
+    -fx-background-color: -fx-focus-color, -fx-text-box-border, -fx-control-inner-background;
+    -fx-background-insets: -0.4, 1, 2;
+    -fx-background-radius: 3.4, 2, 2;
 }
 
 .accordion {

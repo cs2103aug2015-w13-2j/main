@@ -8,16 +8,20 @@ import java.util.stream.Collectors;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
@@ -53,8 +57,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     private final List<Task> mOrderedTasks;
     private final FilterChain mFilterChain;
     private final FXCategoryAccordion mFilteredCategory;
-    private final FXCategoryAccordion mUpcomingCategory;
     private final FXCategoryAccordion mFloatingCategory;
+    private final FXCategoryAccordion mUpcomingCategory;
     private final VBox mCenterVBox;
 
     private LogicInterface mLogic;
@@ -66,22 +70,44 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         mFeedbackLabel = new Label("Welcome to FunDUE!");
         mFeedbackLabel.setPadding(PADDING_FEEDBACK);
         mFeedbackLabel.setFont(FONT_FEEDBACK);
+        mFeedbackLabel.setId("mFeedbackLabel");
+        
         mTextField = new TextField();
         mTextField.setFont(FONT);
         mTextField.setOnKeyPressed(this);
         mTextField.setMaxWidth(Double.MAX_VALUE);
+        mTextField.setId("mTextField");
+        
+        DropShadow borderGlow = new DropShadow();
+        borderGlow.setOffsetY(0f);
+        borderGlow.setOffsetX(0f);
+        borderGlow.setColor(Color.ORANGE);
+        borderGlow.setWidth(15);
+        borderGlow.setHeight(15);
+        mTextField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue ov, Boolean oldPropertyValue,
+                    Boolean newPropertyValue) {
+                if (newPropertyValue) {
+                    mTextField.setEffect(borderGlow);
+                } else {
+                    mTextField.setEffect(null);
+                }
+            }
+        });
+        
         mOrderedTasks = new ArrayList<Task>();
+        
         mFilterChain = new FilterChain();
         mFilteredCategory = new FXCategoryAccordion("");
         mFilteredCategory.managedProperty()
                 .bind(mFilteredCategory.visibleProperty());
+        
         mFloatingCategory = new FXCategoryAccordion("Someday");
-        mUpcomingCategory = new FXCategoryAccordion("Upcoming");
-        //mAllCategory = new FXCategoryAccordion("All Tasks");
+        mUpcomingCategory = new FXCategoryAccordion("Events / Deadlines");
+        
         mCenterVBox = new VBox(mFilteredCategory, mFloatingCategory,
                 mUpcomingCategory);
-        
-        mFeedbackLabel.setId("mFeedbackLabel");
         mCenterVBox.setId("mCenterVBox");
     }
 
@@ -137,9 +163,6 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
                 .collect(Collectors.toList());
         mUpcomingCategory.update(upcomingTasks, mOrderedTasks.size());
         mOrderedTasks.addAll(upcomingTasks);
-
-        //mAllCategory.update(tasks, mOrderedTasks.size());
-        //mOrderedTasks.addAll(tasks);
     }
 
     @Override
