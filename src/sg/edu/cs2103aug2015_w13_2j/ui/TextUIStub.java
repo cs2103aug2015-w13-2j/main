@@ -111,4 +111,10 @@ public class TextUIStub implements UIInterface {
         // TODO Auto-generated method stub
         
     }
+
+	@Override
+	public String getFeedBackMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -61,6 +61,8 @@ public interface UIInterface {
      * @see FeedbackMessage
      */
     public void feedback(FeedbackMessage f);
+    
+    public String getFeedBackMessage();
 
     /**
      * Adds the provided {@link Filter} object to the filter chain. The filtered

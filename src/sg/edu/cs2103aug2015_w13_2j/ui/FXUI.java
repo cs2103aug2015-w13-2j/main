@@ -247,4 +247,10 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
             // Do nothing
         }
     }
+
+	@Override
+	public String getFeedBackMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

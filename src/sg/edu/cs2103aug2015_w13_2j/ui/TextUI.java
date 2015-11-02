@@ -201,4 +201,10 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
         // TODO Auto-generated method stub
         
     }
+
+	@Override
+	public String getFeedBackMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
