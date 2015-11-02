@@ -57,14 +57,11 @@ public class Task implements TaskInterface, Comparable<Task> {
     }
     
     /**
-     * Copy method to create a deep copy of the task object 
+     * Copy method to create a deep copy of this Task object
      * 
-     * @param taskToCopy
-     * 
-     * @return
+     * @return A new instance of this Task object with all the same attributes
      */
     public Task newInstance() {
-        System.out.println("Old task copied: " + this.toString());
         Task newTask = new Task(this.getName());
         Map<String, String> mLabelsMap = this.mLabels;
         for (Map.Entry<String, String> label : mLabelsMap.entrySet()) {
@@ -73,9 +70,6 @@ public class Task implements TaskInterface, Comparable<Task> {
             
             newTask.setLabel(labelName, labelValue);
         }
-        System.out.println("New task created: " + newTask.toString());
-        System.out.println("Are they the same? " + (this == newTask));
-        System.out.println("-----------END COPY-----------");
         return newTask;
     }
 
