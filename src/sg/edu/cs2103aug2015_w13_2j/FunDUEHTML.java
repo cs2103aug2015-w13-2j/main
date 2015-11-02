@@ -6,7 +6,6 @@ import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 //import sg.edu.cs2103aug2015_w13_2j.commands.ArchiveHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
-import sg.edu.cs2103aug2015_w13_2j.commands.ExitHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.FilterHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.HelpHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.LoadHandler;
@@ -39,7 +38,6 @@ public class FunDUEHTML extends Application {
         mLogic.registerCommandHandler(new FilterHandler());
         mLogic.registerCommandHandler(new PopHandler());
         mLogic.registerCommandHandler(new HelpHandler());
-        mLogic.registerCommandHandler(new ExitHandler());
         mLogic.registerCommandHandler(new LoadHandler());
         mLogic.registerCommandHandler(new SearchHandler());
         
