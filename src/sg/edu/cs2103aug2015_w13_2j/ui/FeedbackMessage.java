@@ -2,6 +2,16 @@ package sg.edu.cs2103aug2015_w13_2j.ui;
 
 import java.awt.Color;
 
+// @@author A0121410H
+
+/**
+ * FeedbackMessage class encapsulates the data necessary to display styled
+ * feedback messages to the user. It comprises a message string retrievable via
+ * {@link #getMessage()} and a {@link FeedbackType} object which determines the
+ * type of feedback as well as the styling.
+ * 
+ * @author Zhu Chunqi
+ */
 public class FeedbackMessage {
     public static final FeedbackMessage CLEAR = new FeedbackMessage("",
             FeedbackType.INFO);
@@ -17,9 +27,9 @@ public class FeedbackMessage {
             "Command not recognized.", FeedbackType.ERROR);
 
     /**
-     * Enumeration of the styling for the different types of user feedback
-     * messages. The color of font to be used for each feedback type can be
-     * retrieved via {@link FeedbackType#getAWTColor()} or {@link #getFXColor()}
+     * Enumeration of the styling for different types of user feedback messages.
+     * The color of font to be used for each feedback type can be retrieved via
+     * {@link #getAWTColor()} or {@link #getFXColor()}
      * 
      * @author Zhu Chunqi
      *
@@ -35,7 +45,7 @@ public class FeedbackMessage {
 
         /**
          * Retrieves the color that should be used to style this type of
-         * feedback
+         * feedback message
          * 
          * @return AWT Color object to be used for this type of feedback
          */
@@ -45,7 +55,7 @@ public class FeedbackMessage {
 
         /**
          * Retrieves the color that should be used to style this type of
-         * feedback
+         * feedback message
          * 
          * @return JavaFX Color object to be used for this type of feedback
          */
@@ -64,20 +74,19 @@ public class FeedbackMessage {
     }
 
     /**
-     * Retrieves the message text
+     * Retrieves the string message text
      * 
-     * @return The message text
+     * @return String message text
      */
     public String getMessage() {
         return mMessage;
     }
 
     /**
-     * Retrieves the FeedbackType enum containing the styling information for
-     * this message
+     * Retrieves the {@link FeedbackType} object containing the styling
+     * information for this feedback message
      * 
-     * @return FeedbackType enum for this message
-     * @see FeedbackType
+     * @return {@link FeedbackType} object for this feedback message
      */
     public FeedbackType getType() {
         return mType;
