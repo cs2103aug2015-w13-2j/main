@@ -1,5 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 //import sg.edu.cs2103aug2015_w13_2j.commands.ArchiveHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
@@ -19,17 +21,13 @@ import sg.edu.cs2103aug2015_w13_2j.ui.GUI;
 
 // @@author A0121410H
 
-public class FunDUEHTML {
-    private GUI mGUI;
-    private Storage mStorage = Storage.getInstance();
+public class FunDUEHTML extends Application {
+    private GUI mGUI = GUI.getInstance();
     private Logic mLogic = Logic.getInstance();
+    private Storage mStorage = Storage.getInstance();
 
-    /**
-     * Initialization of components. Components are <b>not</b> allowed to
-     * reference other components during initialization. Additional
-     * initialization should be called from the {@link #run()} method instead
-     */
-    public FunDUEHTML() {
+    @Override
+    public void start(Stage stage) {
         mLogic.registerCommandHandler(new AddHandler());
         mLogic.registerCommandHandler(new EditHandler());
         mLogic.registerCommandHandler(new DeleteHandler());
@@ -44,17 +42,15 @@ public class FunDUEHTML {
         mLogic.registerCommandHandler(new ExitHandler());
         mLogic.registerCommandHandler(new LoadHandler());
         mLogic.registerCommandHandler(new SearchHandler());
-    }
-
-    public void run() {
-        mGUI = GUI.getInstance();
+        
+        mGUI.createUI(stage);
         mGUI.injectDependency(mLogic);
         mLogic.injectDependencies(mStorage, mGUI);
         mLogic.readTasks();
         mLogic.display();
     }
-
+    
     public static void main(String[] args) {
-        new FunDUEHTML().run();
+        launch(args);
     }
 }

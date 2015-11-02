@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
@@ -14,7 +13,6 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
-
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
@@ -24,7 +22,7 @@ import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
 
 // @@author A0121410H
 
-public class GUI extends Application implements UIInterface {
+public class GUI implements UIInterface {
     public static final PrettyTime PRETTY_TIME = new PrettyTime();
     private WebView browser;
     private WebEngine webEngine;
@@ -34,14 +32,12 @@ public class GUI extends Application implements UIInterface {
     private final FilterChain mFilterChain;
     
     private ArrayList<Task> mTasks;
-    
     private LogicInterface mLogic;
     
     /**
      * Private constructor
      */
-    // TODO: *BUG* cannot make this private, otherwise program crashes
-    public GUI() {
+    private GUI() {
         mTasks = new ArrayList<Task>();
         mFilterChain = new FilterChain();
     }
@@ -79,7 +75,7 @@ public class GUI extends Application implements UIInterface {
                 
                 try {
                     if(task.isValid()){
-                        s += i + " " + task.getName() + "<br>";
+                        s += (i+1) + " " + task.getName() + "<br>";
                     }
                 } catch (InvalidTaskException e) {
                     // TODO Auto-generated catch block
@@ -95,8 +91,9 @@ public class GUI extends Application implements UIInterface {
     
     @Override
     public void display(String s) {
-        // TODO: *BUG* FunDUEHTML doesn't launch the app
+        // TODO *BUG* something wrong here
         //setContent("view", s);
+        System.out.println(s);
     }
     
     // @@author A0121410H
@@ -134,15 +131,6 @@ public class GUI extends Application implements UIInterface {
     // @@author A0124007X
     
     /**
-     * Allows Java upcalls from Javascript
-     */
-    private void initializeGUI() {
-        JSObject window = (JSObject) js("window");
-        window.setMember("GUI", new GUI());
-        setAttribute("commandForm", "onsubmit", "GUI.executeCommand(this.command.value)");
-    }
-    
-    /**
      * The only Java method that will be upcalled from Javascript
      */
     public void executeCommand(String command) {
@@ -150,6 +138,12 @@ public class GUI extends Application implements UIInterface {
 
         System.out.println("before command: " + command);
         // TODO: *BUG* Javascript commands don't work within this method
+        /*Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                setContent("view", command);
+            }
+        });*/
         setContent("view", command);
         System.out.println("after command");
     }
@@ -176,40 +170,41 @@ public class GUI extends Application implements UIInterface {
         js("document.getElementById('" + id + "').innerHTML = '" + value + "';");
     }
     
-    @Override
-    public void start(Stage stage) {
-        try {
-            browser = new WebView();
-            webEngine = browser.getEngine();
-            webEngine.load(getClass().getResource("GUI.html").toExternalForm());
-            
-            webEngine.getLoadWorker().stateProperty().addListener(
-                new ChangeListener<State>(){
-                    public void changed(ObservableValue ov, State oldState,
-                            State newState) {
-                        if (newState == State.SUCCEEDED) {
-                            initializeGUI();
-                        }
-                    }
-                }
-            );
-            
-            // TODO: app icon and title in taskbar
-            browser.setContextMenuEnabled(false);
-            Scene scene = new Scene(browser);
-            stage.setTitle("FunDUE");
-            stage.getIcons().add(new Image("file:FunDUE Logo.png"));
-            stage.setHeight(800);
-            stage.setWidth(700);
-            stage.setResizable(false);
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    /**
+     * Allows Java upcalls from Javascript
+     */
+    private void initializeGUI() {
+        JSObject window = (JSObject) js("window");
+        window.setMember("GUI", new GUI());
+        setAttribute("commandForm", "onsubmit", "GUI.executeCommand(this.command.value)");
     }
     
-    public static void main(String[] args) {
-        launch(args);
+    public void createUI(Stage stage) {
+        browser = new WebView();
+        webEngine = browser.getEngine();
+        webEngine.load(getClass().getResource("GUI.html").toExternalForm());
+        
+        webEngine.getLoadWorker().stateProperty().addListener(
+            new ChangeListener<State>(){
+                @Override
+                public void changed(ObservableValue ov, State oldState,
+                        State newState) {
+                    if (newState == State.SUCCEEDED) {
+                        initializeGUI();
+                    }
+                }
+            }
+        );
+        
+        // TODO: app icon and title in taskbar
+        browser.setContextMenuEnabled(false);
+        Scene scene = new Scene(browser);
+        stage.setTitle("FunDUE");
+        stage.getIcons().add(new Image("file:FunDUE Logo.png"));
+        stage.setHeight(800);
+        stage.setWidth(700);
+        stage.setResizable(false);
+        stage.setScene(scene);
+        stage.show();
     }
 }
