@@ -13,12 +13,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -26,7 +26,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -52,10 +51,6 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public static final double ID_MIN_WIDTH = 45;
 
     private static final Logger LOGGER = Logger.getLogger(FXUI.class.getName());
-    private static final int START_WIDTH = 700;
-    private static final int START_HEIGHT = 600;
-    private static final int MIN_WIDTH = 550;
-    private static final int MIN_HEIGHT = 500;
 
     private static FXUI sInstance;
 
@@ -67,9 +62,9 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     private final FXCategoryAccordion mFloatingCategory;
     private final FXCategoryAccordion mUpcomingCategory;
     private final VBox mCenterVBox;
+    private final BorderPane mContainer;
 
     private LogicInterface mLogic;
-    private Stage mStage;
 
     /**
      * Private constructor
@@ -85,13 +80,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         mTextField.setOnKeyPressed(this);
         mTextField.setMaxWidth(Double.MAX_VALUE);
         mTextField.setId("mTextField");
-
-        DropShadow borderGlow = new DropShadow();
-        borderGlow.setOffsetY(0f);
-        borderGlow.setOffsetX(0f);
-        borderGlow.setColor(Color.ORANGE);
-        borderGlow.setWidth(15);
-        borderGlow.setHeight(15);
+        DropShadow borderGlow = new DropShadow(BlurType.GAUSSIAN, Color.ORANGE,
+                15.0, 0.0, 0.0, 0.0);
         mTextField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> ov,
@@ -125,6 +115,27 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         mCenterVBox = new VBox(mFilteredCategory, mFloatingCategory,
                 mUpcomingCategory);
         mCenterVBox.setId("mCenterVBox");
+
+        ScrollPane displayScrollPane = new ScrollPane(mCenterVBox) {
+            // Override to prevent blue focus highlights from appearing
+            @Override
+            public void requestFocus() {
+                // Do nothing
+            }
+        };
+        displayScrollPane.setFitToWidth(true);
+        displayScrollPane.setFitToHeight(true);
+        displayScrollPane.getStyleClass().add("scrollpane");
+
+        VBox bottomVBox = new VBox(mFeedbackLabel, mTextField);
+        bottomVBox.setId("bottomVBox");
+
+        mContainer = new BorderPane();
+        mContainer.setId("container");
+        mContainer.setCenter(displayScrollPane);
+        mContainer.setBottom(bottomVBox);
+        mContainer.getStylesheets().add(
+                getClass().getResource("styleFX.css").toExternalForm());
     }
 
     /**
@@ -222,7 +233,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         fc.setInitialFileName(mLogic.getDataFile().getName());
         fc.getExtensionFilters().add(
                 new ExtensionFilter("FunDUE Data Files", "*.txt"));
-        File selectedFile = fc.showSaveDialog(mStage);
+        File selectedFile = fc.showSaveDialog(null);
         if (selectedFile == null) {
             return false;
         } else {
@@ -233,38 +244,9 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         }
     }
 
-    public void createUI(Stage primaryStage) {
-        mStage = primaryStage;
-        ScrollPane displayScrollPane = new ScrollPane(mCenterVBox) {
-            // OVerride to prevent blue focus highlights from appearing
-            @Override
-            public void requestFocus() {
-                // Do nothing
-            }
-        };
-        displayScrollPane.setFitToWidth(true);
-        displayScrollPane.setFitToHeight(true);
-        displayScrollPane.getStyleClass().add("scrollpane");
-
-        VBox bottomVBox = new VBox(mFeedbackLabel, mTextField);
-        bottomVBox.setId("bottomVBox");
-
-        BorderPane container = new BorderPane();
-        container.setId("container");
-        container.setCenter(displayScrollPane);
-        container.setBottom(bottomVBox);
-
-        Scene scene = new Scene(container, START_WIDTH, START_HEIGHT);
-        scene.getStylesheets().add(
-                getClass().getResource("styleFX.css").toExternalForm());
-
-        primaryStage.setMinWidth(MIN_WIDTH);
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.getIcons().add(new Image("file:FunDUE Logo.png"));
-        primaryStage.setTitle("FunDUE");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        mTextField.requestFocus();
+    @Override
+    public Parent getUI() {
+        return mContainer;
     }
 
     @Override

@@ -10,6 +10,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import javafx.scene.Parent;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -41,7 +43,7 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
      * Protected constructor
      */
     protected TextUI() {
-        createUI();
+
     }
 
     /**
@@ -72,7 +74,7 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
         mTextPane.clear();
         mTextPane.print(s);
     }
-    
+
     public Task getTask(int index) throws TaskNotFoundException {
         try {
             return mTasks.get(index);
@@ -124,7 +126,7 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
      * the tasks to the user, another JLabel which displays text feedback from
      * executing user commands, and a JTextField from which to accept user input
      */
-    private void createUI() {
+    public Parent getUI() {
         // Create and set up window
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -182,12 +184,14 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
         this.pack();
         this.setVisible(true);
         mTextField.requestFocusInWindow();
+
+        return null;
     }
 
     @Override
     public void pushFilter(Filter filter) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -197,20 +201,14 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
     }
 
     @Override
-    public void updateFilters(ArrayList<Task> tasks) {
+    public String getFeedBackMessage() {
         // TODO Auto-generated method stub
-        
+        return null;
     }
 
-	@Override
-	public String getFeedBackMessage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
     @Override
-    public void showChangeDataFilePathDialog() {
+    public boolean showChangeDataFilePathDialog() {
         // TODO Auto-generated method stub
-        
+        return false;
     }
 }

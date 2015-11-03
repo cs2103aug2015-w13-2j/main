@@ -2,6 +2,7 @@ package sg.edu.cs2103aug2015_w13_2j.ui;
 
 import java.util.ArrayList;
 
+import javafx.scene.Parent;
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
@@ -92,4 +93,11 @@ public interface UIInterface {
      * @return {@code True} if a file was selected, {@code false} otherwise.
      */
     public boolean showChangeDataFilePathDialog();
+
+    /**
+     * Retrieves the UI elements to be displayed in a {@link Parent} container.
+     * 
+     * @return {@link Parent} object to be displayed.
+     */
+    public Parent getUI();
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.scene.Parent;
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
@@ -106,12 +107,6 @@ public class TextUIStub implements UIInterface {
         return null;
     }
 
-    @Override
-    public void updateFilters(ArrayList<Task> tasks) {
-        // TODO Auto-generated method stub
-        
-    }
-
 	@Override
 	public String getFeedBackMessage() {
 		// TODO Auto-generated method stub
@@ -119,8 +114,14 @@ public class TextUIStub implements UIInterface {
 	}
 
     @Override
-    public void showChangeDataFilePathDialog() {
+    public boolean showChangeDataFilePathDialog() {
         // TODO Auto-generated method stub
-        
+        return true;
+    }
+
+    @Override
+    public Parent getUI() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
