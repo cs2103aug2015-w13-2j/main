@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface;
 
-// @@author A0121410H
+//@@author A0121410H
 
 /**
  * Task class that encapsulates all the data that represents a task for e.g. the
