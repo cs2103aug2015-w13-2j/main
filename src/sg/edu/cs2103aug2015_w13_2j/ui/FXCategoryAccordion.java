@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import sg.edu.cs2103aug2015_w13_2j.Task;
@@ -74,6 +75,10 @@ public class FXCategoryAccordion extends Accordion {
             row.getChildren().add(nameLabel);
             nameLabel.getStyleClass().add("task");
             
+            Region spacer = new Region();
+            row.getChildren().add(spacer);
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            
             Label timeLabel;
             if (task.getStart() != null && task.getEnd() != null) { // EVENT
                 timeLabel = new Label(
@@ -111,7 +116,7 @@ public class FXCategoryAccordion extends Accordion {
                 nameLabel.setTextFill(Color.RED);
                 timeLabel.setTextFill(Color.RED);
             } else {
-                timeLabel.setTextFill(Color.ORANGE);
+                timeLabel.setTextFill(Color.DARKORANGE);
             }
         }
     }

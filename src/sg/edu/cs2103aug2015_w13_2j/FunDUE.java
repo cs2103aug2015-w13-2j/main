@@ -1,7 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
-//import sg.edu.cs2103aug2015_w13_2j.commands.ArchiveHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.FilterHandler;
@@ -12,7 +11,6 @@ import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.RedoHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.SearchHandler;
-//import sg.edu.cs2103aug2015_w13_2j.commands.UnarchiveHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
