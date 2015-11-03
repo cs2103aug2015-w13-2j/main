@@ -34,8 +34,9 @@ public interface StorageInterface {
     public File getDataFile();
 
     /**
-     * Sets the FunDUE data file to the provided {@link File} object. Also
-     * updates the user's data file path preference.
+     * Sets the FunDUE data file to the provided {@link File} object and updates
+     * the user's data file path preference. If the {@link File} object points
+     * to a non-existent file, the file will be created.
      * 
      * @param newDataFile
      *            {@link File} object to be used as the new FunDUE data file. If

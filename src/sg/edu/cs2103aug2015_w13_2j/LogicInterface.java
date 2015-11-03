@@ -104,8 +104,10 @@ public interface LogicInterface {
      * Pass-through method to {@link UIInterface#showChangeDataFilePathDialog()}
      * which shows a file picker dialog to let the user choose a new FunDUE data
      * file.
+     * 
+     * @return {@code True} if a file was chosen, {@code false} otherwise.
      */
-    public void showChangeDataFilePathDialog();
+    public boolean showChangeDataFilePathDialog();
 
     /**
      * Adds the provided {@link Task} object to the master list of {@link Task}
@@ -206,9 +208,9 @@ public interface LogicInterface {
      *         or {@code null} if only the root {@link Filter} is left.
      */
     public Filter popFilter();
-    
-    //@@author A0130894B
-    
+
+    // @@author A0130894B
+
     /**
      * Stores a deep copy of the master {@link Task} list into the undo stack.
      */
@@ -225,21 +227,21 @@ public interface LogicInterface {
     void clearRedoHistory();
 
     /**
-     * Retrieves the most recent user command, if any. The undo stack initializes 
-     * with the user's saved master {@link Task} list on its root stack and will 
-     * only be restored until that particular entry.
+     * Retrieves the most recent user command, if any. The undo stack
+     * initializes with the user's saved master {@link Task} list on its root
+     * stack and will only be restored until that particular entry.
      * 
-     * @return List of {@link Task} objects that will be displayed 
-     *         after restoring from the undo stack.
+     * @return List of {@link Task} objects that will be displayed after
+     *         restoring from the undo stack.
      */
     ArrayList<Task> restoreCommandFromHistory();
 
     /**
-     * Obtains the last command the user undid, if any. The redo stack initializes 
-     * with no {@link Task} list and will only be restored until that particular 
-     * empty entry.
+     * Obtains the last command the user undid, if any. The redo stack
+     * initializes with no {@link Task} list and will only be restored until
+     * that particular empty entry.
      * 
-     * @return List of {@link Task} objects that will be displayed to the user 
+     * @return List of {@link Task} objects that will be displayed to the user
      *         after restoring from the redo stack.
      */
     ArrayList<Task> restoreCommandFromRedoHistory();

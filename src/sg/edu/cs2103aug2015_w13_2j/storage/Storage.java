@@ -92,8 +92,8 @@ public class Storage implements StorageInterface {
     @Override
     public void setDataFile(File newDataFile) {
         if (newDataFile != null) {
-            mDataFile = newDataFile;
-            PREFERENCES.put(sPrefKey, mDataFile.getAbsolutePath());
+            PREFERENCES.put(sPrefKey, newDataFile.getAbsolutePath());
+            loadDataFile();
         }
     }
 

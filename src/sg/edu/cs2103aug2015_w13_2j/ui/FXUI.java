@@ -215,7 +215,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     }
 
     @Override
-    public void showChangeDataFilePathDialog() {
+    public boolean showChangeDataFilePathDialog() {
         FileChooser fc = new FileChooser();
         fc.setTitle("Select FunDUE Data File");
         fc.setInitialDirectory(mLogic.getDataFile().getParentFile());
@@ -223,12 +223,14 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         fc.getExtensionFilters().add(
                 new ExtensionFilter("FunDUE Data Files", "*.txt"));
         File selectedFile = fc.showSaveDialog(mStage);
-        LOGGER.log(
-                Level.INFO,
-                "Selected data file: "
-                        + (selectedFile == null ? "null" : selectedFile
-                                .getAbsolutePath()));
-        mLogic.setDataFile(selectedFile);
+        if (selectedFile == null) {
+            return false;
+        } else {
+            LOGGER.log(Level.INFO,
+                    "Selected data file: " + selectedFile.getAbsolutePath());
+            mLogic.setDataFile(selectedFile);
+            return true;
+        }
     }
 
     public void createUI(Stage primaryStage) {

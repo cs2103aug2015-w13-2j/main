@@ -11,8 +11,8 @@ public class LoadHandler extends CommandHandler {
     private static final String[] FLAGS = {};
     private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "load" };
-    private static final String LOAD_SUCCESS = 
-            "Loaded new to-do list successfully!";
+    private static final String LOAD_SUCCESS = "Loaded FunDUE data file successfully!";
+    private static final String LOAD_CANCEL = "FunDUE data file was not changed.";
 
     public LoadHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
@@ -20,8 +20,10 @@ public class LoadHandler extends CommandHandler {
 
     @Override
     public void execute(Logic logic, Command command) {
-        logic.showChangeDataFilePathDialog();
-        logic.feedback(new FeedbackMessage(LOAD_SUCCESS, 
-                FeedbackType.INFO));
+        if (logic.showChangeDataFilePathDialog()) {
+            logic.feedback(new FeedbackMessage(LOAD_SUCCESS, FeedbackType.INFO));
+        } else {
+            logic.feedback(new FeedbackMessage(LOAD_CANCEL, FeedbackType.INFO));
+        }
     }
 }

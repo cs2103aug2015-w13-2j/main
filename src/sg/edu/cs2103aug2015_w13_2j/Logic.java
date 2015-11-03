@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
@@ -75,6 +76,8 @@ public class Logic implements LogicInterface {
         List<String> reserved = handler.getReservedKeywords();
         for (String keyword : reserved) {
             if (mCommandHandlers.containsKey(keyword)) {
+                LOGGER.log(Level.SEVERE, "Conflicting command handlers for: "
+                        + keyword);
                 throw new Error("Conflicting command handlers for: " + keyword);
             } else {
                 mCommandHandlers.put(keyword, handler);
@@ -120,8 +123,8 @@ public class Logic implements LogicInterface {
     }
 
     @Override
-    public void showChangeDataFilePathDialog() {
-        mUI.showChangeDataFilePathDialog();
+    public boolean showChangeDataFilePathDialog() {
+        return mUI.showChangeDataFilePathDialog();
     }
 
     @Override
@@ -181,15 +184,15 @@ public class Logic implements LogicInterface {
         return mUI.popFilter();
     }
 
-    //@@author A0130894B
-    
+    // @@author A0130894B
+
     /**
      * Utility method that creates a deep copy of the task list specified.
      * 
      * @param taskListToCopy
-     *          Task list that is to be copied.
-     * @return A list of tasks that has the same contents as taskListToCopy
-     *          but has a different object reference, i.e. is a different object.
+     *            Task list that is to be copied.
+     * @return A list of tasks that has the same contents as taskListToCopy but
+     *         has a different object reference, i.e. is a different object.
      */
     public static ArrayList<Task> copyTaskList(ArrayList<Task> taskListToCopy) {
         ArrayList<Task> taskListCopy = new ArrayList<Task>();
@@ -205,8 +208,7 @@ public class Logic implements LogicInterface {
     }
 
     /**
-     * Stores a deep copy of the master {@link Task} list into the 
-     * undo stack.
+     * Stores a deep copy of the master {@link Task} list into the undo stack.
      */
     public void storeCommandInHistory() {
         ArrayList<Task> rootTaskList = copyTaskList(mTasks);
@@ -229,12 +231,12 @@ public class Logic implements LogicInterface {
     }
 
     /**
-     * Retrieves the most recent user command, if any. The undo stack initializes 
-     * with the user's saved master {@link Task} list on its root stack and will 
-     * only be restored until that particular entry.
+     * Retrieves the most recent user command, if any. The undo stack
+     * initializes with the user's saved master {@link Task} list on its root
+     * stack and will only be restored until that particular entry.
      * 
-     * @return List of {@link Task} objects that will be displayed 
-     *         after restoring from the undo stack.
+     * @return List of {@link Task} objects that will be displayed after
+     *         restoring from the undo stack.
      */
     public ArrayList<Task> restoreCommandFromHistory() {
         boolean rootHistoryReached = mHistoryUndoStack.size() == 1;
@@ -250,11 +252,11 @@ public class Logic implements LogicInterface {
     }
 
     /**
-     * Obtains the last command the user undid, if any. The redo stack initializes 
-     * with no {@link Task} list and will only be restored until that particular 
-     * empty entry.
+     * Obtains the last command the user undid, if any. The redo stack
+     * initializes with no {@link Task} list and will only be restored until
+     * that particular empty entry.
      * 
-     * @return List of {@link Task} objects that will be displayed to the user 
+     * @return List of {@link Task} objects that will be displayed to the user
      *         after restoring from the redo stack.
      */
     public ArrayList<Task> restoreCommandFromRedoHistory() {
@@ -268,14 +270,14 @@ public class Logic implements LogicInterface {
             return mTasks;
         }
     }
-    
+
     /**
-     * Refreshes the master {@link Task} list to show the latest 
-     * update to the user.
+     * Refreshes the master {@link Task} list to show the latest update to the
+     * user.
      * 
      * @param latestTaskListUndone
-     *            List of {@link Task} objects the master {@link Task} 
-     *            list will be updated to.
+     *            List of {@link Task} objects the master {@link Task} list will
+     *            be updated to.
      */
     private void refreshTaskList(ArrayList<Task> taskList) {
         mTasks.clear();
