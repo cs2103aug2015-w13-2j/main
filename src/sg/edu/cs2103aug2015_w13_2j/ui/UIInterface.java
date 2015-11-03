@@ -85,15 +85,6 @@ public interface UIInterface {
     public Filter popFilter();
 
     /**
-     * Re-seeds the root {@link Filter} object with the provided list of Task
-     * objects and updates the entire filter chain
-     * 
-     * @param tasks
-     *            List of Task objects
-     */
-    public void updateFilters(ArrayList<Task> tasks);
-
-    /**
      * Shows a file picker dialog which prompts the user to select a FunDUE data
      * file. If a file is successfully chosen, the user's preference will be
      * recorded via {@link StorageInterface#setDataFile(java.io.File)} and

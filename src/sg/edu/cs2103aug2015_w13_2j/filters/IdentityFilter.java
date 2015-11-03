@@ -8,8 +8,8 @@ public class IdentityFilter extends Filter {
     public IdentityFilter() {
         FILTER_NAME = "all";
     }
-    
+
     public void applyFilter(ArrayList<Task> tasks) {
-        mTasks = new ArrayList<Task>(tasks);
+        mTasks = tasks;
     }
 }

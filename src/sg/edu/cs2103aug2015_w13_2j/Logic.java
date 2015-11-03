@@ -96,7 +96,6 @@ public class Logic implements LogicInterface {
             CommandHandler handler = mCommandHandlers.get(reserved.value);
             if (handler != null) {
                 handler.execute(this, command);
-                mUI.updateFilters(mTasks);
                 if (handler.shouldDisplay()) {
                     display();
                 }
@@ -128,7 +127,6 @@ public class Logic implements LogicInterface {
     @Override
     public void addTask(Task task) {
         mTasks.add(task);
-        mUI.updateFilters(mTasks);
     }
 
     @Override
@@ -154,7 +152,6 @@ public class Logic implements LogicInterface {
     public void readTasks() {
         mTasks.clear();
         mTasks.addAll(mStorage.readTasksFromDataFile());
-        mUI.updateFilters(mTasks);
         storeCommandInHistory();
     }
 
@@ -283,6 +280,5 @@ public class Logic implements LogicInterface {
     private void refreshTaskList(ArrayList<Task> taskList) {
         mTasks.clear();
         mTasks.addAll(copyTaskList(taskList));
-        mUI.updateFilters(mTasks);
     }
 }

@@ -146,6 +146,9 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
 
     @Override
     public void display(ArrayList<Task> tasks) {
+        // Re-seed the filter chain
+        mFilterChain.updateFilters(tasks);
+        
         // Clear the ordered task list
         mOrderedTasks.clear();
         Collections.sort(tasks);
@@ -209,11 +212,6 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     @Override
     public Filter popFilter() {
         return mFilterChain.popFilter();
-    }
-
-    @Override
-    public void updateFilters(ArrayList<Task> tasks) {
-        mFilterChain.updateFilters(tasks);
     }
 
     @Override
