@@ -59,13 +59,13 @@ public class Command implements Iterable<Token> {
         }
         return Token.EMPTY_TOKEN;
     }
-    
+
     /**
-     * Convenience method to retrieves a list of all values of ID 
-     * tokens in this command
+     * Convenience method to retrieves a list of all values of ID tokens in this
+     * command
      * 
-     * @return List of all values of objects of type ID or an empty list 
-     *         if command contains none
+     * @return List of all values of objects of type ID or an empty list if
+     *         command contains none
      */
     public ArrayList<Integer> getAllIdTokenValues() {
         ArrayList<Integer> idTokens = new ArrayList<Integer>();
@@ -86,6 +86,25 @@ public class Command implements Iterable<Token> {
     public Token getReservedToken() {
         for (Token token : this) {
             if (token.type == Type.RESERVED) {
+                return token;
+            }
+        }
+        return Token.EMPTY_TOKEN;
+    }
+
+    /**
+     * Removes and returns the first instance of a RESERVED {@link Token} object
+     * of this command.
+     * 
+     * @return First RESERVED {@link Token} object or an EMPTY {@link Token}
+     *         object if command contains none.
+     */
+    public Token removeReservedToken() {
+        Iterator<Token> iter = mTokens.iterator();
+        while(iter.hasNext()) {
+            Token token = iter.next();
+            if(token.type == Type.RESERVED) {
+                iter.remove();
                 return token;
             }
         }
