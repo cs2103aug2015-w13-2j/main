@@ -45,6 +45,6 @@ public class IntegrationTests {
     @Test
     public void testDelete() throws TaskNotFoundException {
         sLogic.executeCommand("delete 1");
-        assertEquals(sFXUI.getFeedBackMessage(), "Task deleted successfully.");
+        assertEquals(sFXUI.getFeedBackMessage(), "Task deleted successfully."); 
     }
 }

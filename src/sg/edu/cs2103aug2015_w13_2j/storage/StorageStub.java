@@ -25,4 +25,8 @@ public class StorageStub implements StorageInterface {
     public void writeTasksToDataFile(ArrayList<Task> tasks) {
         mStorage = new ArrayList<Task>(tasks);
     }
+    
+    public void clearAllTasks(){
+    	mStorage = new ArrayList<Task>();
+    }
 }
