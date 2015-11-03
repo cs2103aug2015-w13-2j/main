@@ -28,7 +28,7 @@ public class FXUITest extends Application implements UIInterface{
 	private FXUI mUI = FXUI.getInstance();  //<--here
 	private ArrayList<Task> mTasks;
     private FeedbackMessage mFeedback;
-    private Logic mLogic = Logic.getInstance();
+    private Logic mLogic = (Logic) Logic.getInstance();
     private Storage mStorage = Storage.getInstance();
     
     @Override
@@ -107,6 +107,13 @@ public class FXUITest extends Application implements UIInterface{
 
 	@Override
 	public void updateFilters(ArrayList<Task> tasks) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void showChangeDataFilePathDialog() {
 		// TODO Auto-generated method stub
 		
 	}

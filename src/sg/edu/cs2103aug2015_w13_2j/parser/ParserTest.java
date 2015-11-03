@@ -18,7 +18,7 @@ public class ParserTest {
     private static final Logger LOGGER = Logger.getLogger(ParserTest.class
             .getName());
     private Parser mParser = Parser.getInstance();
-    private Logic mLogic = Logic.getInstance();
+    private Logic mLogic = (Logic) Logic.getInstance();
 
     @BeforeClass
     public static void setup() {
