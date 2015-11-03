@@ -148,7 +148,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public void display(ArrayList<Task> tasks) {
         // Re-seed the filter chain
         mFilterChain.updateFilters(tasks);
-        
+
         // Clear the ordered task list
         mOrderedTasks.clear();
         Collections.sort(tasks);
@@ -163,24 +163,24 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
             mFloatingCategory.setVisible(false);
             mUpcomingCategory.setVisible(false);
         } else {
+            // Someday
+            List<Task> floatingTasks = tasks.stream()
+                    .filter((Task t) -> t.getEnd() == null)
+                    .collect(Collectors.toList());
+            mFloatingCategory.update(floatingTasks, mOrderedTasks.size());
+            mOrderedTasks.addAll(floatingTasks);
+
+            // Upcoming
+            List<Task> upcomingTasks = tasks.stream()
+                    .filter((Task t) -> t.getEnd() != null)
+                    .collect(Collectors.toList());
+            mUpcomingCategory.update(upcomingTasks, mOrderedTasks.size());
+            mOrderedTasks.addAll(upcomingTasks);
+
             mFilteredCategory.setVisible(false);
             mFloatingCategory.setVisible(true);
             mUpcomingCategory.setVisible(true);
         }
-
-        // Someday
-        List<Task> floatingTasks = tasks.stream()
-                .filter((Task t) -> t.getEnd() == null)
-                .collect(Collectors.toList());
-        mFloatingCategory.update(floatingTasks, mOrderedTasks.size());
-        mOrderedTasks.addAll(floatingTasks);
-
-        // Upcoming
-        List<Task> upcomingTasks = tasks.stream()
-                .filter((Task t) -> t.getEnd() != null)
-                .collect(Collectors.toList());
-        mUpcomingCategory.update(upcomingTasks, mOrderedTasks.size());
-        mOrderedTasks.addAll(upcomingTasks);
     }
 
     @Override
