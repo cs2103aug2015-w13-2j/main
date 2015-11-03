@@ -16,7 +16,6 @@ public class StorageTest extends Storage {
         sPrefKey = PREFKEY_TESTFILE_PATH;
         sDefaultPath = DEFAULT_TESTFILE_PATH;
         loadDataFile();
-        showChangeDataFilePathDialog();
     }
 
     @Test

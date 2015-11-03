@@ -12,6 +12,7 @@ public class PopHandler extends CommandHandler {
     private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "pop", "back" };
     private static final String POP_SUCCESS = "Last filter removed.";
+    private static final String POP_FAIL = "No filters active.";
 
     public PopHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
@@ -19,7 +20,10 @@ public class PopHandler extends CommandHandler {
 
     @Override
     public void execute(Logic logic, Command command) {
-        logic.popFilter();
-        logic.feedback(new FeedbackMessage(POP_SUCCESS, FeedbackType.INFO));
+        if (logic.popFilter() == null) {
+            logic.feedback(new FeedbackMessage(POP_FAIL, FeedbackType.ERROR));
+        } else {
+            logic.feedback(new FeedbackMessage(POP_SUCCESS, FeedbackType.INFO));
+        }
     }
 }

@@ -207,4 +207,10 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    @Override
+    public void showChangeDataFilePathDialog() {
+        // TODO Auto-generated method stub
+        
+    }
 }

@@ -230,7 +230,7 @@ public class Task implements TaskInterface, Comparable<Task> {
             sb.append(entry.getKey());
             sb.append(":");
             sb.append(entry.getValue());
-            sb.append("\r\n");
+            sb.append("\n");
         }
         return sb.toString();
     }
@@ -249,7 +249,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         StringBuilder sb = new StringBuilder();
         for (Task task : tasks) {
             sb.append(task.toString());
-            sb.append("\r\n");
+            sb.append("\n");
         }
         return sb.toString();
     }

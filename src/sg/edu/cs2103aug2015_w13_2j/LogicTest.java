@@ -24,7 +24,7 @@ import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
 public class LogicTest {
     private static StorageStub sStorage = new StorageStub();
     private static TextUIStub sTextUI = new TextUIStub();
-    private static Logic sLogic = Logic.getInstance();
+    private static LogicInterface sLogic = Logic.getInstance();
     private String response = "";
 
     @BeforeClass

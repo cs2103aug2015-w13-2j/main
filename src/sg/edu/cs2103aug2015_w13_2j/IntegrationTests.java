@@ -20,7 +20,7 @@ import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FXUITest;
 
 public class IntegrationTests {
-    private static Logic sLogic = Logic.getInstance();
+    private static LogicInterface sLogic = Logic.getInstance();
 	private static FXUITest sFXUI= new FXUITest();
     private static Storage sStorage = Storage.getInstance();
     @BeforeClass

@@ -8,9 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
@@ -20,14 +17,15 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 /**
  * Storage component which provides methods to store and retrieve a list of Task
  * objects to and from disk. Stores the user's preference for location of data
- * file and provides file picker dialog to change the preferred location
+ * file with the {@value #PREFKEY_DATAFILE_PATH} preference key.
  * 
  * @author Lu Yang Kenneth
  */
 public class Storage implements StorageInterface {
     public static final String DEFAULT_DATAFILE_PATH = "./FunDUE.txt";
-    private static final Logger LOGGER = Logger
-            .getLogger(Storage.class.getName());
+
+    private static final Logger LOGGER = Logger.getLogger(Storage.class
+            .getName());
     private static final Preferences PREFERENCES = Preferences
             .userNodeForPackage(Storage.class);
     private static final String PREFKEY_DATAFILE_PATH = "FUNDUE_DATAFILE_PATH";
@@ -85,20 +83,17 @@ public class Storage implements StorageInterface {
             LOGGER.log(Level.WARNING, "Failed to write tasks to data file", e);
         }
     }
+    
+    @Override
+    public File getDataFile() {
+        return mDataFile;
+    }
 
     @Override
-    public void showChangeDataFilePathDialog() {
-        final JFileChooser fc = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "FunDue Data File (.txt)", "txt");
-        fc.setDialogTitle("Select FunDue Data File");
-        fc.setFileFilter(filter);
-        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fc.setSelectedFile(mDataFile);
-        int returnValue = fc.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            mDataFile = fc.getSelectedFile();
-            PREFERENCES.put(sPrefKey, fc.getSelectedFile().getAbsolutePath());
+    public void setDataFile(File newDataFile) {
+        if (newDataFile != null) {
+            mDataFile = newDataFile;
+            PREFERENCES.put(sPrefKey, mDataFile.getAbsolutePath());
         }
     }
 

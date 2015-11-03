@@ -17,6 +17,5 @@ public class LoadHandler extends CommandHandler {
     @Override
     public void execute(Logic logic, Command command) {
         logic.showChangeDataFilePathDialog();
-        logic.readTasks();
     }
 }

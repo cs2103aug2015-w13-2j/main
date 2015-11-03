@@ -6,6 +6,7 @@ import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
+import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 
 // @@author A0121410H
 
@@ -61,7 +62,7 @@ public interface UIInterface {
      * @see FeedbackMessage
      */
     public void feedback(FeedbackMessage f);
-    
+
     public String getFeedBackMessage();
 
     /**
@@ -91,4 +92,12 @@ public interface UIInterface {
      *            List of Task objects
      */
     public void updateFilters(ArrayList<Task> tasks);
+
+    /**
+     * Shows a file picker dialog which prompts the user to select a FunDUE data
+     * file. If a file is successfully chosen, the user's preference will be
+     * recorded via {@link StorageInterface#setDataFile(java.io.File)} and
+     * the selected file will used as the data file.
+     */
+    public void showChangeDataFilePathDialog();
 }

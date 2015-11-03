@@ -117,4 +117,10 @@ public class TextUIStub implements UIInterface {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    @Override
+    public void showChangeDataFilePathDialog() {
+        // TODO Auto-generated method stub
+        
+    }
 }

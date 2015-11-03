@@ -1,5 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j.storage;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
@@ -10,11 +11,6 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
  */
 public class StorageStub implements StorageInterface {
     private ArrayList<Task> mStorage = new ArrayList<Task>();
-
-    @Override
-    public void showChangeDataFilePathDialog() {
-        // Do nothing
-    }
 
     @Override
     public ArrayList<Task> readTasksFromDataFile() {
@@ -28,5 +24,15 @@ public class StorageStub implements StorageInterface {
     
     public void clearAllTasks(){
     	mStorage = new ArrayList<Task>();
+    }
+
+    @Override
+    public File getDataFile() {
+        return null;
+    }
+
+    @Override
+    public void setDataFile(File newDataFile) {
+        // Do nothing
     }
 }

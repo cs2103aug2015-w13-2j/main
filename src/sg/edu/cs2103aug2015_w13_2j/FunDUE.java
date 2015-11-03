@@ -22,7 +22,7 @@ import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
 public class FunDUE {
     private TextUI mTextUI;
     private Storage mStorage = Storage.getInstance();
-    private Logic mLogic = Logic.getInstance();
+    private LogicInterface mLogic = Logic.getInstance();
 
     /**
      * Initialization of components. Components are <b>not</b> allowed to
@@ -33,8 +33,6 @@ public class FunDUE {
         mLogic.registerCommandHandler(new AddHandler());
         mLogic.registerCommandHandler(new EditHandler());
         mLogic.registerCommandHandler(new DeleteHandler());
-        //mLogic.registerCommandHandler(new ArchiveHandler());
-        //mLogic.registerCommandHandler(new UnarchiveHandler());
         mLogic.registerCommandHandler(new MarkImportantHandler());
         mLogic.registerCommandHandler(new MarkCompletedHandler());
         mLogic.registerCommandHandler(new UndoHandler());

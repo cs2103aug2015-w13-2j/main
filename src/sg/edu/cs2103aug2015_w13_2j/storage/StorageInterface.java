@@ -1,10 +1,8 @@
 package sg.edu.cs2103aug2015_w13_2j.storage;
 
+import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JFileChooser;
-
-import javafx.stage.FileChooser;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
 // @@author A0124007X
@@ -28,11 +26,20 @@ public interface StorageInterface {
     // @@author A0121410H
 
     /**
-     * Creates a {@link JFileChooser} dialog which restricts the user to select
-     * {@code .txt} files only. If a file is successfully chosen, the user's
-     * preference will be recorded and the selected file will used as the data
-     * file. TODO: Use JavaFX {@link FileChooser} instead for native file
-     * choosers
+     * Retrieves the {@link File} object representing the current FunDUE data
+     * file.
+     * 
+     * @return {@link File} object representing the current FunDUE data file.
      */
-    public void showChangeDataFilePathDialog();
+    public File getDataFile();
+
+    /**
+     * Sets the FunDUE data file to the provided {@link File} object. Also
+     * updates the user's data file path preference.
+     * 
+     * @param newDataFile
+     *            {@link File} object to be used as the new FunDUE data file. If
+     *            {@code null} then this method does nothing.
+     */
+    public void setDataFile(File newDataFile);
 }

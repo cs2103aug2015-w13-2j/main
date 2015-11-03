@@ -1,13 +1,12 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
-
-//import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
@@ -48,7 +47,7 @@ public class Logic implements LogicInterface {
      * 
      * @return {@link LogicInterface} component
      */
-    public synchronized static Logic getInstance() {
+    public synchronized static LogicInterface getInstance() {
         if (sInstance == null) {
             sInstance = new Logic();
         }
@@ -56,8 +55,7 @@ public class Logic implements LogicInterface {
     }
 
     @Override
-    public void injectDependencies(StorageInterface storage,
-            UIInterface textUI) {
+    public void injectDependencies(StorageInterface storage, UIInterface textUI) {
         mStorage = storage;
         mUI = textUI;
     }
@@ -86,8 +84,8 @@ public class Logic implements LogicInterface {
 
     @Override
     public void executeCommand(String commandString) {
-        Command command = Parser.getInstance().parseCommand(this,
-                commandString);
+        Command command = Parser.getInstance()
+                .parseCommand(this, commandString);
         Token reserved = command.getReservedToken();
         if (commandString.isEmpty()) {
             feedback(FeedbackMessage.CLEAR);
@@ -107,23 +105,33 @@ public class Logic implements LogicInterface {
         writeTasks();
     }
 
+    @Override
     public void display() {
         mUI.display(mTasks);
     }
 
+    @Override
     public void display(String s) {
         mUI.display(s);
     }
 
+    @Override
     public void feedback(FeedbackMessage m) {
         mUI.feedback(m);
     }
 
+    @Override
+    public void showChangeDataFilePathDialog() {
+        mUI.showChangeDataFilePathDialog();
+    }
+
+    @Override
     public void addTask(Task task) {
         mTasks.add(task);
         mUI.updateFilters(mTasks);
     }
 
+    @Override
     public Task getTask(int index) throws TaskNotFoundException {
         try {
             return mTasks.get(mTasks.indexOf(mUI.getTask(index)));
@@ -132,6 +140,7 @@ public class Logic implements LogicInterface {
         }
     }
 
+    @Override
     public Task removeTask(int index) throws TaskNotFoundException {
         Task task = mUI.getTask(index);
         if (mTasks.remove(task)) {
@@ -141,18 +150,7 @@ public class Logic implements LogicInterface {
         }
     }
 
-    public void pushFilter(Filter filter) {
-        mUI.pushFilter(filter);
-    }
-
-    public Filter popFilter() {
-        return mUI.popFilter();
-    }
-
-    public void showChangeDataFilePathDialog() {
-        mStorage.showChangeDataFilePathDialog();
-    }
-
+    @Override
     public void readTasks() {
         mTasks.clear();
         mTasks.addAll(mStorage.readTasksFromDataFile());
@@ -160,18 +158,37 @@ public class Logic implements LogicInterface {
         storeCommandInHistory();
     }
 
-    /**
-     * Writes the master list of Task objects to the data file
-     */
-    private void writeTasks() {
+    @Override
+    public void writeTasks() {
         mStorage.writeTasksToDataFile(mTasks);
     }
-    
+
+    @Override
+    public File getDataFile() {
+        return mStorage.getDataFile();
+    }
+
+    @Override
+    public void setDataFile(File newDataFile) {
+        mStorage.setDataFile(newDataFile);
+        readTasks();
+    }
+
+    @Override
+    public void pushFilter(Filter filter) {
+        mUI.pushFilter(filter);
+    }
+
+    @Override
+    public Filter popFilter() {
+        return mUI.popFilter();
+    }
+
     public static ArrayList<Task> copyTaskList(ArrayList<Task> taskListToCopy) {
         ArrayList<Task> taskListCopy = new ArrayList<Task>();
-        
-        // Creates a deep copy of all tasks in the master task 
-        // list so that the same reference to the Task object will 
+
+        // Creates a deep copy of all tasks in the master task
+        // list so that the same reference to the Task object will
         // not be replicated in mHistoryStack.
         for (Task task : taskListToCopy) {
             Task taskCopy = task.newInstance();
@@ -187,7 +204,7 @@ public class Logic implements LogicInterface {
         ArrayList<Task> rootTaskList = copyTaskList(mTasks);
         mHistoryUndoStack.push(rootTaskList);
     }
-    
+
     /**
      * Clears the redo stack.
      */
@@ -196,12 +213,12 @@ public class Logic implements LogicInterface {
     }
 
     /**
-     * Obtains the last command the user input, if any.
-     * The undo stack initializes with the user's saved master task list and
-     * will only be restored until that particular instance.
+     * Obtains the last command the user input, if any. The undo stack
+     * initializes with the user's saved master task list and will only be
+     * restored until that particular instance.
      * 
-     * @return  An ArrayList of Tasks that will be displayed to the user 
-     *          after restoring from the undo stack.
+     * @return An ArrayList of Tasks that will be displayed to the user after
+     *         restoring from the undo stack.
      */
     public ArrayList<Task> restoreCommandFromHistory() {
         boolean rootHistoryReached = mHistoryUndoStack.size() == 1;
@@ -217,14 +234,14 @@ public class Logic implements LogicInterface {
             return mTasks;
         }
     }
-    
+
     /**
-     * Obtains the last command the user undid, if any.
-     * The redo stack initializes with no task list and will only be 
-     * restored until that particular empty instance.
+     * Obtains the last command the user undid, if any. The redo stack
+     * initializes with no task list and will only be restored until that
+     * particular empty instance.
      * 
-     * @return  An ArrayList of Tasks that will be displayed to the user 
-     *          after restoring from the redo stack.
+     * @return An ArrayList of Tasks that will be displayed to the user after
+     *         restoring from the redo stack.
      */
     public ArrayList<Task> restoreCommandFromRedoHistory() {
         boolean rootRedoHistoryReached = mHistoryRedoStack.isEmpty();

@@ -1,11 +1,12 @@
 package sg.edu.cs2103aug2015_w13_2j.ui;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
-import org.ocpsoft.prettytime.PrettyTime;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -23,7 +24,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+
+import org.ocpsoft.prettytime.PrettyTime;
+
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
@@ -45,6 +51,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public static final Font FONT_FEEDBACK = new Font(14);
     public static final double ID_MIN_WIDTH = 45;
 
+    private static final Logger LOGGER = Logger.getLogger(FXUI.class.getName());
     private static final int START_WIDTH = 700;
     private static final int START_HEIGHT = 600;
     private static final int MIN_WIDTH = 550;
@@ -62,6 +69,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     private final VBox mCenterVBox;
 
     private LogicInterface mLogic;
+    private Stage mStage;
 
     /**
      * Private constructor
@@ -71,13 +79,13 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         mFeedbackLabel.setPadding(PADDING_FEEDBACK);
         mFeedbackLabel.setFont(FONT_FEEDBACK);
         mFeedbackLabel.setId("mFeedbackLabel");
-        
+
         mTextField = new TextField();
         mTextField.setFont(FONT);
         mTextField.setOnKeyPressed(this);
         mTextField.setMaxWidth(Double.MAX_VALUE);
         mTextField.setId("mTextField");
-        
+
         DropShadow borderGlow = new DropShadow();
         borderGlow.setOffsetY(0f);
         borderGlow.setOffsetX(0f);
@@ -85,10 +93,9 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         borderGlow.setWidth(15);
         borderGlow.setHeight(15);
         mTextField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @SuppressWarnings("rawtypes")
             @Override
-            public void changed(ObservableValue ov, Boolean oldPropertyValue,
-                    Boolean newPropertyValue) {
+            public void changed(ObservableValue<? extends Boolean> ov,
+                    Boolean oldPropertyValue, Boolean newPropertyValue) {
                 if (newPropertyValue) {
                     mTextField.setEffect(borderGlow);
                 } else {
@@ -96,22 +103,25 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
                 }
             }
         });
-        
+
         mOrderedTasks = new ArrayList<Task>();
-        
+
         mFilterChain = new FilterChain();
         mFilteredCategory = new FXCategoryAccordion("");
-        mFilteredCategory.managedProperty()
-                .bind(mFilteredCategory.visibleProperty());
-        
+        // NOTE: Binding the managed property to the visible property to
+        // properly hide the UI element when visible is set to false. Otherwise
+        // the element will still take up space in layout as it is still managed
+        mFilteredCategory.managedProperty().bind(
+                mFilteredCategory.visibleProperty());
+
         mFloatingCategory = new FXCategoryAccordion("Someday");
-        mFloatingCategory.managedProperty()
-        .bind(mFloatingCategory.visibleProperty());
-        
+        mFloatingCategory.managedProperty().bind(
+                mFloatingCategory.visibleProperty());
+
         mUpcomingCategory = new FXCategoryAccordion("Events / Deadlines");
-        mUpcomingCategory.managedProperty()
-        .bind(mUpcomingCategory.visibleProperty());
-        
+        mUpcomingCategory.managedProperty().bind(
+                mUpcomingCategory.visibleProperty());
+
         mCenterVBox = new VBox(mFilteredCategory, mFloatingCategory,
                 mUpcomingCategory);
         mCenterVBox.setId("mCenterVBox");
@@ -136,13 +146,12 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
 
     @Override
     public void display(ArrayList<Task> tasks) {
-        // Clear the ordered task list and the container VBox
+        // Clear the ordered task list
         mOrderedTasks.clear();
         Collections.sort(tasks);
 
         if (mFilterChain.size() > 1) {
             List<Task> filteredTasks = mFilterChain.getTasksForDisplay();
-            Collections.sort(filteredTasks);
             mFilteredCategory.setName(mFilterChain.getFilterChain());
             mFilteredCategory.update(filteredTasks, mOrderedTasks.size());
             mOrderedTasks.addAll(filteredTasks);
@@ -162,7 +171,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
                 .collect(Collectors.toList());
         mFloatingCategory.update(floatingTasks, mOrderedTasks.size());
         mOrderedTasks.addAll(floatingTasks);
-        
+
         // Upcoming
         List<Task> upcomingTasks = tasks.stream()
                 .filter((Task t) -> t.getEnd() != null)
@@ -207,8 +216,27 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         mFilterChain.updateFilters(tasks);
     }
 
+    @Override
+    public void showChangeDataFilePathDialog() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Select FunDUE Data File");
+        fc.setInitialDirectory(mLogic.getDataFile().getParentFile());
+        fc.setInitialFileName(mLogic.getDataFile().getName());
+        fc.getExtensionFilters().add(
+                new ExtensionFilter("FunDUE Data Files", "*.txt"));
+        File selectedFile = fc.showSaveDialog(mStage);
+        LOGGER.log(
+                Level.INFO,
+                "Selected data file: "
+                        + (selectedFile == null ? "null" : selectedFile
+                                .getAbsolutePath()));
+        mLogic.setDataFile(selectedFile);
+    }
+
     public void createUI(Stage primaryStage) {
+        mStage = primaryStage;
         ScrollPane displayScrollPane = new ScrollPane(mCenterVBox) {
+            // OVerride to prevent blue focus highlights from appearing
             @Override
             public void requestFocus() {
                 // Do nothing
@@ -227,7 +255,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         container.setBottom(bottomVBox);
 
         Scene scene = new Scene(container, START_WIDTH, START_HEIGHT);
-        scene.getStylesheets().add(getClass().getResource("styleFX.css").toExternalForm());
+        scene.getStylesheets().add(
+                getClass().getResource("styleFX.css").toExternalForm());
 
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);
@@ -253,9 +282,9 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         }
     }
 
-	@Override
-	public String getFeedBackMessage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getFeedBackMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

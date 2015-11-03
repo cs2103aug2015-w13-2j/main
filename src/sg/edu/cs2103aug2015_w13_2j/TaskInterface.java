@@ -167,7 +167,7 @@ public interface TaskInterface extends Comparable<Task> {
      */
     public static Task parseTask(String taskString) {
         Task task = new Task();
-        String[] attributes = taskString.split("\r|\n");
+        String[] attributes = taskString.split("\n");
         for (String pair : attributes) {
             // Line cannot be empty
             if (!pair.isEmpty()) {
@@ -188,7 +188,7 @@ public interface TaskInterface extends Comparable<Task> {
     public static ArrayList<Task> parseTasks(String s)
             throws InvalidTaskException {
         ArrayList<Task> tasks = new ArrayList<Task>();
-        String[] taskStrings = s.split("\r\n\r\n");
+        String[] taskStrings = s.split("\n\n");
         for (String taskString : taskStrings) {
             // Check that the task string is not empty nor just whitespace
             // Note: refer to issue #124
