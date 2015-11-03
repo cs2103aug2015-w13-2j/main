@@ -10,7 +10,7 @@ public class PopHandler extends CommandHandler {
     private static final String SYNTAX = "";
     private static final String[] FLAGS = {};
     private static final String[] OPTIONS = {};
-    private static final String[] RESERVED = { "pop" };
+    private static final String[] RESERVED = { "pop", "back" };
     private static final String POP_SUCCESS = "Last filter removed.";
 
     public PopHandler() {
