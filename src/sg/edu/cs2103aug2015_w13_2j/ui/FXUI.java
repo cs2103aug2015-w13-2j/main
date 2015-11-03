@@ -105,7 +105,12 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
                 .bind(mFilteredCategory.visibleProperty());
         
         mFloatingCategory = new FXCategoryAccordion("Someday");
+        mFloatingCategory.managedProperty()
+        .bind(mFloatingCategory.visibleProperty());
+        
         mUpcomingCategory = new FXCategoryAccordion("Events / Deadlines");
+        mUpcomingCategory.managedProperty()
+        .bind(mUpcomingCategory.visibleProperty());
         
         mCenterVBox = new VBox(mFilteredCategory, mFloatingCategory,
                 mUpcomingCategory);
