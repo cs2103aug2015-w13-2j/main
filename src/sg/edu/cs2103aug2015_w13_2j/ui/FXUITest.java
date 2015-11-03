@@ -23,13 +23,11 @@ import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
 
 public class FXUITest extends Application implements UIInterface{
+	private FXUI mUI = FXUI.getInstance();  //<--here
 	private ArrayList<Task> mTasks;
     private FeedbackMessage mFeedback;
     private Logic mLogic = Logic.getInstance();
     private Storage mStorage = Storage.getInstance();
-    public FXUITest(){
-    	
-    }
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -45,7 +43,9 @@ public class FXUITest extends Application implements UIInterface{
         mLogic.registerCommandHandler(new HelpHandler());
         mLogic.registerCommandHandler(new LoadHandler());
         mLogic.registerCommandHandler(new SearchHandler());
-        mLogic.injectDependencies(mStorage, new FXUITest());
+        mUI.createUI(primaryStage);
+        mUI.injectDependency(mLogic);
+        mLogic.injectDependencies(mStorage, this);
         mLogic.readTasks();
         mLogic.display();
     }
