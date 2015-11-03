@@ -221,7 +221,7 @@ public class Logic implements LogicInterface {
      */
     public void storeCommandInRedoHistory(ArrayList<Task> taskListToRedo) {
         ArrayList<Task> copyOfTaskList = copyTaskList(taskListToRedo);
-        mHistoryUndoStack.push(copyOfTaskList);
+        mHistoryRedoStack.push(copyOfTaskList);
     }
 
     /**
@@ -280,9 +280,9 @@ public class Logic implements LogicInterface {
      *            List of {@link Task} objects the master {@link Task} 
      *            list will be updated to.
      */
-    private void refreshTaskList(ArrayList<Task> latestTaskListUndone) {
+    private void refreshTaskList(ArrayList<Task> taskList) {
         mTasks.clear();
-        mTasks.addAll(copyTaskList(latestTaskListUndone));
+        mTasks.addAll(copyTaskList(taskList));
         mUI.updateFilters(mTasks);
     }
 }
