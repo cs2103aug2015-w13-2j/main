@@ -1,5 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
+//@@author A0133387B
+
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class IntegrationTests {
         assertEquals(sFXUI.getFeedBackMessage(), "Task added successfully.");
     }
     
-    @Test
+   
     public void testDelete() throws TaskNotFoundException {
         sLogic.executeCommand("delete 1");
         assertEquals(sFXUI.getFeedBackMessage(), "Task deleted successfully."); 

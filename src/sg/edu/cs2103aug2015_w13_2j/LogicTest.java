@@ -11,6 +11,7 @@ import org.junit.Test;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageStub;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
 
@@ -30,7 +31,10 @@ public class LogicTest {
     public static void setup() {
         sLogic.registerCommandHandler(new AddHandler());
         sLogic.registerCommandHandler(new DeleteHandler());
+        sLogic.registerCommandHandler(new UndoHandler());
         sLogic.injectDependencies(sStorage, sTextUI);
+        sStorage.clearAllTasks();
+        sLogic.readTasks();
     }
 
     @Test
@@ -62,12 +66,16 @@ public class LogicTest {
     public void testIndex() throws TaskNotFoundException {//at this stage still have the first task above in the list
     	//note: the list is not sorted
         sLogic.executeCommand("add 'Go to CS2103T tutorial' -s 21/10T13:00 -e 21/10T14:00");
-        System.out.println("name 2 " + sLogic.getTask(0).getName());
         sLogic.executeCommand("add 'Do 2101 responses' -e 21/10T23:59");
         sLogic.executeCommand("add 'Revise for 2010'");
         sLogic.executeCommand("add 'Study for CS2105'");
         sLogic.executeCommand("add 'Clean room' -e 23/10");
-        
+        System.out.println("name 0 " + sLogic.getTask(0).getName());
+        System.out.println("name 1 " + sLogic.getTask(1).getName());
+        System.out.println("name 2 " + sLogic.getTask(2).getName());
+        System.out.println("name 3 " + sLogic.getTask(3).getName());
+        System.out.println("name 4 " + sLogic.getTask(4).getName());
+  
         testGetIndex(0);
         assertEquals(response, "Go to CS2103T tutorial");
         // boundary value analysis for valid range
@@ -96,5 +104,35 @@ public class LogicTest {
         sLogic.removeTask(0);
         testGetIndex(0);
         assertEquals(response, "0 is out of bounds!");
+    }
+    
+    @Test
+    public void testUndo(){
+    	
+        try {
+        	System.out.println("name 0 " + sLogic.getTask(0).getName());
+            System.out.println("name 1 " + sLogic.getTask(1).getName());
+			System.out.println("name 2 " + sLogic.getTask(2).getName());
+			System.out.println("name 3 " + sLogic.getTask(3).getName());
+	        System.out.println("name 4 " + sLogic.getTask(4).getName());
+		} catch (TaskNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
+    	sLogic.executeCommand("del 0");
+    	try {
+			assertEquals(sLogic.getTask(0).getName(), "Do 2101 responses");
+		} catch (TaskNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	sLogic.executeCommand("undo");
+    	try {
+			assertEquals(sLogic.getTask(0).getName(), "Go to CS2103T tutorial");
+		} catch (TaskNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }
