@@ -8,6 +8,19 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
+//@@author A0130894B
+
+/**
+* Undoes a command made by the user.
+* This class calls upon the Logic class to process and restore a user command 
+* from Logic's internal undo history stack.
+* 
+* A user feedback message will subsequently be returned upon undoing a command 
+* successfully. If the user has undone all the commands issued to FunDUE, a user 
+* feedback message will be returned to indicate that no more commands can be undone.
+* 
+* @author Natasha Koh Sze Sze
+*/
 public class UndoHandler extends CommandHandler {
     private static final String NAME = "Undo";
     private static final String SYNTAX = "<COMMAND_NAME>";

@@ -11,6 +11,19 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
+//@@author A0121410H
+
+/**
+* Deletes a task, or multiple tasks from the master task list.
+* An index that refers to that task, or indexes that refer to the multiple 
+* tasks to be deleted is expected to be specified.
+* 
+* A user feedback message will subsequently be displayed to indicate that 
+* this task was deleted successfully. If the Task index specified is out of range,
+* or does not exist, a user error message will be returned.
+* 
+* @author Zhu Chunqi
+*/
 public class DeleteHandler extends CommandHandler {
     private static final String NAME = "Delete Task";
     private static final String SYNTAX = "<TASK_ID>";

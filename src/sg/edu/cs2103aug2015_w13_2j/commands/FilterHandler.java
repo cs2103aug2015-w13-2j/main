@@ -9,6 +9,15 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
+//@@author A0121410H
+
+/**
+ * Filters tasks according to a filter specified by the user.
+ * 
+ * A user feedback message will subsequently be displayed to indicate that 
+ * this filter was applied successfully. If the filter specified is not 
+ * valid, or does not exist, an error message will be returned.
+ */
 public class FilterHandler extends CommandHandler {
     private static final String NAME = "Add Filter";
     private static final String SYNTAX = "<FILTER_NAME>";

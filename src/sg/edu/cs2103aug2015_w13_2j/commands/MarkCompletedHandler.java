@@ -10,16 +10,16 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
-// @@author A0130894B
+//@@author A0130894B
 
 /**
- * Marks a Task indicated by the user as "Completed" and archives it. For a Task
- * that has been marked as "Completed", it will be marked as "Uncompleted" and
- * be unarchived.
+ * Marks a Task indicated by the user as "Completed" or "Uncompleted". 
+ * An index that refers to that task, or indexes that refer to the multiple 
+ * tasks to be marked is expected to be specified.
  * 
- * A user feedback message will subsequently be returned upon marking the task
- * as "Completed" or "Uncompleted". If the Task index specified is out of range,
- * or does not exist, a user error message will be returned.
+ * A user feedback message will subsequently be returned upon marking the task. 
+ * If the Task index specified is out of range, or does not exist, a user error 
+ * message will be returned.
  * 
  * @author Natasha Koh Sze Sze
  */

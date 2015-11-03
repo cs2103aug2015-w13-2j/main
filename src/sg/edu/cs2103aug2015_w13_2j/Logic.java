@@ -184,6 +184,16 @@ public class Logic implements LogicInterface {
         return mUI.popFilter();
     }
 
+    //@@author A0130894B
+    
+    /**
+     * Utility method that creates a deep copy of the task list specified.
+     * 
+     * @param taskListToCopy
+     *          Task list that is to be copied.
+     * @return A list of tasks that has the same contents as taskListToCopy
+     *          but has a different object reference, i.e. is a different object.
+     */
     public static ArrayList<Task> copyTaskList(ArrayList<Task> taskListToCopy) {
         ArrayList<Task> taskListCopy = new ArrayList<Task>();
 
@@ -198,11 +208,20 @@ public class Logic implements LogicInterface {
     }
 
     /**
-     * Stores a deep copy of the master task list into the undo stack.
+     * Stores a deep copy of the master {@link Task} list into the 
+     * undo stack.
      */
     public void storeCommandInHistory() {
         ArrayList<Task> rootTaskList = copyTaskList(mTasks);
         mHistoryUndoStack.push(rootTaskList);
+    }
+
+    /**
+     * Stores a deep copy of a {@link Task} list into the redo stack.
+     */
+    public void storeCommandInRedoHistory(ArrayList<Task> taskListToRedo) {
+        ArrayList<Task> copyOfTaskList = copyTaskList(taskListToRedo);
+        mHistoryUndoStack.push(copyOfTaskList);
     }
 
     /**
@@ -213,12 +232,12 @@ public class Logic implements LogicInterface {
     }
 
     /**
-     * Obtains the last command the user input, if any. The undo stack
-     * initializes with the user's saved master task list and will only be
-     * restored until that particular instance.
+     * Retrieves the most recent user command, if any. The undo stack initializes 
+     * with the user's saved master {@link Task} list on its root stack and will 
+     * only be restored until that particular entry.
      * 
-     * @return An ArrayList of Tasks that will be displayed to the user after
-     *         restoring from the undo stack.
+     * @return List of {@link Task} objects that will be displayed 
+     *         after restoring from the undo stack.
      */
     public ArrayList<Task> restoreCommandFromHistory() {
         boolean rootHistoryReached = mHistoryUndoStack.size() == 1;
@@ -227,33 +246,43 @@ public class Logic implements LogicInterface {
         } else {
             ArrayList<Task> tasksToUndo = mHistoryUndoStack.pop();
             ArrayList<Task> latestTaskListUndone = mHistoryUndoStack.peek();
-            mHistoryRedoStack.push(copyTaskList(tasksToUndo));
-            mTasks.clear();
-            mTasks.addAll(copyTaskList(latestTaskListUndone));
-            mUI.updateFilters(mTasks);
+            storeCommandInRedoHistory(tasksToUndo);
+            refreshTaskList(latestTaskListUndone);
             return mTasks;
         }
     }
 
     /**
-     * Obtains the last command the user undid, if any. The redo stack
-     * initializes with no task list and will only be restored until that
-     * particular empty instance.
+     * Obtains the last command the user undid, if any. The redo stack initializes 
+     * with no {@link Task} list and will only be restored until that particular 
+     * empty entry.
      * 
-     * @return An ArrayList of Tasks that will be displayed to the user after
-     *         restoring from the redo stack.
+     * @return List of {@link Task} objects that will be displayed to the user 
+     *         after restoring from the redo stack.
      */
     public ArrayList<Task> restoreCommandFromRedoHistory() {
         boolean rootRedoHistoryReached = mHistoryRedoStack.isEmpty();
         if (rootRedoHistoryReached) {
             return null;
         } else {
-            ArrayList<Task> tasksToRedo = mHistoryRedoStack.pop();
-            mHistoryUndoStack.push(copyTaskList(tasksToRedo));
-            mTasks.clear();
-            mTasks.addAll(copyTaskList(tasksToRedo));
-            mUI.updateFilters(mTasks);
+            ArrayList<Task> latestTaskListRedone = mHistoryRedoStack.pop();
+            mHistoryUndoStack.push(copyTaskList(latestTaskListRedone));
+            refreshTaskList(latestTaskListRedone);
             return mTasks;
         }
+    }
+    
+    /**
+     * Refreshes the master {@link Task} list to show the latest 
+     * update to the user.
+     * 
+     * @param latestTaskListUndone
+     *            List of {@link Task} objects the master {@link Task} 
+     *            list will be updated to.
+     */
+    private void refreshTaskList(ArrayList<Task> latestTaskListUndone) {
+        mTasks.clear();
+        mTasks.addAll(copyTaskList(latestTaskListUndone));
+        mUI.updateFilters(mTasks);
     }
 }

@@ -10,6 +10,11 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
+//@@author A0130894B-unused
+
+// Unused as team decided to do away with Archive and Unarchive features 
+// as they, in fact, complicate the task management process for the user.
+
 /**
  * Unarchives a Task specified by the user.
  * 

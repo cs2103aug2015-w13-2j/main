@@ -7,6 +7,18 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
+//@@author A0121410H
+
+/**
+ * Adds a task to the master task list.
+ * A task name and optional flags/options for that task will be specified.
+ * 
+ * A user feedback message will subsequently be displayed to indicate that 
+ * this task was added successfully. If no valid task name was specified 
+ * in the user command, a user error message will be returned.
+ * 
+ * @author Zhu Chunqi
+ */
 public class AddHandler extends CommandHandler {
     private static final String NAME = "Add Task";
     private static final String SYNTAX = "<TASK_NAME> [-e DATETIME] [-s DATETIME]";

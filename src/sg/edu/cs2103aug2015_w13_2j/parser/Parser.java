@@ -9,6 +9,13 @@ import sg.edu.cs2103aug2015_w13_2j.Logic;
 
 // @@author A0121410H
 
+/**
+ * Parser class that handles the interpretation of all tokens in 
+ * the user's command input. This class ensures that all tokens of 
+ * the user command are of a specific Token type.
+ * 
+ * @author Zhu Chunqi
+ */
 public class Parser implements ParserInterface {
     private static final Logger LOGGER = Logger.getLogger(Parser.class
             .getName());
