@@ -25,13 +25,13 @@ import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
 
 // @@author A0133387B
 
-public class FXUITest extends Application implements UIInterface{
-	private FXUI mUI = FXUI.getInstance();  //<--here
-	private ArrayList<Task> mTasks;
+public class FXUITest extends Application implements UIInterface {
+    private FXUI mUI = FXUI.getInstance(); // <--here
+    private ArrayList<Task> mTasks;
     private FeedbackMessage mFeedback;
     private Logic mLogic = (Logic) Logic.getInstance();
     private Storage mStorage = Storage.getInstance();
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         mLogic.registerCommandHandler(new AddHandler());
@@ -53,11 +53,10 @@ public class FXUITest extends Application implements UIInterface{
         mLogic.display();
     }
 
-  
-    public ArrayList<Task> getTasksForDisplay(){
-    	return mTasks;
+    public ArrayList<Task> getTasksForDisplay() {
+        return mTasks;
     }
-    
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -67,56 +66,53 @@ public class FXUITest extends Application implements UIInterface{
         mLogic = (Logic) logic;
     }
 
-	@Override
-	public void display(ArrayList<Task> tasks) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void display(ArrayList<Task> tasks) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void display(String s) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public Task getTask(int index) throws TaskNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public void display(String s) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void feedback(FeedbackMessage f) {
-		mFeedback = f;
-	}
-	
-	public String getFeedBackMessage() {
-		return mFeedback.getMessage();
-	}
+    }
 
-    
-	public void pushFilter(Filter filter) {
-	
-		
-	}
+    @Override
+    public Task getTask(int index) throws TaskNotFoundException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Filter popFilter() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public void feedback(FeedbackMessage f) {
+        mFeedback = f;
+    }
 
-	@Override
-	public void updateFilters(ArrayList<Task> tasks) {
-		// TODO Auto-generated method stub
-		
-	}
+    public String getFeedBackMessage() {
+        return mFeedback.getMessage();
+    }
 
+    public void pushFilter(Filter filter) {
 
-	@Override
-	public void showChangeDataFilePathDialog() {
-		// TODO Auto-generated method stub
-		
-	}
-  
+    }
+
+    @Override
+    public Filter popFilter() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void updateFilters(ArrayList<Task> tasks) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void showChangeDataFilePathDialog() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

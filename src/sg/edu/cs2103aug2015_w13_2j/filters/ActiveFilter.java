@@ -10,14 +10,13 @@ public class ActiveFilter extends Filter {
     public ActiveFilter() {
         FILTER_NAME = "is:active";
     }
-    
+
     public void applyFilter(ArrayList<Task> tasks) {
         mTasks = new ArrayList<Task>();
-        for(Task task : tasks) {
-            if(!task.isCompleted()
-                    // overdue tasks are considered active
-                    && (!task.isOverdue() || task.getStart() == null
-                    && task.getEnd() != null)) {
+        for (Task task : tasks) {
+            // overdue tasks are considered active
+            if (!task.isCompleted() && (!task.isOverdue()
+                    || task.getStart() == null && task.getEnd() != null)) {
                 mTasks.add(task);
             }
         }

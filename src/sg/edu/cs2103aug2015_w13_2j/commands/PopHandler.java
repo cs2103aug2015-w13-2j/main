@@ -8,13 +8,12 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 // @@author A0121410H
 
 /**
-* Pops or removes a filter already specified by the user.
-* 
-* A user feedback message will subsequently be displayed to indicate that 
-* this filter was removed successfully. If there are no more applied 
-* filter(s) remaining, a user feedback message will be displayed to 
-* inform the user.
-*/
+ * Pops or removes a filter already specified by the user.
+ * 
+ * A user feedback message will subsequently be displayed to indicate that this
+ * filter was removed successfully. If there are no more applied filter(s)
+ * remaining, a user feedback message will be displayed to inform the user.
+ */
 public class PopHandler extends CommandHandler {
     private static final String NAME = "Pop Filter";
     private static final String SYNTAX = "";

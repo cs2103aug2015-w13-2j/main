@@ -19,8 +19,9 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FXUITest;
 
 public class IntegrationTests {
     private static LogicInterface sLogic = Logic.getInstance();
-	private static FXUITest sFXUI= new FXUITest();
+    private static FXUITest sFXUI = new FXUITest();
     private static Storage sStorage = Storage.getInstance();
+
     @BeforeClass
     public static void setup() {
         sLogic.registerCommandHandler(new AddHandler());
@@ -29,7 +30,7 @@ public class IntegrationTests {
         sLogic.registerCommandHandler(new PopHandler());
         sLogic.registerCommandHandler(new DeleteHandler());
         sLogic.registerCommandHandler(new MarkImportantHandler());
-		sLogic.injectDependencies(sStorage, sFXUI);
+        sLogic.injectDependencies(sStorage, sFXUI);
         sLogic.readTasks();
     }
 
@@ -39,10 +40,9 @@ public class IntegrationTests {
         sLogic.executeCommand("add '" + taskName + "'");
         assertEquals(sFXUI.getFeedBackMessage(), "Task added successfully.");
     }
-    
-   
+
     public void testDelete() throws TaskNotFoundException {
         sLogic.executeCommand("delete 1");
-        assertEquals(sFXUI.getFeedBackMessage(), "Task deleted successfully."); 
+        assertEquals(sFXUI.getFeedBackMessage(), "Task deleted successfully.");
     }
 }

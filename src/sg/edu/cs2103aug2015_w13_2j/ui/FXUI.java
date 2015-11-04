@@ -101,16 +101,16 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         // NOTE: Binding the managed property to the visible property to
         // properly hide the UI element when visible is set to false. Otherwise
         // the element will still take up space in layout as it is still managed
-        mFilteredCategory.managedProperty().bind(
-                mFilteredCategory.visibleProperty());
+        mFilteredCategory.managedProperty()
+                .bind(mFilteredCategory.visibleProperty());
 
         mFloatingCategory = new FXCategoryAccordion("Someday");
-        mFloatingCategory.managedProperty().bind(
-                mFloatingCategory.visibleProperty());
+        mFloatingCategory.managedProperty()
+                .bind(mFloatingCategory.visibleProperty());
 
         mUpcomingCategory = new FXCategoryAccordion("Events / Deadlines");
-        mUpcomingCategory.managedProperty().bind(
-                mUpcomingCategory.visibleProperty());
+        mUpcomingCategory.managedProperty()
+                .bind(mUpcomingCategory.visibleProperty());
 
         mCenterVBox = new VBox(mFilteredCategory, mFloatingCategory,
                 mUpcomingCategory);
@@ -134,8 +134,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         mContainer.setId("container");
         mContainer.setCenter(displayScrollPane);
         mContainer.setBottom(bottomVBox);
-        mContainer.getStylesheets().add(
-                getClass().getResource("styleFX.css").toExternalForm());
+        mContainer.getStylesheets()
+                .add(getClass().getResource("styleFX.css").toExternalForm());
     }
 
     /**
@@ -231,8 +231,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         fc.setTitle("Select FunDUE Data File");
         fc.setInitialDirectory(mLogic.getDataFile().getParentFile());
         fc.setInitialFileName(mLogic.getDataFile().getName());
-        fc.getExtensionFilters().add(
-                new ExtensionFilter("FunDUE Data Files", "*.txt"));
+        fc.getExtensionFilters()
+                .add(new ExtensionFilter("FunDUE Data Files", "*.txt"));
         File selectedFile = fc.showSaveDialog(null);
         if (selectedFile == null) {
             return false;
@@ -252,14 +252,14 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     @Override
     public void handle(KeyEvent event) {
         switch (event.getCode()) {
-        case ENTER:
+          case ENTER :
             mLogic.executeCommand(mTextField.getText());
             mTextField.setText("");
             break;
-        case ESCAPE:
+          case ESCAPE :
             Platform.exit();
             break;
-        default:
+          default :
             // Do nothing
         }
     }

@@ -13,13 +13,13 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 // @@author A0130894B
 
 /**
- * Toggles a Task specified by the user as "Important" or "Unimportant".
- * An index that refers to that task, or indexes that refer to the multiple 
- * tasks to be marked is expected to be specified.
+ * Toggles a Task specified by the user as "Important" or "Unimportant". An
+ * index that refers to that task, or indexes that refer to the multiple tasks
+ * to be marked is expected to be specified.
  * 
- * A user feedback message will subsequently be returned upon marking the task. 
- * If the Task index specified is out of range, or does not exist, a user 
- * error message will be returned.
+ * A user feedback message will subsequently be returned upon marking the task.
+ * If the Task index specified is out of range, or does not exist, a user error
+ * message will be returned.
  * 
  * @author Natasha Koh Sze Sze
  */

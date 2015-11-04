@@ -40,8 +40,8 @@ public class LogicTest {
         Task task = new Task("Do 2101 reflection");
         System.out.println("name 1 " + task.getName());
         sLogic.executeCommand("add " + task.getName());
-        //System.out.println("name 2" + sLogic.getTask(0).getName());
-        assert(sLogic.getTask(0) != null);
+        // System.out.println("name 2" + sLogic.getTask(0).getName());
+        assert (sLogic.getTask(0) != null);
     }
 
     /**
@@ -54,16 +54,18 @@ public class LogicTest {
     public void testGetIndex(int index) throws TaskNotFoundException {
         try {
             response = sLogic.getTask(index).getName();
-            //System.out.println(sLogic.getTask(index).getName());
+            // System.out.println(sLogic.getTask(index).getName());
         } catch (TaskNotFoundException e) {
             response = index + " is out of bounds!";
         }
     }
 
     @Test
-    public void testIndex() throws TaskNotFoundException {//at this stage still have the first task above in the list
-    	//note: the list is not sorted
-        sLogic.executeCommand("add 'Go to CS2103T tutorial' -s 21/10T13:00 -e 21/10T14:00");
+    public void testIndex() throws TaskNotFoundException {
+        // at this stage still have the first task above in the list
+        // note: the list is not sorted
+        sLogic.executeCommand(
+                "add 'Go to CS2103T tutorial' -s 21/10T13:00 -e 21/10T14:00");
         sLogic.executeCommand("add 'Do 2101 responses' -e 21/10T23:59");
         sLogic.executeCommand("add 'Revise for 2010'");
         sLogic.executeCommand("add 'Study for CS2105'");
@@ -73,7 +75,7 @@ public class LogicTest {
         System.out.println("name 2 " + sLogic.getTask(2).getName());
         System.out.println("name 3 " + sLogic.getTask(3).getName());
         System.out.println("name 4 " + sLogic.getTask(4).getName());
-  
+
         testGetIndex(0);
         assertEquals(response, "Go to CS2103T tutorial");
         // boundary value analysis for valid range
@@ -103,34 +105,34 @@ public class LogicTest {
         testGetIndex(0);
         assertEquals(response, "0 is out of bounds!");
     }
-    
+
     @Test
-    public void testUndo(){
-    	
+    public void testUndo() {
+
         try {
-        	System.out.println("name 0 " + sLogic.getTask(0).getName());
+            System.out.println("name 0 " + sLogic.getTask(0).getName());
             System.out.println("name 1 " + sLogic.getTask(1).getName());
-			System.out.println("name 2 " + sLogic.getTask(2).getName());
-			System.out.println("name 3 " + sLogic.getTask(3).getName());
-	        System.out.println("name 4 " + sLogic.getTask(4).getName());
-		} catch (TaskNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-        
-    	sLogic.executeCommand("del 0");
-    	try {
-			assertEquals(sLogic.getTask(0).getName(), "Do 2101 responses");
-		} catch (TaskNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-    	sLogic.executeCommand("undo");
-    	try {
-			assertEquals(sLogic.getTask(0).getName(), "Go to CS2103T tutorial");
-		} catch (TaskNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            System.out.println("name 2 " + sLogic.getTask(2).getName());
+            System.out.println("name 3 " + sLogic.getTask(3).getName());
+            System.out.println("name 4 " + sLogic.getTask(4).getName());
+        } catch (TaskNotFoundException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        sLogic.executeCommand("del 0");
+        try {
+            assertEquals(sLogic.getTask(0).getName(), "Do 2101 responses");
+        } catch (TaskNotFoundException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        sLogic.executeCommand("undo");
+        try {
+            assertEquals(sLogic.getTask(0).getName(), "Go to CS2103T tutorial");
+        } catch (TaskNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

@@ -23,7 +23,8 @@ public class LoadHandler extends CommandHandler {
     @Override
     public void execute(Logic logic, Command command) {
         if (logic.showChangeDataFilePathDialog()) {
-            logic.feedback(new FeedbackMessage(LOAD_SUCCESS, FeedbackType.INFO));
+            logic.feedback(
+                    new FeedbackMessage(LOAD_SUCCESS, FeedbackType.INFO));
         } else {
             logic.feedback(new FeedbackMessage(LOAD_CANCEL, FeedbackType.INFO));
         }

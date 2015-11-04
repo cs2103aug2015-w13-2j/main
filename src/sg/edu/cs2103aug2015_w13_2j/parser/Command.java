@@ -103,9 +103,9 @@ public class Command implements Iterable<Token> {
      */
     public Token removeReservedToken() {
         Iterator<Token> iter = mTokens.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             Token token = iter.next();
-            if(token.type == Type.RESERVED) {
+            if (token.type == Type.RESERVED) {
                 iter.remove();
                 return token;
             }

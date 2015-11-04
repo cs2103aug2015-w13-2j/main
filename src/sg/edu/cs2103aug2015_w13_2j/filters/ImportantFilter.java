@@ -10,11 +10,11 @@ public class ImportantFilter extends Filter {
     public ImportantFilter() {
         FILTER_NAME = "is:important";
     }
-    
+
     public void applyFilter(ArrayList<Task> tasks) {
         mTasks = new ArrayList<Task>();
-        for(Task task : tasks) {
-            if(task.isImportant()) {
+        for (Task task : tasks) {
+            if (task.isImportant()) {
                 mTasks.add(task);
             }
         }

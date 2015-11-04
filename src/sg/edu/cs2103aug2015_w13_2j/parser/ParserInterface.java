@@ -12,8 +12,8 @@ import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 // @@author A0121410H
 
 public interface ParserInterface {
-    public static final Logger LOGGER = Logger.getLogger(ParserInterface.class
-            .getName());
+    public static final Logger LOGGER = Logger
+            .getLogger(ParserInterface.class.getName());
 
     public class IllegalDateFormatException extends Exception {
         private static final long serialVersionUID = -3295451690918110371L;
@@ -92,8 +92,8 @@ public interface ParserInterface {
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < parts.length; i++) {
-            sb.append((parts[i] == -1 ? DATETIME_FORMAT_PARTS[i] : String
-                    .valueOf(parts[i])));
+            sb.append((parts[i] == -1 ? DATETIME_FORMAT_PARTS[i]
+                    : String.valueOf(parts[i])));
             if (i < parts.length - 1) {
                 sb.append('_');
             }

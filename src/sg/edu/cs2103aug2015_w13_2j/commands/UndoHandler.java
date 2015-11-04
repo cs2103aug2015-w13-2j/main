@@ -11,16 +11,16 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 // @@author A0130894B
 
 /**
-* Undoes a command made by the user.
-* This class calls upon the Logic class to process and restore a user command 
-* from Logic's internal undo history stack.
-* 
-* A user feedback message will subsequently be returned upon undoing a command 
-* successfully. If the user has undone all the commands issued to FunDUE, a user 
-* feedback message will be returned to indicate that no more commands can be undone.
-* 
-* @author Natasha Koh Sze Sze
-*/
+ * Undoes a command made by the user. This class calls upon the Logic class to
+ * process and restore a user command from Logic's internal undo history stack.
+ * 
+ * A user feedback message will subsequently be returned upon undoing a command
+ * successfully. If the user has undone all the commands issued to FunDUE, a
+ * user feedback message will be returned to indicate that no more commands can
+ * be undone.
+ * 
+ * @author Natasha Koh Sze Sze
+ */
 public class UndoHandler extends CommandHandler {
     private static final String NAME = "Undo";
     private static final String SYNTAX = "<COMMAND_NAME>";
@@ -33,14 +33,16 @@ public class UndoHandler extends CommandHandler {
     public UndoHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
-    
+
     @Override
     public void execute(Logic logic, Command command) {
         ArrayList<Task> restoredTaskList = logic.restoreCommandFromHistory();
         if (restoredTaskList == null) {
-            logic.feedback(new FeedbackMessage(UNDO_FAILURE, FeedbackType.INFO));
+            logic.feedback(
+                    new FeedbackMessage(UNDO_FAILURE, FeedbackType.INFO));
         } else {
-            logic.feedback(new FeedbackMessage(UNDO_SUCCESS, FeedbackType.INFO));
+            logic.feedback(
+                    new FeedbackMessage(UNDO_SUCCESS, FeedbackType.INFO));
         }
     }
 }

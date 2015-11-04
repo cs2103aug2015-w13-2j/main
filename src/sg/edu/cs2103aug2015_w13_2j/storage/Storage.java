@@ -24,8 +24,8 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 public class Storage implements StorageInterface {
     public static final String DEFAULT_DATAFILE_PATH = "./FunDUE.txt";
 
-    private static final Logger LOGGER = Logger.getLogger(Storage.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(Storage.class.getName());
     private static final Preferences PREFERENCES = Preferences
             .userNodeForPackage(Storage.class);
     private static final String PREFKEY_DATAFILE_PATH = "FUNDUE_DATAFILE_PATH";
@@ -83,7 +83,7 @@ public class Storage implements StorageInterface {
             LOGGER.log(Level.WARNING, "Failed to write tasks to data file", e);
         }
     }
-    
+
     @Override
     public File getDataFile() {
         return mDataFile;

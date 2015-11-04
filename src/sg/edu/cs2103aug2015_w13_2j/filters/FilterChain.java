@@ -20,8 +20,8 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
  * @author Zhu Chunqi
  */
 public class FilterChain {
-    private static final Logger LOGGER = Logger.getLogger(FilterChain.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(FilterChain.class.getName());
 
     private final Stack<Filter> mFilters = new Stack<Filter>();
 
@@ -134,8 +134,8 @@ public class FilterChain {
      */
     public Filter popFilter() {
         if (mFilters.size() > 1) {
-            LOGGER.log(Level.INFO, "Popped filter: "
-                    + mFilters.peek().getFilterName());
+            LOGGER.log(Level.INFO,
+                    "Popped filter: " + mFilters.peek().getFilterName());
             return mFilters.pop();
         } else {
             LOGGER.log(Level.WARNING, "Cannot pop root filter");

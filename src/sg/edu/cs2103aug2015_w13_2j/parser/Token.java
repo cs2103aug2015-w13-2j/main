@@ -9,7 +9,7 @@ package sg.edu.cs2103aug2015_w13_2j.parser;
  */
 public class Token {
     public static final Token EMPTY_TOKEN = new Token(Type.EMPTY, "");
-    
+
     public enum Type {
         EMPTY, RESERVED, DATE, DATE_INVALID, FLAG, FLAG_INVALID, ID, ID_INVALID, NAME, WHITESPACE, ALPHA_NUM;
     };
@@ -21,7 +21,7 @@ public class Token {
         this.type = type;
         this.value = value;
     }
-    
+
     public boolean isEmptyToken() {
         return this.type.equals(Token.Type.EMPTY);
     }

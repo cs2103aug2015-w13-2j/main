@@ -13,7 +13,7 @@ public class SearchFilter extends Filter {
         FILTER_NAME = "search:";
         for (int i = 0; i < needles.size(); i++) {
             FILTER_NAME += needles.get(i);
-            if(i < needles.size() - 1) {
+            if (i < needles.size() - 1) {
                 FILTER_NAME += ",";
             }
         }

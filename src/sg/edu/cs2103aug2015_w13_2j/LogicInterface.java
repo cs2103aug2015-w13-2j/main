@@ -37,7 +37,8 @@ public interface LogicInterface {
      *            will be retained to be called when a {@link CommandHandler}
      *            provides data to be displayed or provides feedback.
      */
-    public void injectDependencies(StorageInterface storage, UIInterface textUI);
+    public void injectDependencies(StorageInterface storage,
+            UIInterface textUI);
 
     /**
      * Retrieves the set of reserved keyword strings registered by

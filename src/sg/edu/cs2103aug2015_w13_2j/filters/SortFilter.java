@@ -48,13 +48,13 @@ public class SortFilter extends Filter {
 
     public SortFilter(String sortBy) throws InvalidSortFilterException {
         switch (sortBy) {
-        case "end_asc":
+          case "end_asc" :
             mComparator = END_ASC;
             break;
-        case "end_dsc":
+          case "end_dsc" :
             mComparator = END_DSC;
             break;
-        default:
+          default :
             throw new InvalidSortFilterException();
         }
         FILTER_NAME = "sort:" + sortBy;

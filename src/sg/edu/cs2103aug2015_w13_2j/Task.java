@@ -54,7 +54,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         this();
         setName(name);
     }
-    
+
     /**
      * Copy method to create a deep copy of this Task object
      * 
@@ -66,7 +66,7 @@ public class Task implements TaskInterface, Comparable<Task> {
         for (Map.Entry<String, String> label : mLabelsMap.entrySet()) {
             String labelName = label.getKey();
             String labelValue = label.getValue();
-            
+
             newTask.setLabel(labelName, labelValue);
         }
         return newTask;
@@ -244,7 +244,7 @@ public class Task implements TaskInterface, Comparable<Task> {
     }
 
     // @@author A0124007X
-    
+
     @Override
     public int compareTo(Task task) {
         if (this.getEnd() == null && task.getEnd() == null) {

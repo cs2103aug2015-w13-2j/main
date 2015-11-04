@@ -53,15 +53,16 @@ public class FXCategoryAccordion extends Accordion {
         mContainer.getChildren().clear();
 
         // Display Task objects in category
-        // Note: ID, importance and time labels will always take up their required
-        // space, while name label will grow horizontally to fill in available space
+        // Note: ID, importance and time labels will always take up their
+        // required space, while name label will grow horizontally to fill
+        // in available space
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             HBox row = new HBox();
             row.setMinHeight(35);
             row.setAlignment(Pos.CENTER);
             mContainer.getChildren().add(row);
-            
+
             Label idLabel = new Label((int) (i + offset + 1) + "");
             idLabel.setPadding(FXUI.PADDING_LR);
             idLabel.setAlignment(Pos.CENTER_LEFT);
@@ -69,7 +70,7 @@ public class FXCategoryAccordion extends Accordion {
             idLabel.setMinWidth(FXUI.ID_MIN_WIDTH);
             idLabel.setTextFill(Color.GREY);
             row.getChildren().add(idLabel);
-            
+
             Label importanceLabel = new Label("!");
             importanceLabel.setPadding(FXUI.PADDING_LR);
             importanceLabel.setFont(FXUI.FONT);
@@ -78,18 +79,18 @@ public class FXCategoryAccordion extends Accordion {
             if (task.isImportant()) {
                 row.getChildren().add(importanceLabel);
             }
-            
+
             Label nameLabel = new Label(task.getName());
             nameLabel.setPadding(FXUI.PADDING_LR);
             nameLabel.setFont(FXUI.FONT);
             HBox.setHgrow(nameLabel, Priority.ALWAYS);
             row.getChildren().add(nameLabel);
             nameLabel.getStyleClass().add("task");
-            
+
             Region spacer = new Region();
             row.getChildren().add(spacer);
             HBox.setHgrow(spacer, Priority.ALWAYS);
-            
+
             Label timeLabel;
             final SimpleDateFormat DATE = new SimpleDateFormat("d/M/yy HH:mm");
             final SimpleDateFormat DAY = new SimpleDateFormat("d/M/yy");
@@ -98,42 +99,41 @@ public class FXCategoryAccordion extends Accordion {
                 Date start = task.getStart();
                 Date end = task.getEnd();
 
-                // Shortens the description if start and end are the same day 
+                // Shortens the description if start and end are the same day
                 String timeString = "(" + DATE.format(start) + " - ";
                 if (DAY.format(start).equals(DAY.format(end))) {
                     timeString += TIME.format(end);
-                    
+
                 } else {
                     timeString += DATE.format(end);
                 }
                 timeString += ")";
                 timeLabel = new Label(timeString);
-                
+
                 row.getChildren().add(timeLabel);
             } else if (task.getEnd() != null) { // DEADLINE
                 Date end = task.getEnd();
-                
-                timeLabel = new Label(
-                        "(due " + DATE.format(end) + ")");
+
+                timeLabel = new Label("(due " + DATE.format(end) + ")");
                 Tooltip t = new Tooltip(
                         "(due " + FXUI.PRETTY_TIME.format(end) + ")");
                 // TODO: *BUG* tooltip doesn't work with labels?
                 // neither method below works
                 timeLabel.setTooltip(t);
                 Tooltip.install(timeLabel, t);
-                
+
                 row.getChildren().add(timeLabel);
             } else if (task.getStart() != null) { // FLOAT with start date
                 Date start = task.getStart();
-                
-                if (start.before(new Date())) { 
+
+                if (start.before(new Date())) {
                     timeLabel = new Label(
                             "(started " + DATE.format(start) + ")");
                 } else {
                     timeLabel = new Label(
                             "(starts " + DATE.format(start) + ")");
                 }
-                
+
                 row.getChildren().add(timeLabel);
             } else {
                 timeLabel = new Label();
@@ -142,8 +142,9 @@ public class FXCategoryAccordion extends Accordion {
             timeLabel.setFont(FXUI.FONT_SMALLER);
             timeLabel.setContentDisplay(ContentDisplay.CENTER);
             timeLabel.setMinWidth(Control.USE_PREF_SIZE);
-            
-            // Completed and overdue events all grey, overdue all red, otherwise orange
+
+            // Completed and overdue events all grey, overdue all red, otherwise
+            // orange
             if (task.isCompleted()) {
                 nameLabel.setTextFill(Color.GREY);
                 timeLabel.setTextFill(Color.GREY);

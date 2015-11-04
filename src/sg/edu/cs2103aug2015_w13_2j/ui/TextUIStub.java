@@ -100,7 +100,7 @@ public class TextUIStub implements UIInterface {
     @Override
     public void pushFilter(Filter filter) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -109,11 +109,11 @@ public class TextUIStub implements UIInterface {
         return null;
     }
 
-	@Override
-	public String getFeedBackMessage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getFeedBackMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     @Override
     public boolean showChangeDataFilePathDialog() {

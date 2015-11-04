@@ -13,9 +13,9 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 /**
  * Filters tasks according to a filter specified by the user.
  * 
- * A user feedback message will subsequently be displayed to indicate that 
- * this filter was applied successfully. If the filter specified is not 
- * valid, or does not exist, an error message will be returned.
+ * A user feedback message will subsequently be displayed to indicate that this
+ * filter was applied successfully. If the filter specified is not valid, or
+ * does not exist, an error message will be returned.
  */
 public class FilterHandler extends CommandHandler {
     private static final String NAME = "Add Filter";

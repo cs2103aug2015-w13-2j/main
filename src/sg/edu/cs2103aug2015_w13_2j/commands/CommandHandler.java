@@ -159,18 +159,20 @@ public abstract class CommandHandler {
         while (iter.hasNext()) {
             Token token = iter.next();
             switch (token.type) {
-            case FLAG:
+              case FLAG :
+                // Flags which expect the next token to be a date
                 String flag = token.value;
                 switch (flag) {
-                // Flags which expect the next token to be a date
-                case Parser.FLAG_END:
-                case Parser.FLAG_START:
+                  case Parser.FLAG_END :
+                    // Falls through
+                  case Parser.FLAG_START :
                     if (iter.hasNext()) {
                         Token nextToken = iter.next();
                         if (nextToken.type == Token.Type.DATE) {
                             if (flag.compareTo(Parser.FLAG_END) == 0) {
                                 task.setEnd(nextToken.value);
-                            } else if (flag.compareTo(Parser.FLAG_START) == 0) {
+                            } else if (flag.compareTo(
+                                    Parser.FLAG_START) == 0) {
                                 task.setStart(nextToken.value);
                             }
                         }
@@ -178,10 +180,10 @@ public abstract class CommandHandler {
                     break;
                 }
                 break;
-            case NAME:
+              case NAME :
                 task.setName(token.value);
                 break;
-            default:
+              default :
                 // Do nothing
                 break;
             }
@@ -223,7 +225,7 @@ public abstract class CommandHandler {
     }
 
     // @@author A0121410H
-    
+
     /**
      * Utility method that converts an array of strings into a sorted list of
      * strings

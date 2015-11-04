@@ -50,7 +50,8 @@ public class TextPane extends JTextPane {
     private static final Color COLOR_HIGHLIGHT = Color.RED;
 
     private static final AttributeSet STYLE_DEFAULT = getStyle(COLOR_NORMAL);
-    private static final AttributeSet STYLE_HIGHLIGHT = getStyle(COLOR_HIGHLIGHT);
+    private static final AttributeSet STYLE_HIGHLIGHT = getStyle(
+            COLOR_HIGHLIGHT);
 
     /**
      * SimpleDateFormatter object which formats date objects using
@@ -77,14 +78,14 @@ public class TextPane extends JTextPane {
         writeSeparator();
         if (tasks.size() > 0) {
             for (int i = 0; i < tasks.size(); i++) {
-				try {
-					if(tasks.get(i).isValid()){
-						writeTask(tasks.get(i), i);
-					}
-				} catch (InvalidTaskException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                try {
+                    if (tasks.get(i).isValid()) {
+                        writeTask(tasks.get(i), i);
+                    }
+                } catch (InvalidTaskException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         } else {
             print(SEPARATOR_VERTICAL);
@@ -144,11 +145,11 @@ public class TextPane extends JTextPane {
         print(SEPARATOR_VERTICAL);
         print(NEWLINE);
     }
-    
+
     private void writeStatus(Task t) {
-        if(t.isCompleted()) {
+        if (t.isCompleted()) {
             print("[D]");
-        } else if(t.isImportant()) {
+        } else if (t.isImportant()) {
             print("[!]", STYLE_HIGHLIGHT);
         } else {
             print("---");
@@ -224,7 +225,7 @@ public class TextPane extends JTextPane {
             writeCentered("---", WIDTH_DATE);
         } else {
             print(SEPARATOR_BLANK);
-            if(t.isOverdue()) {
+            if (t.isOverdue()) {
                 print(FORMAT_DATE.format(end), STYLE_HIGHLIGHT);
             } else {
                 print(FORMAT_DATE.format(end));

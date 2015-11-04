@@ -154,7 +154,7 @@ public interface TaskInterface extends Comparable<Task> {
     public boolean isValid() throws InvalidTaskException;
 
     // @@author A0124007X
-    
+
     /**
      * Converts a string into its corresponding Task object
      * 
