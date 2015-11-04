@@ -1,5 +1,4 @@
 package sg.edu.cs2103aug2015_w13_2j.ui;
-//@@author A0133387B 
 
 import java.util.ArrayList;
 
@@ -23,6 +22,8 @@ import sg.edu.cs2103aug2015_w13_2j.commands.SearchHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
+
+// @@author A0133387B
 
 public class FXUITest extends Application implements UIInterface{
 	private FXUI mUI = FXUI.getInstance();  //<--here

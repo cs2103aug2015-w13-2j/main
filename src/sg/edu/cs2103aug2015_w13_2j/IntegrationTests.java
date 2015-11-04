@@ -1,12 +1,10 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-//@@author A0133387B
-
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
@@ -16,6 +14,8 @@ import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FXUITest;
+
+// @@author A0133387B
 
 public class IntegrationTests {
     private static LogicInterface sLogic = Logic.getInstance();

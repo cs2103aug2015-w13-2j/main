@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 
-//@@author A0121410H
+// @@author A0121410H
 
 public interface ParserInterface {
     public static final Logger LOGGER = Logger.getLogger(ParserInterface.class

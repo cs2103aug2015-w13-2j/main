@@ -7,6 +7,8 @@ import java.util.Date;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
+// @@author NOAUTHOR
+
 public class SortFilter extends Filter {
 
     private static final Comparator<Task> END_ASC = new Comparator<Task>() {

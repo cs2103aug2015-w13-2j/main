@@ -19,6 +19,8 @@ import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FXUI;
 
+// @@author A0121410H
+
 public class FunDueFX extends Application {
     private static final int START_WIDTH = 700;
     private static final int START_HEIGHT = 600;

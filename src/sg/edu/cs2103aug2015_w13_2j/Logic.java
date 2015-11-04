@@ -19,6 +19,8 @@ import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.UIInterface;
 
+// @@author NOAUTHOR
+
 public class Logic implements LogicInterface {
     private static final Logger LOGGER = Logger
             .getLogger(Logic.class.getName());

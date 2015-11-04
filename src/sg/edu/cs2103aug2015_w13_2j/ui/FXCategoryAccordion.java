@@ -18,6 +18,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
+// @@author NOAUTHOR
+
 public class FXCategoryAccordion extends Accordion {
     private String mName;
     private final VBox mContainer;

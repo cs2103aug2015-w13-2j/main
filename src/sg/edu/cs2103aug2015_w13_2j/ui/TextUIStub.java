@@ -10,6 +10,8 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 
+// @@author NOAUTHOR
+
 public class TextUIStub implements UIInterface {
     private static final Logger LOGGER = Logger
             .getLogger(TextUIStub.class.getName());

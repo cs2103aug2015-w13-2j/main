@@ -1,9 +1,13 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+
+import org.junit.Test;
+
+// @@author NOAUTHOR
 
 public class TaskTest {
     // Use the same task object across the tests

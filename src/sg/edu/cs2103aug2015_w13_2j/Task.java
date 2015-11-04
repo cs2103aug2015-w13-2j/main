@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface;
 
-//@@author A0121410H
+// @@author A0121410H
 
 /**
  * Task class that encapsulates all the data that represents a task for e.g. the
@@ -207,8 +207,6 @@ public class Task implements TaskInterface, Comparable<Task> {
         }
     }
 
-    // @@author A0124007X
-
     /**
      * Converts the provided Task object into its string representation
      * 
@@ -245,8 +243,8 @@ public class Task implements TaskInterface, Comparable<Task> {
         return sb.toString();
     }
 
-    // @@author A0133387B
-
+    // @@author A0124007X
+    
     @Override
     public int compareTo(Task task) {
         if (this.getEnd() == null && task.getEnd() == null) {

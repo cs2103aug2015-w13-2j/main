@@ -9,6 +9,8 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextPane;
 
+// @@author NOAUTHOR
+
 public class HelpHandler extends CommandHandler {
     private static final String NAME = "Help";
     private static final String SYNTAX = "<COMMAND_NAME>";

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
+// @@author NOAUTHOR
+
 public class ImportantFilter extends Filter {
     public ImportantFilter() {
         FILTER_NAME = "is:important";

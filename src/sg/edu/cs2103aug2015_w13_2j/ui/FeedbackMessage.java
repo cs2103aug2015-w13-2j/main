@@ -2,7 +2,7 @@ package sg.edu.cs2103aug2015_w13_2j.ui;
 
 import java.awt.Color;
 
-//@@author A0121410H
+// @@author A0121410H
 
 /**
  * FeedbackMessage class encapsulates the data necessary to display styled

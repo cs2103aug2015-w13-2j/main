@@ -8,7 +8,7 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Token;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
-//@@author A0121410H
+// @@author A0121410H
 
 /**
  * Filters tasks according to a filter specified by the user.

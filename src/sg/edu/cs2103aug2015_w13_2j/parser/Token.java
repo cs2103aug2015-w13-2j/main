@@ -1,6 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j.parser;
 
-//@@author A0121410H
+// @@author A0121410H
 
 /**
  * Utility class that represents a parsed token and its corresponding value

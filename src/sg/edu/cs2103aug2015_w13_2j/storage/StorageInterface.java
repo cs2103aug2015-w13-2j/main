@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
-//@@author A0124007X
+// @@author A0124007X
 
 public interface StorageInterface {
     /**
@@ -22,8 +22,6 @@ public interface StorageInterface {
      *            List of tasks to be written to the data file
      */
     public void writeTasksToDataFile(ArrayList<Task> tasks);
-
-    // @@author A0121410H
 
     /**
      * Retrieves the {@link File} object representing the current FunDUE data

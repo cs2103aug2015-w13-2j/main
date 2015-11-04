@@ -12,7 +12,7 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 
-//@@author A0124007X
+// @@author A0124007X
 
 /**
  * Storage component which provides methods to store and retrieve a list of Task
@@ -116,8 +116,6 @@ public class Storage implements StorageInterface {
             }
         }
     }
-
-    // @@author A0124007X
 
     /**
      * Reads the contents of the data file

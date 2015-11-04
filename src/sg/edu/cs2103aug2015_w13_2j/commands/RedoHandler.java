@@ -8,7 +8,7 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
-//@@author A0130894B
+// @@author A0130894B
 
 /**
 * Redoes a command previously undone using the "Undo" command by the user.

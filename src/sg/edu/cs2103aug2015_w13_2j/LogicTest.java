@@ -13,7 +13,7 @@ import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageStub;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
 
-//@@author A0133387B
+// @@author A0133387B
 
 /**
  * Test cases for the Logic Component

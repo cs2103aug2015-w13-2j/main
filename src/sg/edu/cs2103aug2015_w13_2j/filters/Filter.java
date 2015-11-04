@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 
-//@@author A0121410H
+// @@author A0121410H
 
 /**
  * Base Filter class that all functional Filters extend from.

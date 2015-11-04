@@ -5,7 +5,7 @@ import java.util.Date;
 
 import sg.edu.cs2103aug2015_w13_2j.Task.Type;
 
-//@@author A0121410H
+// @@author A0121410H
 
 public interface TaskInterface extends Comparable<Task> {
     public class InvalidTaskException extends Exception {
@@ -154,6 +154,7 @@ public interface TaskInterface extends Comparable<Task> {
     public boolean isValid() throws InvalidTaskException;
 
     // @@author A0124007X
+    
     /**
      * Converts a string into its corresponding Task object
      * 

@@ -30,6 +30,8 @@ import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.ui.FXUI;
 import sg.edu.cs2103aug2015_w13_2j.ui.UIInterface;
 
+// @@author A0121410H
+
 public class FunDueDemo extends Application implements EventHandler<KeyEvent> {
     private static final Logger LOGGER = Logger.getLogger(FunDueDemo.class
             .getName());
