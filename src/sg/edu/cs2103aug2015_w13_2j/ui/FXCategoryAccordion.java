@@ -6,7 +6,6 @@ import java.util.List;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Accordion;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
@@ -52,6 +51,31 @@ public class FXCategoryAccordion extends Accordion {
         mTitledPane.setText(mName + " (" + tasks.size() + ")");
         mContainer.getChildren().clear();
 
+        // No tasks to display
+        if (tasks.size() == 0) {
+            HBox row = new HBox();
+            row.setMinHeight(35);
+            row.setAlignment(Pos.CENTER);
+            mContainer.getChildren().add(row);
+
+            Label idLabel = new Label();
+            idLabel.setPadding(FXUI.PADDING_LR);
+            idLabel.setFont(FXUI.FONT_SMALLER);
+            idLabel.setMinWidth(FXUI.ID_MIN_WIDTH);
+            row.getChildren().add(idLabel);
+
+            Label nameLabel = new Label("No tasks in this category.");
+            nameLabel.setPadding(FXUI.PADDING_LR);
+            nameLabel.setFont(FXUI.FONT);
+            nameLabel.setTextFill(Color.GREY);
+            HBox.setHgrow(nameLabel, Priority.ALWAYS);
+            row.getChildren().add(nameLabel);
+
+            Region spacer = new Region();
+            row.getChildren().add(spacer);
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+        }
+
         // Display Task objects in category
         // Note: ID, importance and time labels will always take up their
         // required space, while name label will grow horizontally to fill
@@ -65,7 +89,6 @@ public class FXCategoryAccordion extends Accordion {
 
             Label idLabel = new Label((int) (i + offset + 1) + "");
             idLabel.setPadding(FXUI.PADDING_LR);
-            idLabel.setAlignment(Pos.CENTER_LEFT);
             idLabel.setFont(FXUI.FONT_SMALLER);
             idLabel.setMinWidth(FXUI.ID_MIN_WIDTH);
             idLabel.setTextFill(Color.GREY);
@@ -140,7 +163,6 @@ public class FXCategoryAccordion extends Accordion {
             }
             timeLabel.setPadding(FXUI.PADDING_LR);
             timeLabel.setFont(FXUI.FONT_SMALLER);
-            timeLabel.setContentDisplay(ContentDisplay.CENTER);
             timeLabel.setMinWidth(Control.USE_PREF_SIZE);
 
             // Completed and overdue events all grey, overdue all red, otherwise
