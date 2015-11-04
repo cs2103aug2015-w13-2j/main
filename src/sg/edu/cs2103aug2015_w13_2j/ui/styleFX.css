@@ -2,10 +2,6 @@
     -fx-strikethrough: true;
 }
 
-.task {
-    -fx-padding: 0 0 5 0;
-}
-
 #container {
     -fx-border-width: 0;
 }
@@ -15,13 +11,13 @@
     -fx-border-width: 0;
 }
 
+#bottomVBox {
+    -fx-padding: 1 2 2 2;
+}
+
 #mTextField {
     -fx-border-width: 2px;
     -fx-focus-color: transparent;
-}
-
-#bottomVBox {
-    -fx-padding: 1 2 2 2;
 }
 
 #mTextField:focused {

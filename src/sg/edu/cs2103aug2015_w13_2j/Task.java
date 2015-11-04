@@ -258,7 +258,8 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     @Override
     public int compareTo(Task task) {
-        if (this.getEnd() == null && task.getEnd() == null){ // BOTH FLOAT
+        if (this.getEnd() == null && task.getEnd() == null) {
+            // BOTH FLOAT
             if (this.getStart() == null && task.getStart() == null) {
                 return this.getName().compareTo(task.getName());
             } else if (this.getStart() != null && task.getStart() == null) {
@@ -269,10 +270,23 @@ public class Task implements TaskInterface, Comparable<Task> {
                 return this.getStart().compareTo(task.getStart());
             }
         } else if (this.getStart() != null && task.getStart() != null
-                && !this.getStart().equals(task.getStart())) {
-            return this.getStart().compareTo(task.getStart());
-        } else if (this.getEnd() != null && task.getEnd() != null
-                && !this.getEnd().equals(task.getEnd())) {
+                && this.getEnd() != null && task.getEnd() != null) {
+            // BOTH EVENT
+            if (!this.getStart().equals(task.getStart())) {
+                return this.getStart().compareTo(task.getStart());
+            } else {
+                return this.getEnd().compareTo(task.getEnd());
+            }
+        } else if (this.getStart() != null && task.getStart() == null
+                && this.getEnd() != null && task.getEnd() != null) {
+            // ONE EVENT, ONE DEADLINE
+            return this.getStart().compareTo(task.getEnd());
+        } else if (this.getStart() == null && task.getStart() != null
+                && this.getEnd() != null && task.getEnd() != null) {
+            // ONE DEADLINE, ONE EVENT
+            return this.getEnd().compareTo(task.getStart());
+        } else if (this.getEnd() != null && task.getEnd() != null) {
+            // BOTH DEADLINE
             return this.getEnd().compareTo(task.getEnd());
         } else {
             return this.getName().compareTo(task.getName());

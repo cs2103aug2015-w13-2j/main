@@ -1,11 +1,16 @@
 package sg.edu.cs2103aug2015_w13_2j.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -51,12 +56,16 @@ public class FXCategoryAccordion extends Accordion {
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             HBox row = new HBox();
+            row.setMinHeight(35);
+            row.setAlignment(Pos.CENTER);
             mContainer.getChildren().add(row);
             
-            Label idLabel = new Label((int) (i + offset + 1) + ".");
+            Label idLabel = new Label((int) (i + offset + 1) + "");
             idLabel.setPadding(FXUI.PADDING_LR);
-            idLabel.setFont(FXUI.FONT);
+            idLabel.setAlignment(Pos.CENTER_LEFT);
+            idLabel.setFont(FXUI.FONT_SMALLER);
             idLabel.setMinWidth(FXUI.ID_MIN_WIDTH);
+            idLabel.setTextFill(Color.GREY);
             row.getChildren().add(idLabel);
             
             Label importanceLabel = new Label("!");
@@ -80,39 +89,61 @@ public class FXCategoryAccordion extends Accordion {
             HBox.setHgrow(spacer, Priority.ALWAYS);
             
             Label timeLabel;
+            final SimpleDateFormat SIMPLE_DATE = new SimpleDateFormat(
+                    //"d MMM yyyy HH:mm");
+                    "d/M/yy HH:mm");
             if (task.getStart() != null && task.getEnd() != null) { // EVENT
+                Date start = task.getStart();
+                Date end = task.getEnd();
+
+                // TODO: combine day/month/year for events
                 timeLabel = new Label(
-                        "(from " + FXUI.PRETTY_TIME.format(task.getStart()) + " to "
-                                + FXUI.PRETTY_TIME.format(task.getEnd()) + ")");
+                        "(" + SIMPLE_DATE.format(start) + " - "
+                                + SIMPLE_DATE.format(end) + ")");
+                
                 row.getChildren().add(timeLabel);
             } else if (task.getEnd() != null) { // DEADLINE
+                Date end = task.getEnd();
+                
                 timeLabel = new Label(
-                        "(due " + FXUI.PRETTY_TIME.format(task.getEnd()) + ")");
+                        "(due " + SIMPLE_DATE.format(end) + ")");
+                Tooltip t = new Tooltip(
+                        "(due " + FXUI.PRETTY_TIME.format(end) + ")");
+                // TODO: *BUG* tooltip doesn't work with labels?
+                timeLabel.setTooltip(t);
+                Tooltip.install(timeLabel, t);
+                
                 row.getChildren().add(timeLabel);
             } else if (task.getStart() != null) { // FLOAT with start date
-                timeLabel = new Label(
-                        "(starts/started " + FXUI.PRETTY_TIME.format(task.getStart()) + ")");
+                Date start = task.getStart();
+                
+                if (start.before(new Date())) { 
+                    timeLabel = new Label(
+                            "(started " + SIMPLE_DATE.format(start) + ")");
+                } else {
+                    timeLabel = new Label(
+                            "(starts " + SIMPLE_DATE.format(start) + ")");
+                }
+                
                 row.getChildren().add(timeLabel);
             } else {
                 timeLabel = new Label();
             }
             timeLabel.setPadding(FXUI.PADDING_LR);
-            timeLabel.setFont(FXUI.FONT);
+            timeLabel.setFont(FXUI.FONT_SMALLER);
+            timeLabel.setContentDisplay(ContentDisplay.CENTER);
             timeLabel.setMinWidth(Control.USE_PREF_SIZE);
             
             // Completed and overdue events all grey, overdue all red, otherwise orange
             if (task.isCompleted()) {
-                idLabel.setTextFill(Color.GREY);
                 nameLabel.setTextFill(Color.GREY);
                 timeLabel.setTextFill(Color.GREY);
                 nameLabel.getStyleClass().add("completed");
             } else if (task.isOverdue() && task.getStart() != null
                     && task.getEnd() != null) {
-                idLabel.setTextFill(Color.GREY);
                 nameLabel.setTextFill(Color.GREY);
                 timeLabel.setTextFill(Color.GREY);
             } else if (task.isOverdue()) {
-                idLabel.setTextFill(Color.RED);
                 nameLabel.setTextFill(Color.RED);
                 timeLabel.setTextFill(Color.RED);
             } else {
