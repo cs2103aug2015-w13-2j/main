@@ -89,27 +89,34 @@ public class FXCategoryAccordion extends Accordion {
             HBox.setHgrow(spacer, Priority.ALWAYS);
             
             Label timeLabel;
-            final SimpleDateFormat SIMPLE_DATE = new SimpleDateFormat(
-                    //"d MMM yyyy HH:mm");
-                    "d/M/yy HH:mm");
+            final SimpleDateFormat DATE = new SimpleDateFormat("d/M/yy HH:mm");
+            final SimpleDateFormat DAY = new SimpleDateFormat("d/M/yy");
+            final SimpleDateFormat TIME = new SimpleDateFormat("HH:mm");
             if (task.getStart() != null && task.getEnd() != null) { // EVENT
                 Date start = task.getStart();
                 Date end = task.getEnd();
 
-                // TODO: combine day/month/year for events
-                timeLabel = new Label(
-                        "(" + SIMPLE_DATE.format(start) + " - "
-                                + SIMPLE_DATE.format(end) + ")");
+                // Shortens the description if start and end are the same day 
+                String timeString = "(" + DATE.format(start) + " - ";
+                if (DAY.format(start).equals(DAY.format(end))) {
+                    timeString += TIME.format(end);
+                    
+                } else {
+                    timeString += DATE.format(end);
+                }
+                timeString += ")";
+                timeLabel = new Label(timeString);
                 
                 row.getChildren().add(timeLabel);
             } else if (task.getEnd() != null) { // DEADLINE
                 Date end = task.getEnd();
                 
                 timeLabel = new Label(
-                        "(due " + SIMPLE_DATE.format(end) + ")");
+                        "(due " + DATE.format(end) + ")");
                 Tooltip t = new Tooltip(
                         "(due " + FXUI.PRETTY_TIME.format(end) + ")");
                 // TODO: *BUG* tooltip doesn't work with labels?
+                // neither method below works
                 timeLabel.setTooltip(t);
                 Tooltip.install(timeLabel, t);
                 
@@ -119,10 +126,10 @@ public class FXCategoryAccordion extends Accordion {
                 
                 if (start.before(new Date())) { 
                     timeLabel = new Label(
-                            "(started " + SIMPLE_DATE.format(start) + ")");
+                            "(started " + DATE.format(start) + ")");
                 } else {
                     timeLabel = new Label(
-                            "(starts " + SIMPLE_DATE.format(start) + ")");
+                            "(starts " + DATE.format(start) + ")");
                 }
                 
                 row.getChildren().add(timeLabel);
