@@ -9,7 +9,6 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -136,15 +135,7 @@ public class FXCategoryAccordion extends Accordion {
                 row.getChildren().add(timeLabel);
             } else if (task.getEnd() != null) { // DEADLINE
                 Date end = task.getEnd();
-
                 timeLabel = new Label("(due " + DATE.format(end) + ")");
-                Tooltip t = new Tooltip(
-                        "(due " + FXUI.PRETTY_TIME.format(end) + ")");
-                // TODO: *BUG* tooltip doesn't work with labels?
-                // neither method below works
-                timeLabel.setTooltip(t);
-                Tooltip.install(timeLabel, t);
-
                 row.getChildren().add(timeLabel);
             } else if (task.getStart() != null) { // FLOAT with start date
                 Date start = task.getStart();
