@@ -46,14 +46,12 @@ public class MarkCompletedHandler extends CommandHandler {
                 Task task = logic.getTask(index);
                 if (task.isCompleted()) {
                     task.setCompleted(false);
-                    //task.setArchived(false);
-                    logCompletedArchivedTask(task);
+                    logCompletedTask(task);
                     logic.feedback(new FeedbackMessage(SET_UNCOMPLETED_SUCCESS,
                             FeedbackType.INFO));
                 } else {
                     task.setCompleted(true);
-                    //task.setArchived(true);
-                    logCompletedArchivedTask(task);
+                    logCompletedTask(task);
                     logic.feedback(new FeedbackMessage(SET_COMPLETED_SUCCESS,
                             FeedbackType.INFO));
                 }
@@ -65,10 +63,9 @@ public class MarkCompletedHandler extends CommandHandler {
         }
     }
 
-    private void logCompletedArchivedTask(Task task) {
+    private void logCompletedTask(Task task) {
         String nameOfTask = task.getName();
         LOGGER.info("[CommandHandler][MarkCompletedHandler] '" + nameOfTask
-                + "' completed status is: " + task.isCompleted()
-                + " archived status is: " + task.isArchived());
+                + "' completed status is: " + task.isCompleted());
     }
 }

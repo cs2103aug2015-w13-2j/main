@@ -12,7 +12,7 @@ public class ActiveFilter extends Filter {
     public void applyFilter(ArrayList<Task> tasks) {
         mTasks = new ArrayList<Task>();
         for(Task task : tasks) {
-            if(!task.isArchived() && !task.isCompleted()
+            if(!task.isCompleted()
                     // overdue tasks are considered active
                     && (!task.isOverdue() || task.getStart() == null
                     && task.getEnd() != null)) {

@@ -9,13 +9,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
-import sg.edu.cs2103aug2015_w13_2j.commands.ArchiveHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.FilterHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
-import sg.edu.cs2103aug2015_w13_2j.commands.UnarchiveHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FXUITest;
 
@@ -26,8 +24,6 @@ public class IntegrationTests {
     @BeforeClass
     public static void setup() {
         sLogic.registerCommandHandler(new AddHandler());
-        sLogic.registerCommandHandler(new ArchiveHandler());
-        sLogic.registerCommandHandler(new UnarchiveHandler());
         sLogic.registerCommandHandler(new EditHandler());
         sLogic.registerCommandHandler(new FilterHandler());
         sLogic.registerCommandHandler(new PopHandler());

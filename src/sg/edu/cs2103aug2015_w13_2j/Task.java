@@ -24,7 +24,6 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     private static final String TRUE_VALUE = "TRUE";
     private static final String FALSE_VALUE = "FALSE";
-    private static final String LABEL_ARCHIVED = "ARCHIVED";
     private static final String LABEL_COMPLETED = "COMPLETED";
     private static final String LABEL_CREATED = "CREATED";
     private static final String LABEL_END = "END";
@@ -143,14 +142,6 @@ public class Task implements TaskInterface, Comparable<Task> {
 
     public boolean isCompleted() {
         return getBooleanValue(LABEL_COMPLETED);
-    }
-
-    public void setArchived(boolean archived) {
-        setBooleanValue(LABEL_ARCHIVED, archived);
-    }
-
-    public boolean isArchived() {
-        return getBooleanValue(LABEL_ARCHIVED);
     }
 
     public void setImportant(boolean important) {

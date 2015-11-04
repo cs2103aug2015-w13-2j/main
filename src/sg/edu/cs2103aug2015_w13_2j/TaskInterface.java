@@ -119,7 +119,7 @@ public interface TaskInterface extends Comparable<Task> {
      * Sets true or false for a property of the task
      * 
      * @param propertyString
-     *            where property is completed or archived or important
+     *            where property is completed or important
      * 
      *            Gets the flag for a property of the task
      * @return String representing true or false for a property of the task
@@ -128,10 +128,6 @@ public interface TaskInterface extends Comparable<Task> {
     public void setCompleted(boolean completed);
 
     public boolean isCompleted();
-
-    public void setArchived(boolean archived);
-
-    public boolean isArchived();
 
     public void setImportant(boolean important);
 

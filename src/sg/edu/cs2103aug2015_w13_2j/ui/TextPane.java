@@ -146,9 +146,7 @@ public class TextPane extends JTextPane {
     }
     
     private void writeStatus(Task t) {
-        if(t.isArchived()) {
-            print("[A]", STYLE_HIGHLIGHT);
-        } else if(t.isCompleted()) {
+        if(t.isCompleted()) {
             print("[D]");
         } else if(t.isImportant()) {
             print("[!]", STYLE_HIGHLIGHT);
