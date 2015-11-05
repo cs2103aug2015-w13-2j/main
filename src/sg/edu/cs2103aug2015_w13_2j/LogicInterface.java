@@ -142,6 +142,20 @@ public interface LogicInterface {
     public Task getTask(int index) throws TaskNotFoundException;
 
     /**
+     * Removes the {@link Task} object from the master list of {@link Task} 
+     * objects. {@link ArrayList#remove(Object)} is called to remove the 
+     * {@link Task} object from the master list of {@link Task} objects.
+     * 
+     * @param task
+     *            {@link Task} object to be removed.
+     * @return {@link Task} object specified. An exception will be thrown 
+     *         if any provided index is out of bounds.
+     * @throws TaskNotFoundException
+     *             Thrown when the provided index is out of bounds.
+     */
+    public Task removeTask(Task task) throws TaskNotFoundException;
+    
+    /**
      * Removes the {@link Task} object associated with the provided index from
      * the master list of {@link Task} objects. The provided index is specific
      * to the way the {@link UIInterface} component chooses to display the
