@@ -30,11 +30,13 @@ import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.ui.FXUI;
 import sg.edu.cs2103aug2015_w13_2j.ui.UIInterface;
 
-// @@author A0121410H
+// @@author A0121410H-unused
+// Reason: Used exclusively for our CS2101 OP2 Software Demonstration.
+// Additional banner atop the application UI to show our banner slides.
 
 public class FunDueDemo extends Application implements EventHandler<KeyEvent> {
-    private static final Logger LOGGER = Logger
-            .getLogger(FunDueDemo.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(FunDueDemo.class
+            .getName());
     private static final String SLIDE_PATH = "file:resources/demo/Slide%d.JPG";
     private static final int SLIDE_START = 1;
     private static final int SLIDE_END = 9;
@@ -90,21 +92,21 @@ public class FunDueDemo extends Application implements EventHandler<KeyEvent> {
     @Override
     public void handle(KeyEvent event) {
         switch (event.getCode()) {
-          case UP :
+        case UP :
             LOGGER.log(Level.INFO, "UP " + mSlide);
             if (mSlide > SLIDE_START) {
                 mSlide--;
                 loadSlide();
             }
             break;
-          case DOWN :
+        case DOWN :
             LOGGER.log(Level.INFO, "DOWN" + mSlide);
             if (mSlide < SLIDE_END) {
                 mSlide++;
                 loadSlide();
             }
             break;
-          default :
+        default :
             // Do nothing
         }
     }

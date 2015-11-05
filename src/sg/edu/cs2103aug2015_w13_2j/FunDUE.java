@@ -15,7 +15,9 @@ import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
 
-// @@author A0121410H
+// @@author A0121410H-unused
+// Reason: Old AWT-based UI initialization procedure, replaced with JavaFX
+// version
 
 public class FunDUE {
     private TextUI mTextUI;

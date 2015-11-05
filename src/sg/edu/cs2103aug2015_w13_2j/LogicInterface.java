@@ -8,7 +8,6 @@ import java.util.Set;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
-import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.UIInterface;
@@ -16,44 +15,45 @@ import sg.edu.cs2103aug2015_w13_2j.ui.UIInterface;
 // @@author A0121410H
 
 /**
- * Interface for the logic component. Provides methods to modify the master list
- * of {@link Task} objects as well as to interact with the {@link UIInterface}
- * component and {@link StorageInterface} component via pass-through methods.
+ * Interface for a FunDUE logic component. Provides methods to modify the master
+ * list of {@link Task} objects as well as methods to interact with the
+ * {@link UIInterface} and {@link StorageInterface} components via pass-through
+ * methods.
  * 
  * @author Zhu Chunqi
  */
 public interface LogicInterface {
     /**
-     * Injects the dependency on components implementing the
-     * {@link StorageInterface} and {@link UIInterface} into this
-     * {@link LogicInterface} component.
+     * Injects the dependency on {@link StorageInterface} and
+     * {@link UIInterface} components into this {@link LogicInterface}
+     * component.
      * 
      * @param storage
-     *            A {@link StorageInterface} component. A handle to this
-     *            component will be retained for subsequent calls to
-     *            {@link #readTasks()} and {@link #writeTasks()}.
+     *            {@link StorageInterface} component to be used. A handle to
+     *            this component will be retained for subsequent I/O method
+     *            calls.
      * @param textUI
-     *            An {@link UIInterface} component. A handle to this component
-     *            will be retained to be called when a {@link CommandHandler}
-     *            provides data to be displayed or provides feedback.
+     *            {@link UIInterface} component to be used. A handle to this
+     *            component will be retained for when a {@link CommandHandler}
+     *            requires data to be displayed or {@link FeedbackMessage} to be
+     *            shown.
      */
-    public void injectDependencies(StorageInterface storage,
-            UIInterface textUI);
+    public void injectDependencies(StorageInterface storage, UIInterface textUI);
 
     /**
-     * Retrieves the set of reserved keyword strings registered by
-     * {@link CommandHandler} objects during initialization via
-     * {@link #registerCommandHandler(CommandHandler)}.
+     * Retrieves the {@link Set} of reserved keyword strings registered by
+     * {@link CommandHandler} objects during FunDUE initialization.
      * 
-     * @return Set of reserved keyword strings.
+     * @return {@link Set} of reserved keyword strings.
+     * @see #registerCommandHandler(CommandHandler)
      */
     public Set<String> getReservedKeywords();
 
     /**
-     * Retrieves a map of the reserved keyword strings to their respective
-     * {@link CommandHandler} objects.
+     * Retrieves the {@link HashMap} of reserved keyword strings to their
+     * respective {@link CommandHandler} objects.
      * 
-     * @return {@link HashMap} object of the reserved keyword strings to their
+     * @return {@link HashMap} mapping reserved keyword strings to their
      *         respective {@link CommandHandler} objects.
      */
     public HashMap<String, CommandHandler> getCommandHandlers();
@@ -71,7 +71,7 @@ public interface LogicInterface {
     public void registerCommandHandler(CommandHandler handler);
 
     /**
-     * Executes the command entered by the user.
+     * Executes the command string entered by the user.
      * 
      * @param command
      *            Command string to execute.
@@ -112,8 +112,7 @@ public interface LogicInterface {
 
     /**
      * Adds the provided {@link Task} object to the master list of {@link Task}
-     * objects and updates the {@link FilterChain} in the {@link UIInterface}
-     * component.
+     * objects.
      * 
      * @param task
      *            {@link Task} object to be added.
@@ -123,19 +122,18 @@ public interface LogicInterface {
     /**
      * Retrieves the {@link Task} object associated with the provided index from
      * the master list of {@link Task} objects. The provided index is specific
-     * to the way the {@link UIInterface} component chooses to display the
-     * master list of {@link Task} objects. Therefore,
+     * to the way the {@link UIInterface} component chooses to display and index
+     * the master list of {@link Task} objects. Therefore,
      * {@link UIInterface#getTask(int)} is first called to retrieve the
-     * {@link Task} object associated with the provided index,
+     * {@link Task} object from the {@link UIInterface} component,
      * {@link ArrayList#indexOf(Object)} is called to retrieve the corresponding
-     * index in the master list of {@link Task} objects and finally the index is
-     * used to retrieve the associated {@link Task} object from the master list
-     * of {@link Task} objects.
+     * index in the master list of {@link Task} objects, and finally that index
+     * is used to retrieve the associated {@link Task} object from the master
+     * list of {@link Task} objects.
      * 
      * @param index
-     *            Integer index of the {@link Task} object to be retrieved.
-     * @return {@link Task} object associated with the provided index. An
-     *         exception will be thrown if the provided index is out of bounds.
+     *            Index of the {@link Task} object to be retrieved.
+     * @return {@link Task} object associated with the provided index.
      * @throws TaskNotFoundException
      *             Thrown when the provided index is out of bounds.
      */
@@ -158,8 +156,8 @@ public interface LogicInterface {
     /**
      * Removes the {@link Task} object associated with the provided index from
      * the master list of {@link Task} objects. The provided index is specific
-     * to the way the {@link UIInterface} component chooses to display the
-     * master list of {@link Task} objects. Therefore,
+     * to the way the {@link UIInterface} component chooses to display and index
+     * the master list of {@link Task} objects. Therefore,
      * {@link UIInterface#getTask(int)} is first called to retrieve the
      * {@link Task} object associated with the provided index, then
      * {@link ArrayList#remove(Object)} is called to remove the {@link Task}
@@ -176,14 +174,14 @@ public interface LogicInterface {
 
     /**
      * Reads the master list of {@link Task} objects from the FunDUE data file
-     * via the {@link StorageInterface} component. The current list of
+     * using the {@link StorageInterface} component. The current master list of
      * {@link Task} objects will be cleared first.
      */
     public void readTasks();
 
     /**
      * Writes the master list of {@link Task} objects to the FunDUE data file
-     * via the {@link StorageInterface} component.
+     * using the {@link StorageInterface} component.
      */
     public void writeTasks();
 
@@ -198,12 +196,12 @@ public interface LogicInterface {
 
     /**
      * Pass-through method to {@link StorageInterface#setDataFile(File)} which
-     * sets the provided {@link File} object as new the FunDUE data file.
+     * sets the provided {@link File} object as the new FunDUE data file.
      * 
-     * @param newDataFile
+     * @param dataFile
      *            {@link File} object to be used as the FunDUE data file.
      */
-    public void setDataFile(File newDataFile);
+    public void setDataFile(File dataFile);
 
     /**
      * Pass-through method to {@link UIInterface#pushFilter(Filter)} which
@@ -216,8 +214,8 @@ public interface LogicInterface {
     public void pushFilter(Filter filter);
 
     /**
-     * Pass-through method to {@link UIInterface#popFilter()} which pops the
-     * last {@link Filter} object from the filter chain stack and returns it.
+     * Pass-through method to {@link UIInterface#popFilter()} which pops the top
+     * most {@link Filter} object from the filter chain stack and returns it.
      * 
      * @return {@link Filter} object that was popped from the filter chain stack
      *         or {@code null} if only the root {@link Filter} is left.
@@ -227,7 +225,8 @@ public interface LogicInterface {
     // @@author A0130894B
 
     /**
-     * Stores a deep copy of the master {@link Task} list into the undo stack.
+     * Stores a deep copy of the master list of {@link Task} objects into the
+     * undo stack.
      */
     void storeCommandInHistory();
 

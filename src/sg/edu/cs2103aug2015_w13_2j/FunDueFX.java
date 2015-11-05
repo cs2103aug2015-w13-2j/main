@@ -17,22 +17,35 @@ import sg.edu.cs2103aug2015_w13_2j.commands.RedoHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.SearchHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
+import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.ui.FXUI;
+import sg.edu.cs2103aug2015_w13_2j.ui.UIInterface;
 
 // @@author A0121410H
 
+/**
+ * Main FunDUE class and JavaFX entry point. Extends the JavaFX
+ * {@link Application} class.
+ * 
+ * @author Zhu Chunqi
+ */
 public class FunDueFX extends Application {
+    // Initial width and height of the FunDUE window
     private static final int START_WIDTH = 700;
     private static final int START_HEIGHT = 600;
+
+    // Minimum width and height that the FunDUE window can be resized to
     private static final int MIN_WIDTH = 550;
     private static final int MIN_HEIGHT = 500;
 
-    private FXUI mUI = FXUI.getInstance();
+    // Retrieve singleton instances of application dependencies
+    private UIInterface mUI = FXUI.getInstance();
     private LogicInterface mLogic = Logic.getInstance();
-    private Storage mStorage = Storage.getInstance();
+    private StorageInterface mStorage = Storage.getInstance();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // Register all the command handlers
         mLogic.registerCommandHandler(new AddHandler());
         mLogic.registerCommandHandler(new EditHandler());
         mLogic.registerCommandHandler(new DeleteHandler());
@@ -46,6 +59,7 @@ public class FunDueFX extends Application {
         mLogic.registerCommandHandler(new LoadHandler());
         mLogic.registerCommandHandler(new SearchHandler());
 
+        // Create the main FunDUE window and style it
         Scene scene = new Scene(mUI.getUI(), START_WIDTH, START_HEIGHT);
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);

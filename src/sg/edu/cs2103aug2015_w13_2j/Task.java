@@ -12,12 +12,12 @@ import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface;
 
 /**
  * Task class that encapsulates all the data that represents a task for e.g. the
- * name, deadline etc. Also provides getter and setter methods to manipulate the
- * attributes
+ * name, deadline etc. Also provides getter and setter methods to manipulate
+ * named built-in attributes.
  * 
  * @author Zhu Chunqi
  */
-public class Task implements TaskInterface, Comparable<Task> {
+public class Task implements TaskInterface, Comparable<Task>, Cloneable {
     public enum Type {
         DEADLINE, EVENT, FLOATING
     }
@@ -205,6 +205,15 @@ public class Task implements TaskInterface, Comparable<Task> {
         } catch (NumberFormatException e) {
             return 0;
         }
+    }
+
+    @Override
+    public Task clone() {
+        Task task = new Task(getName());
+        for (String label : mLabels.keySet()) {
+            task.setLabel(label, task.getLabel(label));
+        }
+        return task;
     }
 
     /**
