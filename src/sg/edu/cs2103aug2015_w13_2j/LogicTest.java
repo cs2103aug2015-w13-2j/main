@@ -102,12 +102,12 @@ public class LogicTest {
         sLogic.addTask(task2);
         sLogic.addTask(task3);
         
-        // Test deleting a single item
+        // Partition for valid deletion of single Task object
         int expectedSizeOfMasterTaskList = 2;
         sLogic.removeTask(task1);
         assertEquals(expectedSizeOfMasterTaskList, sLogic.getAllTasks().size());
         
-        // Test deleting an item not in the task list
+        // Partition for valid deletion of Task object not found
         Task unknownTask = new Task();
         String expectedErrorMsgForUnknownTask = 
                 FeedbackMessage.ERROR_TASK_NOT_FOUND.getMessage();
@@ -123,8 +123,22 @@ public class LogicTest {
     public void testEditingTaskAttributes() throws TaskNotFoundException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         
-        // Test for editing the name of a task
-        int indexOfTask1 = 0;
+        testEditTaskName();
+        testEditEndDate(dateFormat);
+        testEditStartDate(dateFormat);
+    }
+
+    /**
+     * Test partition for valid editing of single Task object's name 
+     * for testing the edit command.
+     * 
+     * @param dateFormat
+     *          Date format used in this test case.
+     * @throws TaskNotFoundException
+     *          Thrown when the provided index is out of bounds.
+     */
+    private void testEditTaskName() throws TaskNotFoundException {
+        int indexOfTask1 = 1;
         String taskName1 = "'Test Edit 1'";
         String expectedTaskName1Changed = "Test Edit 1 Change Name";
         
@@ -135,27 +149,19 @@ public class LogicTest {
         Task actualEditedTask1 = sLogic.getTask(indexOfTask1);
         String actualNameOfEditedTask1 = actualEditedTask1.getName();
         assertEquals(expectedTaskName1Changed, actualNameOfEditedTask1);
-        
-        // Test for editing the end date of a task
-        int indexOfTask2 = 1;
-        String taskName2 = "'Test Edit 2'";
-        String endDateOfTask2 = "23/09/2015";
-        String endDateOfTask2Changed = "24/09/2015";
-        
-        sLogic.executeCommand("add " + taskName2 + " -e " + endDateOfTask2);
-        sLogic.executeCommand("edit " + indexOfTask2 + " -e " + endDateOfTask2Changed);
-        
-        Task actualEditedTask2 = sLogic.getTask(indexOfTask2);
-        Date actualEditedTask2Date = actualEditedTask2.getEnd();
-        Date expectedTask2StartDate = null;
-        try {
-            expectedTask2StartDate = dateFormat.parse(endDateOfTask2Changed);
-        } catch (ParseException error) {
-            error.printStackTrace();
-        }
-        assertEquals(expectedTask2StartDate, actualEditedTask2Date);
-        
-        // Test for editing the start date of a task
+    }
+
+    /**
+     * Test partition for valid editing of single Task object's start date 
+     * for testing the edit command.
+     * 
+     * @param dateFormat
+     *          Date format used in this test case.
+     * @throws TaskNotFoundException
+     *          Thrown when the provided index is out of bounds.
+     */
+    private void testEditStartDate(SimpleDateFormat dateFormat) 
+            throws TaskNotFoundException {
         int indexOfTask3 = 2;
         String taskName3 = "'Test Edit 3'";
         String startDateOfTask3 = "11/01/2015";
@@ -174,11 +180,41 @@ public class LogicTest {
         }
         assertEquals(expectedTask3StartDate, actualEditedTask3Date);
     }
+
+    /**
+     * Test partition for valid editing of single Task object's end date 
+     * for testing the edit command.
+     * 
+     * @param dateFormat
+     *          Date format used in this test case.
+     * @throws TaskNotFoundException
+     *          Thrown when the provided index is out of bounds.
+     */
+    private void testEditEndDate(SimpleDateFormat dateFormat) 
+            throws TaskNotFoundException {
+        int indexOfTask2 = 1;
+        String taskName2 = "'Test Edit 2'";
+        String endDateOfTask2 = "23/09/2015";
+        String endDateOfTask2Changed = "24/09/2015";
+        
+        sLogic.executeCommand("add " + taskName2 + " -e " + endDateOfTask2);
+        sLogic.executeCommand("edit " + indexOfTask2 + " -e " + endDateOfTask2Changed);
+        
+        Task actualEditedTask2 = sLogic.getTask(indexOfTask2);
+        Date actualEditedTask2Date = actualEditedTask2.getEnd();
+        Date expectedTask2StartDate = null;
+        try {
+            expectedTask2StartDate = dateFormat.parse(endDateOfTask2Changed);
+        } catch (ParseException error) {
+            error.printStackTrace();
+        }
+        assertEquals(expectedTask2StartDate, actualEditedTask2Date);
+    }
     
     @Test
     public void testMarkCompleted() throws TaskNotFoundException {
-        // Test for marking a task as completed
-        int indexOfTask1 = 0;
+        // Partition for valid marking of single Task object as done
+        int indexOfTask1 = 1;
         String taskName1 = "'Test Mark Completed 1'";
         
         sLogic.executeCommand("add " + taskName1);
@@ -187,7 +223,7 @@ public class LogicTest {
         Task actualTask1 = sLogic.getTask(indexOfTask1);
         assertTrue(actualTask1.isCompleted());
         
-        // Test for marking a task as uncompleted
+        // Partition for valid marking of single Task object as not done
         sLogic.executeCommand("done " + indexOfTask1);
         actualTask1 = sLogic.getTask(indexOfTask1);
         assertFalse(actualTask1.isCompleted());
@@ -195,17 +231,17 @@ public class LogicTest {
 
     @Test
     public void testMarkImportant() throws TaskNotFoundException {
-        int indexOfTask1 = 0;
+        int indexOfTask1 = 1;
         String taskName1 = "'Test Mark Important 1'";
         
-        // Test for marking a task as important
+        // Partition for valid marking of single Task object as important
         sLogic.executeCommand("add " + taskName1);
         sLogic.executeCommand("! " + indexOfTask1);
         
         Task actualTask1 = sLogic.getTask(indexOfTask1);
         assertTrue(actualTask1.isImportant());
         
-        // Test for marking a task as unimportant
+        // Partition for valid marking of single Task object as unimportant
         sLogic.executeCommand("! " + indexOfTask1);
         actualTask1 = sLogic.getTask(indexOfTask1);
         assertFalse(actualTask1.isImportant());
@@ -214,25 +250,51 @@ public class LogicTest {
     @Test
     public void testUndo() {
         String undoCommmandString = "undo";
-        
-        // Test for undoing last command if no command has been given
+        int expectedNumberOfTasks = 1;
+        testUndoNoCommand();
+        testUndoAdd(undoCommmandString, expectedNumberOfTasks);
+        testUndoEdit(undoCommmandString, expectedNumberOfTasks);
+        testUndoMark(undoCommmandString, expectedNumberOfTasks);
+    }
+
+    /**
+     * Test partition for undoing last command if no command has been given
+     */
+    private void testUndoNoCommand() {
         assertEquals(null, sLogic.restoreCommandFromHistory());
-        
-        // Test for undoing last task addition command once
-        int indexOfTask1 = 0;
+    }
+    
+    /**
+     * Test partition for undoing last command for adding {@link Task} function
+     * 
+     * @param undoCommmandString
+     *          The specified undo command keyword.
+     * @param expectedNumberOfTasks
+     *          Expected number of tasks in the master {@link Task} list.
+     */
+    private void testUndoAdd(String undoCommmandString, int expectedNumberOfTasks) {
         String taskName1 = "Test Undo 1";
         String taskName2 = "Test Undo 2";
-        
         sLogic.executeCommand("add " + "'" + taskName1 + "'");
         sLogic.storeCommandInHistory();
         sLogic.executeCommand("add " + "'" + taskName2 + "'");
         sLogic.storeCommandInHistory();
         sLogic.executeCommand(undoCommmandString);
         
-        int expectedNumberOfTasks = 1;
         assertNumOfTasksAfterUndo(expectedNumberOfTasks);
-        
-        // Test for undoing editing a task once
+    }
+    
+    /**
+     * Test partition for undoing the last command for editing a {@link Task}'s. 
+     * 
+     * @param undoCommmandString
+     *          The specified undo command keyword.
+     * @param expectedNumberOfTasks
+     *          Expected number of tasks in the master {@link Task} list.
+     */
+    private void testUndoEdit(String undoCommmandString, int expectedNumberOfTasks) {
+        int indexOfTask1 = 0;
+        String taskName1 = "Test Undo 1";
         String task1ChangedName = "Test Undo 1 Changed name";
         sLogic.executeCommand("edit " + indexOfTask1 + " '" + task1ChangedName + "'");
         sLogic.storeCommandInHistory();
@@ -245,33 +307,68 @@ public class LogicTest {
         String actualTaskName = actualTaskUndone.getName();
         String expectedTaskName = taskName1;
         assertEquals(expectedTaskName, actualTaskName);
-        
-        // Test for undoing marking a task once
+    }
+    
+    /**
+     * Test partition for undoing the last command for marking a {@link Task}'s 
+     * toggle attribute.
+     * 
+     * @param undoCommmandString
+     *          The specified undo command keyword.
+     * @param expectedNumberOfTasks
+     *          Expected number of tasks in the master {@link Task} list.
+     */
+    private void testUndoMark(String undoCommmandString, int expectedNumberOfTasks) {
+        int indexOfTask1 = 0;
         sLogic.executeCommand("! " + indexOfTask1);
         sLogic.storeCommandInHistory();
         sLogic.executeCommand("! " + indexOfTask1);
         sLogic.storeCommandInHistory();
         sLogic.executeCommand(undoCommmandString);
         
-        masterTaskList = sLogic.getAllTasks();
-        actualTaskUndone = masterTaskList.get(indexOfTask1);
+        ArrayList<Task> masterTaskList = sLogic.getAllTasks();
+        Task  actualTaskUndone = masterTaskList.get(indexOfTask1);
         assertNumOfTasksAfterUndo(expectedNumberOfTasks);
         assertFalse(actualTaskUndone.isImportant());
     }
-    
+
     @Test
     public void testRedo() {
         String undoCommandString = "undo";
         String redoCommandString = "redo";
         
-        // Test for redoing last command if no command has been given
-        assertEquals(null, sLogic.restoreCommandFromRedoHistory());
+        testRedoNoCommand();
         
-        // Test for redoing last task addition command once
-        int indexOfTask1 = 0;
+        // Partition for redoing last task addition command once
+        int expectedNumOfTasksAfterRedo = 2;
+        
+        testRedoAdd(undoCommandString, redoCommandString, expectedNumOfTasksAfterRedo);
+        testRedoEdit(undoCommandString, redoCommandString, expectedNumOfTasksAfterRedo);
+        testRedoMark(undoCommandString, redoCommandString, expectedNumOfTasksAfterRedo);
+    }
+
+    /**
+     * Test partition for undoing last command if no command has been given
+     */
+    private void testRedoNoCommand() {
+        // Partition for redoing last command if no command has been given
+        assertEquals(null, sLogic.restoreCommandFromRedoHistory());
+    }
+
+    /**
+     * Test partition for redoing last command for adding {@link Task} function
+     * 
+     * @param undoCommmandString
+     *          The specified undo command keyword.
+     * @param redoCommmandString
+     *          The specified undo command keyword.         
+     * @param expectedNumberOfTasks
+     *          Expected number of tasks in the master {@link Task} list.
+     */
+    private void testRedoAdd(String undoCommandString, String redoCommandString,
+            int expectedNumOfTasksAfterRedo) {
         String taskName1 = "Test Redo 1";
         String taskName2 = "Test Redo 2";
-        
         sLogic.executeCommand("add " + "'" + taskName1 + "'");
         sLogic.storeCommandInHistory();
         sLogic.executeCommand("add " + "'" + taskName2 + "'");
@@ -279,10 +376,23 @@ public class LogicTest {
         sLogic.executeCommand(undoCommandString);
         sLogic.executeCommand(redoCommandString);
         
-        int expectedNumOfTasksAfterRedo = 2;
         assertNumOfTasksAfterRedo(expectedNumOfTasksAfterRedo);
-        
-        // Test for redoing editing a task once
+    }
+
+    /**
+     * Test partition for redoing last command for editing {@link Task} function
+     * 
+     * @param undoCommmandString
+     *          The specified undo command keyword.
+     * @param redoCommmandString
+     *          The specified undo command keyword.         
+     * @param expectedNumberOfTasks
+     *          Expected number of tasks in the master {@link Task} list.
+     */
+    private void testRedoEdit(String undoCommandString, String redoCommandString, 
+            int expectedNumOfTasksAfterRedo) {
+        int indexOfTask1 = 0;
+        String taskName1 = "Test Redo 1";
         String task1ChangedName = "Test Redo 1 Changed name";
         sLogic.executeCommand("edit " + indexOfTask1 + " '" + task1ChangedName + "'");
         sLogic.storeCommandInHistory();
@@ -295,9 +405,23 @@ public class LogicTest {
         Task actualTaskRedone = masterTaskList.get(indexOfTask1);
         String actualTaskName = actualTaskRedone.getName();
         String expectedTaskName = taskName1;
-        assertEquals(expectedTaskName, actualTaskName);
         
-        // Test for redoing marking a task once
+        assertEquals(expectedTaskName, actualTaskName);
+    }
+
+    /**
+     * Test partition for redoing last command for marking {@link Task} function
+     * 
+     * @param undoCommmandString
+     *          The specified undo command keyword.
+     * @param redoCommmandString
+     *          The specified undo command keyword.         
+     * @param expectedNumberOfTasks
+     *          Expected number of tasks in the master {@link Task} list.
+     */
+    private void testRedoMark(String undoCommandString, String redoCommandString, 
+            int expectedNumOfTasksAfterRedo) {
+        int indexOfTask1 = 0;
         sLogic.executeCommand("! " + indexOfTask1);
         sLogic.storeCommandInHistory();
         sLogic.executeCommand("! " + indexOfTask1);
@@ -305,8 +429,9 @@ public class LogicTest {
         sLogic.executeCommand(undoCommandString);
         sLogic.executeCommand(redoCommandString);
         
-        masterTaskList = sLogic.getAllTasks();
-        actualTaskRedone = masterTaskList.get(indexOfTask1);
+        ArrayList<Task> masterTaskList = sLogic.getAllTasks();
+        Task actualTaskRedone = masterTaskList.get(indexOfTask1);
+        
         assertNumOfTasksAfterUndo(expectedNumOfTasksAfterRedo);
         assertFalse(actualTaskRedone.isImportant());
     }

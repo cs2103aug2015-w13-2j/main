@@ -58,8 +58,7 @@ public class ParserTest {
         Calendar date1 = new GregorianCalendar(2015, 9 - 1, 23);
 
         String command = "add -s 23/09 -e 4pm *@(*#(!&@! 'Task name'";
-        String expected = "[RESERVED=add][FLAG=s][DATE="
-                + date1.getTimeInMillis() + "]"
+        String expected = "[RESERVED=add][FLAG=s][DATE=23_9_yyyy_0_0]"
                 + "[FLAG=e][DATE_INVALID=4pm][ALPHA_NUM=*@(*#(!&@!]"
                 + "[NAME=Task name]";
 
@@ -173,11 +172,10 @@ public class ParserTest {
         // 2.) Test with multiple valid options
         // 3.) Test with empty option field
         String singleValidOption = "-s 23/09";
-        String singleValidOptionExpected = "[FLAG=s][DATE="
-                + date1.getTimeInMillis() + "]";
+        String singleValidOptionExpected = "[FLAG=s][DATE=23_9_yyyy_0_0]";
         String validOptions = "-s 23/09 -e 24/09";
-        String validOptionsExpected = "[FLAG=s][DATE=" + date1.getTimeInMillis()
-                + "][FLAG=e][DATE=" + date2.getTimeInMillis() + "]";
+        String validOptionsExpected = "[FLAG=s][DATE=23_9_yyyy_0_0]"
+                + "[FLAG=e][DATE=24_9_yyyy_0_0]";
         String emptyToken = "";
         String emptyTokenExpected = "";
 
@@ -194,12 +192,11 @@ public class ParserTest {
         String singleToken = "-s";
         String singleTokenExpected = "[FLAG=s]";
         String invalidSecondOption = "-s 23/09 24/09 -e 25/09";
-        String invalidSecondOptionExpected = "[FLAG=s][DATE="
-                + date1.getTimeInMillis() + "][ID_INVALID=24/09][FLAG=e]"
-                + "[DATE=" + date3.getTimeInMillis() + "]";
+        String invalidSecondOptionExpected = "[FLAG=s][DATE=23_9_yyyy_0_0]"
+                + "[ID_INVALID=24/09][FLAG=e]" + "[DATE=25_9_yyyy_0_0]";
         String invalidSecondOptionField = "-s 23/09 -e";
-        String invalidSecondOptionFieldExpected = "[FLAG=s]" + "[DATE="
-                + date1.getTimeInMillis() + "][FLAG=e]";
+        String invalidSecondOptionFieldExpected = "[FLAG=s]"
+                + "[DATE=23_9_yyyy_0_0][FLAG=e]";
 
         testCommandParser(singleToken, singleTokenExpected);
         testCommandParser(invalidSecondOption, invalidSecondOptionExpected);
