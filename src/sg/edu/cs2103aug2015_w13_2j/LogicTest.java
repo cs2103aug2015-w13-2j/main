@@ -1,9 +1,11 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,6 +16,9 @@ import org.junit.Test;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.MarkCompletedHandler;
+import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageStub;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
@@ -38,6 +43,9 @@ public class LogicTest {
     public static void setup() {
         sLogic.registerCommandHandler(new AddHandler());
         sLogic.registerCommandHandler(new DeleteHandler());
+        sLogic.registerCommandHandler(new EditHandler());
+        sLogic.registerCommandHandler(new MarkCompletedHandler());
+        sLogic.registerCommandHandler(new MarkImportantHandler());
         sLogic.registerCommandHandler(new UndoHandler());
         sLogic.injectDependencies(sStorage, sTextUI);
         sStorage.clearAllTasks();
@@ -83,7 +91,6 @@ public class LogicTest {
 
     @Test
     public void testDelete() throws TaskNotFoundException {
-        System.out.println("Test delete");
         String taskName1 = "Test Delete 1";
         String taskName2 = "Test Delete 2";
         String taskName3 = "Test Delete 3";
@@ -113,8 +120,95 @@ public class LogicTest {
     }
     
     @Test
-    public void testEditingTaskAttributes() {
+    public void testEditingTaskAttributes() throws TaskNotFoundException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         
+        // Test for editing the name of a task
+        int indexOfTask1 = 0;
+        String taskName1 = "'Test Edit 1'";
+        String expectedTaskName1Changed = "Test Edit 1 Change Name";
+        
+        sLogic.executeCommand("add " + taskName1);
+        sLogic.executeCommand("edit " + indexOfTask1 + " '" 
+                + expectedTaskName1Changed + "'");
+        
+        Task actualEditedTask1 = sLogic.getTask(indexOfTask1);
+        String actualNameOfEditedTask1 = actualEditedTask1.getName();
+        assertEquals(expectedTaskName1Changed, actualNameOfEditedTask1);
+        
+        // Test for editing the end date of a task
+        int indexOfTask2 = 1;
+        String taskName2 = "'Test Edit 2'";
+        String endDateOfTask2 = "23/09/2015";
+        String endDateOfTask2Changed = "24/09/2015";
+        
+        sLogic.executeCommand("add " + taskName2 + " -e " + endDateOfTask2);
+        sLogic.executeCommand("edit " + indexOfTask2 + " -e " + endDateOfTask2Changed);
+        
+        Task actualEditedTask2 = sLogic.getTask(indexOfTask2);
+        Date actualEditedTask2Date = actualEditedTask2.getEnd();
+        Date expectedTask2StartDate = null;
+        try {
+            expectedTask2StartDate = dateFormat.parse(endDateOfTask2Changed);
+        } catch (ParseException error) {
+            error.printStackTrace();
+        }
+        assertEquals(expectedTask2StartDate, actualEditedTask2Date);
+        
+        // Test for editing the end date of a task
+        int indexOfTask3 = 2;
+        String taskName3 = "'Test Edit 3'";
+        String startDateOfTask3 = "11/01/2015";
+        String startDateOfTask3Changed = "12/01/2015";
+        
+        sLogic.executeCommand("add " + taskName3 + " -s " + startDateOfTask3);
+        sLogic.executeCommand("edit " + indexOfTask3 + " -s " + startDateOfTask3Changed);
+        
+        Task actualEditedTask3 = sLogic.getTask(indexOfTask3);
+        Date actualEditedTask3Date = actualEditedTask3.getStart();
+        Date expectedTask3StartDate = null;
+        try {
+            expectedTask3StartDate = dateFormat.parse(startDateOfTask3Changed);
+        } catch (ParseException error) {
+            error.printStackTrace();
+        }
+        assertEquals(expectedTask3StartDate, actualEditedTask3Date);
+    }
+    
+    @Test
+    public void testMarkCompleted() throws TaskNotFoundException {
+        // Test for marking a task as completed
+        int indexOfTask1 = 0;
+        String taskName1 = "'Test Mark Completed 1'";
+        
+        sLogic.executeCommand("add " + taskName1);
+        sLogic.executeCommand("done " + indexOfTask1);
+        
+        Task actualTask1 = sLogic.getTask(indexOfTask1);
+        assertTrue(actualTask1.isCompleted());
+        
+        // Test for marking a task as uncompleted
+        sLogic.executeCommand("done " + indexOfTask1);
+        actualTask1 = sLogic.getTask(indexOfTask1);
+        assertFalse(actualTask1.isCompleted());
+    }
+
+    @Test
+    public void testMarkImportant() throws TaskNotFoundException {
+        // Test for marking a task as important
+        int indexOfTask1 = 0;
+        String taskName1 = "'Test Mark Important 1'";
+        
+        sLogic.executeCommand("add " + taskName1);
+        sLogic.executeCommand("! " + indexOfTask1);
+        
+        Task actualTask1 = sLogic.getTask(indexOfTask1);
+        assertTrue(actualTask1.isImportant());
+        
+        // Test for marking a task as unimportant
+        sLogic.executeCommand("! " + indexOfTask1);
+        actualTask1 = sLogic.getTask(indexOfTask1);
+        assertFalse(actualTask1.isImportant());
     }
     
     /**
