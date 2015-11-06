@@ -31,12 +31,12 @@ import sg.edu.cs2103aug2015_w13_2j.ui.UIInterface;
  */
 public class FunDueFX extends Application {
     // Initial width and height of the FunDUE window
-    private static final int START_WIDTH = 700;
-    private static final int START_HEIGHT = 600;
+    public static final int START_WIDTH = 700;
+    public static final int START_HEIGHT = 600;
 
     // Minimum width and height that the FunDUE window can be resized to
-    private static final int MIN_WIDTH = 550;
-    private static final int MIN_HEIGHT = 500;
+    public static final int MIN_WIDTH = 550;
+    public static final int MIN_HEIGHT = 500;
 
     // Retrieve singleton instances of application dependencies
     private UIInterface mUI = FXUI.getInstance();
