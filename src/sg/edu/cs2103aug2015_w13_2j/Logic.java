@@ -245,6 +245,16 @@ public class Logic implements LogicInterface {
     }
 
     /**
+     * Clears the undo history stack until the root history is reached.
+     */
+    public void clearUndoHistory() {
+        int rootHistoryReached = 1;
+        while(mHistoryUndoStack.size() > rootHistoryReached) {
+            mHistoryUndoStack.pop();
+        }
+    }
+
+    /**
      * Clears the redo stack.
      */
     public void clearRedoHistory() {

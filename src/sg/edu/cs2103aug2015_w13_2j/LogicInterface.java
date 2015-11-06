@@ -236,17 +236,22 @@ public interface LogicInterface {
      * Stores a deep copy of the master list of {@link Task} objects into the
      * undo stack.
      */
-    void storeCommandInHistory();
+    public void storeCommandInHistory();
 
     /**
      * Stores a deep copy of a {@link Task} list into the redo stack.
      */
-    void storeCommandInRedoHistory(ArrayList<Task> taskListToRedo);
+    public void storeCommandInRedoHistory(ArrayList<Task> taskListToRedo);
 
+    /**
+     * Clears the undo history stack until the root history is reached.
+     */
+    public void clearUndoHistory();
+    
     /**
      * Clears the redo stack.
      */
-    void clearRedoHistory();
+    public void clearRedoHistory();
 
     /**
      * Retrieves the most recent user command, if any. The undo stack
@@ -256,7 +261,7 @@ public interface LogicInterface {
      * @return List of {@link Task} objects that will be displayed after
      *         restoring from the undo stack.
      */
-    ArrayList<Task> restoreCommandFromHistory();
+    public ArrayList<Task> restoreCommandFromHistory();
 
     /**
      * Obtains the last command the user undid, if any. The redo stack
@@ -266,5 +271,5 @@ public interface LogicInterface {
      * @return List of {@link Task} objects that will be displayed to the user
      *         after restoring from the redo stack.
      */
-    ArrayList<Task> restoreCommandFromRedoHistory();
+    public ArrayList<Task> restoreCommandFromRedoHistory();
 }

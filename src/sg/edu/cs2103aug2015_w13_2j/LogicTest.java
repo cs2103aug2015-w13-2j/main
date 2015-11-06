@@ -6,8 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -30,8 +28,6 @@ import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
  * Unit test for {@link Logic} Component
  */
 public class LogicTest {
-    private static final Logger LOGGER = Logger
-            .getLogger(LogicTest.class.getName());
     private static StorageStub sStorage = new StorageStub();
     private static TextUIStub sTextUI = new TextUIStub();
     private static LogicInterface sLogic = Logic.getInstance();
@@ -52,12 +48,16 @@ public class LogicTest {
         sLogic.readTasks();
     }
     
+    // @@author A0130894B
+    
     @After
     public void cleanup() {
         ArrayList<Task> masterTaskList = sLogic.getAllTasks();
         ArrayList<Task> tasksToDelete = new ArrayList<Task>();
         tasksToDelete = getAllTasksToClear(masterTaskList);
         clearMasterTaskList(tasksToDelete);
+        sLogic.clearUndoHistory();
+        sLogic.clearRedoHistory();
     }
 
     @Test
@@ -155,7 +155,7 @@ public class LogicTest {
         }
         assertEquals(expectedTask2StartDate, actualEditedTask2Date);
         
-        // Test for editing the end date of a task
+        // Test for editing the start date of a task
         int indexOfTask3 = 2;
         String taskName3 = "'Test Edit 3'";
         String startDateOfTask3 = "11/01/2015";
@@ -195,10 +195,10 @@ public class LogicTest {
 
     @Test
     public void testMarkImportant() throws TaskNotFoundException {
-        // Test for marking a task as important
         int indexOfTask1 = 0;
         String taskName1 = "'Test Mark Important 1'";
         
+        // Test for marking a task as important
         sLogic.executeCommand("add " + taskName1);
         sLogic.executeCommand("! " + indexOfTask1);
         
@@ -211,21 +211,140 @@ public class LogicTest {
         assertFalse(actualTask1.isImportant());
     }
     
+    @Test
+    public void testUndo() {
+        String undoCommmandString = "undo";
+        
+        // Test for undoing last command if no command has been given
+        assertEquals(null, sLogic.restoreCommandFromHistory());
+        
+        // Test for undoing last task addition command once
+        int indexOfTask1 = 0;
+        String taskName1 = "Test Undo 1";
+        String taskName2 = "Test Undo 2";
+        
+        sLogic.executeCommand("add " + "'" + taskName1 + "'");
+        sLogic.storeCommandInHistory();
+        sLogic.executeCommand("add " + "'" + taskName2 + "'");
+        sLogic.storeCommandInHistory();
+        sLogic.executeCommand(undoCommmandString);
+        
+        int expectedNumberOfTasks = 1;
+        assertNumOfTasksAfterUndo(expectedNumberOfTasks);
+        
+        // Test for undoing editing a task once
+        String task1ChangedName = "Test Undo 1 Changed name";
+        sLogic.executeCommand("edit " + indexOfTask1 + " '" + task1ChangedName + "'");
+        sLogic.storeCommandInHistory();
+        sLogic.executeCommand(undoCommmandString);
+        
+        assertNumOfTasksAfterUndo(expectedNumberOfTasks);
+        
+        ArrayList<Task> masterTaskList = sLogic.getAllTasks();
+        Task actualTaskUndone = masterTaskList.get(indexOfTask1);
+        String actualTaskName = actualTaskUndone.getName();
+        String expectedTaskName = taskName1;
+        assertEquals(expectedTaskName, actualTaskName);
+        
+        // Test for undoing marking a task once
+        sLogic.executeCommand("! " + indexOfTask1);
+        sLogic.storeCommandInHistory();
+        sLogic.executeCommand("! " + indexOfTask1);
+        sLogic.storeCommandInHistory();
+        sLogic.executeCommand(undoCommmandString);
+        
+        masterTaskList = sLogic.getAllTasks();
+        actualTaskUndone = masterTaskList.get(indexOfTask1);
+        assertNumOfTasksAfterUndo(expectedNumberOfTasks);
+        assertFalse(actualTaskUndone.isImportant());
+    }
+    
+    @Test
+    public void testRedo() {
+        String undoCommandString = "undo";
+        String redoCommandString = "redo";
+        
+        // Test for redoing last command if no command has been given
+        assertEquals(null, sLogic.restoreCommandFromRedoHistory());
+        
+        // Test for redoing last task addition command once
+        int indexOfTask1 = 0;
+        String taskName1 = "Test Redo 1";
+        String taskName2 = "Test Redo 2";
+        
+        sLogic.executeCommand("add " + "'" + taskName1 + "'");
+        sLogic.storeCommandInHistory();
+        sLogic.executeCommand("add " + "'" + taskName2 + "'");
+        sLogic.storeCommandInHistory();
+        sLogic.executeCommand(undoCommandString);
+        sLogic.executeCommand(redoCommandString);
+        
+        int expectedNumOfTasksAfterRedo = 2;
+        assertNumOfTasksAfterRedo(expectedNumOfTasksAfterRedo);
+        
+        // Test for redoing editing a task once
+        String task1ChangedName = "Test Redo 1 Changed name";
+        sLogic.executeCommand("edit " + indexOfTask1 + " '" + task1ChangedName + "'");
+        sLogic.storeCommandInHistory();
+        sLogic.executeCommand(undoCommandString);
+        sLogic.executeCommand(redoCommandString);
+        
+        assertNumOfTasksAfterUndo(expectedNumOfTasksAfterRedo);
+        
+        ArrayList<Task> masterTaskList = sLogic.getAllTasks();
+        Task actualTaskRedone = masterTaskList.get(indexOfTask1);
+        String actualTaskName = actualTaskRedone.getName();
+        String expectedTaskName = taskName1;
+        assertEquals(expectedTaskName, actualTaskName);
+        
+        // Test for redoing marking a task once
+        sLogic.executeCommand("! " + indexOfTask1);
+        sLogic.storeCommandInHistory();
+        sLogic.executeCommand("! " + indexOfTask1);
+        sLogic.storeCommandInHistory();
+        sLogic.executeCommand(undoCommandString);
+        sLogic.executeCommand(redoCommandString);
+        
+        masterTaskList = sLogic.getAllTasks();
+        actualTaskRedone = masterTaskList.get(indexOfTask1);
+        assertNumOfTasksAfterUndo(expectedNumOfTasksAfterRedo);
+        assertFalse(actualTaskRedone.isImportant());
+    }
+
     /**
-     * Convenience method for removing {@link Task}s specified in tasksToDelete
-     * from the master task list.
+     * Convenience method for checking if the size of the master list of 
+     * {@link Task} objects is of the expected number of tasks after an 
+     * undo command.
      * 
-     * @param tasksToDelete
-     *          List of {@link Task} objects that are to be removed.
+     * @param expectedNumberOfTasks
+     *          Specified number of {@link Task} the master list of {@link Task}s 
+     *          should contain.
      */
-    private void clearMasterTaskList(ArrayList<Task> tasksToDelete) {
-        for (Task task: tasksToDelete) {
-            try {
-                sLogic.removeTask(task);
-            } catch (TaskNotFoundException error) {
-                error.printStackTrace();
-            }
-        }
+    private void assertNumOfTasksAfterUndo(int expectedNumberOfTasks) {
+        ArrayList<Task> taskListUndone = sLogic.restoreCommandFromHistory();
+        ArrayList<Task> masterTaskList = sLogic.getAllTasks();
+        int actualUpdatedTaskListSize = taskListUndone.size();
+        int actualMasterTaskListSize = masterTaskList.size();
+        assertEquals(expectedNumberOfTasks, actualUpdatedTaskListSize);
+        assertEquals(expectedNumberOfTasks, actualMasterTaskListSize);
+    }
+    
+    /**
+     * Convenience method for checking if the size of the master list of 
+     * {@link Task} objects is of the expected number of tasks after a 
+     * redo command.
+     * 
+     * @param expectedNumberOfTasks
+     *          Specified number of {@link Task} the master list of {@link Task}s 
+     *          should contain.
+     */
+    private void assertNumOfTasksAfterRedo(int expectedNumberOfTasks) {
+        ArrayList<Task> taskListRedone = sLogic.restoreCommandFromRedoHistory();
+        ArrayList<Task> masterTaskList = sLogic.getAllTasks();
+        int actualUpdatedTaskListSize = taskListRedone.size();
+        int actualMasterTaskListSize = masterTaskList.size();
+        assertEquals(expectedNumberOfTasks, actualUpdatedTaskListSize);
+        assertEquals(expectedNumberOfTasks, actualMasterTaskListSize);
     }
     
     /**
@@ -245,5 +364,22 @@ public class LogicTest {
             tasksToDelete.add(masterTaskList.get(index));
         }
         return tasksToDelete;
+    }
+    
+    /**
+     * Convenience method for removing {@link Task}s specified in tasksToDelete
+     * from the master task list.
+     * 
+     * @param tasksToDelete
+     *          List of {@link Task} objects that are to be removed.
+     */
+    private void clearMasterTaskList(ArrayList<Task> tasksToDelete) {
+        for (Task task: tasksToDelete) {
+            try {
+                sLogic.removeTask(task);
+            } catch (TaskNotFoundException error) {
+                error.printStackTrace();
+            }
+        }
     }
 }
