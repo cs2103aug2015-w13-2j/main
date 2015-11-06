@@ -118,6 +118,14 @@ public interface LogicInterface {
      *            {@link Task} object to be added.
      */
     public void addTask(Task task);
+    
+    /**
+    *  Retrieves the master list of ({@link Task} objects existing locally in
+    *  the {@link Logic} component.
+    * 
+    *  @return Master list of {@link Task} objects
+    */
+    public ArrayList<Task> getAllTasks();
 
     /**
      * Retrieves the {@link Task} object associated with the provided index from

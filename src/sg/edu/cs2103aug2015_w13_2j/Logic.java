@@ -141,6 +141,10 @@ public class Logic implements LogicInterface {
         mTasks.add(task);
     }
 
+    public ArrayList<Task> getAllTasks() {
+        return mTasks;
+    }
+    
     @Override
     public Task getTask(int index) throws TaskNotFoundException {
         try {
