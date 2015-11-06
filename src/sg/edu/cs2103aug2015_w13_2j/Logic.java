@@ -66,6 +66,8 @@ public class Logic implements LogicInterface {
 
     @Override
     public void injectDependencies(StorageInterface storage, UIInterface textUI) {
+    	assert(storage != null);
+    	assert(textUI != null);
         mStorage = storage;
         mUI = textUI;
     }

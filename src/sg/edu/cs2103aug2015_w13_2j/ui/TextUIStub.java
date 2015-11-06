@@ -112,7 +112,7 @@ public class TextUIStub implements UIInterface {
     @Override
     public String getFeedBackMessage() {
         // TODO Auto-generated method stub
-        return null;
+        return mFeedback.getMessage();
     }
 
     @Override
