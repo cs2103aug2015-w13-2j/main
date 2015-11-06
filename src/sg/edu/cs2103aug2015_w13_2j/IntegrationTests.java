@@ -13,14 +13,14 @@ import sg.edu.cs2103aug2015_w13_2j.commands.FilterHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
-import sg.edu.cs2103aug2015_w13_2j.ui.FXUITest;
+import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
 
 // @@author A0133387B
 
 public class IntegrationTests {
     private static LogicInterface sLogic = Logic.getInstance();
-    private static FXUITest sFXUI = new FXUITest();
-    //private static Storage sStorage = Storage.getInstance();
+    private static TextUIStub UI = new TextUIStub();
+    private static Storage sStorage = Storage.getInstance();
 
     @BeforeClass
     public static void setup() {
@@ -30,7 +30,7 @@ public class IntegrationTests {
         sLogic.registerCommandHandler(new PopHandler());
         sLogic.registerCommandHandler(new DeleteHandler());
         sLogic.registerCommandHandler(new MarkImportantHandler());
-        //sLogic.injectDependencies(sStorage, sFXUI);
+        sLogic.injectDependencies(sStorage, UI);
         //sLogic.readTasks();
     }
 
@@ -38,11 +38,14 @@ public class IntegrationTests {
     public void testAdd() throws TaskNotFoundException {
         String taskName = "My first integration test!";
         sLogic.executeCommand("add '" + taskName + "'");
-        assertEquals(sFXUI.getUI().getFeedBackMessage(), "Task added successfully.");
+        assertEquals(UI.getFeedBackMessage(), "Task added successfully.");
     }
 
+    @Test
     public void testDelete() throws TaskNotFoundException {
+    	String taskName = "My first integration test!";
+        sLogic.executeCommand("add '" + taskName + "'");
         sLogic.executeCommand("delete 1");
-        assertEquals(sFXUI.getUI().getFeedBackMessage(), "Task deleted successfully.");
+        assertEquals(UI.getFeedBackMessage(), "Task deleted successfully.");
     }
 }

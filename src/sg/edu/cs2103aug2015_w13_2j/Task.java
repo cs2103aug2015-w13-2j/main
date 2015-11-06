@@ -52,6 +52,7 @@ public class Task implements TaskInterface, Comparable<Task>, Cloneable {
      */
     public Task(String name) {
         this();
+        assert(this.getCreated() != null);
         setName(name);
     }
 
@@ -66,7 +67,6 @@ public class Task implements TaskInterface, Comparable<Task>, Cloneable {
         for (Map.Entry<String, String> label : mLabelsMap.entrySet()) {
             String labelName = label.getKey();
             String labelValue = label.getValue();
-
             newTask.setLabel(labelName, labelValue);
         }
         return newTask;
