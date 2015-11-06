@@ -1,7 +1,9 @@
 package sg.edu.cs2103aug2015_w13_2j.storage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -23,7 +25,6 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
  */
 public class Storage implements StorageInterface {
     public static final String DEFAULT_DATAFILE_PATH = "./FunDUE.txt";
-
     private static final Logger LOGGER = Logger
             .getLogger(Storage.class.getName());
     private static final Preferences PREFERENCES = Preferences
@@ -32,10 +33,11 @@ public class Storage implements StorageInterface {
 
     private static Storage sInstance;
     private static File mDataFile;
-
+    private static String backupFileForTesting = DEFAULT_DATAFILE_PATH;
+    
     protected static String sPrefKey = PREFKEY_DATAFILE_PATH;
     protected static String sDefaultPath = DEFAULT_DATAFILE_PATH;
-
+    
     /**
      * Protected constructor
      */
@@ -44,7 +46,8 @@ public class Storage implements StorageInterface {
                 "Warning for preferences initialization on Windows machines is"
                         + " alright and does not have any ill effects,"
                         + " preferences are still stored");
-        loadDataFile();
+        switchTodataFile(); //in case the file has been changed before especially for testing
+        //loadDataFile();
     }
 
     /**
@@ -96,7 +99,8 @@ public class Storage implements StorageInterface {
             loadDataFile();
         }
     }
-
+    
+   
     /**
      * Loads the file specified as per user preference to be used as the data
      * file. If the user had not specified a preferred file path, the default
@@ -139,7 +143,44 @@ public class Storage implements StorageInterface {
      * @throws IOException
      *             Thrown when an I/O error occurs when writing to the data file
      */
-    private void writeDataFileContents(String content) throws IOException {
+    public void writeDataFileContents(String content) throws IOException {
         Files.write(mDataFile.toPath(), content.getBytes());
     }
+    
+    //@@author A0133387B
+    /**to facilitate testing
+     * This method is used to clear the test file specified in the IntegrationTest JUnit class
+    **/
+    public void clearTestFileContents(){
+    	PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(mDataFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    	writer.print("");
+    	writer.close();
+    }
+    
+    /**
+     * For testing purpose of the actual working component.
+     * This method switches to use the test file in place of the current file
+     * After testing, switch back to the current working file
+     * see switchToDataFile below
+     * @param newTestFile
+     */
+    public void switchToTestFile(File newTestFile) {
+    	backupFileForTesting = mDataFile.getAbsolutePath();
+        if (newTestFile != null) {
+            PREFERENCES.put(sPrefKey, newTestFile.getAbsolutePath());
+            loadDataFile();
+        }
+    }
+    
+    public void switchTodataFile() {
+        PREFERENCES.put(sPrefKey, backupFileForTesting);
+            loadDataFile();
+        
+    }
+
 }

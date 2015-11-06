@@ -9,6 +9,7 @@ import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
+import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
 
 // @@author NOAUTHOR
 
@@ -20,7 +21,7 @@ public class TextUIStub implements UIInterface {
     private FeedbackMessage mFeedback;
     private String mDisplayString;
     private String mFilterChain;
-
+    private Storage sStorage = Storage.getInstance();
     @Override
     public void injectDependency(LogicInterface logic) {
         // Do nothing
@@ -32,7 +33,7 @@ public class TextUIStub implements UIInterface {
         for (Task task : tasks) {
             LOGGER.log(Level.FINEST, task.toString());
         }
-        mTasks = new ArrayList<Task>(tasks);
+        mTasks = tasks;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class TextUIStub implements UIInterface {
     @Override
     public Task getTask(int index) throws TaskNotFoundException {
         try {
-            return mTasks.get(index);
+            return mTasks.get(index - 1);
         } catch (IndexOutOfBoundsException e) {
             throw new TaskNotFoundException();
         }
@@ -63,7 +64,8 @@ public class TextUIStub implements UIInterface {
      * @return List of Task objects that was sent for display
      */
     public ArrayList<Task> getTasksForDisplay() {
-        return mTasks;
+    	mTasks = sStorage.readTasksFromDataFile(); 
+    	return mTasks;
     }
 
     /**

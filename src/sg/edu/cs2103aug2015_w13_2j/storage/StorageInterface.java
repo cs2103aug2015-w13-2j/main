@@ -1,6 +1,7 @@
 package sg.edu.cs2103aug2015_w13_2j.storage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
@@ -41,4 +42,6 @@ public interface StorageInterface {
      *            {@code null} then this method does nothing.
      */
     public void setDataFile(File newDataFile);
+    
+    public void writeDataFileContents(String content) throws IOException;
 }
