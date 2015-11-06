@@ -29,6 +29,10 @@ public class FXUITest extends Application {
     private LogicInterface mLogic = Logic.getInstance();
     private StorageInterface mStorage = Storage.getInstance();
 
+    public UIInterface getUI(){
+    	return mUI;
+    }
+    
     public static void main(String[] args) {
         launch(args);
     }
