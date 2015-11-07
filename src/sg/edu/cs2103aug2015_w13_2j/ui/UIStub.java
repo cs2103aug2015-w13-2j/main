@@ -1,14 +1,19 @@
 package sg.edu.cs2103aug2015_w13_2j.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javafx.scene.Parent;
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
+import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
+import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 
 // @@author A0121410H
 
@@ -27,23 +32,59 @@ public class UIStub implements UIInterface {
     private ArrayList<Task> mTasks;
     private FeedbackMessage mFeedback;
     private String mDisplayString;
-    private String mFilterChain;
+    private FilterChain mFilterChain = new FilterChain();
+    private StorageInterface sStorage;
 
     /**
      * Does nothing.
      */
     @Override
-    public void injectDependency(LogicInterface logic) {
+    public void injectDependency(LogicInterface Logic) {
         // Do nothing
+    }
+
+    public void injectDependency(StorageInterface storageTest) {
+    	sStorage = storageTest;
     }
 
     @Override
     public void display(ArrayList<Task> tasks) {
         LOGGER.log(Level.INFO, tasks.size() + " tasks sent for display");
-        for (Task task : tasks) {
-            LOGGER.log(Level.FINEST, task.toString());
+        // Re-seed the filter chain
+        mFilterChain.updateFilters(tasks);
+
+        // Clear the ordered task list
+        
+        Collections.sort(tasks);
+        List<Task> mOrderedTasks = new ArrayList<Task>();
+        if (mFilterChain.size() > 1) {
+            List<Task> filteredTasks = mFilterChain.getTasksForDisplay();
+      //      mFilteredCategory.setName(mFilterChain.getFilterChain());
+      //      mFilteredCategory.update(filteredTasks, mOrderedTasks.size());
+            mOrderedTasks.addAll(filteredTasks);
+
+       //     mFilteredCategory.setVisible(true);
+       //     mFloatingCategory.setVisible(false);
+       //     mUpcomingCategory.setVisible(false);
+        } else {
+            // Someday
+            List<Task> floatingTasks = tasks.stream()
+                    .filter((Task t) -> t.getEnd() == null)
+                    .collect(Collectors.toList());
+         //   mFloatingCategory.update(floatingTasks, mOrderedTasks.size());
+            mOrderedTasks.addAll(floatingTasks);
+
+            // Upcoming
+            List<Task> upcomingTasks = tasks.stream()
+                    .filter((Task t) -> t.getEnd() != null)
+                    .collect(Collectors.toList());
+           // mUpcomingCategory.update(upcomingTasks, mOrderedTasks.size());
+            mOrderedTasks.addAll(upcomingTasks);
+
+           // mFilteredCategory.setVisible(false);
+           // mFloatingCategory.setVisible(true);
+           // mUpcomingCategory.setVisible(true);
         }
-        mTasks = tasks;
     }
 
     @Override
@@ -74,7 +115,8 @@ public class UIStub implements UIInterface {
      * @return List of {@link Task} objects that was sent for display.
      */
     public ArrayList<Task> getTasksForDisplay() {
-        return mTasks;
+    	mTasks = sStorage.readTasksFromDataFile(); 
+    	return mTasks;
     }
 
     /**

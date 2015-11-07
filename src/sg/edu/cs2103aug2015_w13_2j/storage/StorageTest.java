@@ -2,7 +2,12 @@ package sg.edu.cs2103aug2015_w13_2j.storage;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 
@@ -21,6 +26,8 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 public class StorageTest extends Storage {
     private static final String PREFKEY_TESTFILE_PATH = "FUNDUE_TESTFILE_PATH";
     private static final String DEFAULT_TESTFILE_PATH = "./FunDUE_test.txt";
+    private static final Logger LOGGER = Logger
+            .getLogger(Storage.class.getName());
 
     public StorageTest() {
         sPrefKey = PREFKEY_TESTFILE_PATH;
@@ -36,5 +43,23 @@ public class StorageTest extends Storage {
         writeTasksToDataFile(tasksToWrite);
         ArrayList<Task> tasksWritten = readTasksFromDataFile();
         assertTrue(tasksToWrite.equals(tasksWritten));
+    }
+    
+    //@@author A0133387B
+    /**to facilitate integration testing
+     * This method is used to clear the test file specified in the IntegrationTest JUnit class
+    **/
+    public void clearTestFileContents(){
+    	PrintWriter writer = null;
+    	File testFile = getDataFile();
+		try {
+			writer = new PrintWriter(testFile);
+			System.out.println("IN STORAGE TEST");
+			LOGGER.log(Level.INFO, testFile.toString());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    	writer.print("");
+    	writer.close();
     }
 }

@@ -6,17 +6,15 @@ package sg.edu.cs2103aug2015_w13_2j;
  * produce expected output
  * @author Nguyen Tuong Van
  */
-import static org.junit.Assert.assertEquals;
 
+import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
@@ -25,7 +23,6 @@ import sg.edu.cs2103aug2015_w13_2j.commands.FilterHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
-import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageTest;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.UIStub;
@@ -33,7 +30,7 @@ import sg.edu.cs2103aug2015_w13_2j.ui.UIStub;
 public class IntegrationTests {
     private static LogicInterface sLogic = Logic.getInstance();
     private static UIStub UI = new UIStub();
-    private static StorageInterface sStorage = new StorageTest();
+    private static StorageTest sStorage = new StorageTest();
     private static final Logger LOGGER = Logger
             .getLogger(Storage.class.getName());
     
@@ -46,12 +43,16 @@ public class IntegrationTests {
         sLogic.registerCommandHandler(new DeleteHandler());
         sLogic.registerCommandHandler(new MarkImportantHandler());
         sLogic.injectDependencies(sStorage, UI);
+        UI.injectDependency(sStorage);
+       
     }
     @Before
     public void beforeAll(){
-    	sStorage.clearDataFile();
+    	sStorage.clearTestFileContents();
+    	assert(UI.getTasksForDisplay().size() == 0);
         sLogic.readTasks();
     }
+
     
     @After
     public void afterAll(){
@@ -77,20 +78,22 @@ public class IntegrationTests {
     @Test
     public void testDel() throws TaskNotFoundException {
     	System.out.println("enter test del");
-    	//sStorage.clearTestFileContents();
-        //sLogic.readTasks();
     	assertEquals(UI.getTasksForDisplay().size(), 0);
     	String taskName = "My first integration test!";
         sLogic.executeCommand("add '" + taskName + "'");
+        assertEquals(UI.getTasksForDisplay().size(), 1);
         sLogic.executeCommand("delete 1");
+        System.out.println("Deleted index 1");
         assertEquals(UI.getFeedBackMessage(), "Task deleted successfully.");
+        sLogic.executeCommand("delete 1");
+        assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_TASK_NOT_FOUND.getMessage());
+        sLogic.executeCommand("delet");
+        assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_UNRECOGNIZED_COMMAND.getMessage());
         System.out.println("exit test del");
     }
     
     @Test
     public void testSearch() throws TaskNotFoundException {
-    	//sStorage.clearTestFileContents();
-        //sLogic.readTasks();
     	assertEquals(UI.getTasksForDisplay().size(), 0);
     	ArrayList<Task> tasks = new ArrayList<Task>();
     	String first = "My first integration test!";
@@ -103,7 +106,7 @@ public class IntegrationTests {
         sLogic.executeCommand("add '" + third + "'");
         tasks.add(new Task(third));
         sLogic.executeCommand("search:test");
+        LOGGER.log(Level.INFO, "SEARCH COMMAND");
         assertEquals(UI.getTasksForDisplay().size(), 3);
-        System.out.println("test search");
-    }
+    } 
 }
