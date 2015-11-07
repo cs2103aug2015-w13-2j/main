@@ -8,52 +8,53 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 // @@author A0121410H
 
 /**
- * Base Filter class that all functional Filters extend from.
+ * Base Filter class which all functional Filters extend from.
  * 
  * @author Zhu Chunqi
  */
 public abstract class Filter {
-    protected String FILTER_NAME = "filter";
+    protected String mName = "filter";
     protected ArrayList<Task> mTasks;
 
     /**
-     * Applies this filter's functionality to the provided list of Task objects.
-     * The filtered list of Task objects can be retrieved by calling
-     * {@link #getTasks()}
+     * Applies the functionality of this {@link Filter} to the provided list of
+     * {@link Task} objects. The filtered list of {@link Task} objects can be
+     * retrieved by calling {@link #getTasks()}.
      * 
      * @param tasks
-     *            List of Task objects to be filtered
+     *            List of {@link Task} objects to be filtered.
      */
     public abstract void applyFilter(ArrayList<Task> tasks);
 
     /**
-     * Retrieves the filtered list of Task objects
+     * Retrieves the filtered list of {@link Task} objects.
      * 
-     * @return Filtered list of Task objects
+     * @return Filtered list of {@link Task} objects.
      */
     public ArrayList<Task> getTasks() {
         return mTasks;
     }
 
     /**
-     * Adds a Task object to the list of Task objects stored in this filter
+     * Adds the provided {@link Task} object to the list of {@link Task} objects
+     * stored in this {@link Filter}.
      * 
      * @param task
-     *            Task object to be added
+     *            {@link Task} object to be added.
      */
     public void addTask(Task task) {
         mTasks.add(task);
     }
 
     /**
-     * Retrieves the Task object associated with the provided index. Throws an
-     * exception if the index is out of bounds
+     * Retrieves the {@link Task} object associated with the provided index.
+     * Throws an exception if the provided index is out of bounds.
      * 
      * @param index
-     *            Index of Task object to retrieve
-     * @return Task object associated with the provided index
+     *            Index of {@link Task} object to retrieve.
+     * @return {@link Task} object associated with the provided index.
      * @throws TaskNotFoundException
-     *             Thrown when the provided index is out of bounds
+     *             Thrown when the provided index is out of bounds.
      */
     public Task getTask(int index) throws TaskNotFoundException {
         try {
@@ -64,14 +65,14 @@ public abstract class Filter {
     }
 
     /**
-     * Removes the Task object associated with the provided index. Throws an
-     * exception if the index is out of bounds
+     * Removes the {@link Task} object associated with the provided index.
+     * Throws an exception if the index is out of bounds.
      * 
      * @param index
-     *            Index of Task object to remove
-     * @return Task object associated with the provided index
+     *            Index of {@link Task} object to remove.
+     * @return {@link Task} object associated with the provided index.
      * @throws TaskNotFoundException
-     *             Thrown when the provided index is out of bounds
+     *             Thrown when the provided index is out of bounds.
      */
     public Task removeTask(Task task) throws TaskNotFoundException {
         try {
@@ -83,11 +84,11 @@ public abstract class Filter {
     }
 
     /**
-     * Retrieves the name of this filter
+     * Retrieves the name of this {@link Filter}.
      * 
-     * @return String name of this filter
+     * @return String name of this {@link Filter}.
      */
     public String getFilterName() {
-        return FILTER_NAME;
+        return mName;
     }
 }

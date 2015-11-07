@@ -11,11 +11,9 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 // @@author A0121410H
 
 /**
- * The {@code FilterChain} class encapsulates a {@link Stack} of {@link Filter}
- * objects and provides methods to {@code push} and {@code pop} {@link Filter}
- * objects to the {@link Stack}. Methods are also provided to {@code add},
- * {@code get} and {@code remove} {@link Task} objects as specified by the final
- * {@link Filter} object in the filter chain.
+ * The FilterChain class encapsulates a {@link Stack} of {@link Filter} objects
+ * and provides methods to {@code push} and {@code pop} {@link Filter} objects
+ * to the {@link Stack}.
  * 
  * @author Zhu Chunqi
  */
@@ -26,9 +24,8 @@ public class FilterChain {
     private final Stack<Filter> mFilters = new Stack<Filter>();
 
     /**
-     * Zero-parameter constructor. Internally calls
-     * {@link #FilterChain(ArrayList)} with an empty list of {@link Task}
-     * objects.
+     * Zero-parameter constructor. Internally calls the alternative constructor
+     * {@link #FilterChain(ArrayList)} with a new empty list.
      */
     public FilterChain() {
         this(new ArrayList<Task>());
@@ -36,11 +33,12 @@ public class FilterChain {
 
     /**
      * Class constructor. Initializes a new {@link IdentityFilter} as the root
-     * of the filter chain stack.
+     * of the filter chain stack seeded with the provided list of {@link Task}
+     * objects.
      * 
      * @param tasks
-     *            List of {@link Task} objects to initialize the root
-     *            {@link Filter} object with.
+     *            List of {@link Task} objects to seed the root {@link Filter}
+     *            object.
      */
     public FilterChain(ArrayList<Task> tasks) {
         Filter root = new IdentityFilter();
@@ -49,9 +47,9 @@ public class FilterChain {
     }
 
     /**
-     * Retrieves the number of {@link Filter} objects in the filter chain stack
-     * via {@link Stack#size()}. This number is always at least 1 as the root
-     * {@link IdentityFilter} cannot be removed.
+     * Retrieves the size of the filter chain stack. The number returned is
+     * always <b>at least 1</b> as the root {@link IdentityFilter} cannot be
+     * removed.
      * 
      * @return Number of {@link Filter} objects in this {@link FilterChain}.
      */
@@ -71,9 +69,9 @@ public class FilterChain {
     }
 
     /**
-     * Retrieves a sorted list of {@link Task} objects from the root
+     * Retrieves a sorted list of {@link Task} objects from the <b>root</b>
      * {@link Filter} object in the filter chain, i.e. the list of {@link Task}
-     * objects that the {@link FilterChain} was seeded with.
+     * objects that this {@link FilterChain} was seeded with.
      * 
      * @return Sorted list of {@link Task} objects.
      */
@@ -83,9 +81,9 @@ public class FilterChain {
     }
 
     /**
-     * Updates all {@link Filter} objects in the filter chain by chaining calls
+     * Updates all {@link Filter}s in the filter chain stack by chaining calls
      * to {@link Filter#applyFilter(ArrayList)}, beginning with the list of
-     * {@link Task} objects in the root {@link Filter} object.
+     * {@link Task} objects in the root {@link Filter}.
      */
     public void updateFilters() {
         ArrayList<Task> tasks = mFilters.elementAt(0).getTasks();
@@ -99,11 +97,10 @@ public class FilterChain {
      * Re-seeds the filter chain with the provided list of {@link Task} objects.
      * Internally calls {@link Filter#applyFilter(ArrayList)} on the root
      * {@link Filter} object with the provided list of Task objects and then
-     * propagates the change by calling {@link #updateFilters()}.
+     * propagates the changes by calling {@link #updateFilters()}.
      * 
      * @param tasks
-     *            List of {@link Task} objects to seed the root {@link Filter}
-     *            object.
+     *            List of {@link Task} objects to seed the root {@link Filter}.
      */
     public void updateFilters(ArrayList<Task> tasks) {
         mFilters.get(0).applyFilter(tasks);
@@ -116,7 +113,7 @@ public class FilterChain {
      * which the indices of displayed {@link Task} objects are derived.
      * 
      * @param filter
-     *            Filter object to be added to the filter chain
+     *            {@link Filter} object to add to the filter chain stack.
      */
     public void pushFilter(Filter filter) {
         filter.applyFilter(mFilters.peek().getTasks());
@@ -126,11 +123,11 @@ public class FilterChain {
 
     /**
      * Pops and returns the final {@link Filter} object from the filter chain
-     * stack. If there is only the root {@link Filter} object left, this method
-     * does nothing and returns {@code null}.
+     * stack. If only the root {@link IdentityFilter} left, this method does
+     * nothing and returns {@code null}.
      * 
-     * @return Popped {@link Filter} object or {@code null} if only the root
-     *         {@link Filter} object is left.
+     * @return Popped {@link Filter} or {@code null} if only the root
+     *         {@link IdentityFilter} is left.
      */
     public Filter popFilter() {
         if (mFilters.size() > 1) {

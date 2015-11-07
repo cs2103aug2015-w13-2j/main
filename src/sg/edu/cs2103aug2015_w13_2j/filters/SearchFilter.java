@@ -4,20 +4,28 @@ import java.util.ArrayList;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
-// @@author NOAUTHOR
+// @@author A0121410H
 
+/**
+ * {@link Filter} class that filters for tasks containing the provided search
+ * terms. A {@link Task} is kept if the name retrieved via
+ * {@link Task#getName()} contains <b>any</b> of the needles.<br>
+ * <br>
+ * The filter predicate <b>for any needle</b> is as follows:<br>
+ * 
+ * <pre>
+ * task.getName().contains(needle)
+ * </pre>
+ * 
+ * @author Zhu Chunqi
+ */
 public class SearchFilter extends Filter {
     private ArrayList<String> mNeedles;
 
     public SearchFilter(ArrayList<String> needles) {
-        FILTER_NAME = "search:";
-        for (int i = 0; i < needles.size(); i++) {
-            FILTER_NAME += needles.get(i);
-            if (i < needles.size() - 1) {
-                FILTER_NAME += ",";
-            }
-        }
         mNeedles = needles;
+        // Concatenate the search terms to form the filter name
+        mName = "search:" + String.join(",", mNeedles);
     }
 
     @Override

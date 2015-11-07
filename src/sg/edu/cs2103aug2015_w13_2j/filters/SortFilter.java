@@ -7,7 +7,9 @@ import java.util.Date;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
-// @@author NOAUTHOR
+// @@author A0121410H-unused
+// Reason: Tasks are returned sorted by default. Task object also implements
+// Comparable.
 
 public class SortFilter extends Filter {
 
@@ -57,7 +59,7 @@ public class SortFilter extends Filter {
           default :
             throw new InvalidSortFilterException();
         }
-        FILTER_NAME = "sort:" + sortBy;
+        mName = "sort:" + sortBy;
     }
 
     @Override
