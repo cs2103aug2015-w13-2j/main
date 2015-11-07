@@ -25,6 +25,7 @@ import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
  */
 public class Storage implements StorageInterface {
     public static final String DEFAULT_DATAFILE_PATH = "./FunDUE.txt";
+
     private static final Logger LOGGER = Logger
             .getLogger(Storage.class.getName());
     private static final Preferences PREFERENCES = Preferences
@@ -33,11 +34,10 @@ public class Storage implements StorageInterface {
 
     private static Storage sInstance;
     private static File mDataFile;
-    private static String backupFileForTesting = DEFAULT_DATAFILE_PATH;
-    
+
     protected static String sPrefKey = PREFKEY_DATAFILE_PATH;
     protected static String sDefaultPath = DEFAULT_DATAFILE_PATH;
-    
+
     /**
      * Protected constructor
      */
@@ -46,8 +46,7 @@ public class Storage implements StorageInterface {
                 "Warning for preferences initialization on Windows machines is"
                         + " alright and does not have any ill effects,"
                         + " preferences are still stored");
-        switchTodataFile(); //in case the file has been changed before especially for testing
-        //loadDataFile();
+        loadDataFile();
     }
 
     /**
@@ -55,7 +54,7 @@ public class Storage implements StorageInterface {
      * 
      * @return Storage component
      */
-    public static Storage getInstance() {
+    public static synchronized StorageInterface getInstance() {
         if (sInstance == null) {
             sInstance = new Storage();
         }
@@ -67,7 +66,7 @@ public class Storage implements StorageInterface {
         try {
             String data = readDataFileContents();
             ArrayList<Task> tasks = TaskInterface.parseTasks(data);
-            LOGGER.log(Level.INFO, "Number of Tasks read: " + tasks.size());
+            LOGGER.log(Level.INFO, "Number of tasks read: " + tasks.size());
             return tasks;
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Failed to read tasks from data file", e);
@@ -83,7 +82,7 @@ public class Storage implements StorageInterface {
         try {
             writeDataFileContents(data);
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Failed to write tasks to data file", e);
+            LOGGER.log(Level.SEVERE, "Failed to write tasks to data file", e);
         }
     }
 
@@ -93,19 +92,26 @@ public class Storage implements StorageInterface {
     }
 
     @Override
-    public void setDataFile(File newDataFile) {
-        if (newDataFile != null) {
-            PREFERENCES.put(sPrefKey, newDataFile.getAbsolutePath());
+    public void setDataFile(File dataFile) {
+        if (dataFile != null) {
+            PREFERENCES.put(sPrefKey, dataFile.getAbsolutePath());
             loadDataFile();
         }
     }
-    
-   
+
+    public void clearDataFile() {
+        try {
+            new PrintWriter(mDataFile).close();
+        } catch (FileNotFoundException e) {
+            LOGGER.log(Level.WARNING, "Unable to clear FunDUE data file");
+        }
+    }
+
     /**
      * Loads the file specified as per user preference to be used as the data
      * file. If the user had not specified a preferred file path, the default
      * path of {@value #DEFAULT_DATAFILE_PATH} will be used instead. The data
-     * file will be created if it does not exist
+     * file will be created if it does not exist.
      */
     protected void loadDataFile() {
         String path = PREFERENCES.get(sPrefKey, sDefaultPath);
@@ -122,12 +128,12 @@ public class Storage implements StorageInterface {
     }
 
     /**
-     * Reads the contents of the data file
+     * Reads the contents of the FunDUE data file.
      * 
-     * @return String of the data file contents
+     * @return String contents of the FunDUE data file.
      * @throws IOException
-     *             Thrown when an I/O error occurs when reading from the data
-     *             file
+     *             Thrown when an I/O error occurs while reading from the data
+     *             file.
      */
     private String readDataFileContents() throws IOException {
         // Files.readAllBytes() uses UTF-8 character encoding and ensures that
@@ -136,51 +142,15 @@ public class Storage implements StorageInterface {
     }
 
     /**
-     * Writes the provided string contents to the data file
+     * Writes the provided string contents to the FunDUE data file.
      * 
      * @param contents
-     *            String contents to be written to the data file
+     *            String contents to be written to the FunDUE data file.
      * @throws IOException
-     *             Thrown when an I/O error occurs when writing to the data file
+     *             Thrown when an I/O error occurs while writing to the data
+     *             file.
      */
-    public void writeDataFileContents(String content) throws IOException {
+    private void writeDataFileContents(String content) throws IOException {
         Files.write(mDataFile.toPath(), content.getBytes());
     }
-    
-    //@@author A0133387B
-    /**to facilitate testing
-     * This method is used to clear the test file specified in the IntegrationTest JUnit class
-    **/
-    public void clearTestFileContents(){
-    	PrintWriter writer = null;
-		try {
-			writer = new PrintWriter(mDataFile);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-    	writer.print("");
-    	writer.close();
-    }
-    
-    /**
-     * For testing purpose of the actual working component.
-     * This method switches to use the test file in place of the current file
-     * After testing, switch back to the current working file
-     * see switchToDataFile below
-     * @param newTestFile
-     */
-    public void switchToTestFile(File newTestFile) {
-    	backupFileForTesting = mDataFile.getAbsolutePath();
-        if (newTestFile != null) {
-            PREFERENCES.put(sPrefKey, newTestFile.getAbsolutePath());
-            loadDataFile();
-        }
-    }
-    
-    public void switchTodataFile() {
-        PREFERENCES.put(sPrefKey, backupFileForTesting);
-            loadDataFile();
-        
-    }
-
 }

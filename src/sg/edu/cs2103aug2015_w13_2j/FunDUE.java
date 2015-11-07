@@ -13,15 +13,17 @@ import sg.edu.cs2103aug2015_w13_2j.commands.RedoHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.SearchHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
+import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.ui.TextUI;
+import sg.edu.cs2103aug2015_w13_2j.ui.UIInterface;
 
 // @@author A0121410H-unused
 // Reason: Old AWT-based UI initialization procedure, replaced with JavaFX
 // version
 
 public class FunDUE {
-    private TextUI mTextUI;
-    private Storage mStorage = Storage.getInstance();
+    private UIInterface mTextUI;
+    private StorageInterface mStorage = Storage.getInstance();
     private LogicInterface mLogic = Logic.getInstance();
 
     /**

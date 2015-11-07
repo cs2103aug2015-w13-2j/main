@@ -6,18 +6,17 @@ package sg.edu.cs2103aug2015_w13_2j;
  * produce expected output
  * @author Nguyen Tuong Van
  */
+import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
@@ -26,13 +25,15 @@ import sg.edu.cs2103aug2015_w13_2j.commands.FilterHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
+import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
+import sg.edu.cs2103aug2015_w13_2j.storage.StorageTest;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
-import sg.edu.cs2103aug2015_w13_2j.ui.TextUIStub;
+import sg.edu.cs2103aug2015_w13_2j.ui.UIStub;
 
 public class IntegrationTests {
     private static LogicInterface sLogic = Logic.getInstance();
-    private static TextUIStub UI = new TextUIStub();
-    private static Storage sStorage = Storage.getInstance();
+    private static UIStub UI = new UIStub();
+    private static StorageInterface sStorage = new StorageTest();
     private static final Logger LOGGER = Logger
             .getLogger(Storage.class.getName());
     
@@ -45,11 +46,10 @@ public class IntegrationTests {
         sLogic.registerCommandHandler(new DeleteHandler());
         sLogic.registerCommandHandler(new MarkImportantHandler());
         sLogic.injectDependencies(sStorage, UI);
-        sStorage.switchToTestFile(new File("FunDUE_test.txt"));
     }
     @Before
     public void beforeAll(){
-    	sStorage.clearTestFileContents();
+    	sStorage.clearDataFile();
         sLogic.readTasks();
     }
     
@@ -105,10 +105,5 @@ public class IntegrationTests {
         sLogic.executeCommand("search:test");
         assertEquals(UI.getTasksForDisplay().size(), 3);
         System.out.println("test search");
-    }
-    
-    @AfterClass
-    public static void switchStoragedataFile(){
-    	sStorage.switchTodataFile();
     }
 }

@@ -1,7 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j.storage;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
@@ -10,17 +9,19 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 
 public interface StorageInterface {
     /**
-     * Reads the data file and returns a list of parsed Task objects
+     * Reads the FunDUE data file and returns a list of parsed {@link Task}
+     * objects.
      * 
-     * @return List of Task objects
+     * @return List of {@link Task} objects parsed from the FunDUE data file.
      */
     public ArrayList<Task> readTasksFromDataFile();
 
     /**
-     * Writes the provided list of tasks to the data file
+     * Writes the provided list of {@link Task} objects to the FunDUE data file.
      * 
      * @param tasks
-     *            List of tasks to be written to the data file
+     *            List of {@link Task} objects to be written to the FunDUE data
+     *            file.
      */
     public void writeTasksToDataFile(ArrayList<Task> tasks);
 
@@ -37,11 +38,15 @@ public interface StorageInterface {
      * the user's data file path preference. If the {@link File} object points
      * to a non-existent file, the file will be created.
      * 
-     * @param newDataFile
+     * @param dataFile
      *            {@link File} object to be used as the new FunDUE data file. If
      *            {@code null} then this method does nothing.
      */
-    public void setDataFile(File newDataFile);
-    
-    public void writeDataFileContents(String content) throws IOException;
+    public void setDataFile(File dataFile);
+
+    /**
+     * <b><u>DANGER</u></b>: Irreversibly clears the FunDUE data file of
+     * <b><u>all</u></b> contents.
+     */
+    public void clearDataFile();
 }
