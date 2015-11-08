@@ -23,29 +23,32 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
  * @author Natasha Koh Sze Sze
  */
 public class RedoHandler extends CommandHandler {
+    public static final String REDO_SUCCESS = "Previous command redone!";
+    public static final String REDO_FAILURE = "No more commands to redo! "
+            + "Please undo a command first!";
     private static final String NAME = "Redo";
     private static final String SYNTAX = "<COMMAND_NAME>";
     private static final String[] FLAGS = {};
     private static final String[] OPTIONS = { OPTION_COMMAND_NAME };
     private static final String[] RESERVED = { "redo" };
-    private static final String REDO_SUCCESS = "Previous command redone!";
-    private static final String REDO_FAILURE = "No more commands to redo! "
-            + "Please undo a command first!";
-
+    private Logic mLogic;
+    
     public RedoHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
     public void execute(Logic logic, Command command) {
-        ArrayList<Task> restoredTaskList = logic
+        assert(logic != null);
+        mLogic = logic;
+        ArrayList<Task> restoredTaskList = mLogic
                 .restoreCommandFromRedoHistory();
-
-        if (restoredTaskList == null) {
-            logic.feedback(
+        boolean rootRedoHistoryReached = (restoredTaskList == null);
+        if (rootRedoHistoryReached) {
+            mLogic.feedback(
                     new FeedbackMessage(REDO_FAILURE, FeedbackType.INFO));
         } else {
-            logic.feedback(
+            mLogic.feedback(
                     new FeedbackMessage(REDO_SUCCESS, FeedbackType.INFO));
         }
     }

@@ -24,6 +24,10 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
  * @author Natasha Koh Sze Sze
  */
 public class MarkCompletedHandler extends CommandHandler {
+    public static final String SET_COMPLETED_SUCCESS = "Completed task!";
+    public static final String SET_UNCOMPLETED_SUCCESS = "Task has been set as uncompleted.";
+    public static final String COMPLETED_FAILURE = "Task index entered is invalid. "
+            + "Please provide a valid index!";
     private static final Logger LOGGER = Logger
             .getLogger(MarkCompletedHandler.class.getName());
     private static final String NAME = "Mark Completed";
@@ -31,38 +35,68 @@ public class MarkCompletedHandler extends CommandHandler {
     private static final String[] FLAGS = {};
     private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "mark", "done", "tick" };
-    private static final String SET_COMPLETED_SUCCESS = "Completed task!";
-    private static final String SET_UNCOMPLETED_SUCCESS = "Task has been set as uncompleted.";
-
+    
+    private Logic mLogic;
+    
     public MarkCompletedHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
     public void execute(Logic logic, Command command) {
+        assert(logic != null);
+        mLogic = logic;
         try {
             ArrayList<Integer> markIndexes = command.getAllIdTokenValues();
-            for (Integer index : markIndexes) {
-                Task task = logic.getTask(index);
-                if (task.isCompleted()) {
-                    task.setCompleted(false);
-                    logCompletedTask(task);
-                    logic.feedback(new FeedbackMessage(SET_UNCOMPLETED_SUCCESS,
-                            FeedbackType.INFO));
-                } else {
-                    task.setCompleted(true);
-                    logCompletedTask(task);
-                    logic.feedback(new FeedbackMessage(SET_COMPLETED_SUCCESS,
-                            FeedbackType.INFO));
-                }
+            assert(markIndexes != null);
+            boolean noValidIndexFound = markIndexes.isEmpty();
+            if (noValidIndexFound) {
+                mLogic.feedback(
+                        new FeedbackMessage(COMPLETED_FAILURE, FeedbackType.ERROR));
+            } else {
+                markAllSelectedTasks(markIndexes);
             }
-            logic.clearRedoHistory();
-            logic.storeCommandInHistory();
         } catch (TaskNotFoundException e) {
-            logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
+            mLogic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
         }
     }
 
+    /**
+     * Marks the list of {@link Task} objects associated with the list of 
+     * indexes specified by the user as completed.
+     * 
+     * @param markIndexes
+     *            The list of indexes that represent the items to 
+     *            mark as completed.
+     * @throws TaskNotFoundException
+     *            Thrown when the provided index is out of bounds.
+     */
+    private void markAllSelectedTasks(ArrayList<Integer> markIndexes)
+            throws TaskNotFoundException {
+        for (Integer index : markIndexes) {
+            Task task = mLogic.getTask(index);
+            if (task.isCompleted()) {
+                task.setCompleted(false);
+                logCompletedTask(task);
+                mLogic.feedback(new FeedbackMessage(SET_UNCOMPLETED_SUCCESS,
+                        FeedbackType.INFO));
+            } else {
+                task.setCompleted(true);
+                logCompletedTask(task);
+                mLogic.feedback(new FeedbackMessage(SET_COMPLETED_SUCCESS,
+                        FeedbackType.INFO));
+            }
+        }
+        mLogic.clearRedoHistory();
+        mLogic.storeCommandInHistory();
+    }
+
+    /**
+     * Logs the name and date created of the Task object being processed.
+     * 
+     * @param task
+     *          Task object to be logged.
+     */
     private void logCompletedTask(Task task) {
         String nameOfTask = task.getName();
         LOGGER.info("[CommandHandler][MarkCompletedHandler] '" + nameOfTask

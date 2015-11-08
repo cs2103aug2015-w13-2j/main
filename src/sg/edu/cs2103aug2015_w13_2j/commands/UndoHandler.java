@@ -22,26 +22,30 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
  * @author Natasha Koh Sze Sze
  */
 public class UndoHandler extends CommandHandler {
+    public static final String UNDO_SUCCESS = "Previous command undone!";
+    public static final String UNDO_FAILURE = "No more commands to undo!";
     private static final String NAME = "Undo";
     private static final String SYNTAX = "<COMMAND_NAME>";
     private static final String[] FLAGS = {};
     private static final String[] OPTIONS = { OPTION_COMMAND_NAME };
     private static final String[] RESERVED = { "undo" };
-    private static final String UNDO_SUCCESS = "Previous command undone!";
-    private static final String UNDO_FAILURE = "No more commands to undo!";
-
+    private Logic mLogic;
+    
     public UndoHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
     public void execute(Logic logic, Command command) {
-        ArrayList<Task> restoredTaskList = logic.restoreCommandFromHistory();
-        if (restoredTaskList == null) {
-            logic.feedback(
+        assert(logic != null);
+        mLogic = logic;
+        ArrayList<Task> restoredTaskList = mLogic.restoreCommandFromHistory();
+        boolean rootUndoHistoryReached = (restoredTaskList == null);
+        if (rootUndoHistoryReached) {
+            mLogic.feedback(
                     new FeedbackMessage(UNDO_FAILURE, FeedbackType.INFO));
         } else {
-            logic.feedback(
+            mLogic.feedback(
                     new FeedbackMessage(UNDO_SUCCESS, FeedbackType.INFO));
         }
     }

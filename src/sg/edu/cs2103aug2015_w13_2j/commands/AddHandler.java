@@ -20,14 +20,14 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
  * @author Zhu Chunqi
  */
 public class AddHandler extends CommandHandler {
+    public static final String ADD_SUCCESS = "Task added successfully.";
     private static final String NAME = "Add Task";
     private static final String SYNTAX = "<TASK_NAME> [-e DATETIME] [-s DATETIME]";
     private static final String[] FLAGS = { FLAG_START, FLAG_END };
     private static final String[] OPTIONS = { OPTION_TASK_NAME,
             OPTION_DATETIME };
     private static final String[] RESERVED = { "add", "a" };
-    public static final String ADD_SUCCESS = "Task added successfully.";
-
+    
     public AddHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
