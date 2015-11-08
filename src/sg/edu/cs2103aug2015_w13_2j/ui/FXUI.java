@@ -156,7 +156,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     }
 
     @Override
-    public ArrayList<Task> display(ArrayList<Task> tasks) {
+    public void display(ArrayList<Task> tasks) {
         // Re-seed the filter chain
         mFilterChain.updateFilters(tasks);
 
@@ -173,8 +173,6 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
             mFilteredCategory.setVisible(true);
             mFloatingCategory.setVisible(false);
             mUpcomingCategory.setVisible(false);
-            
-            return (ArrayList<Task>) filteredTasks;
         } else {
             // Someday
             List<Task> floatingTasks = tasks.stream()
@@ -193,7 +191,6 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
             mFilteredCategory.setVisible(false);
             mFloatingCategory.setVisible(true);
             mUpcomingCategory.setVisible(true);
-            return (ArrayList<Task>) mOrderedTasks;
         }
     }
 

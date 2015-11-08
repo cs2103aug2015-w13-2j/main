@@ -30,7 +30,7 @@ public class EditHandler extends CommandHandler {
     private static final String[] OPTIONS = { OPTION_TASK_ID, OPTION_TASK_NAME,
             OPTION_DATETIME };
     private static final String[] RESERVED = { "edit", "e" };
-    private static final String EDIT_SUCCESS = "Task edited successfully.";
+    public static final String EDIT_SUCCESS = "Task edited successfully.";
 
     public EditHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);

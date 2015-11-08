@@ -39,9 +39,10 @@ public class IntegrationTests {
     private static final Logger LOGGER = Logger
             .getLogger(Storage.class.getName());
     
+    
     @BeforeClass
     public static void setup() {
-        UI = new UIStub();
+    	UI = new UIStub();
         sLogic.registerCommandHandler(new AddHandler());
         sLogic.registerCommandHandler(new EditHandler());
         sLogic.registerCommandHandler(new DeleteHandler());
@@ -55,18 +56,18 @@ public class IntegrationTests {
         sLogic.registerCommandHandler(new LoadHandler());
         sLogic.registerCommandHandler(new SearchHandler());
         sLogic.injectDependencies(sStorage, UI);
-        UI.injectDependency(sStorage);
-       
+        UI.injectDependency(sStorage);   
     }
+      
     @Before
     public void beforeAll(){
+    	UI.refreshFilter();
     	sStorage.clearTestFileContents();
     	UI.refreshTaskList();
     	assert(UI.getTasksForDisplay().size() == 0);
         sLogic.readTasks();
     }
 
-    
     @After
     public void afterAll(){
     	LOGGER.log(Level.INFO, "End of test check : ");
@@ -75,26 +76,56 @@ public class IntegrationTests {
 
         }
     }
+    
 
     @Test
-    public void testAdd() throws TaskNotFoundException {
-    	assertEquals(UI.getTasksForDisplay().size(), 0);
-        String taskName = "My first integration test!";
-        sLogic.executeCommand("add '" + taskName + "'");
-        assertEquals(UI.getFeedBackMessage(), AddHandler.ADD_SUCCESS);
-     
-        sLogic.executeCommand("add '");
-        assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_INVALID_TASK.getMessage() );
-        System.out.println("test add");
+    public void addThreeTasks(){
+    	String first = "My first integration test!";
+        sLogic.executeCommand("add '" + first + "'");
+        String sec = "My sec integration test!";
+        sLogic.executeCommand("add '" + sec + "'");
+        String third = "My third integration test!";
+        sLogic.executeCommand("add '" + third + "'");
+        assertEquals(UI.getTasksForDisplay().size(), 3);
     }
-
+    
     @Test
-    public void testDel() throws TaskNotFoundException {
-    	System.out.println("enter test del");
-    	assertEquals(UI.getTasksForDisplay().size(), 0);
+    public void addOneTask(){
     	String taskName = "My first integration test!";
         sLogic.executeCommand("add '" + taskName + "'");
         assertEquals(UI.getTasksForDisplay().size(), 1);
+        assertEquals(UI.getFeedBackMessage(), AddHandler.ADD_SUCCESS);
+    }
+    
+    @Test
+    public void testAddInvalid() throws TaskNotFoundException {
+        sLogic.executeCommand("add '");
+        assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_INVALID_TASK.getMessage() );
+    }
+
+    @Test
+    public void testEditNameOneTask() throws TaskNotFoundException {
+    	addOneTask();
+    	String newName = "ZZZZZ";
+        sLogic.executeCommand("edit 1 "+ "'" + newName + "'");
+        assertEquals(UI.getFeedBackMessage(), EditHandler.EDIT_SUCCESS);
+        assertEquals(UI.getTasksForDisplay().get(0).getName(), newName);
+    }
+    
+    @Test
+    public void testEditNameThreeTasks() throws TaskNotFoundException {
+    	addThreeTasks();
+    	String newName = "ZZZZZ";
+        sLogic.executeCommand("edit 1 "+ "'" + newName + "'"); //<-- since the list is sorted, this
+                                                               //task now sinks to the bottom of the list
+        assertEquals(UI.getFeedBackMessage(), EditHandler.EDIT_SUCCESS);
+        assertEquals(UI.getTasksForDisplay().get(2).getName(), newName); //<-- checking the last task
+    }
+    
+    @Test
+    public void testDelete() throws TaskNotFoundException {
+    	System.out.println("enter test del");
+    	addOneTask();
         sLogic.executeCommand("delete 1");
         System.out.println("Deleted index 1");
         assertEquals(UI.getFeedBackMessage(), DeleteHandler.DELETE_SUCCESS);
@@ -107,50 +138,70 @@ public class IntegrationTests {
     
     @Test
     public void testFilterImportant() throws TaskNotFoundException {
-    	assertEquals(UI.getTasksForDisplay().size(), 0);
-    	String first = "My first integration test!";
-        sLogic.executeCommand("add '" + first + "'");
-        String sec = "My sec integration test!";
-        sLogic.executeCommand("add '" + sec + "'");
-        String third = "My third integration test!";
-        sLogic.executeCommand("add '" + third + "'");
-        assertEquals(UI.getTasksForDisplay().size(), 3);
+    	addThreeTasks();
         sLogic.executeCommand("! 1");
         sLogic.executeCommand("filter important");
+        assertEquals(UI.getFeedBackMessage(), FilterHandler.FILTER_SUCCESS);
         LOGGER.log(Level.INFO, "FILTER IMPORTANT");
         assertEquals(UI.getTasksForDisplay().size(), 1);
     } 
     
     @Test
     public void testFilterActive() throws TaskNotFoundException {
-    	assertEquals(UI.getTasksForDisplay().size(), 0);
-    	String first = "My first integration test!";
-        sLogic.executeCommand("add '" + first + "'");
-        String sec = "My sec integration test!";
-        sLogic.executeCommand("add '" + sec + "'");
-        String third = "My third integration test!";
-        sLogic.executeCommand("add '" + third + "'");
-        assertEquals(UI.getTasksForDisplay().size(), 3);
+    	addThreeTasks();
         sLogic.executeCommand("done 1");
         sLogic.executeCommand("filter active");
+        assertEquals(UI.getFeedBackMessage(), FilterHandler.FILTER_SUCCESS);
         LOGGER.log(Level.INFO, "FILTER ACTIVE");
         assertEquals(UI.getTasksForDisplay().size(), 2);
     } 
+    
     @Test
-    public void testUndo() throws TaskNotFoundException {
-    	assertEquals(UI.getTasksForDisplay().size(), 0);
-    	String first = "My first integration test!";
-        sLogic.executeCommand("add '" + first + "'");
-        String sec = "My sec integration test!";
-        sLogic.executeCommand("add '" + sec + "'");
-        String third = "My third integration test!";
-        sLogic.executeCommand("add '" + third + "'");
+    public void testFilterInvalid() throws TaskNotFoundException {
+    	addThreeTasks();
+        sLogic.executeCommand("filter 111");
+        assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_INVALID_FILTER.getMessage());
+    } 
+    
+    @Test
+    public void testFilterChain() throws TaskNotFoundException {
+    	addThreeTasks();
+        sLogic.executeCommand("done 1");
+        assertEquals(UI.getFeedBackMessage(), MarkCompletedHandler.SET_COMPLETED_SUCCESS);
+        sLogic.executeCommand("! 3");
+        assertEquals(UI.getFeedBackMessage(), MarkImportantHandler.SET_IMPORTANT_SUCCESS);
+        sLogic.executeCommand("filter active");
+        assertEquals(UI.getFeedBackMessage(), FilterHandler.FILTER_SUCCESS);
+        assertEquals(UI.getTasksForDisplay().size(), 2);
+        sLogic.executeCommand("filter important");
+        assertEquals(UI.getTasksForDisplay().size(), 1);
+        sLogic.executeCommand("back");
+        sLogic.executeCommand("back");
         assertEquals(UI.getTasksForDisplay().size(), 3);
+    } 
+    
+    @Test
+    public void testSearch() throws TaskNotFoundException {
+    	addThreeTasks();
+        sLogic.executeCommand("search first");
+        assertEquals(UI.getFeedBackMessage(), SearchHandler.SEARCH_SUCCESS);
+        assertEquals(UI.getTasksForDisplay().size(), 1);
+        sLogic.executeCommand("back");
+        assertEquals(UI.getFeedBackMessage(), PopHandler.POP_SUCCESS);
+        assertEquals(UI.getTasksForDisplay().size(), 3);
+    } 
+
+    @Test
+    public void testUndoRedo() throws TaskNotFoundException {
+    	addThreeTasks();
         sLogic.executeCommand("del 1");
         assertEquals(UI.getFeedBackMessage(), DeleteHandler.DELETE_SUCCESS);
         assertEquals(UI.getTasksForDisplay().size(), 2);
         sLogic.executeCommand("undo");
         LOGGER.log(Level.INFO, "UNDO DELETE");
         assertEquals(UI.getTasksForDisplay().size(), 3);
+        sLogic.executeCommand("redo");
+        assertEquals(UI.getTasksForDisplay().size(), 2);
     } 
+
 }

@@ -29,7 +29,7 @@ public interface UIInterface {
      *            List of Task objects to be displayed
      * @return 
      */
-    public ArrayList<Task> display(ArrayList<Task> tasks);
+    public void display(ArrayList<Task> tasks);
 
     /**
      * Displays the provided string directly on the TextPane via

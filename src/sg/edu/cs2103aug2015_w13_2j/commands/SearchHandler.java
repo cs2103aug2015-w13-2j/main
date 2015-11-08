@@ -27,7 +27,7 @@ public class SearchHandler extends CommandHandler {
     private static final String[] FLAGS = {};
     private static final String[] OPTIONS = { OPTION_SEARCH_TERM };
     private static final String[] RESERVED = { "s", "search" };
-    private static final String SEARCH_SUCCESS = "Search filter added.";
+    public static final String SEARCH_SUCCESS = "Search filter added.";
 
     public SearchHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);

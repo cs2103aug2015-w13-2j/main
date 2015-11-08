@@ -65,10 +65,9 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
         mLogic = logic;
     }
 
-    public ArrayList<Task> display(ArrayList<Task> tasks) {
+    public void display(ArrayList<Task> tasks) {
         mTasks = tasks;
         mTextPane.display(tasks);
-        return tasks;
     }
 
     public void display(String s) {

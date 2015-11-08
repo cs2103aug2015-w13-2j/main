@@ -116,7 +116,7 @@ public class UIStub implements UIInterface {
     	sStorage = storageTest;
     }
 
-    public ArrayList<Task> display(ArrayList<Task> tasks) {
+    public void display(ArrayList<Task> tasks) {
     	LOGGER.log(Level.INFO, "FILTER " + mFilterChain.getFilterChain());
         // Re-seed the filter chain
         mFilterChain.updateFilters(tasks);
@@ -129,7 +129,7 @@ public class UIStub implements UIInterface {
             List<Task> filteredTasks = mFilterChain.getTasksForDisplay();
             mOrderedTasks.addAll(filteredTasks);
             LOGGER.log(Level.INFO, filteredTasks.size() + " tasks sent for display in UISTub FILTERED");
-            return (ArrayList<Task>) mOrderedTasks;
+
         } else {
             // Someday
             List<Task> floatingTasks = tasks.stream()
@@ -144,7 +144,7 @@ public class UIStub implements UIInterface {
             mOrderedTasks.addAll(upcomingTasks);
             LOGGER.log(Level.INFO, "There are " + upcomingTasks.size() + " upcoming tasks");
             LOGGER.log(Level.INFO, "There are in total " + mOrderedTasks.size() + " to display");
-            return (ArrayList<Task>) mOrderedTasks;
+      
         }
     }
 
@@ -170,5 +170,9 @@ public class UIStub implements UIInterface {
     
     public void refreshTaskList() {    	
     	mOrderedTasks = sStorage.readTasksFromDataFile();
+    }
+    
+    public void refreshFilter() {    	
+    	mFilterChain = new FilterChain();
     }
 }

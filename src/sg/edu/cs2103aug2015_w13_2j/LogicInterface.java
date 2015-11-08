@@ -83,7 +83,7 @@ public interface LogicInterface {
      * component to be displayed.
      * @return 
      */
-    public ArrayList<Task> display();
+    public void display();
 
     /**
      * Pass-through method to {@link UIInterface#display(String)}.

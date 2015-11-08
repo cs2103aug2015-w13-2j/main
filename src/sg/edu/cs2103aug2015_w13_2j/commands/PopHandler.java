@@ -20,7 +20,7 @@ public class PopHandler extends CommandHandler {
     private static final String[] FLAGS = {};
     private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "pop", "back" };
-    private static final String POP_SUCCESS = "Last filter removed.";
+    public static final String POP_SUCCESS = "Last filter removed.";
     private static final String POP_FAIL = "No filters active.";
 
     public PopHandler() {
