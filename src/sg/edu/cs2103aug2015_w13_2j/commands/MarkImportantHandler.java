@@ -26,8 +26,6 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 public class MarkImportantHandler extends CommandHandler {
     public static final String SET_IMPORTANT_SUCCESS = "Task has been set as important.";
     public static final String SET_UNIMPORTANT_SUCCESS = "Task has been set as unimportant.";
-    public static final String IMPORTANT_SET_FAILURE = "Task index entered is invalid. "
-            + "Please provide a valid index!";
     private static final Logger LOGGER = Logger
             .getLogger(MarkImportantHandler.class.getName());
     private static final String NAME = "Mark Important";
@@ -50,8 +48,7 @@ public class MarkImportantHandler extends CommandHandler {
             assert(markIndexes != null);
             boolean noValidIndexFound = markIndexes.isEmpty();
             if (noValidIndexFound) {
-                mLogic.feedback(
-                        new FeedbackMessage(IMPORTANT_SET_FAILURE, FeedbackType.ERROR));
+                mLogic.feedback(FeedbackMessage.ERROR_INVALID_INDEX);
             } else {
                 markAllSelectedTasks(markIndexes);
             }

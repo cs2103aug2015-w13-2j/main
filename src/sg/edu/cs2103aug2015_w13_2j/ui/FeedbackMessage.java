@@ -23,6 +23,9 @@ public class FeedbackMessage {
     public static final FeedbackMessage ERROR_TASK_NOT_FOUND = new FeedbackMessage(
             "Task not found. Did you enter the index correctly?",
             FeedbackType.ERROR);
+    public static final FeedbackMessage ERROR_INVALID_INDEX = new FeedbackMessage(
+            "Task index entered is invalid. Please provide a valid index!",
+            FeedbackType.ERROR);
     public static final FeedbackMessage ERROR_UNRECOGNIZED_COMMAND = new FeedbackMessage(
             "Command not recognized.", FeedbackType.ERROR);
 

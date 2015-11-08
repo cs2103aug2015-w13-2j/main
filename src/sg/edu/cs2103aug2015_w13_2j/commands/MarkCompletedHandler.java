@@ -26,8 +26,6 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 public class MarkCompletedHandler extends CommandHandler {
     public static final String SET_COMPLETED_SUCCESS = "Completed task!";
     public static final String SET_UNCOMPLETED_SUCCESS = "Task has been set as uncompleted.";
-    public static final String COMPLETED_FAILURE = "Task index entered is invalid. "
-            + "Please provide a valid index!";
     private static final Logger LOGGER = Logger
             .getLogger(MarkCompletedHandler.class.getName());
     private static final String NAME = "Mark Completed";
@@ -51,8 +49,7 @@ public class MarkCompletedHandler extends CommandHandler {
             assert(markIndexes != null);
             boolean noValidIndexFound = markIndexes.isEmpty();
             if (noValidIndexFound) {
-                mLogic.feedback(
-                        new FeedbackMessage(COMPLETED_FAILURE, FeedbackType.ERROR));
+                mLogic.feedback(FeedbackMessage.ERROR_INVALID_INDEX);
             } else {
                 markAllSelectedTasks(markIndexes);
             }

@@ -24,32 +24,39 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
  * @author Zhu Chunqi
  */
 public class EditHandler extends CommandHandler {
+    public static final String EDIT_SUCCESS = "Task edited successfully.";
+    public static final String EDIT_FAILURE = "Invalid task name. "
+            + "Did you surround your task name with quotes?";
     private static final String NAME = "Edit Task";
     private static final String SYNTAX = "<TASK_ID> [TASK_NAME] [-e DATETIME] [-s DATETIME]";
     private static final String[] FLAGS = { FLAG_START, FLAG_END };
     private static final String[] OPTIONS = { OPTION_TASK_ID, OPTION_TASK_NAME,
             OPTION_DATETIME };
     private static final String[] RESERVED = { "edit", "e" };
-    public static final String EDIT_SUCCESS = "Task edited successfully.";
-
+    private Logic mLogic;
+    
     public EditHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
     public void execute(Logic logic, Command command) {
+        mLogic = logic;
         Token id = command.getIdToken();
         try {
-            Task task = logic.getTask(Integer.parseInt(id.value));
+            int indexToEdit = Integer.parseInt(id.value);
+            Task task = mLogic.getTask(indexToEdit);
             updateTask(command, task);
-            logic.storeCommandInHistory();
-            logic.clearRedoHistory();
-            logic.feedback(
+            mLogic.storeCommandInHistory();
+            mLogic.clearRedoHistory();
+            mLogic.feedback(
                     new FeedbackMessage(EDIT_SUCCESS, FeedbackType.INFO));
+        } catch (NumberFormatException e) {
+            mLogic.feedback(FeedbackMessage.ERROR_INVALID_INDEX);
         } catch (TaskNotFoundException e) {
-            logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
+            mLogic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
         } catch (InvalidTaskException e) {
-            logic.feedback(FeedbackMessage.ERROR_INVALID_TASK);
+            mLogic.feedback(FeedbackMessage.ERROR_INVALID_TASK);
         }
     }
 }

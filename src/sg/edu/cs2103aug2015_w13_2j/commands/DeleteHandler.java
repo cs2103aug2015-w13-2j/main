@@ -26,8 +26,6 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
  */
 public class DeleteHandler extends CommandHandler {
     public static final String DELETE_SUCCESS = "Task deleted successfully.";
-    public static final String DELETE_FAILURE = "Task index entered is invalid. "
-            + "Please provide a valid index!";
     private static final Logger LOGGER = Logger.getLogger(Logic.class.getName());
     private static final String NAME = "Delete Task";
     private static final String SYNTAX = "<TASK_ID>";
@@ -56,8 +54,7 @@ public class DeleteHandler extends CommandHandler {
             ArrayList<Integer> deleteIndexes = command.getAllIdTokenValues();
             boolean noValidIndexFound = deleteIndexes.isEmpty();
             if (noValidIndexFound) {
-                mLogic.feedback(
-                        new FeedbackMessage(DELETE_FAILURE, FeedbackType.ERROR));
+                mLogic.feedback(FeedbackMessage.ERROR_INVALID_INDEX);
             } else {
                 deleteAllSelectedTasks(deleteIndexes);
                 mLogic.feedback(

@@ -181,8 +181,12 @@ public abstract class CommandHandler {
                 }
                 break;
               case NAME :
-                task.setName(token.value);
-                break;
+                if (token.value.length() == 0) {
+                    throw new InvalidTaskException();
+                } else {
+                    task.setName(token.value);
+                    break;
+                }
               default :
                 // Do nothing
                 break;
