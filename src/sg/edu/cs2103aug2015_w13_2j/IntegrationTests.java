@@ -35,6 +35,9 @@ import sg.edu.cs2103aug2015_w13_2j.ui.UIStub;
 /**
  * Includes tests for the synchronization of the components
  * Tests 4 components Logic, UI, Parser and Storage as a whole
+ * Mimics a user's action of adding a command into the application by calling executeCommand() in Logic
+ * and examines the output produced by the User Interface Stub after the whole operation
+ * Before any tests are carried out, the file will be cleared so that individual tests so not affect each other
  * @author Nguyen Tuong Van
  *
  */
@@ -172,9 +175,9 @@ public class IntegrationTests {
         sLogic.executeCommand("delete 1");
         System.out.println("Deleted index 1");
         assertEquals(UI.getFeedBackMessage(), DeleteHandler.DELETE_SUCCESS);
-        sLogic.executeCommand("delete 1");
+        sLogic.executeCommand("delete 1"); //<-- out of bound, as task list is empty
         assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_TASK_NOT_FOUND.getMessage());
-        sLogic.executeCommand("delet");
+        sLogic.executeCommand("delet"); //<-- invalid command
         assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_UNRECOGNIZED_COMMAND.getMessage());
         System.out.println("exit test del");
     }
@@ -217,6 +220,8 @@ public class IntegrationTests {
     
     @Test
     public void testFilterChain() throws TaskNotFoundException {
+    	sLogic.executeCommand("back");
+    	assertEquals(UI.getFeedBackMessage(), PopHandler.POP_FAIL);
     	addThreeTasks();
         sLogic.executeCommand("done 1");
         assertEquals(UI.getFeedBackMessage(), MarkCompletedHandler.SET_COMPLETED_SUCCESS);
@@ -228,6 +233,7 @@ public class IntegrationTests {
         sLogic.executeCommand("filter important");
         assertEquals(UI.getTasksForDisplay().size(), 1);
         sLogic.executeCommand("back");
+        assertEquals(UI.getTasksForDisplay().size(), 2);
         sLogic.executeCommand("back");
         assertEquals(UI.getTasksForDisplay().size(), 3);
     } 
