@@ -96,6 +96,15 @@ public interface UIInterface {
     public boolean showChangeDataFilePathDialog();
 
     /**
+     * Shows the window containing the FunDUE Help Page. Return value indicates
+     * whether the window was opened by the method.
+     * 
+     * @return {@code True} if the FunDUE Help Page was shown, {@code false} if
+     *         the window was already showing.
+     */
+    public boolean showHelpPage();
+
+    /**
      * Retrieves the UI elements to be displayed in a {@link Parent} container.
      * 
      * @return {@link Parent} object to be displayed.

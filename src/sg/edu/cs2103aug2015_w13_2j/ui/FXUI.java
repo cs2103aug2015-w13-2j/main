@@ -14,6 +14,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -26,12 +27,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
+import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
 
@@ -49,6 +52,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public static final Font FONT = new Font(18);
     public static final Font FONT_SMALLER = new Font(15);
     public static final double ID_MIN_WIDTH = 35;
+    public static final double HELP_MIN_WIDTH = 400;
+    public static final double HELP_MIN_HEIGHT = 400;
 
     private static final Logger LOGGER = Logger.getLogger(FXUI.class.getName());
 
@@ -63,6 +68,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     private final FXCategoryAccordion mUpcomingCategory;
     private final VBox mCenterVBox;
     private final BorderPane mContainer;
+    private final Stage mHelpWindow;
 
     private LogicInterface mLogic;
 
@@ -101,16 +107,16 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         // NOTE: Binding the managed property to the visible property to
         // properly hide the UI element when visible is set to false. Otherwise
         // the element will still take up space in layout as it is still managed
-        mFilteredCategory.managedProperty()
-                .bind(mFilteredCategory.visibleProperty());
+        mFilteredCategory.managedProperty().bind(
+                mFilteredCategory.visibleProperty());
 
         mFloatingCategory = new FXCategoryAccordion("Someday");
-        mFloatingCategory.managedProperty()
-                .bind(mFloatingCategory.visibleProperty());
+        mFloatingCategory.managedProperty().bind(
+                mFloatingCategory.visibleProperty());
 
         mUpcomingCategory = new FXCategoryAccordion("Events / Deadlines");
-        mUpcomingCategory.managedProperty()
-                .bind(mUpcomingCategory.visibleProperty());
+        mUpcomingCategory.managedProperty().bind(
+                mUpcomingCategory.visibleProperty());
 
         mCenterVBox = new VBox(mFilteredCategory, mFloatingCategory,
                 mUpcomingCategory);
@@ -134,8 +140,13 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         mContainer.setId("container");
         mContainer.setCenter(displayScrollPane);
         mContainer.setBottom(bottomVBox);
-        mContainer.getStylesheets()
-                .add(getClass().getResource("styleFX.css").toExternalForm());
+        mContainer.getStylesheets().add(
+                getClass().getResource("styleFX.css").toExternalForm());
+
+        mHelpWindow = new Stage();
+        mHelpWindow.setTitle("FunDUE Help Page");
+        mHelpWindow.setMinWidth(400);
+        mHelpWindow.setMinHeight(400);
     }
 
     /**
@@ -153,6 +164,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     @Override
     public void injectDependency(LogicInterface logic) {
         mLogic = logic;
+        createHelpPage(mLogic);
+        showHelpPage();
     }
 
     @Override
@@ -231,8 +244,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         fc.setTitle("Select FunDUE Data File");
         fc.setInitialDirectory(mLogic.getDataFile().getParentFile());
         fc.setInitialFileName(mLogic.getDataFile().getName());
-        fc.getExtensionFilters()
-                .add(new ExtensionFilter("FunDUE Data Files", "*.txt"));
+        fc.getExtensionFilters().add(
+                new ExtensionFilter("FunDUE Data Files", "*.txt"));
         File selectedFile = fc.showSaveDialog(null);
         if (selectedFile == null) {
             return false;
@@ -245,6 +258,18 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     }
 
     @Override
+    public boolean showHelpPage() {
+        if (mHelpWindow.isShowing()) {
+            mHelpWindow.requestFocus();
+            return false;
+        } else {
+            mHelpWindow.show();
+            mHelpWindow.requestFocus();
+            return true;
+        }
+    }
+
+    @Override
     public Parent getUI() {
         return mContainer;
     }
@@ -252,14 +277,14 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     @Override
     public void handle(KeyEvent event) {
         switch (event.getCode()) {
-          case ENTER :
+        case ENTER :
             mLogic.executeCommand(mTextField.getText());
             mTextField.setText("");
             break;
-          case ESCAPE :
+        case ESCAPE :
             Platform.exit();
             break;
-          default :
+        default :
             // Do nothing
         }
     }
@@ -268,5 +293,64 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public String getFeedBackMessage() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    /**
+     * Creates the UI elements necessary to display the help page using
+     * information provided by the loaded {@link CommandHandler} objects.
+     * 
+     * @param logic
+     *            {@link LogicInterface} component from which to obtain the
+     *            loaded {@link CommandHandler} objects.
+     */
+    private void createHelpPage(LogicInterface logic) {
+        // Create a styled container and scroll pane
+        VBox container = new VBox();
+        ScrollPane scrollPane = new ScrollPane(container);
+        scrollPane.setFitToWidth(true);
+        Scene scene = new Scene(scrollPane, HELP_MIN_WIDTH, HELP_MIN_HEIGHT);
+        scene.getStylesheets().add(
+                getClass().getResource("styleFX.css").toExternalForm());
+        
+        // Retrieve all distinct CommandHandlers and iterate
+        List<CommandHandler> handlers = logic.getCommandHandlers().values()
+                .stream().distinct().collect(Collectors.toList());
+        for (CommandHandler handler : handlers) {
+            // Create a row container for each CommandHandler
+            VBox row = new VBox();
+            row.getStyleClass().addAll("helpCategoryRow");
+            
+            // CommandHandler name
+            Label handlerName = new Label(handler.getName());
+            handlerName.getStyleClass().addAll("helpCategoryLabel");
+            
+            // CommandHandler syntax
+            Label handlerUsage = new Label("Usage: "
+                    + handler.getReservedKeywords() + " " + handler.getSyntax());
+            handlerUsage.getStyleClass().add("wrappingText");
+            
+            // CommandHandler flags
+            VBox flagsContainer = new VBox();
+            for (String flag : handler.getFlags()) {
+                Label flagLabel = new Label(flag);
+                flagLabel.getStyleClass().addAll("wrappingText",
+                        "helpTabbedLabel");
+                flagsContainer.getChildren().add(flagLabel);
+            }
+            
+            // CommandHandler options
+            VBox optionsContainer = new VBox();
+            for (String option : handler.getOptions()) {
+                Label optionLabel = new Label(option);
+                optionLabel.getStyleClass().addAll("wrappingText",
+                        "helpTabbedLabel");
+                optionsContainer.getChildren().add(optionLabel);
+            }
+            
+            row.getChildren().addAll(handlerName, handlerUsage, flagsContainer,
+                    optionsContainer);
+            container.getChildren().add(row);
+        }
+        mHelpWindow.setScene(scene);
     }
 }

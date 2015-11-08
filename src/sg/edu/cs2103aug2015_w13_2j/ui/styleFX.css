@@ -1,70 +1,87 @@
 /* @@author A0124007X */
-
 .completed .text {
-    -fx-strikethrough: true;
+	-fx-strikethrough: true;
 }
 
 #container {
-    -fx-border-width: 0;
+	-fx-border-width: 0;
 }
 
 #mCenterVBox {
-    -fx-background-color: white;
-    -fx-border-width: 0;
+	-fx-background-color: white;
+	-fx-border-width: 0;
 }
 
 #bottomVBox {
-    -fx-padding: 1 2 2 2;
+	-fx-padding: 1 2 2 2;
 }
 
 #mTextField {
-    -fx-border-width: 2px;
-    -fx-focus-color: transparent;
+	-fx-border-width: 2px;
+	-fx-focus-color: transparent;
 }
 
 #mTextField:focused {
-    -fx-background-color: -fx-focus-color, -fx-text-box-border, -fx-control-inner-background;
-    -fx-background-insets: -0.4, 1, 2;
-    -fx-background-radius: 3.4, 2, 2;
+	-fx-background-color: -fx-focus-color, -fx-text-box-border,
+		-fx-control-inner-background;
+	-fx-background-insets: -0.4, 1, 2;
+	-fx-background-radius: 3.4, 2, 2;
 }
 
 .accordion {
-    -fx-border-width: 10;
+	-fx-border-width: 10;
 }
 
-.accordion .titled-pane > *.content /*, .title*/ {
-    -fx-background-color: white;
-    -fx-border-width: 0;
+.accordion .titled-pane>*.content /*, .title*/ {
+	-fx-background-color: white;
+	-fx-border-width: 0;
 }
 
 .scrollpane {
-    -fx-hbar-policy: never;
-    -fx-vbar-policy: as-needed;
-    -fx-focus-color: transparent;
+	-fx-hbar-policy: never;
+	-fx-vbar-policy: as-needed;
+	-fx-focus-color: transparent;
 }
 
-.scrollpane .scroll-bar .increment-arrow,
-.scrollpane .scroll-bar .decrement-arrow {
-    -fx-shape: " ";
-    -fx-padding: 0;
+.scrollpane .scroll-bar .increment-arrow, .scrollpane .scroll-bar .decrement-arrow
+	{
+	-fx-shape: " ";
+	-fx-padding: 0;
 }
 
 .scrollpane .scroll-bar .thumb {
-    -fx-background-color: derive(black, 90%);
-    -fx-background-insets: 2, 0, 0;
-    -fx-background-radius: 2em;
+	-fx-background-color: derive(black, 90%);
+	-fx-background-insets: 2, 0, 0;
+	-fx-background-radius: 2em;
 }
 
-.scrollpane .scroll-bar:horizontal .increment-button,
-.scrollpane .scroll-bar:horizontal .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0em;
-    -fx-padding: 0 0 10 0;
+.scrollpane .scroll-bar:horizontal .increment-button, .scrollpane .scroll-bar:horizontal .decrement-button
+	{
+	-fx-background-color: transparent;
+	-fx-background-radius: 0em;
+	-fx-padding: 0 0 10 0;
 }
 
-.scrollpane .scroll-bar:vertical .increment-button,
-.scrollpane .scroll-bar:vertical .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0em;
-    -fx-padding: 0 10 0 0;
+.scrollpane .scroll-bar:vertical .increment-button, .scrollpane .scroll-bar:vertical .decrement-button
+	{
+	-fx-background-color: transparent;
+	-fx-background-radius: 0em;
+	-fx-padding: 0 10 0 0;
+}
+
+.helpCategoryRow {
+	-fx-padding: 10, 3, 10, 3;
+}
+
+.helpCategoryLabel {
+	-fx-underline: true;
+	-fx-font-weight: bold;
+}
+
+.helpTabbedLabel {
+	-fx-padding: 0 0 0 50;
+}
+
+.wrappingText {
+	-fx-wrap-text: true;
 }

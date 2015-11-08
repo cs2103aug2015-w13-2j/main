@@ -1,6 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
-import sg.edu.cs2103aug2015_w13_2j.Logic;
+import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
@@ -28,7 +28,7 @@ public class PopHandler extends CommandHandler {
     }
 
     @Override
-    public void execute(Logic logic, Command command) {
+    public void execute(LogicInterface logic, Command command) {
         if (logic.popFilter() == null) {
             logic.feedback(new FeedbackMessage(POP_FAIL, FeedbackType.ERROR));
         } else {

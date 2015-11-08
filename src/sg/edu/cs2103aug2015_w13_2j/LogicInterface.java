@@ -112,6 +112,15 @@ public interface LogicInterface {
     public boolean showChangeDataFilePathDialog();
 
     /**
+     * Pass-through method to {@link UIInterface#showHelpPage()} which shows the
+     * FunDUE Help Page window.
+     * 
+     * @return {@code True} if the FunDUE Help Page was shown, {@code false} if
+     *         the window was already showing.
+     */
+    public boolean showHelpPage();
+
+    /**
      * Adds the provided {@link Task} object to the master list of {@link Task}
      * objects.
      * 
@@ -119,13 +128,13 @@ public interface LogicInterface {
      *            {@link Task} object to be added.
      */
     public void addTask(Task task);
-    
+
     /**
-    *  Retrieves the master list of ({@link Task} objects existing locally in
-    *  the {@link Logic} component.
-    * 
-    *  @return Master list of {@link Task} objects
-    */
+     * Retrieves the master list of ({@link Task} objects existing locally in
+     * the {@link Logic} component.
+     * 
+     * @return Master list of {@link Task} objects
+     */
     public ArrayList<Task> getAllTasks();
 
     /**
@@ -149,19 +158,19 @@ public interface LogicInterface {
     public Task getTask(int index) throws TaskNotFoundException;
 
     /**
-     * Removes the {@link Task} object from the master list of {@link Task} 
-     * objects. {@link ArrayList#remove(Object)} is called to remove the 
+     * Removes the {@link Task} object from the master list of {@link Task}
+     * objects. {@link ArrayList#remove(Object)} is called to remove the
      * {@link Task} object from the master list of {@link Task} objects.
      * 
      * @param task
      *            {@link Task} object to be removed.
-     * @return {@link Task} object specified. An exception will be thrown 
-     *         if any provided index is out of bounds.
+     * @return {@link Task} object specified. An exception will be thrown if any
+     *         provided index is out of bounds.
      * @throws TaskNotFoundException
      *             Thrown when the provided index is out of bounds.
      */
     public Task removeTask(Task task) throws TaskNotFoundException;
-    
+
     /**
      * Removes the {@link Task} object associated with the provided index from
      * the master list of {@link Task} objects. The provided index is specific

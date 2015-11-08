@@ -3,7 +3,7 @@ package sg.edu.cs2103aug2015_w13_2j.commands;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import sg.edu.cs2103aug2015_w13_2j.Logic;
+import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
@@ -33,20 +33,20 @@ public class MarkCompletedHandler extends CommandHandler {
     private static final String[] FLAGS = {};
     private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "mark", "done", "tick" };
-    
-    private Logic mLogic;
-    
+
+    private LogicInterface mLogic;
+
     public MarkCompletedHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
-    public void execute(Logic logic, Command command) {
-        assert(logic != null);
+    public void execute(LogicInterface logic, Command command) {
+        assert (logic != null);
         mLogic = logic;
         try {
             ArrayList<Integer> markIndexes = command.getAllIdTokenValues();
-            assert(markIndexes != null);
+            assert (markIndexes != null);
             boolean noValidIndexFound = markIndexes.isEmpty();
             if (noValidIndexFound) {
                 mLogic.feedback(FeedbackMessage.ERROR_INVALID_INDEX);
@@ -59,14 +59,14 @@ public class MarkCompletedHandler extends CommandHandler {
     }
 
     /**
-     * Marks the list of {@link Task} objects associated with the list of 
+     * Marks the list of {@link Task} objects associated with the list of
      * indexes specified by the user as completed.
      * 
      * @param markIndexes
-     *            The list of indexes that represent the items to 
-     *            mark as completed.
+     *            The list of indexes that represent the items to mark as
+     *            completed.
      * @throws TaskNotFoundException
-     *            Thrown when the provided index is out of bounds.
+     *             Thrown when the provided index is out of bounds.
      */
     private void markAllSelectedTasks(ArrayList<Integer> markIndexes)
             throws TaskNotFoundException {
@@ -92,7 +92,7 @@ public class MarkCompletedHandler extends CommandHandler {
      * Logs the name and date created of the Task object being processed.
      * 
      * @param task
-     *          Task object to be logged.
+     *            Task object to be logged.
      */
     private void logCompletedTask(Task task) {
         String nameOfTask = task.getName();

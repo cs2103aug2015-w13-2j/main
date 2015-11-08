@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import sg.edu.cs2103aug2015_w13_2j.Logic;
+import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.Task.Type;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
@@ -16,20 +16,23 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Token;
 // @@author A0121410H
 
 /**
- * Abstract command handler class which is inherited by all commands
+ * Base abstract class inherited by all command handlers. Provides default
+ * methods to set and retrieve the name, syntax, flags, options and reserved
+ * keyword strings of the command handlers. Also provides a method to update
+ * {@link Task} objects from information contained within a {@link Command}
+ * object.
  * 
  * @author Zhu Chunqi
  */
 public abstract class CommandHandler {
-    protected static final String FLAG_START = "-s: Specifies the start date/time of the Task";
-    protected static final String FLAG_END = "-e: Specifies the end date/time of the Task";
+    protected static final String FLAG_START = "-s: Specifies the start date/time of the Task.";
+    protected static final String FLAG_END = "-e: Specifies the end date/time of the Task.";
 
-    protected static final String OPTION_COMMAND_NAME = "COMMAND_NAME: A valid command name.";
     protected static final String OPTION_DATETIME = "DATETIME: Any valid combination of the supported date and time formats.";
-    protected static final String OPTION_FILTER_NAME = "FILTER_NAME: A valid filter name and argument if and argumer is required.";
-    protected static final String OPTION_TASK_ID = "TASK_ID: The index of the Task as shown in the ID column.";
-    protected static final String OPTION_TASK_NAME = "TASK_NAME: Any short phrase to identify this particular Task. Must be surrounded by either single or double quotes.";
-    protected static final String OPTION_SEARCH_TERM = "SEARCH_TERM: Any word or quoted phrase that you want to search for.";
+    protected static final String OPTION_FILTER_NAME = "FILTER_NAME: A valid filter name.";
+    protected static final String OPTION_TASK_ID = "TASK_ID: The index of the Task as displayed.";
+    protected static final String OPTION_TASK_NAME = "TASK_NAME: Name to be given to this Task. Must be surrounded by either single (') or double quotes (\").";
+    protected static final String OPTION_SEARCH_TERM = "SEARCH_TERM: Any word or quoted phrase.";
 
     private String mName;
     private String mSyntax;
@@ -38,23 +41,23 @@ public abstract class CommandHandler {
     private String[] mReserved;
 
     /**
-     * Constructor for all CommandHandlers. Stores the name of the
-     * CommandHandler, the syntax, the flags supported and their descriptions,
-     * the options supported and their descriptions, and the keywords recognized
-     * by the CommandHandler. Each CommandHandler <b>must</b> provide valid
-     * parameters to the constructor as no empty constructor is provided and the
-     * values are <b>not</b> initialized by default
+     * Constructor for all {@link CommandHandler} objects. Stores the name,
+     * syntax, supported flags, supported options and reserved keyword strings
+     * of the {@link CommandHandler}. Each inheriting {@link CommandHandler}
+     * <b>must</b> provide valid parameters as the values are <b>not</b>
+     * initialized by default.
      * 
      * @param name
-     *            Name of the CommandHandler
+     *            Name of this {@link CommandHandler}.
      * @param syntax
-     *            Syntax required by the CommandHandler
+     *            Syntax required by this {@link CommandHandler}.
      * @param flags
-     *            Array of flags supported and their descriptions
+     *            String array of flags supported and their descriptions.
      * @param options
-     *            Array of options supported and their descriptions
+     *            String array of options supported and their descriptions.
      * @param reserved
-     *            Array of reserved keywords recognized by the CommandHandler
+     *            Array of reserved keyword strings handled by this
+     *            {@link CommandHandler}.
      */
     public CommandHandler(String name, String syntax, String[] flags,
             String[] options, String[] reserved) {
@@ -66,92 +69,92 @@ public abstract class CommandHandler {
     }
 
     /**
-     * Executes the provided Command object
+     * Executes the functionality of this {@link CommandHandler} based on the
+     * provided {@link Command} object.
      * 
      * @param logic
-     *            Dependency injection of the Logic component for the
-     *            CommandHandler to act upon
+     *            Dependency injection of {@link LogicInterface} component to
+     *            allow this {@link CommandHandler} to function.
      * @param command
-     *            Command object containing parsed {@link Token}s of the command
-     *            string
+     *            {@link Command} object containing parsed {@link Token} objects
+     *            from user input.
      */
-    public abstract void execute(Logic logic, Command command);
+    public abstract void execute(LogicInterface logic, Command command);
 
     /**
-     * Retrieves the name of this CommandHandler
+     * Retrieves the name of this {@link CommandHandler}.
      * 
-     * @return Name of this CommandHandler
+     * @return Name of this {@link CommandHandler}.
      */
     public String getName() {
         return mName;
     }
 
     /**
-     * Retrieves the syntax required by this CommandHandler
+     * Retrieves the syntax required by this {@link CommandHandler}.
      * 
-     * @return Syntax required by this CommandHandler
+     * @return Syntax required by this {@link CommandHandler}.
      */
     public String getSyntax() {
         return mSyntax;
     }
 
     /**
-     * Retrieves a list of flags and their descriptions that are supported by
-     * this CommandHandler
+     * Retrieves a <b>sorted</b> list of flags and their descriptions supported
+     * by this {@link CommandHandler}.
      * 
-     * @return List of flags and their descriptions
+     * @return Sorted list of flags and their descriptions.
      */
     public List<String> getFlags() {
         return getSortedList(mFlags);
     }
 
     /**
-     * Retrieves a list of options and their descriptions that are supported by
-     * this CommandHandler
+     * Retrieves a <b>sorted</b> list of options and their descriptions that are
+     * supported by this {@link CommandHandler}.
      * 
-     * @return List of options and their descriptions
+     * @return Sorted list of options and their descriptions.
      */
     public List<String> getOptions() {
         return getSortedList(mOptions);
     }
 
     /**
-     * Retrieves a list of reserved keywords recognized by this CommandHandler.
-     * The list may include simple aliases or keywords with completely different
-     * functionality
+     * Retrieves a <b>sorted</b> list of reserved keyword strings handled by
+     * this {@link CommandHandler}. The list may include simple aliases or
+     * keywords with completely different functionality.
      * 
-     * @return A list of keywords recognized by this CommandHandler
+     * @return Sorted list of reserved keyword strings handled by this
+     *         {@link CommandHandler}.
      */
     public List<String> getReservedKeywords() {
         return getSortedList(mReserved);
     }
 
     /**
-     * Checks if this CommandHandler requires a display refresh after execution.
-     * Defaults to true for all CommandHandlers unless {@link #shouldDisplay()}
-     * is explicitly overridden and returns false. CommandHandlers which display
-     * directly to the TextPane via the {@link Logic#display(String)} method
-     * should override this method to return false
+     * Checks if this {@link CommandHandler} requires a display refresh after
+     * execution. Defaults to {@code true} for all {@link CommandHandler}s
+     * unless {@link #shouldDisplay()} is explicitly overridden to return
+     * {@code false}.
      * 
-     * @return True if this CommandHandler requires a display refresh after
-     *         execution, false otherwise
+     * @return {@code True} if this {@link CommandHandler} requires a display
+     *         refresh after execution, {@code false} otherwise.
      */
     public boolean shouldDisplay() {
         return true;
     }
 
     /**
-     * Updates the provided Task object based on {@link Token}s within the
-     * provided Command object
+     * Updates the provided {@link Task} object based on the provided
+     * {@link Command} object.
      * 
      * @param command
-     *            Command object containing parsed {@link Token}s of the command
-     *            string
+     *            {@link Command} object created from user input.
      * @param task
-     *            Task object to be updated
+     *            {@link Task} object to be updated.
      * @throws InvalidTaskException
-     *             Thrown when the Task object constructed from the parsed
-     *             tokens is invalid
+     *             Thrown when the {@link Task} object modified by the
+     *             {@link Command} object becomes invalid.
      */
     public void updateTask(Command command, Task task)
             throws InvalidTaskException {
@@ -159,20 +162,19 @@ public abstract class CommandHandler {
         while (iter.hasNext()) {
             Token token = iter.next();
             switch (token.type) {
-              case FLAG :
+            case FLAG :
                 // Flags which expect the next token to be a date
                 String flag = token.value;
                 switch (flag) {
-                  case Parser.FLAG_END :
+                case Parser.FLAG_END :
                     // Falls through
-                  case Parser.FLAG_START :
+                case Parser.FLAG_START :
                     if (iter.hasNext()) {
                         Token nextToken = iter.next();
                         if (nextToken.type == Token.Type.DATE) {
                             if (flag.compareTo(Parser.FLAG_END) == 0) {
                                 task.setEnd(nextToken.value);
-                            } else if (flag.compareTo(
-                                    Parser.FLAG_START) == 0) {
+                            } else if (flag.compareTo(Parser.FLAG_START) == 0) {
                                 task.setStart(nextToken.value);
                             }
                         }
@@ -180,14 +182,14 @@ public abstract class CommandHandler {
                     break;
                 }
                 break;
-              case NAME :
+            case NAME :
                 if (token.value.length() == 0) {
                     throw new InvalidTaskException();
                 } else {
                     task.setName(token.value);
                     break;
                 }
-              default :
+            default :
                 // Do nothing
                 break;
             }
@@ -197,7 +199,7 @@ public abstract class CommandHandler {
     }
 
     // @@author A0133387B
-    
+
     /**
      * Determine the type of a task based on its start (if any) and end (if any)
      * times
@@ -232,12 +234,11 @@ public abstract class CommandHandler {
     // @@author A0121410H
 
     /**
-     * Utility method that converts an array of strings into a sorted list of
-     * strings
+     * Converts an array of strings into a sorted list of strings.
      * 
      * @param array
-     *            Array of strings to be sorted
-     * @return Sorted list of strings
+     *            Array of strings to be sorted.
+     * @return Sorted list of strings.
      */
     private List<String> getSortedList(String[] array) {
         List<String> list = Arrays.asList(array);

@@ -1,6 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j.commands;
 
-import sg.edu.cs2103aug2015_w13_2j.Logic;
+import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
@@ -12,52 +12,50 @@ import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 // @@author A0121410H
 
 /**
- * Edits a task in the master task list. An index that refers to the task to be
- * edited is expected to be specified. A task name and optional flags/options
- * that need to be edited for that task will also be specified.
+ * {@link CommandHandler} which handles editing the details of a {@link Task}
+ * object in the master list of {@link Task} objects. An index referring to the
+ * {@link Task} object to be edited must be specified. Optionally, a new task
+ * name, start date or end date can be specified.
  * 
- * A user feedback message will subsequently be displayed to indicate that this
- * task was edited successfully. If no valid task name was specified in the user
- * command, a user error message will be returned. If the Task index specified
- * is out of range, or does not exist, a user error message will be returned.
+ * User feedback {@value #EDIT_SUCCESS} will be displayed to indicate that the
+ * {@link Task} object was edited successfully. If the index specified is out of
+ * range, the {@link FeedbackMessage#ERROR_TASK_NOT_FOUND} error message will be
+ * shown. If the {@link Task} object becomes invalid after the edit, the
+ * {@link FeedbackMessage#ERROR_INVALID_TASK} error message will be shown.
  * 
  * @author Zhu Chunqi
  */
 public class EditHandler extends CommandHandler {
     public static final String EDIT_SUCCESS = "Task edited successfully.";
-    public static final String EDIT_FAILURE = "Invalid task name. "
-            + "Did you surround your task name with quotes?";
+
     private static final String NAME = "Edit Task";
     private static final String SYNTAX = "<TASK_ID> [TASK_NAME] [-e DATETIME] [-s DATETIME]";
     private static final String[] FLAGS = { FLAG_START, FLAG_END };
     private static final String[] OPTIONS = { OPTION_TASK_ID, OPTION_TASK_NAME,
             OPTION_DATETIME };
     private static final String[] RESERVED = { "edit", "e" };
-    private Logic mLogic;
-    
+
     public EditHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
-    public void execute(Logic logic, Command command) {
-        mLogic = logic;
+    public void execute(LogicInterface logic, Command command) {
         Token id = command.getIdToken();
         try {
             int indexToEdit = Integer.parseInt(id.value);
-            Task task = mLogic.getTask(indexToEdit);
+            Task task = logic.getTask(indexToEdit);
             updateTask(command, task);
-            assert(task.isValid());
-            mLogic.storeCommandInHistory();
-            mLogic.clearRedoHistory();
-            mLogic.feedback(
-                    new FeedbackMessage(EDIT_SUCCESS, FeedbackType.INFO));
+            assert (task.isValid());
+            logic.storeCommandInHistory();
+            logic.clearRedoHistory();
+            logic.feedback(new FeedbackMessage(EDIT_SUCCESS, FeedbackType.INFO));
         } catch (NumberFormatException e) {
-            mLogic.feedback(FeedbackMessage.ERROR_INVALID_INDEX);
+            logic.feedback(FeedbackMessage.ERROR_INVALID_INDEX);
         } catch (TaskNotFoundException e) {
-            mLogic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
+            logic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
         } catch (InvalidTaskException e) {
-            mLogic.feedback(FeedbackMessage.ERROR_INVALID_TASK);
+            logic.feedback(FeedbackMessage.ERROR_INVALID_TASK);
         }
     }
 }

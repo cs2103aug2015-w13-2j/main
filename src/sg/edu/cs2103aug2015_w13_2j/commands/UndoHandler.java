@@ -2,7 +2,7 @@ package sg.edu.cs2103aug2015_w13_2j.commands;
 
 import java.util.ArrayList;
 
-import sg.edu.cs2103aug2015_w13_2j.Logic;
+import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
@@ -25,28 +25,26 @@ public class UndoHandler extends CommandHandler {
     public static final String UNDO_SUCCESS = "Previous command undone!";
     public static final String UNDO_FAILURE = "No more commands to undo!";
     private static final String NAME = "Undo";
-    private static final String SYNTAX = "<COMMAND_NAME>";
+    private static final String SYNTAX = "";
     private static final String[] FLAGS = {};
-    private static final String[] OPTIONS = { OPTION_COMMAND_NAME };
+    private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "undo" };
-    private Logic mLogic;
-    
+    private LogicInterface mLogic;
+
     public UndoHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
-    public void execute(Logic logic, Command command) {
-        assert(logic != null);
+    public void execute(LogicInterface logic, Command command) {
+        assert (logic != null);
         mLogic = logic;
         ArrayList<Task> restoredTaskList = mLogic.restoreCommandFromHistory();
         boolean rootUndoHistoryReached = (restoredTaskList == null);
         if (rootUndoHistoryReached) {
-            mLogic.feedback(
-                    new FeedbackMessage(UNDO_FAILURE, FeedbackType.INFO));
+            mLogic.feedback(new FeedbackMessage(UNDO_FAILURE, FeedbackType.INFO));
         } else {
-            mLogic.feedback(
-                    new FeedbackMessage(UNDO_SUCCESS, FeedbackType.INFO));
+            mLogic.feedback(new FeedbackMessage(UNDO_SUCCESS, FeedbackType.INFO));
         }
     }
 }

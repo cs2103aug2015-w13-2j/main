@@ -187,4 +187,9 @@ public class UIStub implements UIInterface {
     public void refreshFilter() {    	
     	mFilterChain = new FilterChain();
     }
+    @Override
+    public boolean showHelpPage() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

@@ -66,8 +66,8 @@ public class Logic implements LogicInterface {
 
     @Override
     public void injectDependencies(StorageInterface storage, UIInterface textUI) {
-    	assert(storage != null);
-    	assert(textUI != null);
+        assert (storage != null);
+        assert (textUI != null);
         mStorage = storage;
         mUI = textUI;
     }
@@ -139,6 +139,11 @@ public class Logic implements LogicInterface {
     }
 
     @Override
+    public boolean showHelpPage() {
+        return mUI.showHelpPage();
+    }
+
+    @Override
     public void addTask(Task task) {
         mTasks.add(task);
     }
@@ -146,7 +151,7 @@ public class Logic implements LogicInterface {
     public ArrayList<Task> getAllTasks() {
         return mTasks;
     }
-    
+
     @Override
     public Task getTask(int index) throws TaskNotFoundException {
         try {
@@ -155,7 +160,7 @@ public class Logic implements LogicInterface {
             throw new TaskNotFoundException();
         }
     }
-    
+
     @Override
     public Task removeTask(Task task) throws TaskNotFoundException {
         if (mTasks.remove(task)) {
@@ -163,7 +168,7 @@ public class Logic implements LogicInterface {
         } else {
             throw new TaskNotFoundException();
         }
-    } 
+    }
 
     @Override
     public Task removeTask(int index) throws TaskNotFoundException {
@@ -171,7 +176,7 @@ public class Logic implements LogicInterface {
         removeTask(task);
         return task;
     }
-    
+
     @Override
     public void readTasks() {
         mTasks.clear();
@@ -252,7 +257,7 @@ public class Logic implements LogicInterface {
     @Override
     public void clearUndoHistory() {
         int rootHistoryReached = 1;
-        while(mHistoryUndoStack.size() > rootHistoryReached) {
+        while (mHistoryUndoStack.size() > rootHistoryReached) {
             mHistoryUndoStack.pop();
         }
     }

@@ -2,7 +2,7 @@ package sg.edu.cs2103aug2015_w13_2j.commands;
 
 import java.util.ArrayList;
 
-import sg.edu.cs2103aug2015_w13_2j.Logic;
+import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
@@ -27,29 +27,27 @@ public class RedoHandler extends CommandHandler {
     public static final String REDO_FAILURE = "No more commands to redo! "
             + "Please undo a command first!";
     private static final String NAME = "Redo";
-    private static final String SYNTAX = "<COMMAND_NAME>";
+    private static final String SYNTAX = "";
     private static final String[] FLAGS = {};
-    private static final String[] OPTIONS = { OPTION_COMMAND_NAME };
+    private static final String[] OPTIONS = {};
     private static final String[] RESERVED = { "redo" };
-    private Logic mLogic;
-    
+    private LogicInterface mLogic;
+
     public RedoHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);
     }
 
     @Override
-    public void execute(Logic logic, Command command) {
-        assert(logic != null);
+    public void execute(LogicInterface logic, Command command) {
+        assert (logic != null);
         mLogic = logic;
         ArrayList<Task> restoredTaskList = mLogic
                 .restoreCommandFromRedoHistory();
         boolean rootRedoHistoryReached = (restoredTaskList == null);
         if (rootRedoHistoryReached) {
-            mLogic.feedback(
-                    new FeedbackMessage(REDO_FAILURE, FeedbackType.INFO));
+            mLogic.feedback(new FeedbackMessage(REDO_FAILURE, FeedbackType.INFO));
         } else {
-            mLogic.feedback(
-                    new FeedbackMessage(REDO_SUCCESS, FeedbackType.INFO));
+            mLogic.feedback(new FeedbackMessage(REDO_SUCCESS, FeedbackType.INFO));
         }
     }
 }
