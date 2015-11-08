@@ -37,6 +37,7 @@ public class AddHandler extends CommandHandler {
         Task task = new Task();
         try {
             updateTask(command, task);
+            assert(task.isValid());
             logic.addTask(task);
             logic.clearRedoHistory();
             logic.storeCommandInHistory();

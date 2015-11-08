@@ -47,6 +47,7 @@ public class EditHandler extends CommandHandler {
             int indexToEdit = Integer.parseInt(id.value);
             Task task = mLogic.getTask(indexToEdit);
             updateTask(command, task);
+            assert(task.isValid());
             mLogic.storeCommandInHistory();
             mLogic.clearRedoHistory();
             mLogic.feedback(
