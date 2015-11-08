@@ -181,7 +181,7 @@ public class Logic implements LogicInterface {
     public void readTasks() {
         mTasks.clear();
         mTasks.addAll(mStorage.readTasksFromDataFile());
-        storeCommandInHistory();
+        createUndoCommandHistory();
     }
 
     @Override
@@ -222,10 +222,6 @@ public class Logic implements LogicInterface {
      */
     public static ArrayList<Task> copyTaskList(ArrayList<Task> taskListToCopy) {
         ArrayList<Task> taskListCopy = new ArrayList<Task>();
-
-        // Creates a deep copy of all tasks in the master task
-        // list so that the same reference to the Task object will
-        // not be replicated in mHistoryStack.
         for (Task task : taskListToCopy) {
             Task taskCopy = task.newInstance();
             taskListCopy.add(taskCopy);
@@ -233,6 +229,17 @@ public class Logic implements LogicInterface {
         return taskListCopy;
     }
 
+    /**
+     * Clears and stores the first copy of the master {@link Task} list 
+     * into the undo stack.
+     */
+    public void createUndoCommandHistory() {
+        ArrayList<Task> rootTaskList = copyTaskList(mTasks);
+        mHistoryUndoStack.clear();
+        mHistoryRedoStack.clear();
+        mHistoryUndoStack.push(rootTaskList);
+    }
+    
     /**
      * Stores a deep copy of the master {@link Task} list into the undo stack.
      */
