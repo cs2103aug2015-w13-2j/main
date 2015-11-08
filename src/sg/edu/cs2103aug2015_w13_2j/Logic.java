@@ -233,7 +233,7 @@ public class Logic implements LogicInterface {
      * Clears and stores the first copy of the master {@link Task} list 
      * into the undo stack.
      */
-    public void createUndoCommandHistory() {
+    private void createUndoCommandHistory() {
         ArrayList<Task> rootTaskList = copyTaskList(mTasks);
         mHistoryUndoStack.clear();
         mHistoryRedoStack.clear();
