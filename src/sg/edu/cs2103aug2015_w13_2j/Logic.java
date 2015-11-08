@@ -231,6 +231,7 @@ public class Logic implements LogicInterface {
     /**
      * Stores a deep copy of the master {@link Task} list into the undo stack.
      */
+    @Override
     public void storeCommandInHistory() {
         ArrayList<Task> rootTaskList = copyTaskList(mTasks);
         mHistoryUndoStack.push(rootTaskList);
@@ -239,6 +240,7 @@ public class Logic implements LogicInterface {
     /**
      * Stores a deep copy of a {@link Task} list into the redo stack.
      */
+    @Override
     public void storeCommandInRedoHistory(ArrayList<Task> taskListToRedo) {
         ArrayList<Task> copyOfTaskList = copyTaskList(taskListToRedo);
         mHistoryRedoStack.push(copyOfTaskList);
@@ -247,6 +249,7 @@ public class Logic implements LogicInterface {
     /**
      * Clears the undo history stack until the root history is reached.
      */
+    @Override
     public void clearUndoHistory() {
         int rootHistoryReached = 1;
         while(mHistoryUndoStack.size() > rootHistoryReached) {
@@ -257,6 +260,7 @@ public class Logic implements LogicInterface {
     /**
      * Clears the redo stack.
      */
+    @Override
     public void clearRedoHistory() {
         mHistoryRedoStack.clear();
     }
@@ -269,6 +273,7 @@ public class Logic implements LogicInterface {
      * @return List of {@link Task} objects that will be displayed after
      *         restoring from the undo stack.
      */
+    @Override
     public ArrayList<Task> restoreCommandFromHistory() {
         boolean rootHistoryReached = mHistoryUndoStack.size() == 1;
         if (rootHistoryReached) {
@@ -290,6 +295,7 @@ public class Logic implements LogicInterface {
      * @return List of {@link Task} objects that will be displayed to the user
      *         after restoring from the redo stack.
      */
+    @Override
     public ArrayList<Task> restoreCommandFromRedoHistory() {
         boolean rootRedoHistoryReached = mHistoryRedoStack.isEmpty();
         if (rootRedoHistoryReached) {
