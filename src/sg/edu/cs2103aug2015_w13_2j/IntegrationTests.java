@@ -76,7 +76,6 @@ public class IntegrationTests {
 
         }
     }
-    
 
     @Test
     public void addThreeTasks(){
@@ -112,6 +111,7 @@ public class IntegrationTests {
         assertEquals(UI.getTasksForDisplay().get(0).getName(), newName);
     }
     
+    
     @Test
     public void testEditNameThreeTasks() throws TaskNotFoundException {
     	addThreeTasks();
@@ -120,6 +120,17 @@ public class IntegrationTests {
                                                                //task now sinks to the bottom of the list
         assertEquals(UI.getFeedBackMessage(), EditHandler.EDIT_SUCCESS);
         assertEquals(UI.getTasksForDisplay().get(2).getName(), newName); //<-- checking the last task
+    }
+    
+    
+    @Test
+    public void testEditTime() throws TaskNotFoundException {
+    	addThreeTasks();
+    	String name = UI.getTasksForDisplay().get(0).getName();
+        sLogic.executeCommand("edit 1 "+ "-s 11/11 -e 12/11"); //<-- since this task becomes event
+                                                     //it sinks to the bottom of the list
+        assertEquals(UI.getFeedBackMessage(), EditHandler.EDIT_SUCCESS);
+        assertEquals(UI.getTasksForDisplay().get(2).getName(), name);
     }
     
     @Test
