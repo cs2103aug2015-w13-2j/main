@@ -5,8 +5,15 @@ import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;
 
-// @@author NOAUTHOR
+// @@author A0121410H
 
+/**
+ * Loads a FunDUE data file located on the user's computer.
+ * 
+ * A user feedback message will subsequently be displayed to indicate that 
+ * the load operation was successful. If the user cancels the load operation, 
+ * a user feedback message will be displayed to notify the user.
+ */
 public class LoadHandler extends CommandHandler {
     private static final String NAME = "Load Data File";
     private static final String SYNTAX = "";
