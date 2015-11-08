@@ -192,13 +192,14 @@ public abstract class CommandHandler {
         determineType(task);
     }
 
+    // @@author A0133387B
+    
     /**
      * Determine the type of a task based on its start (if any) and end (if any)
      * times
      * 
      * @param task
      *            the new task to be categorized
-     * @@author A0133387B
      */
     private void determineType(Task task) {
         assert (task != null);

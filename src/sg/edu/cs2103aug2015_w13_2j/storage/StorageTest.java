@@ -45,10 +45,12 @@ public class StorageTest extends Storage {
         assertTrue(tasksToWrite.equals(tasksWritten));
     }
     
-    //@@author A0133387B
-    /**to facilitate integration testing
+    // @@author A0133387B
+    
+    /**
+     * To facilitate integration testing
      * This method is used to clear the test file specified in the IntegrationTest JUnit class
-    **/
+     */
     public void clearTestFileContents(){
     	PrintWriter writer = null;
     	File testFile = getDataFile();
