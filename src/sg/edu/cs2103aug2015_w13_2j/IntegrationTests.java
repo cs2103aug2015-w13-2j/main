@@ -105,6 +105,22 @@ public class IntegrationTests {
         assertEquals(UI.getFeedBackMessage(), AddHandler.ADD_SUCCESS);
     }
     
+    // @@author A0130894B
+    
+    @Test
+    public void add100Tasks() {
+        int stressCount = 200;
+        String taskName = "";
+        for (int i = 0; i < stressCount; i++) {
+            taskName += i;
+            sLogic.executeCommand("add '" + taskName + "'");
+            assertEquals(UI.getFeedBackMessage(), AddHandler.ADD_SUCCESS);
+        }
+        assertEquals(UI.getTasksForDisplay().size(), stressCount);
+    }
+    
+    // @@author A0133387B
+    
     @Test
     public void addShortForm(){
     	String taskName = "My first integration test!";
