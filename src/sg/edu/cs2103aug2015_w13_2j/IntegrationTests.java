@@ -81,9 +81,13 @@ public class IntegrationTests {
 			System.out.println(UI.getTasksForDisplay().get(i).toString());
 
         }
+    	sStorage.clearTestFileContents();
     }
 
-    @Test
+    /**
+     * Some convenience methods to add tasks to tests
+     */
+    
     public void addThreeTasks(){
     	String first = "My first integration test!";
         sLogic.executeCommand("add '" + first + "'");
@@ -94,7 +98,6 @@ public class IntegrationTests {
         assertEquals(UI.getTasksForDisplay().size(), 3);
     }
     
-    @Test
     public void addOneTask(){
     	String taskName = "My first integration test!";
         sLogic.executeCommand("add '" + taskName + "'");
