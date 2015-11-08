@@ -165,7 +165,6 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public void injectDependency(LogicInterface logic) {
         mLogic = logic;
         createHelpPage(mLogic);
-        showHelpPage();
     }
 
     @Override
@@ -311,7 +310,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         Scene scene = new Scene(scrollPane, HELP_MIN_WIDTH, HELP_MIN_HEIGHT);
         scene.getStylesheets().add(
                 getClass().getResource("styleFX.css").toExternalForm());
-        
+
         // Retrieve all distinct CommandHandlers and iterate
         List<CommandHandler> handlers = logic.getCommandHandlers().values()
                 .stream().distinct().collect(Collectors.toList());
@@ -319,16 +318,16 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
             // Create a row container for each CommandHandler
             VBox row = new VBox();
             row.getStyleClass().addAll("helpCategoryRow");
-            
+
             // CommandHandler name
             Label handlerName = new Label(handler.getName());
             handlerName.getStyleClass().addAll("helpCategoryLabel");
-            
+
             // CommandHandler syntax
             Label handlerUsage = new Label("Usage: "
                     + handler.getReservedKeywords() + " " + handler.getSyntax());
             handlerUsage.getStyleClass().add("wrappingText");
-            
+
             // CommandHandler flags
             VBox flagsContainer = new VBox();
             for (String flag : handler.getFlags()) {
@@ -337,7 +336,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
                         "helpTabbedLabel");
                 flagsContainer.getChildren().add(flagLabel);
             }
-            
+
             // CommandHandler options
             VBox optionsContainer = new VBox();
             for (String option : handler.getOptions()) {
@@ -346,7 +345,7 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
                         "helpTabbedLabel");
                 optionsContainer.getChildren().add(optionLabel);
             }
-            
+
             row.getChildren().addAll(handlerName, handlerUsage, flagsContainer,
                     optionsContainer);
             container.getChildren().add(row);
