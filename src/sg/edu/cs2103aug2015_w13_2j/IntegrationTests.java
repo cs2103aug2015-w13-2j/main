@@ -97,6 +97,14 @@ public class IntegrationTests {
     }
     
     @Test
+    public void addShortForm(){
+    	String taskName = "My first integration test!";
+        sLogic.executeCommand("a '" + taskName + "'");
+        assertEquals(UI.getTasksForDisplay().size(), 1);
+        assertEquals(UI.getFeedBackMessage(), AddHandler.ADD_SUCCESS);
+    }
+    
+    @Test
     public void testAddInvalid() throws TaskNotFoundException {
         sLogic.executeCommand("add '");
         assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_INVALID_TASK.getMessage() );
@@ -107,6 +115,15 @@ public class IntegrationTests {
     	addOneTask();
     	String newName = "ZZZZZ";
         sLogic.executeCommand("edit 1 "+ "'" + newName + "'");
+        assertEquals(UI.getFeedBackMessage(), EditHandler.EDIT_SUCCESS);
+        assertEquals(UI.getTasksForDisplay().get(0).getName(), newName);
+    }
+    
+    @Test
+    public void testEditShortForm() throws TaskNotFoundException {
+    	addOneTask();
+    	String newName = "ZZZZZ";
+        sLogic.executeCommand("e 1 "+ "'" + newName + "'");
         assertEquals(UI.getFeedBackMessage(), EditHandler.EDIT_SUCCESS);
         assertEquals(UI.getTasksForDisplay().get(0).getName(), newName);
     }
@@ -151,6 +168,15 @@ public class IntegrationTests {
         sLogic.executeCommand("delet");
         assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_UNRECOGNIZED_COMMAND.getMessage());
         System.out.println("exit test del");
+    }
+    
+    
+    @Test
+    public void testDeleteShortForm() throws TaskNotFoundException {
+    	addOneTask();
+        sLogic.executeCommand("del 1");
+        assertEquals(UI.getFeedBackMessage(), DeleteHandler.DELETE_SUCCESS);
+        assertEquals(UI.getTasksForDisplay().size(), 0);
     }
     
     @Test
