@@ -108,7 +108,7 @@ public class IntegrationTests {
     // @@author A0130894B
     
     @Test
-    public void add100Tasks() {
+    public void add200Tasks() {
         int stressCount = 200;
         String taskName = "";
         for (int i = 0; i < stressCount; i++) {
