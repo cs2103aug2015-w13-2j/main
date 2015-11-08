@@ -111,6 +111,12 @@ public class IntegrationTests {
         assertEquals(UI.getTasksForDisplay().get(0).getName(), newName);
     }
     
+    @Test
+    public void testEditNameOneTaskInvalid() throws TaskNotFoundException {
+    	addOneTask();
+        sLogic.executeCommand("edit 2");
+        assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_TASK_NOT_FOUND.getMessage());
+    }
     
     @Test
     public void testEditNameThreeTasks() throws TaskNotFoundException {
@@ -214,5 +220,40 @@ public class IntegrationTests {
         sLogic.executeCommand("redo");
         assertEquals(UI.getTasksForDisplay().size(), 2);
     } 
-
+  
+    @Test
+    public void testSortByName() throws TaskNotFoundException{
+     	String first = "jumps over the lazy dog";
+        sLogic.executeCommand("add '" + first + "'");
+        String sec = "brown fox";
+        sLogic.executeCommand("add '" + sec + "'");
+        String third = "The quick";
+        sLogic.executeCommand("add '" + third + "'");
+        assertEquals(UI.getTasksForDisplay().get(0).getName(), third);	
+        assertEquals(UI.getTasksForDisplay().get(1).getName(), sec);
+        assertEquals(UI.getTasksForDisplay().get(2).getName(), first);	
+    }
+    
+    @Test
+    public void testSortChronological() throws TaskNotFoundException {
+    	String first = "over the lazy dog";
+        sLogic.executeCommand("add '" + first + "'");
+        String sec = "brown fox jumps ";
+        sLogic.executeCommand("add '" + sec + "'");
+        String third = "the quick";
+        sLogic.executeCommand("add '" + third + "'");
+        assertEquals(UI.getTasksForDisplay().get(0).getName(), sec);	
+        assertEquals(UI.getTasksForDisplay().get(1).getName(), first);
+        assertEquals(UI.getTasksForDisplay().get(2).getName(), third);	
+        //change one of them to event, another to deadline task
+        sLogic.executeCommand("edit 1 -e 8/11"); //< this task becomes a deadline task and sinks to the bottom
+        assertEquals(UI.getTasksForDisplay().get(2).getName(), sec);	
+        assertEquals(UI.getTasksForDisplay().get(0).getName(), first);
+        assertEquals(UI.getTasksForDisplay().get(1).getName(), third);
+        //now change the task named 
+        sLogic.executeCommand("edit 1 -e 9/11");
+        assertEquals(UI.getTasksForDisplay().get(0).getName(), third);	
+        assertEquals(UI.getTasksForDisplay().get(1).getName(), sec);
+        assertEquals(UI.getTasksForDisplay().get(2).getName(), first);
+    }
 }
