@@ -120,6 +120,7 @@ public class Logic implements LogicInterface {
 
     @Override
     public ArrayList<Task> display() {
+    	LOGGER.log(Level.INFO, "IN DISPLAY OF LOGIC");
         return mUI.display(mTasks);
     }
 

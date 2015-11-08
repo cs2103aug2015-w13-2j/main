@@ -29,15 +29,14 @@ public class UIStub implements UIInterface {
     private static final Logger LOGGER = Logger
             .getLogger(UIStub.class.getName());
 
-    private ArrayList<Task> mTasks;
     private ArrayList<Task> mOrderedTasks;
     private FeedbackMessage mFeedback;
     private String mDisplayString;
     private FilterChain mFilterChain;
     private StorageInterface sStorage;
-
     public UIStub(){
     	mFilterChain = new FilterChain();
+    	mOrderedTasks = new ArrayList<Task>();
     }
     @Override
     public void injectDependency(LogicInterface Logic) {
@@ -101,8 +100,6 @@ public class UIStub implements UIInterface {
         return mFeedback.getMessage();
     }
 
-
-
     @Override
     public void display(String s) {
         LOGGER.log(Level.INFO, s);
@@ -139,41 +136,39 @@ public class UIStub implements UIInterface {
                     .filter((Task t) -> t.getEnd() == null)
                     .collect(Collectors.toList());
             LOGGER.log(Level.INFO, "There are " + floatingTasks.size() + " floating tasks");
-
+            mOrderedTasks.addAll(floatingTasks);
             // Upcoming
             List<Task> upcomingTasks = tasks.stream()
                     .filter((Task t) -> t.getEnd() != null)
                     .collect(Collectors.toList());
             mOrderedTasks.addAll(upcomingTasks);
             LOGGER.log(Level.INFO, "There are " + upcomingTasks.size() + " upcoming tasks");
+            LOGGER.log(Level.INFO, "There are in total " + mOrderedTasks.size() + " to display");
             return (ArrayList<Task>) mOrderedTasks;
         }
     }
-  
-
 
     @Override
     public Task getTask(int index) throws TaskNotFoundException {
         try {
-            return mTasks.get(index - 1);
+            return mOrderedTasks.get(index - 1);
         } catch (IndexOutOfBoundsException e) {
             throw new TaskNotFoundException();
         }
     }
 
-
+    
     /**
      * Retrieves the list of {@link Task} objects that was sent for display via
      * {@link UIInterface#display(ArrayList)}.
      * 
      * @return List of {@link Task} objects that was sent for display.
      */
-    public ArrayList<Task> getTasksForDisplay() {
-    	mTasks = sStorage.readTasksFromDataFile(); 
-    	return mTasks;
+    public ArrayList<Task> getTasksForDisplay() {    	
+    	return mOrderedTasks;
     }
     
-    public ArrayList<Task> getFilteredTasksForDisplay() {    	
-    	return mOrderedTasks;
+    public void refreshTaskList() {    	
+    	mOrderedTasks = sStorage.readTasksFromDataFile();
     }
 }
