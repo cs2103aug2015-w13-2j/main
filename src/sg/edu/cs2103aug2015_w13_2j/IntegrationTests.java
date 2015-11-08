@@ -32,6 +32,12 @@ import sg.edu.cs2103aug2015_w13_2j.storage.StorageTest;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.UIStub;
 
+/**
+ * Includes tests for the synchronization of the components
+ * Tests 4 components Logic, UI, Parser and Storage as a whole
+ * @author Nguyen Tuong Van
+ *
+ */
 public class IntegrationTests {
 	private static LogicInterface sLogic = Logic.getInstance();
 	private static UIStub UI;

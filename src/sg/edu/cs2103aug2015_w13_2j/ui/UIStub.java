@@ -84,6 +84,7 @@ public class UIStub implements UIInterface {
     }
     
   //@@author A0133387B
+    
     @Override
     public void pushFilter(Filter filter) {
         mFilterChain.pushFilter(filter);
@@ -116,6 +117,12 @@ public class UIStub implements UIInterface {
     	sStorage = storageTest;
     }
 
+    /**
+     * Selects the list of {@link Task} objects that should be displayed
+     * depending on user's command
+     * This method works in the same way as the display method in FXUI 
+     * {@link FXUI#display(ArrayList)}, omitting the codes for appearance 
+     */
     public void display(ArrayList<Task> tasks) {
     	LOGGER.log(Level.INFO, "FILTER " + mFilterChain.getFilterChain());
         // Re-seed the filter chain
@@ -151,6 +158,7 @@ public class UIStub implements UIInterface {
     @Override
     public Task getTask(int index) throws TaskNotFoundException {
         try {
+        	// NOTE: list is zero indexed whereas display is 1 indexed
             return mOrderedTasks.get(index - 1);
         } catch (IndexOutOfBoundsException e) {
             throw new TaskNotFoundException();
@@ -172,6 +180,10 @@ public class UIStub implements UIInterface {
     	mOrderedTasks = sStorage.readTasksFromDataFile();
     }
     
+    /**
+     * Reverts back to the main task list with no additional filter
+     * for testing purpose, avoiding chaining of filter unnecessarily when testing
+     */
     public void refreshFilter() {    	
     	mFilterChain = new FilterChain();
     }
