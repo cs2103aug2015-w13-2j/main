@@ -1,12 +1,5 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-//@@author A0133387B
-/**
- * contains tests for testing all components to ensure they work together to 
- * produce expected output
- * @author Nguyen Tuong Van
- */
-
 import static org.junit.Assert.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,14 +25,20 @@ import sg.edu.cs2103aug2015_w13_2j.storage.StorageTest;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.UIStub;
 
+// @@author A0133387B
+
 /**
- * Includes tests for the synchronization of the components
- * Tests 4 components Logic, UI, Parser and Storage as a whole
- * Mimics a user's action of adding a command into the application by calling executeCommand() in Logic
- * and examines the output produced by the User Interface Stub after the whole operation
- * Before any tests are carried out, the file will be cleared so that individual tests so not affect each other
+ * Contains tests for testing all components to ensure they work together to 
+ * produce expected output
+ * 
+ * Includes tests for the synchronization of the components Tests 4 components 
+ * Logic, UI, Parser and Storage as a whole. Mimics a user's action of adding a 
+ * command into the application by calling executeCommand() in Logic and examines 
+ * the output produced by the User Interface Stub after the whole operation. 
+ * Before any tests are carried out, the file will be cleared so that individual 
+ * tests do not affect each other
+ * 
  * @author Nguyen Tuong Van
- *
  */
 public class IntegrationTests {
 	private static LogicInterface sLogic = Logic.getInstance();
@@ -47,7 +46,6 @@ public class IntegrationTests {
 	private static StorageTest sStorage = new StorageTest();
     private static final Logger LOGGER = Logger
             .getLogger(Storage.class.getName());
-    
     
     @BeforeClass
     public static void setup() {
@@ -90,7 +88,6 @@ public class IntegrationTests {
     /**
      * Some convenience methods to add tasks to tests
      */
-    
     public void addThreeTasks(){
     	String first = "My first integration test!";
         sLogic.executeCommand("add '" + first + "'");
