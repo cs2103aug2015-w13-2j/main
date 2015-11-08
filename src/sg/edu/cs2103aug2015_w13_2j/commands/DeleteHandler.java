@@ -35,7 +35,7 @@ public class DeleteHandler extends CommandHandler {
             "TASK_ID: Index of the Task to be deleted as displayed in the ID column" };
     private static final String[] RESERVED = { "delete", "del", "remove",
             "rm" };
-    private static final String DELETE_SUCCESS = "Task deleted successfully.";
+    public static final String DELETE_SUCCESS = "Task deleted successfully.";
     
     public DeleteHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);

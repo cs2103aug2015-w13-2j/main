@@ -81,8 +81,9 @@ public interface LogicInterface {
     /**
      * Sends the master list of {@link Task} objects to the {@link UIInterface}
      * component to be displayed.
+     * @return 
      */
-    public void display();
+    public ArrayList<Task> display();
 
     /**
      * Pass-through method to {@link UIInterface#display(String)}.

@@ -26,7 +26,7 @@ public class AddHandler extends CommandHandler {
     private static final String[] OPTIONS = { OPTION_TASK_NAME,
             OPTION_DATETIME };
     private static final String[] RESERVED = { "add", "a" };
-    private static final String ADD_SUCCESS = "Task added successfully.";
+    public static final String ADD_SUCCESS = "Task added successfully.";
 
     public AddHandler() {
         super(NAME, SYNTAX, FLAGS, OPTIONS, RESERVED);

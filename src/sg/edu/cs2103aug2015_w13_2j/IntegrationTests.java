@@ -68,7 +68,7 @@ public class IntegrationTests {
     	assertEquals(UI.getTasksForDisplay().size(), 0);
         String taskName = "My first integration test!";
         sLogic.executeCommand("add '" + taskName + "'");
-        assertEquals(UI.getFeedBackMessage(), "Task added successfully.");
+        assertEquals(UI.getFeedBackMessage(), AddHandler.ADD_SUCCESS);
      
         sLogic.executeCommand("add '");
         assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_INVALID_TASK.getMessage() );
@@ -79,12 +79,13 @@ public class IntegrationTests {
     public void testDel() throws TaskNotFoundException {
     	System.out.println("enter test del");
     	assertEquals(UI.getTasksForDisplay().size(), 0);
+    	assertEquals(sLogic.display().size(), 0);
     	String taskName = "My first integration test!";
         sLogic.executeCommand("add '" + taskName + "'");
         assertEquals(UI.getTasksForDisplay().size(), 1);
         sLogic.executeCommand("delete 1");
         System.out.println("Deleted index 1");
-        assertEquals(UI.getFeedBackMessage(), "Task deleted successfully.");
+        assertEquals(UI.getFeedBackMessage(), DeleteHandler.DELETE_SUCCESS);
         sLogic.executeCommand("delete 1");
         assertEquals(UI.getFeedBackMessage(), FeedbackMessage.ERROR_TASK_NOT_FOUND.getMessage());
         sLogic.executeCommand("delet");
@@ -93,7 +94,7 @@ public class IntegrationTests {
     }
     
     @Test
-    public void testSearch() throws TaskNotFoundException {
+    public void testFilter() throws TaskNotFoundException {
     	assertEquals(UI.getTasksForDisplay().size(), 0);
     	ArrayList<Task> tasks = new ArrayList<Task>();
     	String first = "My first integration test!";
@@ -105,8 +106,10 @@ public class IntegrationTests {
         String third = "My third integration test!";
         sLogic.executeCommand("add '" + third + "'");
         tasks.add(new Task(third));
-        sLogic.executeCommand("search:test");
-        LOGGER.log(Level.INFO, "SEARCH COMMAND");
         assertEquals(UI.getTasksForDisplay().size(), 3);
+        sLogic.executeCommand("! 1");
+        sLogic.executeCommand("filter important");
+        LOGGER.log(Level.INFO, "FILTER IMPORTANT");
+        assertEquals(UI.getFilteredTasksForDisplay().size(), 1);
     } 
 }

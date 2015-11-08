@@ -119,8 +119,8 @@ public class Logic implements LogicInterface {
     }
 
     @Override
-    public void display() {
-        mUI.display(mTasks);
+    public ArrayList<Task> display() {
+        return mUI.display(mTasks);
     }
 
     @Override

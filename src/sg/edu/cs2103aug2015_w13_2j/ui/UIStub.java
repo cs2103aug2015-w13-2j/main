@@ -30,95 +30,20 @@ public class UIStub implements UIInterface {
             .getLogger(UIStub.class.getName());
 
     private ArrayList<Task> mTasks;
+    private ArrayList<Task> mOrderedTasks;
     private FeedbackMessage mFeedback;
     private String mDisplayString;
-    private FilterChain mFilterChain = new FilterChain();
+    private FilterChain mFilterChain;
     private StorageInterface sStorage;
 
-    /**
-     * Does nothing.
-     */
+    public UIStub(){
+    	mFilterChain = new FilterChain();
+    }
     @Override
     public void injectDependency(LogicInterface Logic) {
         // Do nothing
     }
-
-    public void injectDependency(StorageInterface storageTest) {
-    	sStorage = storageTest;
-    }
-
-    @Override
-    public void display(ArrayList<Task> tasks) {
-        LOGGER.log(Level.INFO, tasks.size() + " tasks sent for display");
-        // Re-seed the filter chain
-        mFilterChain.updateFilters(tasks);
-
-        // Clear the ordered task list
-        
-        Collections.sort(tasks);
-        List<Task> mOrderedTasks = new ArrayList<Task>();
-        if (mFilterChain.size() > 1) {
-            List<Task> filteredTasks = mFilterChain.getTasksForDisplay();
-      //      mFilteredCategory.setName(mFilterChain.getFilterChain());
-      //      mFilteredCategory.update(filteredTasks, mOrderedTasks.size());
-            mOrderedTasks.addAll(filteredTasks);
-
-       //     mFilteredCategory.setVisible(true);
-       //     mFloatingCategory.setVisible(false);
-       //     mUpcomingCategory.setVisible(false);
-        } else {
-            // Someday
-            List<Task> floatingTasks = tasks.stream()
-                    .filter((Task t) -> t.getEnd() == null)
-                    .collect(Collectors.toList());
-         //   mFloatingCategory.update(floatingTasks, mOrderedTasks.size());
-            mOrderedTasks.addAll(floatingTasks);
-
-            // Upcoming
-            List<Task> upcomingTasks = tasks.stream()
-                    .filter((Task t) -> t.getEnd() != null)
-                    .collect(Collectors.toList());
-           // mUpcomingCategory.update(upcomingTasks, mOrderedTasks.size());
-            mOrderedTasks.addAll(upcomingTasks);
-
-           // mFilteredCategory.setVisible(false);
-           // mFloatingCategory.setVisible(true);
-           // mUpcomingCategory.setVisible(true);
-        }
-    }
-
-    @Override
-    public void display(String s) {
-        LOGGER.log(Level.INFO, s);
-        mDisplayString = s;
-    }
-
-    @Override
-    public Task getTask(int index) throws TaskNotFoundException {
-        try {
-            return mTasks.get(index - 1);
-        } catch (IndexOutOfBoundsException e) {
-            throw new TaskNotFoundException();
-        }
-    }
-
-    @Override
-    public void feedback(FeedbackMessage f) {
-        LOGGER.log(Level.INFO, f.getMessage());
-        mFeedback = f;
-    }
-
-    /**
-     * Retrieves the list of {@link Task} objects that was sent for display via
-     * {@link UIInterface#display(ArrayList)}.
-     * 
-     * @return List of {@link Task} objects that was sent for display.
-     */
-    public ArrayList<Task> getTasksForDisplay() {
-    	mTasks = sStorage.readTasksFromDataFile(); 
-    	return mTasks;
-    }
-
+    
     /**
      * Retrieves the string that was sent for display via
      * {@link UIInterface#display(String)}.
@@ -143,30 +68,6 @@ public class UIStub implements UIInterface {
      * Does nothing.
      */
     @Override
-    public void pushFilter(Filter filter) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * Does nothing.
-     */
-    @Override
-    public Filter popFilter() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String getFeedBackMessage() {
-        // TODO Auto-generated method stub
-        return mFeedback.getMessage();
-    }
-
-    /**
-     * Does nothing.
-     */
-    @Override
     public boolean showChangeDataFilePathDialog() {
         // TODO Auto-generated method stub
         return true;
@@ -181,5 +82,98 @@ public class UIStub implements UIInterface {
     public Parent getUI() {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+  //@@author A0133387B
+    @Override
+    public void pushFilter(Filter filter) {
+        mFilterChain.pushFilter(filter);
+    }
+
+    @Override
+    public Filter popFilter() {
+        return mFilterChain.popFilter();
+    }
+
+    @Override
+    public String getFeedBackMessage() {
+        // TODO Auto-generated method stub
+        return mFeedback.getMessage();
+    }
+
+
+
+    @Override
+    public void display(String s) {
+        LOGGER.log(Level.INFO, s);
+        mDisplayString = s;
+    }
+    
+    @Override
+    public void feedback(FeedbackMessage f) {
+        LOGGER.log(Level.INFO, f.getMessage());
+        mFeedback = f;
+    }
+    
+    public void injectDependency(StorageInterface storageTest) {
+    	sStorage = storageTest;
+    }
+
+    public ArrayList<Task> display(ArrayList<Task> tasks) {
+    	LOGGER.log(Level.INFO, "FILTER " + mFilterChain.getFilterChain());
+        // Re-seed the filter chain
+        mFilterChain.updateFilters(tasks);
+
+        // Clear the ordered task list
+        mOrderedTasks = new ArrayList<Task>();
+        Collections.sort(tasks);
+        
+        if (mFilterChain.size() > 1) {
+            List<Task> filteredTasks = mFilterChain.getTasksForDisplay();
+            mOrderedTasks.addAll(filteredTasks);
+            LOGGER.log(Level.INFO, filteredTasks.size() + " tasks sent for display in UISTub FILTERED");
+            return (ArrayList<Task>) mOrderedTasks;
+        } else {
+            // Someday
+            List<Task> floatingTasks = tasks.stream()
+                    .filter((Task t) -> t.getEnd() == null)
+                    .collect(Collectors.toList());
+            LOGGER.log(Level.INFO, "There are " + floatingTasks.size() + " floating tasks");
+
+            // Upcoming
+            List<Task> upcomingTasks = tasks.stream()
+                    .filter((Task t) -> t.getEnd() != null)
+                    .collect(Collectors.toList());
+            mOrderedTasks.addAll(upcomingTasks);
+            LOGGER.log(Level.INFO, "There are " + upcomingTasks.size() + " upcoming tasks");
+            return (ArrayList<Task>) mOrderedTasks;
+        }
+    }
+  
+
+
+    @Override
+    public Task getTask(int index) throws TaskNotFoundException {
+        try {
+            return mTasks.get(index - 1);
+        } catch (IndexOutOfBoundsException e) {
+            throw new TaskNotFoundException();
+        }
+    }
+
+
+    /**
+     * Retrieves the list of {@link Task} objects that was sent for display via
+     * {@link UIInterface#display(ArrayList)}.
+     * 
+     * @return List of {@link Task} objects that was sent for display.
+     */
+    public ArrayList<Task> getTasksForDisplay() {
+    	mTasks = sStorage.readTasksFromDataFile(); 
+    	return mTasks;
+    }
+    
+    public ArrayList<Task> getFilteredTasksForDisplay() {    	
+    	return mOrderedTasks;
     }
 }

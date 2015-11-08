@@ -27,8 +27,9 @@ public interface UIInterface {
      * 
      * @param tasks
      *            List of Task objects to be displayed
+     * @return 
      */
-    public void display(ArrayList<Task> tasks);
+    public ArrayList<Task> display(ArrayList<Task> tasks);
 
     /**
      * Displays the provided string directly on the TextPane via
