@@ -1,7 +1,6 @@
 package sg.edu.cs2103aug2015_w13_2j.ui;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +47,6 @@ public class UIStub implements UIInterface {
 
         // Clear the ordered task list
         mOrderedTasks.clear();
-        Collections.sort(tasks);
 
         if (mFilterChain.size() > 1) {
             List<Task> filteredTasks = mFilterChain.getTasksForDisplay();
