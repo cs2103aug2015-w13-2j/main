@@ -406,7 +406,9 @@ public class Task implements Comparable<Task>, Cloneable {
     }
 
     // @@author A0124007X
-
+    /**
+     * Comparison method used in {@link Task} sorting
+     */
     @Override
     public int compareTo(Task task) {
         if (this.getEnd() == null && task.getEnd() == null) {
