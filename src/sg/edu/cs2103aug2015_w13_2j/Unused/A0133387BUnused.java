@@ -1,4 +1,4 @@
-package sg.edu.cs2103aug2015_w13_2j.Unused;
+package sg.edu.cs2103aug2015_w13_2j.unused;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,7 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 
 public class A0133387BUnused {
     
-    //@@author A0133387B-unused
+    // @@author A0133387B-unused
     /**
      * The codes below are unused because of refactoring of Logic subsequently
      * and registering each command as a CommandHandler
