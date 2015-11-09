@@ -207,11 +207,6 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     }
 
     @Override
-    public void display(String s) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public Task getTask(int index) throws TaskNotFoundException {
         try {
             // NOTE: list is zero indexed whereas display is 1 indexed
@@ -225,6 +220,11 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public void feedback(FeedbackMessage f) {
         mFeedbackLabel.setTextFill(f.getType().getFXColor());
         mFeedbackLabel.setText(f.getMessage());
+    }
+
+    @Override
+    public String getFeedbackMessageString() {
+        return mFeedbackLabel.getText();
     }
 
     @Override
@@ -269,6 +269,11 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     }
 
     @Override
+    public void focusCommandBar() {
+        mTextField.requestFocus();
+    }
+
+    @Override
     public Parent getUI() {
         return mContainer;
     }
@@ -286,12 +291,6 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         default :
             // Do nothing
         }
-    }
-
-    @Override
-    public String getFeedBackMessage() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     /**

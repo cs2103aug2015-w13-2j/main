@@ -12,32 +12,22 @@ import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 
 public interface UIInterface {
     /**
-     * Injects the dependency on an object implementing the
-     * {@link LogicInterface} into this {@link UIInterface} component
+     * Injects the dependency on a {@link LogicInterface} component into this
+     * {@link UIInterface} component.
      * 
      * @param logic
-     *            An object implementing the {@link LogicInterface}. A handle to
-     *            this object will be retained so that
-     *            {@link LogicInterface#executeCommand(String)} can be called
+     *            A {@link LogicInterface} component. A handle to this object
+     *            will be retained to access the {@link LogicInterface} methods.
      */
     public void injectDependency(LogicInterface logic);
 
     /**
-     * Displays the provided list of Task objects
+     * Displays the provided list of {@link Task} objects.
      * 
      * @param tasks
-     *            List of Task objects to be displayed
+     *            List of {@link Task} objects to be displayed.
      */
     public void display(ArrayList<Task> tasks);
-
-    /**
-     * Displays the provided string directly on the TextPane via
-     * {@link TextPane#print(String)}
-     * 
-     * @param s
-     *            String to be displayed
-     */
-    public void display(String s);
 
     /**
      * Retrieves the Task object associated with the index provided. The general
@@ -63,7 +53,14 @@ public interface UIInterface {
      */
     public void feedback(FeedbackMessage f);
 
-    public String getFeedBackMessage();
+    /**
+     * Retrieves the string message content of the last {@link FeedbackMessage}
+     * object that was displayed.
+     * 
+     * @return String message content of last displayed {@link FeedbackMessage}
+     *         object.
+     */
+    public String getFeedbackMessageString();
 
     /**
      * Adds the provided {@link Filter} object to the filter chain. The filtered
@@ -102,6 +99,11 @@ public interface UIInterface {
      *         the window was already showing.
      */
     public boolean showHelpPage();
+
+    /**
+     * Attempts to place focus on the command bar text field input.
+     */
+    public void focusCommandBar();
 
     /**
      * Retrieves the UI elements to be displayed in a {@link Parent} container.

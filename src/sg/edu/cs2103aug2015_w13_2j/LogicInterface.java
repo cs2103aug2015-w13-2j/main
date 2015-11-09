@@ -85,14 +85,6 @@ public interface LogicInterface {
     public void display();
 
     /**
-     * Pass-through method to {@link UIInterface#display(String)}.
-     * 
-     * @param s
-     *            String to be displayed.
-     */
-    public void display(String s);
-
-    /**
      * Pass-through method to {@link UIInterface#feedback(FeedbackMessage)}
      * which displays the provided {@link FeedbackMessage} object to the user.
      * 
@@ -251,7 +243,7 @@ public interface LogicInterface {
      * Stores a deep copy of a {@link Task} list into the redo stack.
      * 
      * @param taskListToRedo
-     *          List of {@link Task} objects to be stored in redo history.
+     *            List of {@link Task} objects to be stored in redo history.
      * 
      */
     public void storeCommandInRedoHistory(ArrayList<Task> taskListToRedo);
@@ -260,7 +252,7 @@ public interface LogicInterface {
      * Clears the undo history stack until the root history is reached.
      */
     public void clearUndoHistory();
-    
+
     /**
      * Clears the redo stack.
      */

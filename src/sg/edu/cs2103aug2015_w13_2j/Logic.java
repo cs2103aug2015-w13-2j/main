@@ -124,11 +124,6 @@ public class Logic implements LogicInterface {
     }
 
     @Override
-    public void display(String s) {
-        mUI.display(s);
-    }
-
-    @Override
     public void feedback(FeedbackMessage m) {
         mUI.feedback(m);
     }
@@ -230,8 +225,8 @@ public class Logic implements LogicInterface {
     }
 
     /**
-     * Clears and stores the first copy of the master {@link Task} list 
-     * into the undo stack.
+     * Clears and stores the first copy of the master {@link Task} list into the
+     * undo stack.
      */
     private void createUndoCommandHistory() {
         ArrayList<Task> rootTaskList = copyTaskList(mTasks);
@@ -239,7 +234,7 @@ public class Logic implements LogicInterface {
         mHistoryRedoStack.clear();
         mHistoryUndoStack.push(rootTaskList);
     }
-    
+
     /**
      * Stores a deep copy of the master {@link Task} list into the undo stack.
      */

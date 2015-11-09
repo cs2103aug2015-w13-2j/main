@@ -49,7 +49,6 @@ public class LogicTest {
         sLogic.registerCommandHandler(new UndoHandler());
         sLogic.registerCommandHandler(new RedoHandler());
         sLogic.injectDependencies(sStorage, sUI);
-        sUI.injectDependency(sStorage);
         sStorage.clearDataFile();
         sUI.getTasksForDisplay();
         sLogic.readTasks();
@@ -64,7 +63,7 @@ public class LogicTest {
         clearMasterTaskList(tasksToDelete);
         sLogic.clearUndoHistory();
         sLogic.clearRedoHistory();
-        assert(sLogic.getAllTasks().size() == 0);
+        assert (sLogic.getAllTasks().size() == 0);
     }
 
     @Test
@@ -149,8 +148,8 @@ public class LogicTest {
         String expectedTaskName1Changed = "Test Edit 1 Change Name";
 
         sLogic.executeCommand("add " + taskName1);
-        sLogic.executeCommand(
-                "edit " + indexOfTask1 + " '" + expectedTaskName1Changed + "'");
+        sLogic.executeCommand("edit " + indexOfTask1 + " '"
+                + expectedTaskName1Changed + "'");
 
         Task actualEditedTask1 = sLogic.getTask(indexOfTask1);
         String actualNameOfEditedTask1 = actualEditedTask1.getName();
@@ -174,8 +173,8 @@ public class LogicTest {
         String startDateOfTask3Changed = "12/01/2015";
 
         sLogic.executeCommand("add " + taskName3 + " -s " + startDateOfTask3);
-        sLogic.executeCommand(
-                "edit " + indexOfTask3 + " -s " + startDateOfTask3Changed);
+        sLogic.executeCommand("edit " + indexOfTask3 + " -s "
+                + startDateOfTask3Changed);
 
         Task actualEditedTask3 = sLogic.getTask(indexOfTask3);
         Date actualEditedTask3Date = actualEditedTask3.getStart();
@@ -205,8 +204,8 @@ public class LogicTest {
         String endDateOfTask2Changed = "24/09/2015";
 
         sLogic.executeCommand("add " + taskName2 + " -e " + endDateOfTask2);
-        sLogic.executeCommand(
-                "edit " + indexOfTask2 + " -e " + endDateOfTask2Changed);
+        sLogic.executeCommand("edit " + indexOfTask2 + " -e "
+                + endDateOfTask2Changed);
 
         Task actualEditedTask2 = sLogic.getTask(indexOfTask2);
         Date actualEditedTask2Date = actualEditedTask2.getEnd();
@@ -306,8 +305,8 @@ public class LogicTest {
         int indexOfTask1 = 0;
         String taskName1 = "Test Undo 1";
         String task1ChangedName = "Test Undo 1 Changed name";
-        sLogic.executeCommand(
-                "edit " + indexOfTask1 + " '" + task1ChangedName + "'");
+        sLogic.executeCommand("edit " + indexOfTask1 + " '" + task1ChangedName
+                + "'");
         sLogic.storeCommandInHistory();
         sLogic.executeCommand(undoCommmandString);
 
@@ -379,8 +378,8 @@ public class LogicTest {
      * @param expectedNumberOfTasks
      *            Expected number of tasks in the master {@link Task} list.
      */
-    private void testRedoAdd(String undoCommandString, String redoCommandString,
-            int expectedNumOfTasksAfterRedo) {
+    private void testRedoAdd(String undoCommandString,
+            String redoCommandString, int expectedNumOfTasksAfterRedo) {
         String taskName1 = "Test Redo 1";
         String taskName2 = "Test Redo 2";
         sLogic.executeCommand("add " + "'" + taskName1 + "'");
@@ -408,8 +407,8 @@ public class LogicTest {
         int indexOfTask1 = 0;
         String taskName1 = "Test Redo 1";
         String task1ChangedName = "Test Redo 1 Changed name";
-        sLogic.executeCommand(
-                "edit " + indexOfTask1 + " '" + task1ChangedName + "'");
+        sLogic.executeCommand("edit " + indexOfTask1 + " '" + task1ChangedName
+                + "'");
         sLogic.storeCommandInHistory();
         sLogic.executeCommand(undoCommandString);
         sLogic.executeCommand(redoCommandString);

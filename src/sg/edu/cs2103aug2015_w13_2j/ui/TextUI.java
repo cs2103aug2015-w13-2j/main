@@ -23,7 +23,8 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 
-// @@author A0121410H
+// @@author A0121410H-unused
+// Reason: Original text-based UI
 
 public class TextUI extends JFrame implements UIInterface, KeyListener {
     private static final long serialVersionUID = 7758912303888211773L;
@@ -95,20 +96,20 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
 
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-          case KeyEvent.VK_ENTER :
+        case KeyEvent.VK_ENTER :
             mLogic.executeCommand(mTextField.getText());
             mTextField.setText(null);
             break;
-          case KeyEvent.VK_UP :
+        case KeyEvent.VK_UP :
             // TODO: Pass to parser
             break;
-          case KeyEvent.VK_DOWN :
+        case KeyEvent.VK_DOWN :
             // TODO: Pass to parser
             break;
-          case KeyEvent.VK_ESCAPE :
+        case KeyEvent.VK_ESCAPE :
             System.exit(0);
             break;
-          default :
+        default :
             break;
         }
     }
@@ -198,12 +199,6 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
     }
 
     @Override
-    public String getFeedBackMessage() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public boolean showChangeDataFilePathDialog() {
         // TODO Auto-generated method stub
         return false;
@@ -213,5 +208,17 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
     public boolean showHelpPage() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public String getFeedbackMessageString() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void focusCommandBar() {
+        // TODO Auto-generated method stub
+        
     }
 }

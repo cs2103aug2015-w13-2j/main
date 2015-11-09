@@ -69,6 +69,7 @@ public class FunDueFX extends Application {
         primaryStage.show();
 
         mUI.injectDependency(mLogic);
+        mUI.focusCommandBar();
         mLogic.injectDependencies(mStorage, mUI);
         mLogic.readTasks();
         mLogic.display();

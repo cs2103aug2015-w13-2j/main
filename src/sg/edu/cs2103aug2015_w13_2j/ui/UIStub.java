@@ -13,7 +13,6 @@ import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
-import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 
 // @@author A0121410H
 
@@ -23,68 +22,75 @@ import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
  * public {@link UIInterface} methods for assertion.
  * 
  * @author Zhu Chunqi
- *
  */
 public class UIStub implements UIInterface {
-    private static final Logger LOGGER = Logger
-            .getLogger(UIStub.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UIStub.class
+            .getName());
 
     private ArrayList<Task> mOrderedTasks;
     private FeedbackMessage mFeedback;
-    private String mDisplayString;
     private FilterChain mFilterChain;
-    private StorageInterface sStorage;
-    public UIStub(){
-    	mFilterChain = new FilterChain();
-    	mOrderedTasks = new ArrayList<Task>();
+
+    public UIStub() {
+        mFilterChain = new FilterChain();
+        mOrderedTasks = new ArrayList<Task>();
     }
+
     @Override
     public void injectDependency(LogicInterface Logic) {
         // Do nothing
     }
-    
-    /**
-     * Retrieves the string that was sent for display via
-     * {@link UIInterface#display(String)}.
-     * 
-     * @return String that was sent for display.
-     */
-    public String getDisplayString() {
-        return mDisplayString;
-    }
 
-    /**
-     * Retrieves the {@link FeedbackMessage} object that was sent for display
-     * via {@link UIInterface#feedback(FeedbackMessage)}.
-     * 
-     * @return {@link FeedbackMessage} that was sent for display.
-     */
-    public FeedbackMessage getFeedbackMessage() {
-        return mFeedback;
-    }
-
-    /**
-     * Does nothing.
-     */
     @Override
-    public boolean showChangeDataFilePathDialog() {
-        // TODO Auto-generated method stub
-        return true;
+    public void display(ArrayList<Task> tasks) {
+        // Re-seed the filter chain
+        mFilterChain.updateFilters(tasks);
+
+        // Clear the ordered task list
+        mOrderedTasks.clear();
+        Collections.sort(tasks);
+
+        if (mFilterChain.size() > 1) {
+            List<Task> filteredTasks = mFilterChain.getTasksForDisplay();
+            mOrderedTasks.addAll(filteredTasks);
+        } else {
+            // Someday
+            List<Task> floatingTasks = tasks.stream()
+                    .filter((Task t) -> t.getEnd() == null)
+                    .collect(Collectors.toList());
+            mOrderedTasks.addAll(floatingTasks);
+
+            // Upcoming
+            List<Task> upcomingTasks = tasks.stream()
+                    .filter((Task t) -> t.getEnd() != null)
+                    .collect(Collectors.toList());
+            mOrderedTasks.addAll(upcomingTasks);
+        }
     }
 
-    /**
-     * Does nothing.
-     * 
-     * @return {@code null}.
-     */
     @Override
-    public Parent getUI() {
-        // TODO Auto-generated method stub
-        return null;
+    public Task getTask(int index) throws TaskNotFoundException {
+        try {
+            // NOTE: list is zero indexed whereas display is 1 indexed
+            return mOrderedTasks.get(index - 1);
+        } catch (IndexOutOfBoundsException e) {
+            throw new TaskNotFoundException();
+        }
     }
-    
-  //@@author A0133387B
-    
+
+    @Override
+    public void feedback(FeedbackMessage feedback) {
+        mFeedback = feedback;
+        LOGGER.log(Level.INFO, mFeedback.getMessage());
+    }
+
+    @Override
+    public String getFeedbackMessageString() {
+        return mFeedback.getMessage();
+    }
+
+    // @@author A0133387B
+
     @Override
     public void pushFilter(Filter filter) {
         mFilterChain.pushFilter(filter);
@@ -95,101 +101,59 @@ public class UIStub implements UIInterface {
         return mFilterChain.popFilter();
     }
 
+    /**
+     * Does nothing.
+     * 
+     * @return Always {@code true}.
+     */
     @Override
-    public String getFeedBackMessage() {
-        // TODO Auto-generated method stub
-        return mFeedback.getMessage();
-    }
-
-    @Override
-    public void display(String s) {
-        LOGGER.log(Level.INFO, s);
-        mDisplayString = s;
-    }
-    
-    @Override
-    public void feedback(FeedbackMessage f) {
-        LOGGER.log(Level.INFO, f.getMessage());
-        mFeedback = f;
-    }
-    
-    public void injectDependency(StorageInterface storageTest) {
-    	sStorage = storageTest;
+    public boolean showChangeDataFilePathDialog() {
+        return true;
     }
 
     /**
-     * Selects the list of {@link Task} objects that should be displayed
-     * depending on user's command
-     * This method works in the same way as the display method in FXUI 
-     * {@link FXUI#display(ArrayList)}, omitting the codes for appearance 
+     * Does nothing.
+     * 
+     * @return Always {@code true}.
      */
-    public void display(ArrayList<Task> tasks) {
-    	LOGGER.log(Level.INFO, "FILTER " + mFilterChain.getFilterChain());
-        // Re-seed the filter chain
-        mFilterChain.updateFilters(tasks);
-
-        // Clear the ordered task list
-        mOrderedTasks = new ArrayList<Task>();
-        Collections.sort(tasks);
-        
-        if (mFilterChain.size() > 1) {
-            List<Task> filteredTasks = mFilterChain.getTasksForDisplay();
-            mOrderedTasks.addAll(filteredTasks);
-            LOGGER.log(Level.INFO, filteredTasks.size() + " tasks sent for display in UISTub FILTERED");
-
-        } else {
-            // Someday
-            List<Task> floatingTasks = tasks.stream()
-                    .filter((Task t) -> t.getEnd() == null)
-                    .collect(Collectors.toList());
-            LOGGER.log(Level.INFO, "There are " + floatingTasks.size() + " floating tasks");
-            mOrderedTasks.addAll(floatingTasks);
-            // Upcoming
-            List<Task> upcomingTasks = tasks.stream()
-                    .filter((Task t) -> t.getEnd() != null)
-                    .collect(Collectors.toList());
-            mOrderedTasks.addAll(upcomingTasks);
-            LOGGER.log(Level.INFO, "There are " + upcomingTasks.size() + " upcoming tasks");
-            LOGGER.log(Level.INFO, "There are in total " + mOrderedTasks.size() + " to display");
-      
-        }
-    }
-
     @Override
-    public Task getTask(int index) throws TaskNotFoundException {
-        try {
-        	// NOTE: list is zero indexed whereas display is 1 indexed
-            return mOrderedTasks.get(index - 1);
-        } catch (IndexOutOfBoundsException e) {
-            throw new TaskNotFoundException();
-        }
+    public boolean showHelpPage() {
+        return true;
     }
 
-    
+    /**
+     * Does nothing.
+     */
+    @Override
+    public void focusCommandBar() {
+        // Do nothing
+    }
+
+    /**
+     * Does nothing.
+     * 
+     * @return Always {@code null}.
+     */
+    @Override
+    public Parent getUI() {
+        return null;
+    }
+
     /**
      * Retrieves the list of {@link Task} objects that was sent for display via
      * {@link UIInterface#display(ArrayList)}.
      * 
      * @return List of {@link Task} objects that was sent for display.
      */
-    public ArrayList<Task> getTasksForDisplay() {    	
-    	return mOrderedTasks;
+    public ArrayList<Task> getTasksForDisplay() {
+        return mOrderedTasks;
     }
-    
-    public void refreshTaskList() {    	
-    	mOrderedTasks = sStorage.readTasksFromDataFile();
-    }
-    
+
     /**
-     * Reverts back to the main task list with no additional filter
-     * for testing purpose, avoiding chaining of filter unnecessarily when testing
+     * Creates a new instance of {@link FilterChain} with no {@link Task}
+     * objects.
      */
-    public void refreshFilter() {    	
-    	mFilterChain = new FilterChain();
-    }
-    @Override
-    public boolean showHelpPage() {
-        // TODO Auto-generated method stub
-        return false;
+    public void refreshFilter() {
+        mFilterChain = new FilterChain();
     }
 }

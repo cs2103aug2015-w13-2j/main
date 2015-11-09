@@ -16,7 +16,8 @@ import javax.swing.text.StyledDocument;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
 
-// @@author A0121410H
+// @@author A0121410H-unused
+// Reason: Original text-based UI sub-component
 
 /**
  * This class extends the JTextPane swing component with methods specific to
@@ -50,8 +51,7 @@ public class TextPane extends JTextPane {
     private static final Color COLOR_HIGHLIGHT = Color.RED;
 
     private static final AttributeSet STYLE_DEFAULT = getStyle(COLOR_NORMAL);
-    private static final AttributeSet STYLE_HIGHLIGHT = getStyle(
-            COLOR_HIGHLIGHT);
+    private static final AttributeSet STYLE_HIGHLIGHT = getStyle(COLOR_HIGHLIGHT);
 
     /**
      * SimpleDateFormatter object which formats date objects using
