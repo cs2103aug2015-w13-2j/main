@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage.FeedbackType;

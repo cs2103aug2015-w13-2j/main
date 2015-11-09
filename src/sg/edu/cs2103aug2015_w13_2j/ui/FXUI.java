@@ -8,8 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.ocpsoft.prettytime.PrettyTime;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,10 +26,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+
+import org.ocpsoft.prettytime.PrettyTime;
+
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
 

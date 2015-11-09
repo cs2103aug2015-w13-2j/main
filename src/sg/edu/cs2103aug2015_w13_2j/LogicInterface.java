@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;

@@ -13,7 +13,6 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
@@ -21,6 +20,7 @@ import sg.edu.cs2103aug2015_w13_2j.commands.MarkCompletedHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.MarkImportantHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.RedoHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageInterface;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageStub;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;

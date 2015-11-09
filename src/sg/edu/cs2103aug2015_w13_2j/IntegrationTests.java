@@ -1,13 +1,16 @@
 package sg.edu.cs2103aug2015_w13_2j;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
+
+import sg.edu.cs2103aug2015_w13_2j.Task.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;

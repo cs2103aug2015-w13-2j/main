@@ -9,8 +9,8 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.CommandHandler;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.parser.Parser;
@@ -216,7 +216,7 @@ public class Logic implements LogicInterface {
     public static ArrayList<Task> copyTaskList(ArrayList<Task> taskListToCopy) {
         ArrayList<Task> taskListCopy = new ArrayList<Task>();
         for (Task task : taskListToCopy) {
-            Task taskCopy = task.newInstance();
+            Task taskCopy = task.clone();
             taskListCopy.add(taskCopy);
         }
         return taskListCopy;

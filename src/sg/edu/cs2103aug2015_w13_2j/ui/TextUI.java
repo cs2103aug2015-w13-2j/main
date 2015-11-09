@@ -20,7 +20,7 @@ import javax.swing.text.DefaultCaret;
 
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.filters.Filter;
 
 // @@author A0121410H-unused

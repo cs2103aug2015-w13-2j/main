@@ -17,8 +17,10 @@ import sg.edu.cs2103aug2015_w13_2j.Logic;
  * @author Zhu Chunqi
  */
 public class Parser implements ParserInterface {
-    private static final Logger LOGGER = Logger
-            .getLogger(Parser.class.getName());
+    public static final String DATETIME_FORMAT_STRING = "dd_MM_yyyy_HH_mm";
+
+    private static final Logger LOGGER = Logger.getLogger(Parser.class
+            .getName());
 
     private enum State {
         GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
@@ -90,7 +92,7 @@ public class Parser implements ParserInterface {
             }
 
             switch (mState) {
-              case ALPHA_NUM :
+            case ALPHA_NUM :
                 s = nextDelimiter(' ');
                 if (isReserved(s)) {
                     mCommand.addToken(Token.Type.RESERVED, s);
@@ -99,7 +101,7 @@ public class Parser implements ParserInterface {
                 }
                 mState = State.GENERAL;
                 break;
-              case DATE :
+            case DATE :
                 s = nextDelimiter(' ');
                 try {
                     String dateString = ParserInterface.parseDate(s);
@@ -109,7 +111,7 @@ public class Parser implements ParserInterface {
                 }
                 mState = State.GENERAL;
                 break;
-              case FLAG :
+            case FLAG :
                 // Consume dash character
                 next();
                 s = nextDelimiter(' ');
@@ -124,7 +126,7 @@ public class Parser implements ParserInterface {
                     mState = State.GENERAL;
                 }
                 break;
-              case GENERAL :
+            case GENERAL :
                 if (peek() == ' ') {
                     // Skip over all intervening whitespace
                     while (hasNext() && peek() == ' ') {
@@ -141,7 +143,7 @@ public class Parser implements ParserInterface {
                     mState = State.ALPHA_NUM;
                 }
                 break;
-              case ID :
+            case ID :
                 s = nextDelimiter(' ');
                 try {
                     Integer.parseInt(s);
@@ -152,7 +154,7 @@ public class Parser implements ParserInterface {
                 }
                 mState = State.GENERAL;
                 break;
-              case NAME :
+            case NAME :
                 s = nextDelimiter(openingQuote);
                 mCommand.addToken(Token.Type.NAME, s);
                 // Consume closing quote if not end of command
@@ -161,7 +163,7 @@ public class Parser implements ParserInterface {
                 }
                 mState = State.GENERAL;
                 break;
-              default :
+            default :
                 throw new Error("Invalid parser state: " + mState);
             }
         }

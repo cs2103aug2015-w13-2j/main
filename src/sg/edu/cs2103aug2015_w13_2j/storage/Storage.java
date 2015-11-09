@@ -11,8 +11,7 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface;
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.InvalidTaskException;
 
 // @@author A0124007X
 
@@ -65,7 +64,7 @@ public class Storage implements StorageInterface {
     public ArrayList<Task> readTasksFromDataFile() {
         try {
             String data = readDataFileContents();
-            ArrayList<Task> tasks = TaskInterface.parseTasks(data);
+            ArrayList<Task> tasks = Task.parseTasks(data);
             LOGGER.log(Level.INFO, "Number of tasks read: " + tasks.size());
             return tasks;
         } catch (IOException e) {

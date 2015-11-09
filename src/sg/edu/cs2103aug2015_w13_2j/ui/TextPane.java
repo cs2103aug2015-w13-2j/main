@@ -14,7 +14,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.InvalidTaskException;
 
 // @@author A0121410H-unused
 // Reason: Original text-based UI sub-component

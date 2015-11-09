@@ -8,7 +8,7 @@ import java.util.List;
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.Task.Type;
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.InvalidTaskException;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.InvalidTaskException;
 import sg.edu.cs2103aug2015_w13_2j.parser.Command;
 import sg.edu.cs2103aug2015_w13_2j.parser.Parser;
 import sg.edu.cs2103aug2015_w13_2j.parser.Token;

@@ -3,7 +3,7 @@ package sg.edu.cs2103aug2015_w13_2j.filters;
 import java.util.ArrayList;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
-import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.TaskNotFoundException;
 
 // @@author A0121410H
 
