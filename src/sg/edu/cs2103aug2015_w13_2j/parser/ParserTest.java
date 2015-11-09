@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
-import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface.IllegalDateFormatException;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.IllegalDateFormatException;
 
 // @@author A0121410H
 
@@ -45,7 +45,7 @@ public class ParserTest {
     private void testDatetimeParser(String datetime, String expected)
             throws IllegalDateFormatException {
         LOGGER.log(Level.INFO, "Parsing: " + datetime);
-        String actual = ParserInterface.parseDate(datetime);
+        String actual = Parser.parseDate(datetime);
         LOGGER.log(Level.INFO, "Parsed datetime: " + actual);
         LOGGER.log(Level.INFO, "Expected: " + expected);
         assertEquals(expected, actual);

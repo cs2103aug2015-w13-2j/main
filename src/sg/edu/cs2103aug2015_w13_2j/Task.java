@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import sg.edu.cs2103aug2015_w13_2j.exceptions.InvalidTaskException;
-import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface;
+import sg.edu.cs2103aug2015_w13_2j.parser.Parser;
 
 // @@author A0121410H
 
@@ -542,7 +542,7 @@ public class Task implements Comparable<Task>, Cloneable {
         if (date == null) {
             date = new Date();
         }
-        return ParserInterface.updateDate(format, date);
+        return Parser.updateDate(format, date);
     }
 
     // @@author A0124007X
