@@ -274,10 +274,13 @@ public class Task implements TaskInterface, Comparable<Task>, Cloneable {
             }
         } else if (this.isFloat() && task.isFloat()) {
             // BOTH FLOAT
-            if (this.getStart() != null && task.getStart() != null
-                    && !this.getStart().equals(task.getStart())) {
+            if (this.getStart() != null && task.getStart() != null) {
                 // BOTH HAVE START DATE
-                return this.getStart().compareTo(task.getStart());
+                if (!this.getStart().equals(task.getStart())) {
+                    return this.getStart().compareTo(task.getStart());
+                } else {
+                    return this.getName().compareTo(task.getName());
+                }
             } else if (this.getStart() != null) {
                 return -1;
             } else if (task.getStart() != null) {
