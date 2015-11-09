@@ -23,8 +23,8 @@ import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
  * @author Zhu Chunqi
  */
 public class UIStub implements UIInterface {
-    private static final Logger LOGGER = Logger.getLogger(UIStub.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(UIStub.class.getName());
 
     private ArrayList<Task> mOrderedTasks;
     private FeedbackMessage mFeedback;
