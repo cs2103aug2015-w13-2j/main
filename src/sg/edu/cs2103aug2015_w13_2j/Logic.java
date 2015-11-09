@@ -65,7 +65,8 @@ public class Logic implements LogicInterface {
     }
 
     @Override
-    public void injectDependencies(StorageInterface storage, UIInterface textUI) {
+    public void injectDependencies(StorageInterface storage,
+            UIInterface textUI) {
         assert (storage != null);
         assert (textUI != null);
         mStorage = storage;
@@ -87,8 +88,8 @@ public class Logic implements LogicInterface {
         List<String> reserved = handler.getReservedKeywords();
         for (String keyword : reserved) {
             if (mCommandHandlers.containsKey(keyword)) {
-                LOGGER.log(Level.WARNING, "Conflicting command handlers for: "
-                        + keyword);
+                LOGGER.log(Level.WARNING,
+                        "Conflicting command handlers for: " + keyword);
             } else {
                 mCommandHandlers.put(keyword, handler);
             }
@@ -97,8 +98,8 @@ public class Logic implements LogicInterface {
 
     @Override
     public void executeCommand(String commandString) {
-        Command command = Parser.getInstance()
-                .parseCommand(this, commandString);
+        Command command = Parser.getInstance().parseCommand(this,
+                commandString);
         Token reserved = command.getReservedToken();
         if (commandString.isEmpty()) {
             feedback(FeedbackMessage.CLEAR);

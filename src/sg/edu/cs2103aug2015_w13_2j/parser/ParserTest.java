@@ -15,8 +15,8 @@ import sg.edu.cs2103aug2015_w13_2j.exceptions.IllegalDateFormatException;
 // @@author A0121410H
 
 public class ParserTest {
-    private static final Logger LOGGER = Logger.getLogger(ParserTest.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(ParserTest.class.getName());
     private Parser mParser = Parser.getInstance();
     private Logic mLogic = (Logic) Logic.getInstance();
 

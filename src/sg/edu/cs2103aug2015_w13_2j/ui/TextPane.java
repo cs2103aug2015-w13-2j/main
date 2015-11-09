@@ -51,7 +51,8 @@ public class TextPane extends JTextPane {
     private static final Color COLOR_HIGHLIGHT = Color.RED;
 
     private static final AttributeSet STYLE_DEFAULT = getStyle(COLOR_NORMAL);
-    private static final AttributeSet STYLE_HIGHLIGHT = getStyle(COLOR_HIGHLIGHT);
+    private static final AttributeSet STYLE_HIGHLIGHT = getStyle(
+            COLOR_HIGHLIGHT);
 
     /**
      * SimpleDateFormatter object which formats date objects using

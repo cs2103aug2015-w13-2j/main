@@ -329,7 +329,8 @@ public class Task implements Comparable<Task>, Cloneable {
                 String n2 = this.getName();
                 if (n1 == null && n2 == null) {
                     return true;
-                } else if (n1 == null && n2 != null || n1 != null && n2 == null) {
+                } else if (n1 == null && n2 != null
+                        || n1 != null && n2 == null) {
                     return false;
                 } else {
                     return n1.equals(n2);
@@ -406,7 +407,7 @@ public class Task implements Comparable<Task>, Cloneable {
     }
 
     // @@author A0124007X
-    
+
     /**
      * Comparison method used in {@link Task} sorting
      */

@@ -38,7 +38,8 @@ public interface LogicInterface {
      *            requires data to be displayed or {@link FeedbackMessage} to be
      *            shown.
      */
-    public void injectDependencies(StorageInterface storage, UIInterface textUI);
+    public void injectDependencies(StorageInterface storage,
+            UIInterface textUI);
 
     /**
      * Retrieves the {@link Set} of reserved keyword strings registered by
