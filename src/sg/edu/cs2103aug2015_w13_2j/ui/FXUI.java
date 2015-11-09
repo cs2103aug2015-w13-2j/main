@@ -188,14 +188,14 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
             mUpcomingCategory.setVisible(false);
         } else {
             // Someday
-            List<Task> floatingTasks = tasks.stream()
+            List<Task> floatingTasks = tasks.stream().sorted()
                     .filter((Task t) -> t.getEnd() == null)
                     .collect(Collectors.toList());
             mFloatingCategory.update(floatingTasks, mOrderedTasks.size());
             mOrderedTasks.addAll(floatingTasks);
 
             // Upcoming
-            List<Task> upcomingTasks = tasks.stream()
+            List<Task> upcomingTasks = tasks.stream().sorted()
                     .filter((Task t) -> t.getEnd() != null)
                     .collect(Collectors.toList());
             mUpcomingCategory.update(upcomingTasks, mOrderedTasks.size());

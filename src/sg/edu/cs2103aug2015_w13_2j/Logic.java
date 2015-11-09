@@ -87,9 +87,8 @@ public class Logic implements LogicInterface {
         List<String> reserved = handler.getReservedKeywords();
         for (String keyword : reserved) {
             if (mCommandHandlers.containsKey(keyword)) {
-                LOGGER.log(Level.SEVERE, "Conflicting command handlers for: "
+                LOGGER.log(Level.WARNING, "Conflicting command handlers for: "
                         + keyword);
-                throw new Error("Conflicting command handlers for: " + keyword);
             } else {
                 mCommandHandlers.put(keyword, handler);
             }

@@ -2,8 +2,6 @@ package sg.edu.cs2103aug2015_w13_2j.parser;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,8 +15,8 @@ import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface.IllegalDateFormatExcep
 // @@author A0121410H
 
 public class ParserTest {
-    private static final Logger LOGGER = Logger
-            .getLogger(ParserTest.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ParserTest.class
+            .getName());
     private Parser mParser = Parser.getInstance();
     private Logic mLogic = (Logic) Logic.getInstance();
 
@@ -55,8 +53,6 @@ public class ParserTest {
 
     @Test
     public void parserTokenizerTest() {
-        Calendar date1 = new GregorianCalendar(2015, 9 - 1, 23);
-
         String command = "add -s 23/09 -e 4pm *@(*#(!&@! 'Task name'";
         String expected = "[RESERVED=add][FLAG=s][DATE=23_9_yyyy_0_0]"
                 + "[FLAG=e][DATE_INVALID=4pm][ALPHA_NUM=*@(*#(!&@!]"
@@ -161,11 +157,6 @@ public class ParserTest {
      *****************************************************************/
     @Test
     public void parseAllOptionsTest() {
-        // Initialize dates used for this test case
-        Calendar date1 = new GregorianCalendar(2015, 9 - 1, 23);
-        Calendar date2 = new GregorianCalendar(2015, 9 - 1, 24);
-        Calendar date3 = new GregorianCalendar(2015, 9 - 1, 25);
-
         // Equivalence partition for an 'Valid option(s)'
         // These are test cases for valid flag-date pairs recognized:
         // 1.) Test with single valid option
@@ -226,6 +217,7 @@ public class ParserTest {
 
     @Test
     public void parserRegression119Test() {
+        // Parser NullPointerException when no date is provided
         String command = "a 'lunch with someone' -s ''";
         String commandExpected = "[RESERVED=a][NAME=lunch with someone][FLAG=s][DATE_INVALID='']";
         testCommandParser(command, commandExpected);
@@ -233,6 +225,8 @@ public class ParserTest {
 
     @Test
     public void parserRegression126Test() {
+        // Parser IndexOutOfBoundsException when parser position advances past
+        // end of command due to trim()
         String command = "add  ";
         String commandExpected = "[RESERVED=add]";
         testCommandParser(command, commandExpected);
