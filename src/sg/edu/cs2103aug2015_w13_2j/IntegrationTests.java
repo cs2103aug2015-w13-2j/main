@@ -149,29 +149,21 @@ public class IntegrationTests {
     public void testEditNameThreeTasks() throws TaskNotFoundException {
         addThreeTasks();
         String newName = "ZZZZZ";
-        sLogic.executeCommand("edit 1 " + "'" + newName + "'"); // <-- since the
-                                                                // list is
-                                                                // sorted, this
-                                                                // task now
-                                                                // sinks to the
-                                                                // bottom of the
-                                                                // list
+        // since the list is sorted, this task now sinks to the bottom of 
+        // the list
+        sLogic.executeCommand("edit 1 " + "'" + newName + "'");
         assertEquals(UI.getFeedbackMessageString(), EditHandler.EDIT_SUCCESS);
-        assertEquals(UI.getTasksForDisplay().get(2).getName(), newName); // <--
-                                                                         // checking
-                                                                         // the
-                                                                         // last
-                                                                         // task
+        // checking the last task
+        assertEquals(UI.getTasksForDisplay().get(2).getName(), newName);
     }
 
     @Test
     public void testEditTime() throws TaskNotFoundException {
         addThreeTasks();
         String name = UI.getTasksForDisplay().get(0).getName();
-        sLogic.executeCommand("edit 1 " + "-s 11/11 -e 12/11"); // <-- since
-                                                                // this task
-                                                                // becomes event
-        // it sinks to the bottom of the list
+        // since this task becomes an event, it sinks to the bottom of the
+        // list
+        sLogic.executeCommand("edit 1 " + "-s 11/11 -e 12/11");
         assertEquals(UI.getFeedbackMessageString(), EditHandler.EDIT_SUCCESS);
         assertEquals(UI.getTasksForDisplay().get(2).getName(), name);
     }
@@ -184,11 +176,12 @@ public class IntegrationTests {
         System.out.println("Deleted index 1");
         assertEquals(UI.getFeedbackMessageString(),
                 DeleteHandler.DELETE_SUCCESS);
-        sLogic.executeCommand("delete 1"); // <-- out of bound, as task list is
-                                           // empty
+        // out of bounds, as task list is empty
+        sLogic.executeCommand("delete 1");
         assertEquals(UI.getFeedbackMessageString(),
                 FeedbackMessage.ERROR_TASK_NOT_FOUND.getMessage());
-        sLogic.executeCommand("delet"); // <-- invalid command
+        // an invalid command
+        sLogic.executeCommand("delet");
         assertEquals(UI.getFeedbackMessageString(),
                 FeedbackMessage.ERROR_UNRECOGNIZED_COMMAND.getMessage());
         System.out.println("exit test del");
@@ -303,21 +296,21 @@ public class IntegrationTests {
         sLogic.executeCommand("add '" + sec + "'");
         String third = "the quick";
         sLogic.executeCommand("add '" + third + "'");
-        assertEquals(UI.getTasksForDisplay().get(0).getName(), sec); // < now brown fox is on top,
-                                                                     // < then over, and the quick
+        // now brown fox is on top, then over, and the quick
+        assertEquals(UI.getTasksForDisplay().get(0).getName(), sec);
         assertEquals(UI.getTasksForDisplay().get(1).getName(), first);
         assertEquals(UI.getTasksForDisplay().get(2).getName(), third);
         // change two of them to deadline task
-        sLogic.executeCommand("edit 1 -e 8/11"); // < this task (brown fox ...) becomes a
-                                                 // deadline task and sinks to
-                                                 // the bottom. on top now is over, 
-                                                 // then the quick
+        // this task (brown fox ...) becomes a deadline task and sinks to
+        // the bottom. on top now is over, then the quick
+        sLogic.executeCommand("edit 1 -e 8/11");
         assertEquals(UI.getFeedbackMessageString(), EditHandler.EDIT_SUCCESS);
         assertEquals(UI.getTasksForDisplay().get(2).getName(), sec);
         assertEquals(UI.getTasksForDisplay().get(0).getName(), first);
         assertEquals(UI.getTasksForDisplay().get(1).getName(), third);
-        // now change the task named brown fox
-        sLogic.executeCommand("edit 1 -e 9/11"); // < now over... sinks below the quick
+        // now change the task named brown fox now over... sinks below
+        // the quick
+        sLogic.executeCommand("edit 1 -e 9/11");
         assertEquals(UI.getFeedbackMessageString(), EditHandler.EDIT_SUCCESS);
         assertEquals(UI.getTasksForDisplay().get(0).getName(), third);
         assertEquals(UI.getTasksForDisplay().get(1).getName(), sec);
