@@ -101,22 +101,6 @@ public class IntegrationTests {
         assertEquals(UI.getFeedbackMessageString(), AddHandler.ADD_SUCCESS);
     }
 
-    // @@author A0130894B
-
-    @Test
-    public void add200Tasks() {
-        int stressCount = 200;
-        String taskName = "";
-        for (int i = 0; i < stressCount; i++) {
-            taskName += i;
-            sLogic.executeCommand("add '" + taskName + "'");
-            assertEquals(UI.getFeedbackMessageString(), AddHandler.ADD_SUCCESS);
-        }
-        assertEquals(UI.getTasksForDisplay().size(), stressCount);
-    }
-
-    // @@author A0133387B
-
     @Test
     public void addShortForm() {
         String taskName = "My first integration test!";
@@ -316,18 +300,20 @@ public class IntegrationTests {
         sLogic.executeCommand("add '" + sec + "'");
         String third = "the quick";
         sLogic.executeCommand("add '" + third + "'");
-        assertEquals(UI.getTasksForDisplay().get(0).getName(), sec);
+        assertEquals(UI.getTasksForDisplay().get(0).getName(), sec);//< now brown fox is on top,
+                                                                    //< then over, and the quick
         assertEquals(UI.getTasksForDisplay().get(1).getName(), first);
         assertEquals(UI.getTasksForDisplay().get(2).getName(), third);
-        // change one of them to event, another to deadline task
-        sLogic.executeCommand("edit 1 -e 8/11"); // < this task becomes a
+        // change two of them to deadline task
+        sLogic.executeCommand("edit 1 -e 8/11"); // < this task (brown fox ...) becomes a
                                                  // deadline task and sinks to
-                                                 // the bottom
+                                                 // the bottom. on top now is over, 
+                                                 // then the quick
         assertEquals(UI.getTasksForDisplay().get(2).getName(), sec);
         assertEquals(UI.getTasksForDisplay().get(0).getName(), first);
         assertEquals(UI.getTasksForDisplay().get(1).getName(), third);
-        // now change the task named
-        sLogic.executeCommand("edit 1 -e 9/11");
+        // now change the task named brown fox
+        sLogic.executeCommand("edit 1 -e 9/11");//< now over... sinks below the quick
         assertEquals(UI.getTasksForDisplay().get(0).getName(), third);
         assertEquals(UI.getTasksForDisplay().get(1).getName(), sec);
         assertEquals(UI.getTasksForDisplay().get(2).getName(), first);
