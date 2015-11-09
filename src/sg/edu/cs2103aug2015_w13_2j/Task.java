@@ -284,17 +284,11 @@ public class Task implements TaskInterface, Comparable<Task>, Cloneable {
         } else if (this.isEvent() && task.isDeadline()) {
             // ONE EVENT, ONE DEADLINE
             return this.getStart().compareTo(task.getEnd());
-        } else if (this.isDeadline() && task.isFloat()) {
-            // ONE DEADLINE, ONE FLOAT
+        } else if ((this.isDeadline() || this.isEvent()) && task.isFloat()) {
+            // ONE DEADLINE/EVENT, ONE FLOAT
             return -1;
-        } else if (this.isFloat() && task.isDeadline()) {
-            // ONE FLOAT, ONE DEADLINE
-            return 1;
-        } else if (this.isEvent() && task.isFloat()) {
-            // ONE EVENT, ONE FLOAT
-            return -1;
-        } else if (this.isFloat() && task.isEvent()) {
-            // ONE FLOAT, ONE EVENT
+        } else if (this.isFloat() && (task.isDeadline() || task.isEvent())) {
+            // ONE FLOAT, ONE DEADLINE/EVENT
             return 1;
         } else {
             return this.getName().compareTo(task.getName());
