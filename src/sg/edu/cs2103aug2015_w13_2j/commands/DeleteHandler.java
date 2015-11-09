@@ -60,8 +60,8 @@ public class DeleteHandler extends CommandHandler {
                 mLogic.feedback(FeedbackMessage.ERROR_INVALID_INDEX);
             } else {
                 deleteAllSelectedTasks(deleteIndexes);
-                mLogic.feedback(new FeedbackMessage(DELETE_SUCCESS,
-                        FeedbackType.INFO));
+                mLogic.feedback(
+                        new FeedbackMessage(DELETE_SUCCESS, FeedbackType.INFO));
             }
         } catch (TaskNotFoundException e) {
             mLogic.feedback(FeedbackMessage.ERROR_TASK_NOT_FOUND);
@@ -94,8 +94,8 @@ public class DeleteHandler extends CommandHandler {
      * @throws TaskNotFoundException
      *             Thrown when the provided index is out of bounds.
      */
-    private ArrayList<Task> getAllTasksToDelete(ArrayList<Integer> deleteIndexes)
-            throws TaskNotFoundException {
+    private ArrayList<Task> getAllTasksToDelete(
+            ArrayList<Integer> deleteIndexes) throws TaskNotFoundException {
         ArrayList<Task> deleteTaskList = new ArrayList<Task>();
 
         for (Integer index : deleteIndexes) {

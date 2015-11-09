@@ -31,8 +31,8 @@ public class Parser {
     public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat(
             "dd_MM_yyyy_HH_mm");
 
-    private static final Logger LOGGER = Logger.getLogger(Parser.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(Parser.class.getName());
 
     private enum State {
         GENERAL, ALPHA_NUM, DATE, FLAG, ID, NAME
@@ -156,8 +156,8 @@ public class Parser {
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < parts.length; i++) {
-            sb.append((parts[i] == -1 ? DATETIME_FORMAT_PARTS[i] : String
-                    .valueOf(parts[i])));
+            sb.append((parts[i] == -1 ? DATETIME_FORMAT_PARTS[i]
+                    : String.valueOf(parts[i])));
             if (i < parts.length - 1) {
                 sb.append('_');
             }
@@ -205,7 +205,7 @@ public class Parser {
             }
 
             switch (mState) {
-            case ALPHA_NUM :
+              case ALPHA_NUM :
                 s = nextDelimiter(' ');
                 if (isReserved(s)) {
                     mCommand.addToken(Token.Type.RESERVED, s);
@@ -214,7 +214,7 @@ public class Parser {
                 }
                 mState = State.GENERAL;
                 break;
-            case DATE :
+              case DATE :
                 s = nextDelimiter(' ');
                 try {
                     String dateString = Parser.parseDate(s);
@@ -224,7 +224,7 @@ public class Parser {
                 }
                 mState = State.GENERAL;
                 break;
-            case FLAG :
+              case FLAG :
                 // Consume dash character
                 next();
                 s = nextDelimiter(' ');
@@ -239,7 +239,7 @@ public class Parser {
                     mState = State.GENERAL;
                 }
                 break;
-            case GENERAL :
+              case GENERAL :
                 if (peek() == ' ') {
                     // Skip over all intervening whitespace
                     while (hasNext() && peek() == ' ') {
@@ -256,7 +256,7 @@ public class Parser {
                     mState = State.ALPHA_NUM;
                 }
                 break;
-            case ID :
+              case ID :
                 s = nextDelimiter(' ');
                 try {
                     Integer.parseInt(s);
@@ -267,7 +267,7 @@ public class Parser {
                 }
                 mState = State.GENERAL;
                 break;
-            case NAME :
+              case NAME :
                 s = nextDelimiter(openingQuote);
                 mCommand.addToken(Token.Type.NAME, s);
                 // Consume closing quote if not end of command
@@ -276,7 +276,7 @@ public class Parser {
                 }
                 mState = State.GENERAL;
                 break;
-            default :
+              default :
                 throw new Error("Invalid parser state: " + mState);
             }
         }

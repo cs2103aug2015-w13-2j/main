@@ -96,20 +96,20 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
 
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-        case KeyEvent.VK_ENTER :
+          case KeyEvent.VK_ENTER :
             mLogic.executeCommand(mTextField.getText());
             mTextField.setText(null);
             break;
-        case KeyEvent.VK_UP :
+          case KeyEvent.VK_UP :
             // TODO: Pass to parser
             break;
-        case KeyEvent.VK_DOWN :
+          case KeyEvent.VK_DOWN :
             // TODO: Pass to parser
             break;
-        case KeyEvent.VK_ESCAPE :
+          case KeyEvent.VK_ESCAPE :
             System.exit(0);
             break;
-        default :
+          default :
             break;
         }
     }
@@ -219,6 +219,6 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
     @Override
     public void focusCommandBar() {
         // TODO Auto-generated method stub
-        
+
     }
 }

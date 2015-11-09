@@ -38,13 +38,13 @@ public class FilterHandler extends CommandHandler {
     public void execute(LogicInterface logic, Command command) {
         Token alpha = command.getAlphaToken();
         switch (alpha.value) {
-        case "active" :
+          case "active" :
             logic.pushFilter(new ActiveFilter());
             break;
-        case "important" :
+          case "important" :
             logic.pushFilter(new ImportantFilter());
             break;
-        default :
+          default :
             logic.feedback(FeedbackMessage.ERROR_INVALID_FILTER);
             return;
         }

@@ -100,16 +100,16 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         // NOTE: Binding the managed property to the visible property to
         // properly hide the UI element when visible is set to false. Otherwise
         // the element will still take up space in layout as it is still managed
-        mFilteredCategory.managedProperty().bind(
-                mFilteredCategory.visibleProperty());
+        mFilteredCategory.managedProperty()
+                .bind(mFilteredCategory.visibleProperty());
 
         mFloatingCategory = new FXCategoryAccordion("Someday");
-        mFloatingCategory.managedProperty().bind(
-                mFloatingCategory.visibleProperty());
+        mFloatingCategory.managedProperty()
+                .bind(mFloatingCategory.visibleProperty());
 
         mUpcomingCategory = new FXCategoryAccordion("Events / Deadlines");
-        mUpcomingCategory.managedProperty().bind(
-                mUpcomingCategory.visibleProperty());
+        mUpcomingCategory.managedProperty()
+                .bind(mUpcomingCategory.visibleProperty());
 
         mCenterVBox = new VBox(mFilteredCategory, mFloatingCategory,
                 mUpcomingCategory);
@@ -133,8 +133,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         mContainer.setId("container");
         mContainer.setCenter(displayScrollPane);
         mContainer.setBottom(bottomVBox);
-        mContainer.getStylesheets().add(
-                getClass().getResource("styleFX.css").toExternalForm());
+        mContainer.getStylesheets()
+                .add(getClass().getResource("styleFX.css").toExternalForm());
 
         mHelpWindow = new Stage();
         mHelpWindow.setTitle("FunDUE Help Page");
@@ -164,10 +164,10 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public void display(ArrayList<Task> tasks) {
         // Clear the ordered task list
         mOrderedTasks.clear();
-        
+
         // Sorts new task list
         Collections.sort(tasks);
-        
+
         // Re-seed the filter chain
         mFilterChain.updateFilters(tasks);
 
@@ -238,8 +238,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         fc.setTitle("Select FunDUE Data File");
         fc.setInitialDirectory(mLogic.getDataFile().getParentFile());
         fc.setInitialFileName(mLogic.getDataFile().getName());
-        fc.getExtensionFilters().add(
-                new ExtensionFilter("FunDUE Data Files", "*.txt"));
+        fc.getExtensionFilters()
+                .add(new ExtensionFilter("FunDUE Data Files", "*.txt"));
         File selectedFile = fc.showSaveDialog(null);
         if (selectedFile == null) {
             return false;
@@ -302,8 +302,8 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
         ScrollPane scrollPane = new ScrollPane(container);
         scrollPane.setFitToWidth(true);
         Scene scene = new Scene(scrollPane, HELP_MIN_WIDTH, HELP_MIN_HEIGHT);
-        scene.getStylesheets().add(
-                getClass().getResource("styleFX.css").toExternalForm());
+        scene.getStylesheets()
+                .add(getClass().getResource("styleFX.css").toExternalForm());
 
         // Retrieve all distinct CommandHandlers and iterate
         List<CommandHandler> handlers = logic.getCommandHandlers().values()
@@ -318,8 +318,9 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
             handlerName.getStyleClass().addAll("helpCategoryLabel");
 
             // CommandHandler syntax
-            Label handlerUsage = new Label("Usage: "
-                    + handler.getReservedKeywords() + " " + handler.getSyntax());
+            Label handlerUsage = new Label(
+                    "Usage: " + handler.getReservedKeywords() + " "
+                            + handler.getSyntax());
             handlerUsage.getStyleClass().add("wrappingText");
 
             // CommandHandler flags
