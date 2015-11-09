@@ -52,7 +52,7 @@ public class Task implements TaskInterface, Comparable<Task>, Cloneable {
      */
     public Task(String name) {
         this();
-        assert(this.getCreated() != null);
+        assert (this.getCreated() != null);
         setName(name);
     }
 
@@ -256,10 +256,27 @@ public class Task implements TaskInterface, Comparable<Task>, Cloneable {
 
     @Override
     public int compareTo(Task task) {
-        if (this.isFloat() && task.isFloat()) {
+        if (this.isEvent() && task.isEvent()) {
+            // BOTH EVENT
+            if (!this.getStart().equals(task.getStart())) {
+                return this.getStart().compareTo(task.getStart());
+            } else if (!this.getEnd().equals(task.getEnd())) {
+                return this.getEnd().compareTo(task.getEnd());
+            } else {
+                return this.getName().compareTo(task.getName());
+            }
+        } else if (this.isDeadline() && task.isDeadline()) {
+            // BOTH DEADLINE
+            if (!this.getEnd().equals(task.getEnd())) {
+                return this.getEnd().compareTo(task.getEnd());
+            } else {
+                return this.getName().compareTo(task.getName());
+            }
+        } else if (this.isFloat() && task.isFloat()) {
             // BOTH FLOAT
-            if (this.getStart() != null && task.getStart() != null) {
-                // BOTH HAVE START
+            if (this.getStart() != null && task.getStart() != null
+                    && !this.getStart().equals(task.getStart())) {
+                // BOTH HAVE START DATE
                 return this.getStart().compareTo(task.getStart());
             } else if (this.getStart() != null) {
                 return -1;
@@ -268,16 +285,6 @@ public class Task implements TaskInterface, Comparable<Task>, Cloneable {
             } else {
                 return this.getName().compareTo(task.getName());
             }
-        } else if (this.isEvent() && task.isEvent()) {
-            // BOTH EVENT
-            if (!this.getStart().equals(task.getStart())) {
-                return this.getStart().compareTo(task.getStart());
-            } else {
-                return this.getEnd().compareTo(task.getEnd());
-            }
-        } else if (this.isDeadline() && task.isDeadline()) {
-            // BOTH DEADLINE
-            return this.getEnd().compareTo(task.getEnd());
         } else if (this.isDeadline() && task.isEvent()) {
             // ONE DEADLINE, ONE EVENT
             return this.getEnd().compareTo(task.getStart());
@@ -298,11 +305,11 @@ public class Task implements TaskInterface, Comparable<Task>, Cloneable {
     private boolean isFloat() {
         return getType().equals("FLOAT");
     }
-    
+
     private boolean isEvent() {
         return getType().equals("EVENT");
     }
-    
+
     private boolean isDeadline() {
         return getType().equals("DEADLINE");
     }
