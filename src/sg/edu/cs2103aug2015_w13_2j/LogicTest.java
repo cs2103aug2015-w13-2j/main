@@ -112,17 +112,17 @@ public class LogicTest {
         int expectedSizeOfMasterTaskList = 2;
         sLogic.removeTask(task1);
         assertEquals(expectedSizeOfMasterTaskList, sLogic.getAllTasks().size());
-
+    }
+    
+    @Test(expected = TaskNotFoundException.class)
+    public void deleteShouldThrowTaskNotFoundException() throws TaskNotFoundException {
         // Partition for valid deletion of Task object not found
+        String taskName1 = "Test Delete 1 TaskNotFoundException test";
+        Task task1 = new Task(taskName1);
         Task unknownTask = new Task();
-        String expectedErrorMsgForUnknownTask = FeedbackMessage.ERROR_TASK_NOT_FOUND
-                .getMessage();
-
-        try {
-            sLogic.removeTask(unknownTask);
-        } catch (TaskNotFoundException error) {
-            assertEquals(expectedErrorMsgForUnknownTask, error.getMessage());
-        }
+        
+        sLogic.addTask(task1);
+        sLogic.removeTask(unknownTask);
     }
 
     @Test

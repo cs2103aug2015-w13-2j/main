@@ -167,8 +167,7 @@ public class Logic implements LogicInterface {
     @Override
     public Task removeTask(int index) throws TaskNotFoundException {
         Task task = mUI.getTask(index);
-        removeTask(task);
-        return task;
+        return removeTask(task);
     }
 
     @Override
