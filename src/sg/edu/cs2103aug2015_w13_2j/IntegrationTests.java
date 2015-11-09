@@ -315,6 +315,7 @@ public class IntegrationTests {
         assertEquals(UI.getTasksForDisplay().get(1).getName(), third);
         // now change the task named brown fox
         sLogic.executeCommand("edit 1 -e 9/11");//< now over... sinks below the quick
+        assertEquals(UI.getFeedbackMessageString(), EditHandler.EDIT_SUCCESS);
         assertEquals(UI.getTasksForDisplay().get(0).getName(), third);
         assertEquals(UI.getTasksForDisplay().get(1).getName(), sec);
         assertEquals(UI.getTasksForDisplay().get(2).getName(), first);
