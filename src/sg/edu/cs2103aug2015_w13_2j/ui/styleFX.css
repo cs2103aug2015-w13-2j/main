@@ -1,11 +1,23 @@
 /* @@author A0124007X */
 
 .completed .text {
-	-fx-strikethrough: true;
+    -fx-strikethrough: true;
+}
+
+.labelPadding {
+    -fx-padding: 0 3 0 3;
+}
+
+.normalFont {
+    -fx-font-size: 18px;
+}
+
+.smallerFont {
+    -fx-font-size: 15px;
 }
 
 #container {
-	-fx-border-width: 0;
+    -fx-border-width: 0;
 }
 
 #mCenterVBox {
@@ -15,6 +27,10 @@
 
 #bottomVBox {
 	-fx-padding: 1 2 2 2;
+}
+
+#mFeedbackLabel {
+    -fx-padding: 5 10 5 10;
 }
 
 #mTextField {
@@ -33,7 +49,7 @@
 	-fx-border-width: 10;
 }
 
-.accordion .titled-pane>*.content /*, .title*/ {
+.accordion .titled-pane > *.content {
 	-fx-background-color: white;
 	-fx-border-width: 0;
 }
@@ -44,8 +60,8 @@
 	-fx-focus-color: transparent;
 }
 
-.scrollpane .scroll-bar .increment-arrow, .scrollpane .scroll-bar .decrement-arrow
-	{
+.scrollpane .scroll-bar .increment-arrow,
+.scrollpane .scroll-bar .decrement-arrow {
 	-fx-shape: " ";
 	-fx-padding: 0;
 }
@@ -56,15 +72,15 @@
 	-fx-background-radius: 2em;
 }
 
-.scrollpane .scroll-bar:horizontal .increment-button, .scrollpane .scroll-bar:horizontal .decrement-button
-	{
+.scrollpane .scroll-bar:horizontal .increment-button,
+.scrollpane .scroll-bar:horizontal .decrement-button {
 	-fx-background-color: transparent;
 	-fx-background-radius: 0em;
 	-fx-padding: 0 0 10 0;
 }
 
-.scrollpane .scroll-bar:vertical .increment-button, .scrollpane .scroll-bar:vertical .decrement-button
-	{
+.scrollpane .scroll-bar:vertical .increment-button,
+.scrollpane .scroll-bar:vertical .decrement-button {
 	-fx-background-color: transparent;
 	-fx-background-radius: 0em;
 	-fx-padding: 0 10 0 0;

@@ -14,7 +14,6 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -26,7 +25,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -46,10 +44,6 @@ import sg.edu.cs2103aug2015_w13_2j.filters.FilterChain;
  */
 public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     public static final PrettyTime PRETTY_TIME = new PrettyTime();
-    public static final Insets PADDING_LR = new Insets(0, 3, 0, 3);
-    public static final Insets PADDING_FEEDBACK = new Insets(5, 10, 5, 10);
-    public static final Font FONT = new Font(18);
-    public static final Font FONT_SMALLER = new Font(15);
     public static final double ID_MIN_WIDTH = 35;
     public static final double HELP_MIN_WIDTH = 400;
     public static final double HELP_MIN_HEIGHT = 400;
@@ -76,12 +70,11 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
      */
     private FXUI() {
         mFeedbackLabel = new Label("Welcome to FunDUE!");
-        mFeedbackLabel.setPadding(PADDING_FEEDBACK);
-        mFeedbackLabel.setFont(FONT_SMALLER);
+        mFeedbackLabel.getStyleClass().add("smallerFont");
         mFeedbackLabel.setId("mFeedbackLabel");
 
         mTextField = new TextField();
-        mTextField.setFont(FONT);
+        mTextField.getStyleClass().add("normalFont");
         mTextField.setOnKeyPressed(this);
         mTextField.setMaxWidth(Double.MAX_VALUE);
         mTextField.setId("mTextField");

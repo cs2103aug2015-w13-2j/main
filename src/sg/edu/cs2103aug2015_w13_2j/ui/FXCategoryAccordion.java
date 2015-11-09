@@ -28,7 +28,7 @@ public class FXCategoryAccordion extends Accordion {
         mName = name;
         mContainer = new VBox();
         mTitledPane = new TitledPane("", mContainer);
-        mTitledPane.setFont(FXUI.FONT);
+        mTitledPane.getStyleClass().add("normalFont");
         mTitledPane.setAnimated(false);
         this.setExpandedPane(mTitledPane);
         getPanes().add(mTitledPane);
@@ -58,14 +58,14 @@ public class FXCategoryAccordion extends Accordion {
             mContainer.getChildren().add(row);
 
             Label idLabel = new Label();
-            idLabel.setPadding(FXUI.PADDING_LR);
-            idLabel.setFont(FXUI.FONT_SMALLER);
+            idLabel.getStyleClass().add("labelPadding");
+            idLabel.getStyleClass().add("smallerFont");
             idLabel.setMinWidth(FXUI.ID_MIN_WIDTH);
             row.getChildren().add(idLabel);
 
             Label nameLabel = new Label("No tasks in this category.");
-            nameLabel.setPadding(FXUI.PADDING_LR);
-            nameLabel.setFont(FXUI.FONT);
+            nameLabel.getStyleClass().add("labelPadding");
+            nameLabel.getStyleClass().add("normalFont");
             nameLabel.setTextFill(Color.GREY);
             HBox.setHgrow(nameLabel, Priority.ALWAYS);
             row.getChildren().add(nameLabel);
@@ -87,15 +87,15 @@ public class FXCategoryAccordion extends Accordion {
             mContainer.getChildren().add(row);
 
             Label idLabel = new Label((int) (i + offset + 1) + "");
-            idLabel.setPadding(FXUI.PADDING_LR);
-            idLabel.setFont(FXUI.FONT_SMALLER);
+            idLabel.getStyleClass().add("labelPadding");
+            idLabel.getStyleClass().add("smallerFont");
             idLabel.setMinWidth(FXUI.ID_MIN_WIDTH);
             idLabel.setTextFill(Color.GREY);
             row.getChildren().add(idLabel);
 
             Label importanceLabel = new Label("!");
-            importanceLabel.setPadding(FXUI.PADDING_LR);
-            importanceLabel.setFont(FXUI.FONT);
+            importanceLabel.getStyleClass().add("labelPadding");
+            importanceLabel.getStyleClass().add("normalFont");
             importanceLabel.setMinWidth(Control.USE_PREF_SIZE);
             importanceLabel.setTextFill(Color.RED);
             if (task.isImportant()) {
@@ -103,11 +103,10 @@ public class FXCategoryAccordion extends Accordion {
             }
 
             Label nameLabel = new Label(task.getName());
-            nameLabel.setPadding(FXUI.PADDING_LR);
-            nameLabel.setFont(FXUI.FONT);
+            nameLabel.getStyleClass().add("labelPadding");
+            nameLabel.getStyleClass().add("normalFont");
             HBox.setHgrow(nameLabel, Priority.ALWAYS);
             row.getChildren().add(nameLabel);
-            nameLabel.getStyleClass().add("task");
 
             Region spacer = new Region();
             row.getChildren().add(spacer);
@@ -152,8 +151,8 @@ public class FXCategoryAccordion extends Accordion {
             } else {
                 timeLabel = new Label();
             }
-            timeLabel.setPadding(FXUI.PADDING_LR);
-            timeLabel.setFont(FXUI.FONT_SMALLER);
+            timeLabel.getStyleClass().add("labelPadding");
+            timeLabel.getStyleClass().add("smallerFont");
             timeLabel.setMinWidth(Control.USE_PREF_SIZE);
 
             // Completed and overdue events all grey, overdue all red, otherwise
