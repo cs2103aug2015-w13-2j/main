@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
-// @@author A0133387B-unused
-
-public class A0133387BUnused {    
+public class A0133387BUnused {
+    
+    //@@author A0133387B-unused
     /**
      * The codes below are unused because of refactoring of Logic subsequently
      * and registering each command as a CommandHandler
@@ -33,7 +33,41 @@ public class A0133387BUnused {
         return tasksWithKeyword;
     }
     */
-
+	/*
+	   public void addTask(Task task){
+	    	tasks.add(task);
+	    	
+	    	determineType(task);
+	    	 
+	    	   if(task.getType().equals("EVENT")){
+	    		  events.add(task);
+	    	   } else if (task.getType().equals("DUE")){
+	    		  deadlines.add(task);
+	    	   } else {
+	    		  floats.add(task);
+	    	   }
+	    	
+	    }
+	   */
+	    /**
+	     * Determine the type of a task based on its start (if any) and end (if any) times
+	     * @param task
+	     *            the new task to be categorized
+	     * 
+	     */
+	    /*
+	    public void determineType(Task task){
+	    	if(task.getDeadline() == null){// if deadLine == null, float
+	    		task.setTypeFloat();
+	    	} else {
+	    		if (task.getStart() != null){//if deadLine != null and start != null, event
+	    		    task.setTypeEvent();
+	    	    } else {//if deadLine != null but start == null, then it's a task with deadline
+	    		    task.setTypeDeadline();
+	    	    }
+	    	}
+	    }
+	    */
     /**
 	 * This method merges the details of a new task and the original task by
 	 * checking the fields of the new task Those that are blank are kept
@@ -46,34 +80,27 @@ public class A0133387BUnused {
 	 *            the task that is updating the original task
 	 * @return the updated original task
 	 */
-    /*
+/*
 	public Task mergeDetails(Task original, Task newTask) {
 		// possible fields to update: name, start, end
 		if (newTask.getName() != null) {
 			original.setName(newTask.getName());
 		}
-
 		if (newTask.getEnd() != null) {
 			original.setEnd(newTask.getEnd());
 		}
-
 		if (newTask.getStart() != null) {
 			original.setStart(newTask.getStart());
 		}
-
 		if (newTask.getCompleted().equals("TRUE")) {
 			original.setCompleted("TRUE");
 		}
-
-
 		if (newTask.getArchived().equals("TRUE")) {
 			original.setArchived("TRUE");
 		}
-
 		return original;
 	}
-     */
-    
+*/
 	/**
 	 * This method edits a task according to the fields specified by the user It
 	 * takes in a task formed by the name input by user, as well as the fields
@@ -92,44 +119,27 @@ public class A0133387BUnused {
 	 */
     /*
 	public Task editTask(Task original, Task edittingTask) {
-	
 		// potential edits to the type of task
-
-		if (original.getStart() == null && original.getEnd() == null) {// originally
-																		// float
-			if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited to events
-																	
+		if (original.getStart() == null && original.getEnd() == null) {// originally float
+			if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited to events														
 				original.setType("EVENT");
 			}
-
-			if (edittingTask.getStart() == null && edittingTask.getEnd() != null) {// edited to
-																	// deadline
-																	// tasks
+			if (edittingTask.getStart() == null && edittingTask.getEnd() != null) {// edited to deadline tasks
 				original.setType("DEADLINE");
 			}
-		} else if (original.getStart() != null && original.getEnd() != null) {// originally
-																				// event
+		} else if (original.getStart() != null && original.getEnd() != null) {// originally event
 			if (edittingTask.getEnd() == null) {// change to float
 				original.setType("FLOAT");
-
 			} else if (edittingTask.getStart() == null) {// change to task with deadline
 				original.setType("DEADLINE");
 			}
-		} else if (original.getStart() == null && original.getEnd() != null) {// originally
-																				// task
-																				// with
-																				// deadline
+		} else if (original.getStart() == null && original.getEnd() != null) {// originally task with deadline
 			if (edittingTask.getEnd() == null) {// change to float
 				original.setType("FLOAT");
-
-			} else if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited
-																			// to
-																			// event
+			} else if (edittingTask.getStart() != null && edittingTask.getEnd() != null) {// edited to event
 				original.setType("EVENT");
-
 			}
 		}
-
 		mergeDetails(original, edittingTask);
 		mAppInstance.getFormatterInstance().format(original, FormatterInterface.Format.LIST); 
 		try {
@@ -151,7 +161,6 @@ public class A0133387BUnused {
 		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST); 
 		return userView;
 	}
-	*/
 
 	/**
 	 * This method sorts a list of tasks according to their deadlines(if any)
@@ -194,4 +203,92 @@ public class A0133387BUnused {
 		}
     }
     */
+	/**
+	 * Below are the unused LogicTest JUnit codes
+	 */
+	/*
+	 
+	public class LogicTest {
+	    
+	    private Logic logicComponent;
+	    
+	    @Before
+	    
+	    public void init(){
+	        logicComponent = new Logic();
+	    }
+	    
+		@Test
+		public void testAdd() {
+	        Task newTask = new Task("First"); 
+	        logicComponent.addTask(newTask);
+	        assertEquals("First", logicComponent.getTask(0).getName());
+		}
+		@Test
+		public void testDelete(){
+			logicComponent.addTask(new Task("first test task"));
+			logicComponent.addTask(new Task("second test task"));
+			logicComponent.deleteTask(logicComponent.findTaskByName("first test task"));
+			assertEquals(logicComponent.getAllTasks().get(0).getName(), "second test task");
+		}
+		
+		@Test
+		public void testDetermineType(){
+			Task newTask = new Task("first test task");
+			logicComponent.determineType(newTask);
+			assertTrue(newTask.getDeadline() == null);
+			assertEquals(newTask.getType(), "FLOAT");
+			newTask.setDeadline(new Date());
+			logicComponent.determineType(newTask);
+			assertEquals(newTask.getType(), "DUE");
+			newTask.setStart(new Date());
+			logicComponent.determineType(newTask);
+			assertEquals(newTask.getType(), "EVENT");
+		}
+		
+		@Test
+		public void testEdit(){
+			Task original = new Task("first test task");
+			assertEquals(original.getStatus(), "ONGOING");
+			logicComponent.addTask(original);
+			assertEquals(original.getType(), "FLOAT");
+			Task newTask = new Task("first test task");
+			newTask.setDeadline(new Date());
+			logicComponent.determineType(newTask);
+			logicComponent.editTask("first test task", newTask);
+			assertEquals(original.getType(), "DUE");
+			assertTrue(logicComponent.getDeadlines().contains(original));
+			assertEquals(logicComponent.getFloats().contains(original), false);
+			newTask.setStart(new Date());
+			logicComponent.determineType(newTask);
+			logicComponent.editTask("first test task", newTask);
+			assertEquals(original.getType(), "EVENT");
+			newTask.setName("I have changed");
+			logicComponent.editTask("first test task", newTask);
+			assertEquals(original.getName(), newTask.getName());
+		}
+		
+		@Test
+		public void testStatus(){
+			Task original = new Task("second test task");
+			logicComponent.addTask(original);
+			assertEquals(original.getStatus(), "ONGOING");
+			original.markCompleted();
+			assertEquals(original.getStatus(), "COMPLETED");
+			assertTrue(logicComponent.getAllTasks().size() == 1);
+			assertTrue(logicComponent.viewCompleted().size() == 1);
+			assertTrue(logicComponent.getFloats().size() == 1);
+			assertTrue(logicComponent.getEvents().isEmpty());
+			assertTrue(logicComponent.getDeadlines().isEmpty());
+			logicComponent.deleteTask(original);
+			assertEquals(original.getStatus(), "DELETED");
+			assertTrue(logicComponent.getAllTasks().isEmpty());
+			assertTrue(logicComponent.viewCompleted().isEmpty());
+			assertTrue(logicComponent.getFloats().isEmpty());
+			assertTrue(logicComponent.getEvents().isEmpty());
+			assertTrue(logicComponent.getDeadlines().isEmpty());
+			
+		}
+	}
+	*/
 }
