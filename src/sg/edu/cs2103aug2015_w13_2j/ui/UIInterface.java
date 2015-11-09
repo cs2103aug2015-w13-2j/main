@@ -27,7 +27,6 @@ public interface UIInterface {
      * 
      * @param tasks
      *            List of Task objects to be displayed
-     * @return 
      */
     public void display(ArrayList<Task> tasks);
 

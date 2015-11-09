@@ -34,6 +34,8 @@ public interface TaskInterface extends Comparable<Task> {
     /**
      * Retrieves the value of a label of the {@link Task} object.
      * 
+     * @param label
+     *            The label to be retrieved.
      * @return The value of the label or null if not set.
      */
     public String getLabel(String label);
@@ -75,7 +77,7 @@ public interface TaskInterface extends Comparable<Task> {
      * 
      * @param format
      *            String of the format dd_MM_yyyy_HH_mm as produced by
-     *            {@link #parseDate(String)}.
+     *            parsing the Date of the {@link Task}
      */
     public void setStart(String format);
 
@@ -100,7 +102,7 @@ public interface TaskInterface extends Comparable<Task> {
      * 
      * @param format
      *            String of the format dd_MM_yyyy_HH_mm as produced by
-     *            {@link #parseDate(String)}.
+     *            parsing the Date of the {@link Task}
      */
     public void setEnd(String format);
 

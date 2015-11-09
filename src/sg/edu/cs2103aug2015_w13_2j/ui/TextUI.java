@@ -49,9 +49,6 @@ public class TextUI extends JFrame implements UIInterface, KeyListener {
     /**
      * Retrieves the singleton instance of the TextUI component
      * 
-     * @param logic
-     *            Dependency injection of the Logic component depended upon by
-     *            the TextUI component
      * @return TextUI component singleton instance
      */
     public static TextUI getInstance() {

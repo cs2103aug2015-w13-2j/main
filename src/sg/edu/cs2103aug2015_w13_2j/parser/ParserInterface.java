@@ -66,7 +66,9 @@ public interface ParserInterface {
      * @param datetime
      *            Date string to be parsed
      * @return String in the format dd_MM_yyyy_HH_mm. Fields which are defined
-     *         in the date string are filled in
+     *         in the date string are filled in.
+     * @throws IllegalDateFormatException
+     *            Error thrown when a date is not a valid numerical format.
      */
     public static String parseDate(String datetime)
             throws IllegalDateFormatException {

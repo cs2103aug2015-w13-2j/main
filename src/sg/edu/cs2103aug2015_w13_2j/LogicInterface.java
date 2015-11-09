@@ -81,7 +81,6 @@ public interface LogicInterface {
     /**
      * Sends the master list of {@link Task} objects to the {@link UIInterface}
      * component to be displayed.
-     * @return 
      */
     public void display();
 
@@ -250,6 +249,10 @@ public interface LogicInterface {
 
     /**
      * Stores a deep copy of a {@link Task} list into the redo stack.
+     * 
+     * @param taskListToRedo
+     *          List of {@link Task} objects to be stored in redo history.
+     * 
      */
     public void storeCommandInRedoHistory(ArrayList<Task> taskListToRedo);
 

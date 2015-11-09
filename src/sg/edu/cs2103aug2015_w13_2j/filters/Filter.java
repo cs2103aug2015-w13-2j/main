@@ -68,8 +68,8 @@ public abstract class Filter {
      * Removes the {@link Task} object associated with the provided index.
      * Throws an exception if the index is out of bounds.
      * 
-     * @param index
-     *            Index of {@link Task} object to remove.
+     * @param task
+     *            {@link Task} object to be removed.
      * @return {@link Task} object associated with the provided index.
      * @throws TaskNotFoundException
      *             Thrown when the provided index is out of bounds.
