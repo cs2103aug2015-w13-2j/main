@@ -183,10 +183,18 @@ public class Task implements TaskInterface, Comparable<Task>, Cloneable {
         if (o instanceof Task) {
             String c1 = ((Task) o).getLabel(LABEL_CREATED);
             String c2 = this.getLabel(LABEL_CREATED);
-            if (c1.equals(c2)) {
+            if (c1 == null && c2 == null) {
+                return true;
+            } else if (c1 != null && c1.equals(c2)) {
                 String n1 = ((Task) o).getName();
                 String n2 = this.getName();
-                return n1.equals(n2);
+                if (n1 == null && n2 == null) {
+                    return true;
+                } else if (n1 != null && n1.equals(n2)) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
