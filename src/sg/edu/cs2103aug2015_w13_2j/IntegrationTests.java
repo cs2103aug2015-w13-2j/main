@@ -309,6 +309,7 @@ public class IntegrationTests {
                                                  // deadline task and sinks to
                                                  // the bottom. on top now is over, 
                                                  // then the quick
+        assertEquals(UI.getFeedbackMessageString(), EditHandler.EDIT_SUCCESS);
         assertEquals(UI.getTasksForDisplay().get(2).getName(), sec);
         assertEquals(UI.getTasksForDisplay().get(0).getName(), first);
         assertEquals(UI.getTasksForDisplay().get(1).getName(), third);
