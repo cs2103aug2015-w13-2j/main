@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import sg.edu.cs2103aug2015_w13_2j.Task.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.DeleteHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.EditHandler;
@@ -23,6 +22,7 @@ import sg.edu.cs2103aug2015_w13_2j.commands.PopHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.RedoHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.SearchHandler;
 import sg.edu.cs2103aug2015_w13_2j.commands.UndoHandler;
+import sg.edu.cs2103aug2015_w13_2j.exceptions.TaskNotFoundException;
 import sg.edu.cs2103aug2015_w13_2j.storage.Storage;
 import sg.edu.cs2103aug2015_w13_2j.storage.StorageTest;
 import sg.edu.cs2103aug2015_w13_2j.ui.FeedbackMessage;
