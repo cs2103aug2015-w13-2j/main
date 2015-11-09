@@ -86,6 +86,7 @@ public class FXCategoryAccordion extends Accordion {
             row.setAlignment(Pos.CENTER);
             mContainer.getChildren().add(row);
 
+            // id
             Label idLabel = new Label((int) (i + offset + 1) + "");
             idLabel.getStyleClass().add("labelPadding");
             idLabel.getStyleClass().add("smallerFont");
@@ -93,6 +94,7 @@ public class FXCategoryAccordion extends Accordion {
             idLabel.setTextFill(Color.GREY);
             row.getChildren().add(idLabel);
 
+            // importance
             Label importanceLabel = new Label("!");
             importanceLabel.getStyleClass().add("labelPadding");
             importanceLabel.getStyleClass().add("normalFont");
@@ -102,6 +104,7 @@ public class FXCategoryAccordion extends Accordion {
                 row.getChildren().add(importanceLabel);
             }
 
+            // name
             Label nameLabel = new Label(task.getName());
             nameLabel.getStyleClass().add("labelPadding");
             nameLabel.getStyleClass().add("normalFont");
@@ -112,11 +115,13 @@ public class FXCategoryAccordion extends Accordion {
             row.getChildren().add(spacer);
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
+            // time
             Label timeLabel;
             final SimpleDateFormat DATE = new SimpleDateFormat("d/M/yy HH:mm");
             final SimpleDateFormat DAY = new SimpleDateFormat("d/M/yy");
             final SimpleDateFormat TIME = new SimpleDateFormat("HH:mm");
-            if (task.getStart() != null && task.getEnd() != null) { // EVENT
+            if (task.getStart() != null && task.getEnd() != null) {
+                // EVENT
                 Date start = task.getStart();
                 Date end = task.getEnd();
 
@@ -132,11 +137,13 @@ public class FXCategoryAccordion extends Accordion {
                 timeLabel = new Label(timeString);
 
                 row.getChildren().add(timeLabel);
-            } else if (task.getEnd() != null) { // DEADLINE
+            } else if (task.getEnd() != null) {
+                // DEADLINE
                 Date end = task.getEnd();
                 timeLabel = new Label("(due " + DATE.format(end) + ")");
                 row.getChildren().add(timeLabel);
-            } else if (task.getStart() != null) { // FLOAT with start date
+            } else if (task.getStart() != null) {
+                // FLOAT with start date
                 Date start = task.getStart();
 
                 if (start.before(new Date())) {
@@ -155,8 +162,8 @@ public class FXCategoryAccordion extends Accordion {
             timeLabel.getStyleClass().add("smallerFont");
             timeLabel.setMinWidth(Control.USE_PREF_SIZE);
 
-            // Completed and overdue events all grey, overdue all red, otherwise
-            // orange
+            // Coloring: completed and overdue events all grey, overdue all red,
+            // otherwise orange
             if (task.isCompleted()) {
                 nameLabel.setTextFill(Color.GREY);
                 timeLabel.setTextFill(Color.GREY);
