@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import sg.edu.cs2103aug2015_w13_2j.Task;
 
-public class A0133387BUnused {
-    
-    //@@author A0133387B-unused
+// @@author A0133387B-unused
+
+public class A0133387BUnused {    
     /**
      * The codes below are unused because of refactoring of Logic subsequently
      * and registering each command as a CommandHandler
@@ -33,9 +33,7 @@ public class A0133387BUnused {
         return tasksWithKeyword;
     }
     */
-   /*
-    *  
-    */
+
     /**
 	 * This method merges the details of a new task and the original task by
 	 * checking the fields of the new task Those that are blank are kept
@@ -48,7 +46,7 @@ public class A0133387BUnused {
 	 *            the task that is updating the original task
 	 * @return the updated original task
 	 */
-/*
+    /*
 	public Task mergeDetails(Task original, Task newTask) {
 		// possible fields to update: name, start, end
 		if (newTask.getName() != null) {
@@ -74,7 +72,8 @@ public class A0133387BUnused {
 
 		return original;
 	}
-*/
+     */
+    
 	/**
 	 * This method edits a task according to the fields specified by the user It
 	 * takes in a task formed by the name input by user, as well as the fields
@@ -152,6 +151,7 @@ public class A0133387BUnused {
 		mAppInstance.getFormatterInstance().format(userView, FormatterInterface.Format.LIST); 
 		return userView;
 	}
+	*/
 
 	/**
 	 * This method sorts a list of tasks according to their deadlines(if any)
@@ -194,5 +194,4 @@ public class A0133387BUnused {
 		}
     }
     */
-    
 }

@@ -47,8 +47,8 @@ public class IntegrationTests {
     private static LogicInterface sLogic = Logic.getInstance();
     private static UIStub UI;
     private static StorageTest sStorage = new StorageTest();
-    private static final Logger LOGGER = Logger.getLogger(Storage.class
-            .getName());
+    private static final Logger LOGGER = Logger
+            .getLogger(Storage.class.getName());
 
     @BeforeClass
     public static void setup() {
@@ -303,8 +303,8 @@ public class IntegrationTests {
         sLogic.executeCommand("add '" + sec + "'");
         String third = "the quick";
         sLogic.executeCommand("add '" + third + "'");
-        assertEquals(UI.getTasksForDisplay().get(0).getName(), sec);//< now brown fox is on top,
-                                                                    //< then over, and the quick
+        assertEquals(UI.getTasksForDisplay().get(0).getName(), sec); // < now brown fox is on top,
+                                                                     // < then over, and the quick
         assertEquals(UI.getTasksForDisplay().get(1).getName(), first);
         assertEquals(UI.getTasksForDisplay().get(2).getName(), third);
         // change two of them to deadline task
@@ -317,7 +317,7 @@ public class IntegrationTests {
         assertEquals(UI.getTasksForDisplay().get(0).getName(), first);
         assertEquals(UI.getTasksForDisplay().get(1).getName(), third);
         // now change the task named brown fox
-        sLogic.executeCommand("edit 1 -e 9/11");//< now over... sinks below the quick
+        sLogic.executeCommand("edit 1 -e 9/11"); // < now over... sinks below the quick
         assertEquals(UI.getFeedbackMessageString(), EditHandler.EDIT_SUCCESS);
         assertEquals(UI.getTasksForDisplay().get(0).getName(), third);
         assertEquals(UI.getTasksForDisplay().get(1).getName(), sec);
