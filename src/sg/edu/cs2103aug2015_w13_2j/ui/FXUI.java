@@ -8,6 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,9 +30,6 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-
-import org.ocpsoft.prettytime.PrettyTime;
-
 import sg.edu.cs2103aug2015_w13_2j.LogicInterface;
 import sg.edu.cs2103aug2015_w13_2j.Task;
 import sg.edu.cs2103aug2015_w13_2j.TaskInterface.TaskNotFoundException;
@@ -169,12 +168,14 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
 
     @Override
     public void display(ArrayList<Task> tasks) {
-        // Re-seed the filter chain
-        mFilterChain.updateFilters(tasks);
-
         // Clear the ordered task list
         mOrderedTasks.clear();
+        
+        // Sorts new task list
         Collections.sort(tasks);
+        
+        // Re-seed the filter chain
+        mFilterChain.updateFilters(tasks);
 
         if (mFilterChain.size() > 1) {
             List<Task> filteredTasks = mFilterChain.getTasksForDisplay();
@@ -281,14 +282,14 @@ public class FXUI implements UIInterface, EventHandler<KeyEvent> {
     @Override
     public void handle(KeyEvent event) {
         switch (event.getCode()) {
-        case ENTER :
+          case ENTER :
             mLogic.executeCommand(mTextField.getText());
             mTextField.setText("");
             break;
-        case ESCAPE :
+          case ESCAPE :
             Platform.exit();
             break;
-        default :
+          default :
             // Do nothing
         }
     }

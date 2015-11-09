@@ -256,39 +256,61 @@ public class Task implements TaskInterface, Comparable<Task>, Cloneable {
 
     @Override
     public int compareTo(Task task) {
-        if (this.getEnd() == null && task.getEnd() == null) {
+        if (this.isFloat() && task.isFloat()) {
             // BOTH FLOAT
-            if (this.getStart() == null && task.getStart() == null) {
-                return this.getName().compareTo(task.getName());
-            } else if (this.getStart() != null && task.getStart() == null) {
-                return -1;
-            } else if (this.getStart() == null && task.getStart() != null) {
-                return 1;
-            } else { // if both tasks have start
+            if (this.getStart() != null && task.getStart() != null) {
+                // BOTH HAVE START
                 return this.getStart().compareTo(task.getStart());
+            } else if (this.getStart() != null) {
+                return -1;
+            } else if (task.getStart() != null) {
+                return 1;
+            } else {
+                return this.getName().compareTo(task.getName());
             }
-        } else if (this.getStart() != null && task.getStart() != null
-                && this.getEnd() != null && task.getEnd() != null) {
+        } else if (this.isEvent() && task.isEvent()) {
             // BOTH EVENT
             if (!this.getStart().equals(task.getStart())) {
                 return this.getStart().compareTo(task.getStart());
             } else {
                 return this.getEnd().compareTo(task.getEnd());
             }
-        } else if (this.getStart() != null && task.getStart() == null
-                && this.getEnd() != null && task.getEnd() != null) {
-            // ONE EVENT, ONE DEADLINE
-            return this.getStart().compareTo(task.getEnd());
-        } else if (this.getStart() == null && task.getStart() != null
-                && this.getEnd() != null && task.getEnd() != null) {
-            // ONE DEADLINE, ONE EVENT
-            return this.getEnd().compareTo(task.getStart());
-        } else if (this.getEnd() != null && task.getEnd() != null) {
+        } else if (this.isDeadline() && task.isDeadline()) {
             // BOTH DEADLINE
             return this.getEnd().compareTo(task.getEnd());
+        } else if (this.isDeadline() && task.isEvent()) {
+            // ONE DEADLINE, ONE EVENT
+            return this.getEnd().compareTo(task.getStart());
+        } else if (this.isEvent() && task.isDeadline()) {
+            // ONE EVENT, ONE DEADLINE
+            return this.getStart().compareTo(task.getEnd());
+        } else if (this.isDeadline() && task.isFloat()) {
+            // ONE DEADLINE, ONE FLOAT
+            return -1;
+        } else if (this.isFloat() && task.isDeadline()) {
+            // ONE FLOAT, ONE DEADLINE
+            return 1;
+        } else if (this.isEvent() && task.isFloat()) {
+            // ONE EVENT, ONE FLOAT
+            return -1;
+        } else if (this.isFloat() && task.isEvent()) {
+            // ONE FLOAT, ONE EVENT
+            return 1;
         } else {
             return this.getName().compareTo(task.getName());
         }
+    }
+
+    private boolean isFloat() {
+        return getType().equals("FLOAT");
+    }
+    
+    private boolean isEvent() {
+        return getType().equals("EVENT");
+    }
+    
+    private boolean isDeadline() {
+        return getType().equals("DEADLINE");
     }
 
     // @@author A0121410H
