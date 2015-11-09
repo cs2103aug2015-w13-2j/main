@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import sg.edu.cs2103aug2015_w13_2j.parser.Token.Type;
 
-// @@author NOAUTHOR
+// @@author A0121410H
 
 public class Command implements Iterable<Token> {
     private ArrayList<Token> mTokens = new ArrayList<Token>();

@@ -7,7 +7,7 @@ import java.util.Date;
 
 import org.junit.Test;
 
-// @@author NOAUTHOR
+// @@author A0124007X
 
 public class TaskTest {
     // Use the same task object across the tests

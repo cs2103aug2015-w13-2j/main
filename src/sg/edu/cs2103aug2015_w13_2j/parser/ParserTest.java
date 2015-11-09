@@ -14,7 +14,7 @@ import sg.edu.cs2103aug2015_w13_2j.Logic;
 import sg.edu.cs2103aug2015_w13_2j.commands.AddHandler;
 import sg.edu.cs2103aug2015_w13_2j.parser.ParserInterface.IllegalDateFormatException;
 
-// @@author NOAUTHOR
+// @@author A0121410H
 
 public class ParserTest {
     private static final Logger LOGGER = Logger
