@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="sg/edu/cs2103aug2015_w13_2j/unused/|sg/edu/cs2103aug2015_w13_2j/ui/TextPane.java|sg/edu/cs2103aug2015_w13_2j/ui/TextUI.java|sg/edu/cs2103aug2015_w13_2j/FunDUE.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
