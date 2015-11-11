@@ -366,7 +366,7 @@ public class Task implements Comparable<Task>, Cloneable {
     public Task clone() {
         Task task = new Task(getName());
         for (String label : mLabels.keySet()) {
-            task.setLabel(label, task.getLabel(label));
+            task.setLabel(label, getLabel(label));
         }
         return task;
     }
